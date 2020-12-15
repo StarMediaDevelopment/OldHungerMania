@@ -1,0 +1,5 @@
+package net.hungermania.hungergames.lobby;
+
+public enum SignType {
+    PASSES, HIGHESTKILLSTREAK, WINS, DEATHS, PASSESUSED, MUTANTKILLS, MUTANTDEATHS, DEATHMATCHES, CHESTSFOUND, SCORE, GAME
+}

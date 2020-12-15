@@ -1,0 +1,12 @@
+name: ManiaHub
+version: ${project.version}
+main: net.hungermania.hub.Hub
+description: HungerMania's Hub
+depend: [ManiaCore]
+commands:
+    testadmin:
+    spawn:
+    fly:
+    hologram:
+    leaderboard:
+    npc:
