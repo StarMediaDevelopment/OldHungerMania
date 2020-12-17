@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.*;
 
 @Getter
-public abstract class Perk {
+public abstract class Perk implements Comparable<Perk> {
     
     protected String displayName;
     protected int baseCost;
@@ -90,5 +90,9 @@ public abstract class Perk {
         
         itemBuilder.setLore(lore);
         return itemBuilder.build();
+    }
+    
+    public int compareTo(Perk o) {
+        return this.getName().compareTo(o.getName());
     }
 }
