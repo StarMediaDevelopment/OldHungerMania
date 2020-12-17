@@ -21,6 +21,7 @@ public class BungeeListener implements Listener {
     public void onLogin(LoginEvent e) {
         Redis.deleteUserData(e.getConnection().getUniqueId());
         Redis.deleteUserStats(e.getConnection().getUniqueId());
+        Redis.deleteToggles(e.getConnection().getUniqueId());
         BungeeUser bungeeUser = (BungeeUser) ManiaCore.getInstance().getUserManager().getUser(e.getConnection().getUniqueId());
         Redis.pushUser(bungeeUser);
         ManiaCore.getInstance().getFriendsManager().loadDataFromDatabase(e.getConnection().getUniqueId());

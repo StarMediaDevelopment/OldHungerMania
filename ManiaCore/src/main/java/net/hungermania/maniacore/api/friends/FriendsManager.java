@@ -50,7 +50,7 @@ public class FriendsManager {
             return FriendResult.ALREADY_FRIENDS;
         }
         
-        if (!getFriendRequestsByRequester(sender.getUniqueId()).isEmpty() || getFriendRequestsByTarget(target.getUniqueId()).isEmpty()) {
+        if (getFriendRequest(sender.getUniqueId(), target.getUniqueId()) != null) {
             return FriendResult.EXISTING_REQUEST;
         }
         
@@ -149,7 +149,6 @@ public class FriendsManager {
         if (getFriendship(user.getUniqueId(), target.getUniqueId()) != null) {
             return new Pair<>(FriendResult.ALREADY_FRIENDS, null);
         }
-    
         
         if (request == null) {
             return new Pair<>(FriendResult.NO_REQUEST, null);

@@ -60,6 +60,7 @@ public class ManiaCoreProxy extends Plugin implements ManiaPlugin {
     
     public void onDisable() {
         maniaCore.getDatabase().pushQueue();
+        Redis.getConnection().flushAll();
     }
     
     public Database getDatabase() {

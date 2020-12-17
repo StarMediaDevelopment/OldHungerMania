@@ -288,6 +288,12 @@ public class Redis {
         }
     }
     
+    public static void deleteToggles(UUID uuid) {
+        try (Jedis jedis = getConnection()) {
+            jedis.del("TOGGLES-" + uuid.toString());
+        }
+    }
+    
     public static Map<String, String> getUserData(UUID uuid) {
         Map<String, String> data;
         try (Jedis jedis = getConnection()) {
