@@ -27,8 +27,8 @@ public class GameUser extends SpigotUser {
         super(jedisData);
     }
     
-    public GameUser(int id, UUID uniqueId, String name, long networkExperience, int coins, Rank rank, Channel channel, long onlineTime) {
-        super(id, uniqueId, name, networkExperience, coins, rank, channel, onlineTime);
+    public GameUser(int id, UUID uniqueId, String name, Rank rank, Channel channel) {
+        super(id, uniqueId, name, rank, channel);
     }
     
     public GameUser(User user) {

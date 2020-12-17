@@ -236,10 +236,7 @@ public class Redis {
             data.put("id", user.getId() + "");
             data.put("uniqueId", user.getUniqueId().toString());
             data.put("name", user.getName());
-            data.put("networkExperience", user.getNetworkExperience() + "");
-            data.put("coins", user.getCoins() + "");
             data.put("rank", user.getRank().name());
-            data.put("onlineTime", user.getOnlineTime() + "");
             jedis.hmset("USER:" + user.getUniqueId().toString(), data);
             pushToggles(user);
             addUUIDIDMapping(user.getUniqueId(), user.getId());

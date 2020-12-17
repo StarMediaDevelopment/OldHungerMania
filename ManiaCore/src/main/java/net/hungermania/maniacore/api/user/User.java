@@ -23,12 +23,9 @@ public class User {
     protected int id = 0;
     protected UUID uniqueId;
     protected String name;
-    protected long networkExperience = 0L; //Statistic
-    protected int coins = 0; //Statistic
     protected Channel channel = Channel.GLOBAL;
     protected Set<IgnoreInfo> ignoredPlayers = new HashSet<>();
     protected Rank rank = Rank.DEFAULT;
-    protected long onlineTime = 0L; //Statistic
     
     protected Map<String, Statistic> stats = new HashMap<>();
     protected Map<Toggles, Toggle> toggles = new HashMap<>();
@@ -46,10 +43,7 @@ public class User {
         this.id = Integer.parseInt(jedisData.get("id"));
         this.uniqueId = UUID.fromString(jedisData.get("uniqueId"));
         this.name = jedisData.get("name");
-        this.networkExperience = Long.parseLong(jedisData.get("networkExperience"));
-        this.coins = Integer.parseInt(jedisData.get("coins"));
         this.rank = Rank.valueOf(jedisData.get("rank"));
-        this.onlineTime = Long.parseLong(jedisData.get("onlineTime"));
     }
     
     public boolean isOnline() {
@@ -84,25 +78,23 @@ public class User {
         }
     }
     
-    public User(int id, UUID uniqueId, String name, long networkExperience, int coins, Rank rank, Channel channel, long onlineTime) {
+    public User(int id, UUID uniqueId, String name, Rank rank, Channel channel) {
         this.id = id;
         this.uniqueId = uniqueId;
         this.name = name;
-        this.networkExperience = networkExperience;
-        this.coins = coins;
         if (rank == null) {
             this.rank = Rank.DEFAULT;
         } else {
             this.rank = rank;
         }
         this.channel = channel;
-        this.onlineTime = onlineTime;
     }
     
     public void addNetworkExperience(int exp) {
-        Level current = ManiaCore.getInstance().getLevelManager().getLevel(getNetworkExperience());
-        this.networkExperience += exp;
-        Level newLevel = ManiaCore.getInstance().getLevelManager().getLevel(getNetworkExperience());
+        Statistic stat = getStat(Stats.EXPERIENCE);
+        Level current = ManiaCore.getInstance().getLevelManager().getLevel(stat.getValueAsInt());
+        stat.setValue((stat.getValueAsInt() + exp) + "");
+        Level newLevel = ManiaCore.getInstance().getLevelManager().getLevel(stat.getValueAsInt());
         if (current.getNumber() < newLevel.getNumber()) {
             sendMessage("&a&lLevel Up! " + current.getNumber() + " -> " + newLevel.getNumber());
             sendMessage("  &7&oThis message is temporary");
@@ -122,6 +114,7 @@ public class User {
     }
     
     public Pair<Integer, String> addCoins(int coins, boolean coinMultiplier) {
+        Statistic stat = getStat(Stats.COINS);
         double multiplier = 1;
         String multiplierString = "";
         if (coinMultiplier) {
@@ -131,7 +124,7 @@ public class User {
             }
         }
         int totalCoins = (int) Math.round(coins * multiplier);
-        setCoins(getCoins() + totalCoins);
+        stat.setValue((stat.getValueAsInt() + totalCoins) + "");
         return new Pair<>(coins, multiplierString);
     }
     
@@ -231,9 +224,10 @@ public class User {
     }
     
     public void incrementOnlineTime() {
-        this.onlineTime++;
+        Statistic stat = getStat(Stats.ONLINE_TIME);
+        stat.increment();
         
-        if (this.onlineTime % 600 == 0) {
+        if (stat.getValueAsInt() % 600 == 0) {
             int multiplier = 1;
             if (hasPermission(Rank.SCAVENGER)) { multiplier = 2; }
             if (hasPermission(Rank.MEDIA)) { multiplier = 3; }

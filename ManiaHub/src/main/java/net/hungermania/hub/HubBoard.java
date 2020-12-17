@@ -21,7 +21,7 @@ public class HubBoard extends PlayerBoard {
     private final int killsLine;
     private ManiaCore maniaCore;
     
-    public HubBoard(Hub plugin, SpigotUser spigotUser) {
+    public HubBoard(SpigotUser spigotUser) {
         super(Utils.color("&6&lHUNGER MANIA"));
         this.user = spigotUser;
         addLine("", ChatColor.GOLD + "" + ChatColor.BOLD + "RANK", "");
@@ -44,7 +44,7 @@ public class HubBoard extends PlayerBoard {
         int totalKills = user.getStat(Stats.HG_KILLS).getValueAsInt();
         this.winsLine = addLine("", ChatColor.WHITE + "Wins: " + ChatColor.YELLOW, "" + totalWins);
         this.killsLine = addLine("", ChatColor.WHITE + "Kills: " + ChatColor.YELLOW, "" + totalKills);
-        this.coinsLine = addLine("", ChatColor.WHITE + "Coins: " + ChatColor.YELLOW, "" + spigotUser.getCoins());
+        this.coinsLine = addLine("", ChatColor.WHITE + "Coins: " + ChatColor.YELLOW, "" + spigotUser.getStat(Stats.COINS).getValueAsInt());
         addLine("", ChatColor.GRAY.toString(), "");
         addLine("", ChatColor.GOLD + "" + ChatColor.BOLD + "SERVER", "");
         ManiaServer currentServer = maniaCore.getServerManager().getCurrentServer();
@@ -76,6 +76,6 @@ public class HubBoard extends PlayerBoard {
         int totalKills = user.getStat(Stats.HG_KILLS).getValueAsInt();
         setLine(winsLine, totalWins + "");
         setLine(killsLine, totalKills + "");
-        setLine(coinsLine, user.getCoins() + "");
+        setLine(coinsLine, user.getStat(Stats.COINS).getValueAsInt() + "");
     }
 }

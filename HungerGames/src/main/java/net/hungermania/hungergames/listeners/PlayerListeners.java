@@ -118,7 +118,7 @@ public class PlayerListeners extends GameListener {
                 format = format.replace("{chatcolor}", channel.getColor());
             }
             
-            Level level = plugin.getManiaCore().getLevelManager().getLevel(user.getNetworkExperience());
+            Level level = plugin.getManiaCore().getLevelManager().getLevel(user.getStat(Stats.EXPERIENCE).getValueAsInt());
             
             format = format.replace("{levelcolor}", level.getNumberColor().toString());
             format = format.replace("{level}", level.getNumber() + "");
@@ -148,7 +148,7 @@ public class PlayerListeners extends GameListener {
         format = format.replace("{prefix}", rank.getPrefix());
         GameTeam team = game.getGameTeam(user.getUniqueId());
         format = format.replace("{teamcolor}", team.getColor());
-        Level level = plugin.getManiaCore().getLevelManager().getLevel(user.getNetworkExperience());
+        Level level = plugin.getManiaCore().getLevelManager().getLevel(user.getStat(Stats.EXPERIENCE).getValueAsInt());
         format = format.replace("{levelcolor}", level.getNumberColor().toString());
         format = format.replace("{level}", level.getNumber() + "");
         

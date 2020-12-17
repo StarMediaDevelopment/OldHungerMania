@@ -6,6 +6,7 @@ import net.hungermania.hungergames.records.PerkInfoRecord;
 import net.hungermania.hungergames.user.GameUser;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.redis.Redis;
+import net.hungermania.maniacore.api.stats.Stats;
 import net.hungermania.maniacore.api.util.Utils;
 import net.hungermania.maniacore.spigot.util.ItemBuilder;
 import org.bukkit.Material;
@@ -56,12 +57,12 @@ public abstract class Perk implements Comparable<Perk> {
             return;
         }
         
-        if (user.getCoins() < this.baseCost) {
+        if (user.getStat(Stats.EXPERIENCE).getValueAsInt() < this.baseCost) {
             user.sendMessage("&cYou do not have enough coins to purchase that perk.");
             return;
         }
         
-        user.setCoins(user.getCoins() - this.baseCost);
+        user.getStat(Stats.COINS).setValue(user.getStat(Stats.COINS).getValueAsInt() - this.baseCost);
         perkInfo.setValue(true);
         ManiaCore.getInstance().getDatabase().pushRecord(new PerkInfoRecord(perkInfo));
         user.sendMessage("&aYou purchased the perk " + getDisplayName());
@@ -78,7 +79,7 @@ public abstract class Perk implements Comparable<Perk> {
         if (user.getPerkInfo(this).getValue()) {
             lore.add(Utils.color("&a&oPurchased"));
         } else {
-            if (user.getCoins() >= baseCost) {
+            if (user.getStat(Stats.COINS).getValueAsInt() >= baseCost) {
                 lore.add(Utils.color("&e&oAvailable"));
                 lore.add("");
                 lore.add("&6&lLeft Click &fto purchase.");

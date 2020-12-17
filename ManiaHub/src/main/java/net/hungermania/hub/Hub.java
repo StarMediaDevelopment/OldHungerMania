@@ -11,6 +11,7 @@ import net.hungermania.maniacore.api.events.EventInfo;
 import net.hungermania.maniacore.api.leveling.Level;
 import net.hungermania.maniacore.api.server.ManiaServer;
 import net.hungermania.maniacore.api.server.ServerType;
+import net.hungermania.maniacore.api.stats.Stats;
 import net.hungermania.maniacore.api.util.Utils;
 import net.hungermania.maniacore.memory.MemoryHook;
 import net.hungermania.maniacore.memory.MemoryHook.Task;
@@ -324,13 +325,13 @@ public final class Hub extends JavaPlugin implements Listener, ManiaPlugin {
                     
                     SpigotUser user = (SpigotUser) ManiaCore.getInstance().getUserManager().getUser(player.getUniqueId());
                     if (user.getScoreboard() == null) {
-                        new HubBoard(Hub.this, user);
+                        new HubBoard(user);
                     } else {
                         user.getScoreboard().update();
                     }
                     user.getBukkitPlayer().setPlayerListName(Utils.color(user.getDisplayName()));
                     
-                    Level level = ManiaCore.getInstance().getLevelManager().getLevel(user.getNetworkExperience());
+                    Level level = ManiaCore.getInstance().getLevelManager().getLevel(user.getStat(Stats.EXPERIENCE).getValueAsInt());
                     if (level != null) {
                         player.setLevel(level.getNumber());
                         if (level.getNumber() != 0) {
@@ -342,7 +343,7 @@ public final class Hub extends JavaPlugin implements Listener, ManiaPlugin {
                                 if (previousLevel != null) {
                                     xpToNextLevel = xpToNextLevel - previousLevel.getTotalXp();
                                 }
-                                long currentProgress = user.getNetworkExperience() - level.getTotalXp();
+                                long currentProgress = user.getStat(Stats.EXPERIENCE).getValueAsInt() - level.getTotalXp();
                                 xp = (currentProgress * 1F) / (xpToNextLevel * 1F);
                             }
                             player.setExp(xp);
@@ -377,7 +378,7 @@ public final class Hub extends JavaPlugin implements Listener, ManiaPlugin {
         Gui.prepare(this);
         
         for (Player player : Bukkit.getOnlinePlayers()) {
-            new HubBoard(this, (SpigotUser) ManiaCore.getInstance().getUserManager().getUser(player.getUniqueId()));
+            new HubBoard((SpigotUser) ManiaCore.getInstance().getUserManager().getUser(player.getUniqueId()));
         }
         
         this.leaderboardManager = new LeaderboardManager(this);

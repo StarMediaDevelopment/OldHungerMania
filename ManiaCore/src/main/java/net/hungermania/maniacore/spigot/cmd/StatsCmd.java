@@ -29,7 +29,7 @@ public class StatsCmd implements CommandExecutor {
             return true;
         }
     
-        Level level = ManiaCore.getInstance().getLevelManager().getLevel(target.getNetworkExperience());
+        Level level = ManiaCore.getInstance().getLevelManager().getLevel(target.getStat(Stats.EXPERIENCE).getValueAsInt());
         Level nextLevel = ManiaCore.getInstance().getLevelManager().getLevels().getOrDefault(level.getNumber() + 1, ManiaCore.getInstance().getLevelManager().getLevel(0));
     
         User user = ManiaCore.getInstance().getUserManager().getUser(target.getUniqueId());
@@ -45,9 +45,9 @@ public class StatsCmd implements CommandExecutor {
         int chestsFound = user.getStat(Stats.HG_CHESTS_FOUND).getValueAsInt();
     
         sender.sendMessage(Utils.color("&6&l>> &a" + target.getName() + "'s Stats"));
-        sender.sendMessage(Utils.color("&6&l> &7Coins: &b" + target.getCoins()));
+        sender.sendMessage(Utils.color("&6&l> &7Coins: &b" + target.getStat(Stats.COINS).getValueAsInt()));
         sender.sendMessage(Utils.color("&6&l> &7Level: &b" + level.getNumber()));
-        sender.sendMessage(Utils.color("&6&l> &7Experience: &b" + target.getNetworkExperience() + "     &e&lNext Level: &b" + (nextLevel.getTotalXp() - target.getNetworkExperience())));
+        sender.sendMessage(Utils.color("&6&l> &7Experience: &b" + target.getStat(Stats.EXPERIENCE).getValueAsInt() + "     &e&lNext Level: &b" + (nextLevel.getTotalXp() - target.getStat(Stats.EXPERIENCE).getValueAsInt())));
         sender.sendMessage(Utils.color("&6&l> &7Kills: &b" + kills));
         sender.sendMessage(Utils.color("&6&l> &7Deaths: &b" + deaths));
         sender.sendMessage(Utils.color("&6&l> &7K/D: &b" + Constants.NUMBER_FORMAT.format(kdr)));

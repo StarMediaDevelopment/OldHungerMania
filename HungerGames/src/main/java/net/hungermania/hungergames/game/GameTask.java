@@ -11,6 +11,7 @@ import net.hungermania.maniacore.api.util.Utils;
 import net.hungermania.maniacore.memory.MemoryHook.Task;
 import net.hungermania.maniacore.spigot.user.SpigotUser;
 import net.hungermania.maniacore.spigot.util.SpigotUtils;
+import net.hungermania.manialib.util.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -131,15 +132,8 @@ public class GameTask extends BukkitRunnable {
                 if (elapsedMinutes % 5 == 0 && !(elapsedMinutes == 0)) {
                     for (UUID tribute : game.getTributesTeam()) {
                         GamePlayer gamePlayer = game.getPlayer(tribute);
-                        gamePlayer.getUser().setCoins(gamePlayer.getUser().getCoins());
-                        Rank rank = gamePlayer.getUser().getRank();
-                        String multiplierString = "";
-                        if (rank.getCoinMultiplier() > 1) {
-                            multiplierString = rank.getBaseColor() + "&lx" + rank.getCoinMultiplier() + " " + rank.getName() + " Bonus";
-                        }
-                        int coins = (int) Math.round(15 * rank.getCoinMultiplier());
-                        gamePlayer.getUser().setCoins(gamePlayer.getUser().getCoins());
-                        gamePlayer.getUser().sendMessage("&2&l>> &a&l+" + coins + " &3&lCOINS&a! " + multiplierString);
+                        Pair<Integer, String> result = gamePlayer.getUser().addCoins(15, true);
+                        gamePlayer.getUser().sendMessage("&2&l>> &a&l+" + result.getValue1() + " &3&lCOINS&a! " + result.getValue2());
                     }
                     this.survivalTime.add(elapsedMinutes);
                 }

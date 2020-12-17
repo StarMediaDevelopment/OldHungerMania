@@ -57,7 +57,7 @@ public class MutateGui extends Gui {
             if (unlockedTypes.contains(mutation.getType())) {
                 status = MutationStatus.AVAILABLE;
             } else {
-                if (gamePlayer.getUser().getCoins() >= mutation.getUnlockCost()) {
+                if (gamePlayer.getUser().getStat(Stats.COINS).getValueAsInt() >= mutation.getUnlockCost()) {
                     status = MutationStatus.PURCHASABLE;
                 } else {
                     status = MutationStatus.LOCKED;
@@ -111,7 +111,7 @@ public class MutateGui extends Gui {
                 for (Entry<MutationType, ItemStack> entry : items.entrySet()) {
                     setButton(availableCounter.get(), new GUIButton(entry.getValue()).setListener((e) -> {
                         User user = ManiaCore.getInstance().getUserManager().getUser(e.getWhoClicked().getUniqueId());
-                        if (user.getCoins() < Mutations.MUTATIONS.get(entry.getKey()).getUseCost()) {
+                        if (user.getStat(Stats.COINS).getValueAsInt() < Mutations.MUTATIONS.get(entry.getKey()).getUseCost()) {
                             e.getWhoClicked().closeInventory();
                             e.getWhoClicked().sendMessage(Utils.color("&cYou do not have enough coins to use that mutation."));
                             return;
@@ -127,8 +127,8 @@ public class MutateGui extends Gui {
                         if (e.getClick() == ClickType.RIGHT) {
                             User user = ManiaCore.getInstance().getUserManager().getUser(e.getWhoClicked().getUniqueId());
                             Mutation mutation = Mutations.MUTATIONS.get(entry.getKey());
-                            if (user.getCoins() >= mutation.getUnlockCost()) {
-                                user.setCoins(user.getCoins() - mutation.getUnlockCost());
+                            if (user.getStat(Stats.COINS).getValueAsInt() >= mutation.getUnlockCost()) {
+                                user.getStat(Stats.COINS).setValue((user.getStat(Stats.COINS).getValueAsInt() - mutation.getUnlockCost()) + "");
                                 unlockedTypes.add(entry.getKey());
                                 user.setStat(Stats.HG_UNLOCKED_MUTATIONS, StringUtils.join(unlockedTypes, ";"));
                                 e.getWhoClicked().closeInventory();

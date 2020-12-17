@@ -13,6 +13,7 @@ import net.hungermania.maniacore.api.records.CmdEntryRecord;
 import net.hungermania.maniacore.api.redis.Redis;
 import net.hungermania.maniacore.api.server.ServerType;
 import net.hungermania.maniacore.api.skin.Skin;
+import net.hungermania.maniacore.api.stats.Stats;
 import net.hungermania.maniacore.api.user.*;
 import net.hungermania.maniacore.api.user.toggle.Toggles;
 import net.hungermania.maniacore.api.util.Utils;
@@ -109,7 +110,7 @@ public class SpigotUserManager extends UserManager implements Listener {
                 format = format.replace("{chatcolor}", channel.getColor());
             }
             
-            Level level = ManiaCore.getInstance().getLevelManager().getLevel(user.getNetworkExperience());
+            Level level = ManiaCore.getInstance().getLevelManager().getLevel(user.getStat(Stats.EXPERIENCE).getValueAsInt());
             
             format = format.replace("{levelcolor}", level.getNumberColor().toString());
             format = format.replace("{level}", level.getNumber() + "");

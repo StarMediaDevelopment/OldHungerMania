@@ -57,4 +57,9 @@ public class Statistic {
         this.value = value;
         this.modified = System.currentTimeMillis();
     }
+    
+    public void setValue(int value) {
+        this.value = String.valueOf(value);
+        this.modified = System.currentTimeMillis();
+    }
 }

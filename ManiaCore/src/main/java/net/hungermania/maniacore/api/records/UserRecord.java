@@ -16,12 +16,9 @@ public class UserRecord implements IRecord<User> {
         Column id = new Column("id", DataType.INT, true, true);
         Column uniqueId = new Column("uniqueId", DataType.VARCHAR, 64, false, false);
         Column name = new Column("name", DataType.VARCHAR, 32, false, false);
-        Column networkExperience = new Column("networkExperience", DataType.BIGINT, false, false);
-        Column coins = new Column("coins", DataType.INT);
         Column rank = new Column("rank", DataType.VARCHAR, 100);
         Column channel = new Column("channel", DataType.VARCHAR, 15);
-        Column onlineTime = new Column("onlineTime", DataType.BIGINT);
-        table.addColumns(id, uniqueId, name, networkExperience, coins, rank, channel, onlineTime);
+        table.addColumns(id, uniqueId, name, rank, channel);
         return table;
     }
     
@@ -33,8 +30,6 @@ public class UserRecord implements IRecord<User> {
         int id = row.getInt("id");
         UUID uniqueId = UUID.fromString(row.getString("uniqueId"));
         String name = row.getString("name");
-        long networkExperience = row.getLong("networkExperience");
-        int coins = row.getInt("coins");
         Rank rank = Rank.valueOf(row.getString("rank"));
         
         Channel channel;
@@ -43,8 +38,7 @@ public class UserRecord implements IRecord<User> {
         } catch (Exception e) {
             channel = Channel.GLOBAL;
         }
-        long onlineTime = row.getLong("onlineTime");
-        this.user = new User(id, uniqueId, name, networkExperience, coins, rank, channel, onlineTime);
+        this.user = new User(id, uniqueId, name, rank, channel);
     }
     
     public int getId() {
@@ -60,11 +54,8 @@ public class UserRecord implements IRecord<User> {
             put("id", user.getId());
             put("uniqueId", user.getUniqueId().toString());
             put("name", user.getName());
-            put("networkExperience", user.getNetworkExperience());
-            put("coins", user.getCoins());
             put("rank", user.getRank().name());
             put("channel", user.getChannel().name());
-            put("onlineTime", user.getOnlineTime());
         }};
     }
     

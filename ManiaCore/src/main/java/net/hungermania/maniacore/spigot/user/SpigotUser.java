@@ -31,11 +31,11 @@ public class SpigotUser extends User {
     }
     
     public SpigotUser(User user) {
-        this(user.getId(), user.getUniqueId(), user.getName(), user.getNetworkExperience(), user.getCoins(), user.getRank(), user.getChannel(), user.getOnlineTime());
+        this(user.getId(), user.getUniqueId(), user.getName(), user.getRank(), user.getChannel());
     }
     
-    public SpigotUser(int id, UUID uniqueId, String name, long networkExperience, int coins, Rank rank, Channel channel, long onlineTime) {
-        super(id, uniqueId, name, networkExperience, coins, rank, channel, onlineTime);
+    public SpigotUser(int id, UUID uniqueId, String name, Rank rank, Channel channel) {
+        super(id, uniqueId, name, rank, channel);
     }
     
     public void sendMessage(BaseComponent baseComponent) {
