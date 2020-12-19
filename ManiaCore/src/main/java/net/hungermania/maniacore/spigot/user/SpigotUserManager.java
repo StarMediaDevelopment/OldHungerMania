@@ -197,7 +197,7 @@ public class SpigotUserManager extends UserManager implements Listener {
                 UserJoinEvent event = new UserJoinEvent((SpigotUser) user);
                 Bukkit.getServer().getPluginManager().callEvent(event);
             }, 1L);
-        }, 1L);
+        }, 5L);
     }
     
     @EventHandler
