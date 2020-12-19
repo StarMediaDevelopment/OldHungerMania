@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 public class FattyPerk extends TieredPerk {
     public FattyPerk() {
-        super("Fatty", 1000, 100, Material.CAKE);
+        super("Fatty", 1000, 100, Material.CAKE, PerkCategory.OTHER);
         
         this.tiers.put(1, new Tier(1, getBaseCost(), 10) {
             public boolean activate(User user) {

@@ -8,8 +8,8 @@ public class FlatPerk extends Perk {
     public FlatPerk() {
     }
     
-    public FlatPerk(String name, int baseCost, int chance, Material iconMaterial) {
-        super(name, baseCost, chance, iconMaterial);
+    public FlatPerk(String name, int baseCost, int chance, Material iconMaterial, PerkCategory category) {
+        super(name, baseCost, chance, iconMaterial, category);
     }
     
     public boolean activate(GameUser user) {

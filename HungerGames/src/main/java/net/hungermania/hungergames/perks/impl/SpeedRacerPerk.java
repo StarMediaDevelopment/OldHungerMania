@@ -10,7 +10,7 @@ import org.bukkit.potion.PotionEffectType;
 
 public class SpeedRacerPerk extends TieredPerk {
     public SpeedRacerPerk() {
-        super("Speed Racer", 1500, 100, Material.BEACON);
+        super("Speed Racer", 1500, 100, Material.BEACON, PerkCategory.OTHER);
         
         this.tiers.put(1, new Tier(1, getBaseCost()) {
             public boolean activate(User user) {

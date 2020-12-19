@@ -9,8 +9,8 @@ public class ItemPerk extends FlatPerk {
     
     private ItemStack itemStack;
     
-    public ItemPerk(String name, int baseCost, int chance, ItemStack itemStack) {
-        super(name, baseCost, chance, itemStack.getType());
+    public ItemPerk(String name, int baseCost, int chance, ItemStack itemStack, PerkCategory category) {
+        super(name, baseCost, chance, itemStack.getType(), category);
         this.itemStack = itemStack;
     }
     

@@ -1,6 +1,6 @@
 package net.hungermania.hungergames.perks.cmd;
 
-import net.hungermania.hungergames.perks.gui.PerkGui;
+import net.hungermania.hungergames.perks.gui.PerkMainGui;
 import net.hungermania.hungergames.user.GameUser;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.util.Utils;
@@ -14,7 +14,7 @@ public class PerkCmd implements CommandExecutor {
             return true;
         }
         GameUser user = (GameUser) ManiaCore.getInstance().getUserManager().getUser(((Player) sender).getUniqueId());
-        new PerkGui(user).openGUI((Player) sender);
+        new PerkMainGui(user).openGUI((Player) sender);
         return true;
     }
 }

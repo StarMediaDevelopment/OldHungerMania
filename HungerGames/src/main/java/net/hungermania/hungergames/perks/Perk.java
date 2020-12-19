@@ -21,15 +21,17 @@ public abstract class Perk implements Comparable<Perk> {
     protected int baseCost;
     protected int chance;
     protected Material iconMaterial;
+    protected PerkCategory category;
     
     public Perk() {
     }
     
-    public Perk(String displayName, int baseCost, int chance, Material iconMaterial) {
+    public Perk(String displayName, int baseCost, int chance, Material iconMaterial, PerkCategory category) {
         this.displayName = displayName;
         this.baseCost = baseCost;
         this.chance = chance;
         this.iconMaterial = iconMaterial;
+        this.category = category;
     }
     
     public abstract boolean activate(GameUser user);
@@ -95,5 +97,17 @@ public abstract class Perk implements Comparable<Perk> {
     
     public int compareTo(Perk o) {
         return this.getName().compareTo(o.getName());
+    }
+    
+    public enum PerkCategory {
+        KILL(Material.DIAMOND_SWORD), OTHER(Material.BEDROCK);
+        private Material iconMaterial;
+        PerkCategory(Material iconMaterial) {
+            this.iconMaterial = iconMaterial;
+        }
+        
+        public ItemStack getIcon() {
+            return ItemBuilder.start(iconMaterial).setDisplayName("&d" + Utils.capitalizeEveryWord(name() + " Perks")).build();
+        }
     }
 }

@@ -9,7 +9,7 @@ import org.bukkit.potion.PotionEffectType;
 
 public class SurvivalistPerk extends FlatPerk {
     public SurvivalistPerk() {
-        super("Survivalist", 10000, 1, Material.GOLD_HELMET);
+        super("Survivalist", 10000, 1, Material.GOLD_HELMET, PerkCategory.KILL);
     }
     
     public boolean activate(GameUser user) {

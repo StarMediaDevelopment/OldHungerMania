@@ -6,7 +6,7 @@ import org.bukkit.Material;
 
 public class FeatherweightPerk extends TieredPerk {
     public FeatherweightPerk() {
-        super("Featherweight", 1500, 100, Material.FEATHER);
+        super("Featherweight", 1500, 100, Material.FEATHER, PerkCategory.OTHER);
         
         this.tiers.put(1, new Tier(1, getBaseCost(), 10) {
             public boolean activate(User user) {

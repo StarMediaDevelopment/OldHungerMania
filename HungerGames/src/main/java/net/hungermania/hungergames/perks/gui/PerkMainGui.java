@@ -7,8 +7,8 @@ import net.hungermania.hungergames.user.GameUser;
 import net.hungermania.maniacore.spigot.gui.GUIButton;
 import net.hungermania.maniacore.spigot.gui.Gui;
 
-public class PerkGui extends Gui {
-    public PerkGui(GameUser user) {
+public class PerkMainGui extends Gui {
+    public PerkMainGui(GameUser user) {
         super(HungerGames.getInstance(), "Perks", false, 27);
     
         for (Perk perk : Perks.PERKS) {
