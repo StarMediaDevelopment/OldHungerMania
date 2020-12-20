@@ -467,8 +467,9 @@ public class Game {
             }
             
             String winnerName;
+            UUID winner = null;
             if (this.tributesTeam.size() == 1) {
-                UUID winner = new ArrayList<>(tributesTeam.getMembers()).get(0);
+                winner = new ArrayList<>(tributesTeam.getMembers()).get(0);
                 Player player = Bukkit.getPlayer(winner);
                 GamePlayer gamePlayer = this.players.get(player.getUniqueId());
                 gamePlayer.getUser().incrementStat(Stats.HG_WINS);
@@ -477,6 +478,7 @@ public class Game {
                 gamePlayer.setEarnedCoins(gamePlayer.getEarnedCoins() + result.getValue1());
                 user.sendMessage("&2&l>> &a+" + result.getValue1() + " &3COINS&a! " + result.getValue2());
                 user.addNetworkExperience(30);
+                user.incrementStat(Stats.HG_WINSTREAK);
 //                EventInfo activeEvent = ManiaCore.getInstance().getEventManager().getActiveEvent();
 //                if (activeEvent != null) {
 //                    if (activeEvent.getServers().contains(ManiaCore.getInstance().getServerManager().getCurrentServer().getName())) {
@@ -498,6 +500,9 @@ public class Game {
             
             HungerGames.getInstance().getManiaCore().getDatabase().addRecordToQueue(new GameRecord(this));
             for (GamePlayer gp : this.players.values()) {
+                if (!gp.getUser().getUniqueId().equals(winner)) {
+                    gp.getUser().getStat(Stats.HG_WINSTREAK).setValue(0);
+                }
                 Redis.pushUser(gp.getUser());
                 gp.getUser().setScoreboard(null);
             }

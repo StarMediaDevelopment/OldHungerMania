@@ -54,6 +54,7 @@ public class StatsCmd implements CommandExecutor {
         sender.sendMessage(Utils.color("&6&l> &7Wins: &b" + wins));
         sender.sendMessage(Utils.color("&6&l> &7Losses: &b" + losses));
         sender.sendMessage(Utils.color("&6&l> &7W/L: &b" + Constants.NUMBER_FORMAT.format(wlr)));
+        sender.sendMessage(Utils.color("&6&l> &7Win Streak: &b" + user.getStat(Stats.HG_WINSTREAK).getValue()));
         sender.sendMessage(Utils.color("&6&l> &7Deathmatches Reached: &b" + deathmatches));
         sender.sendMessage(Utils.color("&6&l> &7Chests Found: &b" + chestsFound));
         

@@ -12,6 +12,7 @@ public enum Stats implements Stat {
     HG_GAMES("hg_games", "0", true),
     HG_KILLS("hg_kills", "0", true),
     HG_UNLOCKED_MUTATIONS("hg_unlocked_mutations", "PIG_ZOMBIE", false),
+    HG_WINSTREAK("hg_winstreak", "0", true),
     
     COINS("coins", "0", true),
     EXPERIENCE("experience", "0", true),
