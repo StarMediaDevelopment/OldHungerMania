@@ -12,7 +12,7 @@ import java.util.Map.Entry;
 
 public class BettyPerk extends FlatPerk {
     public BettyPerk() {
-        super("Betty", 1000, 100, Material.DIAMOND_AXE, PerkCategory.KILL);
+        super("Betty", 1000, 100, Material.DIAMOND_AXE, PerkCategory.KILL, "Your axe gains sharpness 1 after killing 3 people with that axe.");
     }
     
     private static final Set<Material> AXE_TYPES = EnumSet.of(Material.WOOD_AXE, Material.STONE_AXE, Material.GOLD_AXE, Material.IRON_AXE, Material.DIAMOND_AXE);

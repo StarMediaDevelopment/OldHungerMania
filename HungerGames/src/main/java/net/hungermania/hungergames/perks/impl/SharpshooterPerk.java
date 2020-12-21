@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class SharpshooterPerk extends TieredPerk {
     public SharpshooterPerk() {
-        super("Sharpshooter", 1500, 100, Material.BOW, PerkCategory.KILL);
+        super("Sharpshooter", 1500, 100, Material.BOW, PerkCategory.KILL, "You have a chance to get your arrow back after shooting someone with a bow.");
         
         this.tiers.put(1, new Tier(1, getBaseCost(), 10) {
             public boolean activate(User user) {

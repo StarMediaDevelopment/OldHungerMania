@@ -14,8 +14,8 @@ public abstract class TieredPerk extends Perk {
     
     protected Map<Integer, Tier> tiers = new HashMap<>();
     
-    public TieredPerk(String name, int baseCost, int chance, Material iconMaterial, PerkCategory category) {
-        super(name, baseCost, chance, iconMaterial, category);
+    public TieredPerk(String name, int baseCost, int chance, Material iconMaterial, PerkCategory category, String description) {
+        super(name, baseCost, chance, iconMaterial, category, description);
     }
     
     public Map<Integer, Tier> getTiers() {

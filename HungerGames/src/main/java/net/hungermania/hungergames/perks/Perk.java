@@ -22,16 +22,18 @@ public abstract class Perk implements Comparable<Perk> {
     protected int chance;
     protected Material iconMaterial;
     protected PerkCategory category;
+    protected String description;
     
     public Perk() {
     }
     
-    public Perk(String displayName, int baseCost, int chance, Material iconMaterial, PerkCategory category) {
+    public Perk(String displayName, int baseCost, int chance, Material iconMaterial, PerkCategory category, String description) {
         this.displayName = displayName;
         this.baseCost = baseCost;
         this.chance = chance;
         this.iconMaterial = iconMaterial;
         this.category = category;
+        this.description = description;
     }
     
     public abstract boolean activate(GameUser user);

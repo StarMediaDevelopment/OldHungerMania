@@ -13,7 +13,7 @@ public class PotionPerk extends FlatPerk {
     protected PotionEffectType type;
     protected int amplifier, length;
     
-    public PotionPerk(int cost, PotionEffectType type, int amplifier, int length, Material icon, PerkCategory category) {
+    public PotionPerk(int cost, PotionEffectType type, int amplifier, int length, Material icon, PerkCategory category, String description) {
         this.displayName = type.getName() + " " + amplifier;
         this.baseCost = cost;
         this.chance = 100;
@@ -22,9 +22,10 @@ public class PotionPerk extends FlatPerk {
         this.length = length;
         this.iconMaterial = icon;
         this.category = category;
+        this.description = description;
     }
     
-    public PotionPerk(String name, int cost, PotionEffectType type, int amplifier, int length, Material icon, PerkCategory category) {
+    public PotionPerk(String name, int cost, PotionEffectType type, int amplifier, int length, Material icon, PerkCategory category, String description) {
         this.displayName = name;
         this.baseCost = cost;
         this.chance = 100;
@@ -33,6 +34,7 @@ public class PotionPerk extends FlatPerk {
         this.length = length;
         this.iconMaterial = icon;
         this.category = category;
+        this.description = description;
     }
     
     public ItemStack getIcon(GameUser user) {
