@@ -17,6 +17,7 @@ public class PerkInfoRecord implements IRecord<PerkInfo> {
         table.addColumn("created", DataType.BIGINT);
         table.addColumn("modified", DataType.BIGINT);
         table.addColumn("unlockedTiers", DataType.VARCHAR, 1000);
+        table.addColumn("active", DataType.VARCHAR, 5);
         return table;
     }
     
@@ -40,7 +41,8 @@ public class PerkInfoRecord implements IRecord<PerkInfo> {
                 unlockedTiers.add(Integer.parseInt(s));
             } catch (Exception e) {}
         }
-        this.object = new PerkInfo(id, uuid, name, value, unlockedTiers, created, modified);
+        boolean active = row.getBoolean("active");
+        this.object = new PerkInfo(id, uuid, name, value, unlockedTiers, created, modified, active);
     }
     
     public int getId() {
@@ -60,6 +62,7 @@ public class PerkInfoRecord implements IRecord<PerkInfo> {
             put("created", object.getCreated());
             put("modified", object.getModified());
             put("unlockedTiers", Utils.join(object.getUnlockedTiers(), ","));
+            put("active", object.isActive());
         }};
     }
     
