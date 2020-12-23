@@ -82,13 +82,22 @@ public abstract class Perk implements Comparable<Perk> {
         List<String> lore = new LinkedList<>();
         if (user.getPerkInfo(this).getValue()) {
             lore.add(Utils.color("&a&oPurchased"));
+            lore.add("&7&o" + getDescription());
+            if (user.getPerkInfo(this).isActive()) {
+                lore.add("");
+                lore.add("&a&lSELECTED");
+            } else {
+                lore.add("");
+                lore.add("&6&lRight Click &fto select.");
+            }
         } else {
             if (user.getStat(Stats.COINS).getValueAsInt() >= baseCost) {
                 lore.add(Utils.color("&e&oAvailable"));
+                lore.add("&7&o" + getDescription());
                 lore.add("");
-                lore.add("&6&lLeft Click &fto purchase.");
+                lore.add("&6&lLeft Click &fto purchase for " + getBaseCost() + ".");
             } else {
-                lore.add(Utils.color("&c&oPurcahsed"));
+                lore.add(Utils.color("&c&oLocked"));
                 lore.add("&dYou do not have enough coins to purchase this perks.");
             }
         }

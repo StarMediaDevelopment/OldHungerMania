@@ -31,7 +31,7 @@ public class LevelManager {
     
     public void generateDefaults() {
         if (levels.isEmpty()) {
-            int totalXp = 5000;
+            int totalXp = 2500;
     
             Set<Range<ChatColor>> levelColors = new HashSet<>();
             levelColors.add(new Range<>(1, 9, ChatColor.GRAY));
@@ -55,7 +55,14 @@ public class LevelManager {
                     }
                 }
                 
-                Level level = new Level(i, i * 5000, 0, color);
+                int levelXp;
+                if (i == 1) {
+                    levelXp = totalXp;
+                } else {
+                    levelXp = ((i - 1) * totalXp) + (i * totalXp);
+                }
+                
+                Level level = new Level(i, levelXp, 0, color);
                 ManiaCore.getInstance().getDatabase().addRecordToQueue(new LevelRecord(level));
                 this.levels.put(i, level);
             }
