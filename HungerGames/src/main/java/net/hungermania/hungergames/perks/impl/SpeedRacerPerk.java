@@ -16,7 +16,7 @@ public class SpeedRacerPerk extends TieredPerk {
             public boolean activate(User user) {
                 Player player = Bukkit.getPlayer(user.getUniqueId());
                 if (player == null) return false;
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 1, 20));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20, 1));
                 return true;
             }
         });
@@ -25,7 +25,7 @@ public class SpeedRacerPerk extends TieredPerk {
             public boolean activate(User user) {
                 Player player = Bukkit.getPlayer(user.getUniqueId());
                 if (player == null) return false;
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 1, 40));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 40, 1));
                 return true;
             }
         });
@@ -34,7 +34,7 @@ public class SpeedRacerPerk extends TieredPerk {
             public boolean activate(User user) {
                 Player player = Bukkit.getPlayer(user.getUniqueId());
                 if (player == null) return false;
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 1, 60));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60, 1));
                 return true;
             }
         });
