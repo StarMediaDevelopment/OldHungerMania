@@ -657,7 +657,7 @@ public class PlayerListeners extends GameListener {
                             } else {
                                 lobby.getPlayers().add(user);
                             }
-                            user.getBukkitPlayer().teleport(Bukkit.getWorld("world").getSpawnLocation());
+                            user.getBukkitPlayer().teleport(plugin.getSpawn());
                             
                             if (lobby.getPlayers().size() >= lobby.getGameSettings().getMinPlayers()) {
                                 lobby.startTimer();

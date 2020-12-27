@@ -17,7 +17,7 @@ import java.util.Map.Entry;
 
 public abstract class TieredPerk extends Perk {
     
-    protected Map<Integer, Tier> tiers = new HashMap<>();
+    protected Map<Integer, Tier> tiers = new TreeMap<>();
     
     public TieredPerk(String name, int baseCost, int chance, Material iconMaterial, PerkCategory category, String description) {
         super(name, baseCost, chance, iconMaterial, category, description);
@@ -39,14 +39,31 @@ public abstract class TieredPerk extends Perk {
         ItemBuilder itemBuilder = ItemBuilder.start(iconMaterial).setDisplayName("&b" + displayName);
         List<String> lore = new LinkedList<>();
         PerkInfo perkInfo = user.getPerkInfo(this);
+        Set<Integer> unlockedTiers = perkInfo.getUnlockedTiers();
         if (perkInfo.getValue()) {
             lore.add(Utils.color("&a&oPurchased"));
             lore.add("&7&o" + getDescription());
+            lore.add("");
+    
+            lore.add("&dTIERS");
+            for (Entry<Integer, Tier> entry : this.tiers.entrySet()) {
+                String color = "";
+                if (unlockedTiers.contains(entry.getKey())) {
+                    color = "&a";
+                } else {
+                    if (user.getStat(Stats.COINS).getValueAsInt() >= entry.getValue().getCost()) {
+                        color = "&e";
+                    } else {
+                        color = "&c";
+                    }
+                }
+                
+                lore.add(" &8- " + color + " Tier " + entry.getKey() + ": " + entry.getValue().getDescription());
+            }
+            
             if (perkInfo.isActive()) {
-                lore.add("");
                 lore.add("&a&lSELECTED");
             } else {
-                lore.add("");
                 lore.add("&6&lRight Click &fto select.");
             }
         } else {
@@ -101,5 +118,9 @@ public abstract class TieredPerk extends Perk {
         }
     
         public abstract boolean activate(User user);
+    
+        public String getDescription() {
+            return null;
+        }
     }
 }

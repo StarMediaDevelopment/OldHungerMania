@@ -313,6 +313,8 @@ public class HGCommand implements CommandExecutor {
         } else if (Utils.checkCmdAliases(args, 0, "setspawn")) {
             plugin.setSpawn(player.getLocation());
             sender.sendMessage(Utils.color("&aSet the spawnpoint to your current location."));
+            plugin.getConfig().set("spawn", plugin.getSpawn());
+            plugin.saveConfig();
         } else if (Utils.checkCmdAliases(args, 0, "mutations")) {
             if (!sender.hasPermission("mania.hungergames.playertrackers")) {
                 sender.sendMessage(Utils.color("&cYou do not have permission to use that command."));
