@@ -1,0 +1,27 @@
+name: ManiaCore
+version: ${project.version}
+main: net.hungermania.maniacore.ManiaCorePlugin
+authors: [Firestar311]
+description: Library Plugin for HungerMania
+website: hungermania.net
+depend: [TimoCloud,LuckPerms,Vault]
+commands:
+    incognito:
+        aliases: [i]
+    message:
+        aliases: [whisper, msg, tell]
+    me:
+    broadcast:
+        aliases: [bc]
+    memory:
+        aliases: [mem, tps]
+    say:
+    stats:
+    toggle:
+    reply:
+        aliases: [r]
+    ignore:
+    rank:
+    friends:
+        aliases: [f]
+    setstat:

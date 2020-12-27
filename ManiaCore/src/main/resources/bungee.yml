@@ -1,0 +1,5 @@
+name: ManiaCore
+version: ${project.version}
+main: net.hungermania.maniacore.ManiaCoreProxy
+description: HungerMania's Core
+depends: [TimoCloud]
