@@ -9,9 +9,11 @@ import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.channel.Channel;
 import net.hungermania.maniacore.api.events.EventInfo;
 import net.hungermania.maniacore.api.leveling.Level;
+import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.maniacore.api.server.ManiaServer;
 import net.hungermania.maniacore.api.server.ServerType;
 import net.hungermania.maniacore.api.stats.Stats;
+import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.util.Utils;
 import net.hungermania.maniacore.memory.MemoryHook;
 import net.hungermania.maniacore.memory.MemoryHook.Task;
@@ -177,7 +179,8 @@ public final class Hub extends JavaPlugin implements Listener, ManiaPlugin {
             }
             
             Player player = (Player) sender;
-            if (!player.hasPermission("hungermania.fly")) {
+            User user = ManiaCore.getInstance().getUserManager().getUser(player.getUniqueId());
+            if (!user.hasPermission(Rank.HELPER)) {
                 player.sendMessage(Utils.color("&cYou do not have permission to use that command."));
                 return true;
             }
