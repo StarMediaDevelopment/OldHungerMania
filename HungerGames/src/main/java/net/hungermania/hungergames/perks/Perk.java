@@ -61,7 +61,7 @@ public abstract class Perk implements Comparable<Perk> {
             return;
         }
         
-        if (user.getStat(Stats.EXPERIENCE).getValueAsInt() < this.baseCost) {
+        if (user.getStat(Stats.COINS).getValueAsInt() < this.baseCost) {
             user.sendMessage("&cYou do not have enough coins to purchase that perk.");
             return;
         }

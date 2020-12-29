@@ -12,7 +12,7 @@ public class SpeedRacerPerk extends TieredPerk {
     public SpeedRacerPerk() {
         super("Speed Racer", 1500, 100, Material.BEACON, PerkCategory.OTHER, "A perk that enables on game starts so that you get a boost to get to starting loot.");
         
-        this.tiers.put(1, new Tier(1, getBaseCost()) {
+        this.tiers.put(1, new Tier(1, getBaseCost(), "Get 1 second of speed 1") {
             public boolean activate(User user) {
                 Player player = Bukkit.getPlayer(user.getUniqueId());
                 if (player == null) return false;
@@ -21,7 +21,7 @@ public class SpeedRacerPerk extends TieredPerk {
             }
         });
     
-        this.tiers.put(2, new Tier(2, 2000) {
+        this.tiers.put(2, new Tier(2, 2000, "Get 2 seconds of speed 1") {
             public boolean activate(User user) {
                 Player player = Bukkit.getPlayer(user.getUniqueId());
                 if (player == null) return false;
@@ -30,7 +30,7 @@ public class SpeedRacerPerk extends TieredPerk {
             }
         });
     
-        this.tiers.put(3, new Tier(3, 2500) {
+        this.tiers.put(3, new Tier(3, 2500, "Get 3 seconds of speed 1") {
             public boolean activate(User user) {
                 Player player = Bukkit.getPlayer(user.getUniqueId());
                 if (player == null) return false;
