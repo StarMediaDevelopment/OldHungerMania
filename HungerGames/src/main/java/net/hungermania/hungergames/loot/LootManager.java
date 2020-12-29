@@ -18,9 +18,17 @@ public class LootManager {
     public void loadFromDatabase() {
         List<IRecord> records = plugin.getManiaCore().getDatabase().getRecords(LootRecord.class, null, null);
         if (!records.isEmpty()) {
+            records:
             for (IRecord record : records) {
                 if (record instanceof LootRecord) {
                     LootRecord lootRecord = (LootRecord) record;
+                    Loot loot = lootRecord.toObject();
+                    for (Loot value : this.possibleLoot.values()) {
+                        if (value.getMaterial() == loot.getMaterial()) {
+                            ManiaCore.getInstance().getDatabase().deleteRecord(lootRecord);
+                            continue records;
+                        }
+                    }
                     this.possibleLoot.put(lootRecord.getId(), lootRecord.toObject());
                 }
             }
