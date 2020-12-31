@@ -13,7 +13,10 @@ public class PerkMainGui extends Gui {
     
         for (Perk perk : Perks.PERKS) {
             GUIButton button = new GUIButton(perk.getIcon(user));
-            button.setListener(e -> perk.handlePurchase(user));
+            button.setListener(e -> { 
+                perk.handlePurchase(user); 
+                refreshInventory(e.getWhoClicked());
+            });
             addButton(button);
         }
     }
