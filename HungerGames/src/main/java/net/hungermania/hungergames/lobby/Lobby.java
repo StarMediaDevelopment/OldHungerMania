@@ -296,6 +296,7 @@ public class Lobby implements Listener, CommandExecutor {
             } catch (Exception e) {
                 handleError(e.getMessage());
                 this.game = null;
+                this.voteTimer = null;
                 return;
             }
             if (this.game.getId() == -1) {
