@@ -6,14 +6,12 @@ import net.hungermania.hungergames.records.PerkInfoRecord;
 import net.hungermania.hungergames.user.GameUser;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.redis.Redis;
-import net.hungermania.maniacore.api.stats.Statistic;
 import net.hungermania.maniacore.api.stats.Stats;
 import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.util.Utils;
 import net.hungermania.maniacore.spigot.util.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.Potion.Tier;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -153,11 +151,12 @@ public abstract class TieredPerk extends Perk {
     
     public Tier getTier(GameUser user) {
         int currentTier = 0;
-        for (Entry<String, Statistic> stats : user.getStats().entrySet()) {
-            if (stats.getKey().contains(getName())) {
-                int t = Integer.parseInt(stats.getKey().split(":")[1]);
-                if (t > currentTier) {
-                    currentTier = t;
+        PerkInfo perkInfo = user.getPerkInfo(this);
+        if (perkInfo != null) {
+            Set<Integer> unlockedTiers = perkInfo.getUnlockedTiers();
+            for (Integer unlockedTier : unlockedTiers) {
+                if (unlockedTier > currentTier) {
+                    currentTier = unlockedTier;
                 }
             }
         }
