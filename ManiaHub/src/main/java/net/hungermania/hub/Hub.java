@@ -250,8 +250,9 @@ public final class Hub extends JavaPlugin implements Listener, ManiaPlugin {
                 Map<Integer, ItemStack> serverStacks = new TreeMap<>();
                 int onlinePlayers = 0, maximumPlayers = 0;
                 EventInfo activeEvent = ManiaCore.getInstance().getEventManager().getActiveEvent();
-                
-                for (ServerObject server : TimoCloudAPI.getUniversalAPI().getServerGroup("HG").getServers()) {
+    
+                Collection<ServerObject> hgServers = TimoCloudAPI.getUniversalAPI().getServerGroup("HG").getServers();
+                for (ServerObject server : hgServers) {
                     Material itemMaterial = null;
                     List<String> lore = new LinkedList<>();
                     if (server.getState().equalsIgnoreCase("online") || server.getState().equalsIgnoreCase("ingame") || server.getState().equalsIgnoreCase("lobby")) {
