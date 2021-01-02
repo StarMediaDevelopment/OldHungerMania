@@ -78,27 +78,33 @@ public abstract class Perk implements Comparable<Perk> {
             HungerGames.getInstance().getLogger().severe("Perk " + getName() + " does not have an icon setup.");
             return ItemBuilder.start(Material.REDSTONE_BLOCK).withLore("&cNo Icon Setup.").build();
         }
-        ItemBuilder itemBuilder = ItemBuilder.start(iconMaterial).setDisplayName("&b" + displayName);
+        ItemBuilder itemBuilder = ItemBuilder.start(iconMaterial).setDisplayName("&b" + Utils.capitalizeEveryWord(displayName));
         List<String> lore = new LinkedList<>();
+        if (getDescription().contains("\n")) {
+            String[] lines = getDescription().split("\n");
+            for (String line : lines) {
+                lore.add("&7&o" + line);
+            }
+        } else {
+            lore.add("&7&o" + getDescription());
+        }
         if (user.getPerkInfo(this).getValue()) {
             lore.add(Utils.color("&a&oPurchased"));
-            lore.add("&7&o" + getDescription());
             if (user.getPerkInfo(this).isActive()) {
                 lore.add("");
                 lore.add("&a&lSELECTED");
             } else {
                 lore.add("");
-                lore.add("&6&lRight Click &fto select.");
+                lore.add("&6&lRight Click &fto select this perk.");
             }
         } else {
             if (user.getStat(Stats.COINS).getValueAsInt() >= baseCost) {
                 lore.add(Utils.color("&e&oAvailable"));
-                lore.add("&7&o" + getDescription());
                 lore.add("");
                 lore.add("&6&lLeft Click &fto purchase for " + getBaseCost() + ".");
             } else {
                 lore.add(Utils.color("&c&oLocked"));
-                lore.add("&dYou do not have enough coins to purchase this perks.");
+                lore.add("&dYou do not have enough coins to purchase this perk.");
             }
         }
         

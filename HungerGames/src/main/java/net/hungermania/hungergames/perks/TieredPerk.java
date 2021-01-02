@@ -6,12 +6,14 @@ import net.hungermania.hungergames.records.PerkInfoRecord;
 import net.hungermania.hungergames.user.GameUser;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.redis.Redis;
+import net.hungermania.maniacore.api.stats.Statistic;
 import net.hungermania.maniacore.api.stats.Stats;
 import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.util.Utils;
 import net.hungermania.maniacore.spigot.util.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.Potion.Tier;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -46,12 +48,12 @@ public abstract class TieredPerk extends Perk {
             user.sendMessage("&cYou have already purchased the max tier of that perk.");
             return;
         }
-    
+        
         if (user.getStat(Stats.COINS).getValueAsInt() < nextTier.getCost()) {
             user.sendMessage("&cYou do not have enough coins to purchase that perk.");
             return;
         }
-    
+        
         user.getStat(Stats.COINS).setValue(user.getStat(Stats.COINS).getValueAsInt() - nextTier.getCost());
         perkInfo.setValue(true);
         perkInfo.getUnlockedTiers().add(nextTier.getNumber());
@@ -66,58 +68,100 @@ public abstract class TieredPerk extends Perk {
             return ItemBuilder.start(Material.REDSTONE_BLOCK).withLore("&cNo Icon Setup.").build();
         }
         ItemBuilder itemBuilder = ItemBuilder.start(iconMaterial).setDisplayName("&b" + displayName);
-        List<String> lore = new LinkedList<>();
+        List<String> lore = new LinkedList<>(), tierLore = new LinkedList<>();
         PerkInfo perkInfo = user.getPerkInfo(this);
         Set<Integer> unlockedTiers = perkInfo.getUnlockedTiers();
-        if (perkInfo.getValue()) {
-            lore.add(Utils.color("&a&oPurchased"));
-            lore.add("&7&o" + getDescription());
-            generatePerkLore(user, lore, unlockedTiers);
-    
-            if (perkInfo.isActive()) {
-                lore.add("&a&lSELECTED");
+        PerkStatus status;
+        Statistic coins = user.getStat(Stats.COINS);
+        
+        Tier current = null, nextTier = null;
+        for (Integer t : unlockedTiers) {
+            if (current == null) {
+                current = this.tiers.get(t);
             } else {
-                lore.add("&6&lRight Click &fto select.");
-            }
-        } else {
-            Tier current = null;
-            for (Integer t : unlockedTiers) {
-                if (current == null) {
+                if (t > current.getNumber()) {
                     current = this.tiers.get(t);
+                }
+            }
+        }
+        
+        if (current == null) {
+            nextTier = this.tiers.get(1);
+        } else {
+            if (this.tiers.get(current.getNumber() + 1) != null) {
+                nextTier = this.tiers.get(current.getNumber() + 1);
+            }
+        }
+        
+        tierLore.add("&d&lTIERS");
+        for (Entry<Integer, Tier> entry : this.tiers.entrySet()) {
+            String color;
+            if (unlockedTiers.contains(entry.getKey())) {
+                color = "&a";
+            } else {
+                if (coins.getValueAsInt() >= entry.getValue().getCost()) {
+                    color = "&e";
                 } else {
-                    if (t > current.getNumber()) {
-                        current = this.tiers.get(t);
-                    }
+                    color = "&c";
                 }
             }
             
-            if (user.getStat(Stats.COINS).getValueAsInt() >= baseCost) {
-                lore.add(Utils.color("&e&oAvailable"));
-                lore.add("&7&o" + getDescription());
-                generatePerkLore(user, lore, unlockedTiers);
-                
-                int tierNumber = 0, cost = 0;
-                if (current == null) {
-                    tierNumber = 1;
-                    cost = getBaseCost();
-                } else {
-                    if (this.tiers.get(tierNumber + 1) != null) {
-                        Tier nextTier = this.tiers.get(tierNumber + 1);
-                        tierNumber = nextTier.getNumber();
-                        cost = nextTier.getCost();
-                    }
-                }
-                if (tierNumber != 0) {
-                    lore.add("&6&lLeft Click &fto purchase tier " + tierNumber + " for " + cost + " coins.");
-                } else {
-                    lore.add("&cYou have already purchased the max teir of this perk.");
-                }
-            } else {
-                lore.add(Utils.color("&c&oLocked"));
-                lore.add("&dYou do not have enough coins to purchase this perk.");
-            }
+            tierLore.add(" &8- " + color + " Tier " + entry.getKey() + ": " + entry.getValue().getDescription());
         }
-    
+        
+        if (this.tiers.size() == unlockedTiers.size()) {
+            status = PerkStatus.PURCHASED;
+        } else if ((unlockedTiers.size() > 0) && unlockedTiers.size() < this.tiers.size()) {
+            status = PerkStatus.PARTIALLY_PURCHASED;
+        } else if (current == null) {
+            if (coins.getValueAsInt() >= nextTier.getCost()) {
+                status = PerkStatus.AVAILABLE;
+            } else {
+                status = PerkStatus.LOCKED;
+            }
+        } else if (nextTier != null) {
+            if (coins.getValueAsInt() >= nextTier.getCost()) {
+                status = PerkStatus.AVAILABLE;
+            } else {
+                status = PerkStatus.PARTIALLY_PURCHASED;
+            }
+        } else {
+            status = PerkStatus.LOCKED;
+        }
+        
+        String rightClickLore = "", leftClickLore = "";
+        lore.add(status.getColor() + Utils.capitalizeEveryWord(status.name()));
+        if (getDescription().contains("\n")) {
+            String[] lines = getDescription().split("\n");
+            for (String line : lines) {
+                lore.add("&7&o" + line);
+            }
+        } else {
+            lore.add("&7&o" + getDescription());
+        }
+        
+        lore.add("");
+        lore.addAll(tierLore);
+        lore.add("");
+        
+        if (perkInfo.isActive()) {
+            lore.add("&a&lSELECTED");
+        } else {
+            rightClickLore = "&6&lRight Click &fto select this perk.";
+        }
+        
+        if (status == PerkStatus.AVAILABLE || status == PerkStatus.PARTIALLY_PURCHASED) {
+            leftClickLore = "&6&lLeft Click &fto purchase Tier " + nextTier.getNumber() + " for " + nextTier.getCost() + " coins.";
+        }
+        
+        if (!leftClickLore.equals("")) {
+            lore.add(leftClickLore);
+        }
+        
+        if (!rightClickLore.equals("")) {
+            lore.add(rightClickLore);
+        }
+        
         itemBuilder.setLore(lore);
         return itemBuilder.build();
     }
@@ -143,9 +187,9 @@ public abstract class TieredPerk extends Perk {
     }
     
     public boolean activate(GameUser user) {
-        if (!user.getPerkInfo(this).getValue()) return false;
+        if (!user.getPerkInfo(this).getValue()) { return false; }
         Tier tier = getTier(user);
-        if (tier == null) return false;
+        if (tier == null) { return false; }
         return ManiaCore.RANDOM.nextInt(100) <= tier.getChance() && tier.activate(user);
     }
     
@@ -167,6 +211,7 @@ public abstract class TieredPerk extends Perk {
     public static abstract class Tier {
         private int number, cost, chance;
         private String description;
+        
         public Tier(int number, int cost, String description) {
             this.number = number;
             this.cost = cost;
@@ -180,7 +225,7 @@ public abstract class TieredPerk extends Perk {
             this.chance = chance;
             this.description = description;
         }
-    
+        
         public abstract boolean activate(User user);
     }
 }

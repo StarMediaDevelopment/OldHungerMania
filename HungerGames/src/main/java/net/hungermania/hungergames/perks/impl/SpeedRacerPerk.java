@@ -10,7 +10,7 @@ import org.bukkit.potion.PotionEffectType;
 
 public class SpeedRacerPerk extends TieredPerk {
     public SpeedRacerPerk() {
-        super("Speed Racer", 1500, 100, Material.BEACON, PerkCategory.OTHER, "A perk that enables on game starts so that you get a boost to get to starting loot.");
+        super("Speed Racer", 1500, 100, Material.BEACON, PerkCategory.OTHER, "A perk that enables on game starts so \nthat you get a boost to get to starting loot.");
         
         this.tiers.put(1, new Tier(1, getBaseCost(), "Get 1 second of speed 1") {
             public boolean activate(User user) {

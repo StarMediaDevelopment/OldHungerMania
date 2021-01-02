@@ -6,7 +6,7 @@
 
     <groupId>net.hungermania</groupId>
     <artifactId>HungerGames</artifactId>
-    <version>1.19.3-SNAPSHOT</version>
+    <version>1.19.5-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>HungerGames</name>
@@ -127,5 +127,12 @@
             <version>6.2.0</version>
             <scope>provided</scope>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>cloud.timo.TimoCloud</groupId>-->
+<!--            <artifactId>TimoCloud-API</artifactId>-->
+<!--            <version>5.3.1</version>-->
+<!--            <scope>system</scope>-->
+<!--            <systemPath>${project.basedir}/../Libs/TimoCloud.jar</systemPath>-->
+<!--        </dependency>-->
     </dependencies>
 </project>

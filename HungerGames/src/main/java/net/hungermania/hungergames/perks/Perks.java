@@ -29,7 +29,7 @@ public class Perks {
         PERKS.add(SHARPSHOOTER = new SharpshooterPerk());
         PERKS.add(ENCHANT_XP_BOOST = new EnchantXpPerk());
         PERKS.add(BETTY = new BettyPerk());
-        PERKS.add(CHEF = new FlatPerk("Chef", 4000, 100, Material.COOKED_BEEF, PerkCategory.OTHER, "When holding an uncooked food item for 7 seconds, it will automatically cook."));
+        PERKS.add(CHEF = new FlatPerk("Chef", 4000, 100, Material.COOKED_BEEF, PerkCategory.OTHER, "When holding an uncooked food item \nfor 7 seconds, it will automatically cook."));
     }
     
     public static Perk getPerk(String name) {

@@ -39,7 +39,7 @@ public class PotionPerk extends FlatPerk {
     
     public ItemStack getIcon(GameUser user) {
         if (this.iconMaterial == Material.POTION) {
-            ItemStack itemStack = new ItemStack(this.iconMaterial);
+            ItemStack itemStack = super.getIcon(user);
             PotionMeta potionMeta = (PotionMeta) itemStack.getItemMeta();
             potionMeta.setMainEffect(this.type);
             itemStack.setItemMeta(potionMeta);
