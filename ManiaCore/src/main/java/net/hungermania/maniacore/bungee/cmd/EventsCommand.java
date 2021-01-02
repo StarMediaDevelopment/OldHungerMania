@@ -5,7 +5,7 @@ import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.events.EventInfo;
 import net.hungermania.maniacore.api.records.EventInfoRecord;
 import net.hungermania.maniacore.api.user.User;
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.bungee.util.BungeeUtils;
 import net.hungermania.manialib.util.Constants;
 import net.md_5.bungee.api.ChatColor;
@@ -36,7 +36,7 @@ public class EventsCommand extends Command {
             return;
         }
         
-        if (Utils.checkCmdAliases(args, 0, "create")) {
+        if (ManiaUtils.checkCmdAliases(args, 0, "create")) {
             if (!(args.length > 2)) {
                 sender.sendMessage(notEnoughArguments);
                 return;
@@ -45,7 +45,7 @@ public class EventsCommand extends Command {
             String name = args[1];
             long startDate;
             try {
-                startDate = Utils.parseCalendarDate(StringUtils.join(args, " ", 2, args.length)).getTimeInMillis();
+                startDate = net.hungermania.manialib.util.Utils.parseCalendarDate(StringUtils.join(args, " ", 2, args.length)).getTimeInMillis();
             } catch (Exception e) {
                 e.printStackTrace();
                 sender.sendMessage(new ComponentBuilder("You provided an invalid date value.").color(ChatColor.RED).create());
@@ -61,7 +61,7 @@ public class EventsCommand extends Command {
             
             ManiaCore.getInstance().getEventManager().getEvents().put(eventInfo.getId(), eventInfo);
             sender.sendMessage(new ComponentBuilder("Created an event with the name " + name).color(ChatColor.GREEN).create());
-        } else if (Utils.checkCmdAliases(args, 0, "edit")) {
+        } else if (ManiaUtils.checkCmdAliases(args, 0, "edit")) {
             if (!(args.length > 3)) {
                 sender.sendMessage(notEnoughArguments);
                 return;
@@ -81,10 +81,10 @@ public class EventsCommand extends Command {
                 return;
             }
             
-            if (Utils.checkCmdAliases(args, 2, "setname")) {
+            if (ManiaUtils.checkCmdAliases(args, 2, "setname")) {
                 eventInfo.setName(StringUtils.join(args, 3, args.length));
                 sender.sendMessage(new ComponentBuilder("You have set the name of the event to " + eventInfo.getName()).color(ChatColor.GREEN).create());
-            } else if (Utils.checkCmdAliases(args, 2, "setactive")) {
+            } else if (ManiaUtils.checkCmdAliases(args, 2, "setactive")) {
                 boolean value;
                 try {
                     value = Boolean.parseBoolean(args[3]);
@@ -107,10 +107,10 @@ public class EventsCommand extends Command {
                 ManiaCore.getInstance().getEventManager().setActiveEvent(eventInfo);
                 plugin.getManiaCore().getMessageHandler().sendMessage("maniacore:mania", "EventStatus", null, eventInfo.getId() + "", eventInfo.isActive() + "");
                 sender.sendMessage(new ComponentBuilder("You have set status of the event to " + eventInfo.isActive()).color(ChatColor.GREEN).create());
-            } else if (Utils.checkCmdAliases(args, 2, "setstarttime")) {
+            } else if (ManiaUtils.checkCmdAliases(args, 2, "setstarttime")) {
                 long startDate;
                 try {
-                    startDate = Utils.parseCalendarDate(StringUtils.join(args, " ", 2, args.length)).getTimeInMillis();
+                    startDate = net.hungermania.manialib.util.Utils.parseCalendarDate(StringUtils.join(args, " ", 2, args.length)).getTimeInMillis();
                 } catch (Exception e) {
                     sender.sendMessage(new ComponentBuilder("You provided an invalid date value.").color(ChatColor.RED).create());
                     return;
@@ -118,7 +118,7 @@ public class EventsCommand extends Command {
                 
                 eventInfo.setStartTime(startDate);
                 sender.sendMessage(new ComponentBuilder("You have set the start date of the event to " + Constants.DATE_FORMAT.format(new Date(startDate))).color(ChatColor.GREEN).create());
-            } else if (Utils.checkCmdAliases(args, 2, "addplayer", "addserver")) {
+            } else if (ManiaUtils.checkCmdAliases(args, 2, "addplayer", "addserver")) {
                 List<String> outputMessages = new ArrayList<>();
                 String successOutputFormat = "Added {value} as a {type}";
                 String alreadyExistsFormat = "Could not add {value} as a {type} because it already exists.";
@@ -160,7 +160,7 @@ public class EventsCommand extends Command {
                 for (String outputMessage : outputMessages) {
                     sender.sendMessage(new ComponentBuilder(outputMessage).color(ChatColor.GREEN).create());
                 }
-            } else if (Utils.checkCmdAliases(args, 2, "setsettings")) {
+            } else if (ManiaUtils.checkCmdAliases(args, 2, "setsettings")) {
                 int settingsId;
                 try {
                     settingsId = Integer.parseInt(args[3]);
@@ -173,7 +173,7 @@ public class EventsCommand extends Command {
                 BungeeUtils.sendMessage(sender, "Set the game settings id for the event to " + settingsId, ChatColor.GREEN);
             }
             ManiaCore.getInstance().getDatabase().pushRecord(new EventInfoRecord(eventInfo));
-        } else if (Utils.checkCmdAliases(args, 0, "delete")) {
+        } else if (ManiaUtils.checkCmdAliases(args, 0, "delete")) {
             if (!(args.length > 1)) {
                 sender.sendMessage(notEnoughArguments);
                 return;

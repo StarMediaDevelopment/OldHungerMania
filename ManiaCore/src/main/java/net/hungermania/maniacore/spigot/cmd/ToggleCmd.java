@@ -5,21 +5,21 @@ import net.hungermania.maniacore.api.records.ToggleRecord;
 import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.user.toggle.Toggle;
 import net.hungermania.maniacore.api.user.toggle.Toggles;
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.api.util.ManiaUtils;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
 public class ToggleCmd implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(Utils.color("&cOnly players may use that command."));
+            sender.sendMessage(ManiaUtils.color("&cOnly players may use that command."));
             return true;
         }
         
         Player player = ((Player) sender);
         
         if (!(args.length > 0)) {
-            player.sendMessage(Utils.color("&cYou must provide a type."));
+            player.sendMessage(ManiaUtils.color("&cYou must provide a type."));
             return true;
         }
     
@@ -42,7 +42,7 @@ public class ToggleCmd implements CommandExecutor {
         
         toggle = user.getToggle(type);
         if (!user.hasPermission(type.getRank())) {
-            user.sendMessage(Utils.color("&cYou do not have permission to use that toggle."));
+            user.sendMessage(ManiaUtils.color("&cYou do not have permission to use that toggle."));
             return true;
         }
         
@@ -56,7 +56,7 @@ public class ToggleCmd implements CommandExecutor {
             settingValue = "&c&lOFF";
         }
 
-        player.sendMessage(Utils.color("&6&l>> &fYou have turned " + settingValue + " &fthe toggle &e" + type.name().toLowerCase().replace("_", " ") + "&f."));
+        player.sendMessage(ManiaUtils.color("&6&l>> &fYou have turned " + settingValue + " &fthe toggle &e" + type.name().toLowerCase().replace("_", " ") + "&f."));
         return true;
     }
 }

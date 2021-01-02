@@ -3,7 +3,7 @@ package net.hungermania.maniacore.bungee.user;
 import net.hungermania.maniacore.api.channel.Channel;
 import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.maniacore.api.user.User;
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -41,7 +41,7 @@ public class BungeeUser extends User {
     public void sendMessage(String s) {
         ProxiedPlayer proxiedPlayer = getProxyPlayer();
         if (proxiedPlayer != null) {
-            proxiedPlayer.sendMessage(ChatMessageType.CHAT, TextComponent.fromLegacyText(Utils.color(s)));
+            proxiedPlayer.sendMessage(ChatMessageType.CHAT, TextComponent.fromLegacyText(ManiaUtils.color(s)));
         }
     }
     

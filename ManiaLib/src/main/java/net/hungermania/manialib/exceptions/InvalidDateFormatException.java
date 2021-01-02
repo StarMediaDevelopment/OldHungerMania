@@ -1,4 +1,4 @@
-package net.hungermania.maniacore.api.exceptions;
+package net.hungermania.manialib.exceptions;
 
 public class InvalidDateFormatException extends Exception {
     public InvalidDateFormatException(String message) {

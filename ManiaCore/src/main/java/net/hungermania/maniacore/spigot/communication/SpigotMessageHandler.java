@@ -7,7 +7,7 @@ import net.hungermania.maniacore.api.communication.MessageHandler;
 import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.user.toggle.Toggles;
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.spigot.user.SpigotUser;
 import net.hungermania.maniacore.spigot.util.SpartanUtils;
 import org.bukkit.Bukkit;
@@ -32,7 +32,7 @@ public class SpigotMessageHandler extends MessageHandler {
             User user = ManiaCore.getInstance().getUserManager().getUser(player.getUniqueId());
             if (user.hasPermission(Rank.HELPER)) {
                 if (user.getToggle(Toggles.STAFF_NOTIFICATIONS).getAsBoolean()) {
-                    player.sendMessage(Utils.color(format.toString()));
+                    player.sendMessage(ManiaUtils.color(format.toString()));
                 }
             }
         }
@@ -46,7 +46,7 @@ public class SpigotMessageHandler extends MessageHandler {
             User user = ManiaCore.getInstance().getUserManager().getUser(player.getUniqueId());
             if (user.hasPermission(Rank.ADMIN)) {
                 if (user.getToggle(Toggles.ADMIN_NOTIFICATIONS).getAsBoolean()) {
-                    player.sendMessage(Utils.color(format.toString()));
+                    player.sendMessage(ManiaUtils.color(format.toString()));
                 }
             }
         }
@@ -61,7 +61,7 @@ public class SpigotMessageHandler extends MessageHandler {
         if (Bukkit.getOnlinePlayers().isEmpty()) return;
         SpigotUser user = (SpigotUser) plugin.getManiaCore().getUserManager().getUser(p);
         if (user.hasPermission(Rank.MEDIA)) {
-            String format = Utils.color(Channel.STAFF.getChatPrefix() + user.getColoredName() + " &7&l-> &6" + server);
+            String format = ManiaUtils.color(Channel.STAFF.getChatPrefix() + user.getColoredName() + " &7&l-> &6" + server);
             for (Player player : Bukkit.getOnlinePlayers()) {
                 User u = ManiaCore.getInstance().getUserManager().getUser(player.getUniqueId());
                 if (u.hasPermission(Rank.HELPER)) {
@@ -77,7 +77,7 @@ public class SpigotMessageHandler extends MessageHandler {
         if (Bukkit.getOnlinePlayers().isEmpty()) return;
         SpigotUser user = new SpigotUser(plugin.getManiaCore().getUserManager().getUser(p));
         if (user.hasPermission(Rank.MEDIA)) {
-            String format = Utils.color(Channel.STAFF.getChatPrefix() + user.getColoredName() + " &6left the network.");
+            String format = ManiaUtils.color(Channel.STAFF.getChatPrefix() + user.getColoredName() + " &6left the network.");
             for (Player player : Bukkit.getOnlinePlayers()) {
                 User u = ManiaCore.getInstance().getUserManager().getUser(player.getUniqueId());
                 if (u.hasPermission(Rank.HELPER)) {

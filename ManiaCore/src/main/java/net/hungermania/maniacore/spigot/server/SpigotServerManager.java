@@ -7,7 +7,7 @@ import net.hungermania.maniacore.api.channel.Channel;
 import net.hungermania.maniacore.api.server.*;
 import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.user.toggle.Toggles;
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.api.util.ManiaUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -29,7 +29,7 @@ public class SpigotServerManager extends ServerManager {
             if (player.hasPermission(c.getPermission())) {
                 User user = ManiaCore.getInstance().getUserManager().getUser(player.getUniqueId());
                 if (user.getToggle(Toggles.STAFF_NOTIFICATIONS).getAsBoolean()) {
-                    player.sendMessage(Utils.color(format.toString()));
+                    player.sendMessage(ManiaUtils.color(format.toString()));
                 }
             }
         }
@@ -40,7 +40,7 @@ public class SpigotServerManager extends ServerManager {
             String message = "&6&l>> &a&lA game is ready at the server " + server + "!";
             //TODO Click text
             for (Player p : Bukkit.getOnlinePlayers()) {
-                p.sendMessage(Utils.color(message));
+                p.sendMessage(ManiaUtils.color(message));
             }
         }
     }

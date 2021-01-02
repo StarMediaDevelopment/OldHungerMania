@@ -1,6 +1,6 @@
 package net.hungermania.maniacore.spigot.util;
 
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.spigot.util.sb.SBLine;
 import org.bukkit.Bukkit;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -60,9 +60,9 @@ public class ScoreboardBuilder {
         Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         Objective objective;
         if (title != null) {
-            objective = scoreboard.registerNewObjective(Utils.color(title), "dummy");
+            objective = scoreboard.registerNewObjective(ManiaUtils.color(title), "dummy");
         } else {
-            objective = scoreboard.registerNewObjective(Utils.color(name), "dummy");
+            objective = scoreboard.registerNewObjective(ManiaUtils.color(name), "dummy");
         }
         objective.setDisplaySlot(slot);
         
@@ -74,10 +74,10 @@ public class ScoreboardBuilder {
             SBLine text = this.lines.get(i);
             if (text != null) {
                 Team line = scoreboard.registerNewTeam(text.getName());
-                line.setPrefix(Utils.color(text.getPrefix()));
-                line.setSuffix(Utils.color(line.getSuffix()));
-                line.addEntry(Utils.color(text.getName()));
-                objective.getScore(Utils.color(text.getName())).setScore(15 - i);
+                line.setPrefix(ManiaUtils.color(text.getPrefix()));
+                line.setSuffix(ManiaUtils.color(line.getSuffix()));
+                line.addEntry(ManiaUtils.color(text.getName()));
+                objective.getScore(ManiaUtils.color(text.getName())).setScore(15 - i);
             }
         }
         

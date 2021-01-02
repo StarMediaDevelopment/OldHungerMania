@@ -7,7 +7,7 @@ import net.hungermania.maniacore.api.records.SkinRecord;
 import net.hungermania.maniacore.api.skin.Skin;
 import net.hungermania.manialib.sql.IRecord;
 import net.hungermania.maniacore.api.user.User;
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.api.util.ManiaUtils;
 import org.bukkit.*;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.banner.Pattern;
@@ -50,12 +50,12 @@ public class ItemBuilder {
         ItemStack itemStack = new ItemStack(material, amount, damage);
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (displayName != null) {
-            itemMeta.setDisplayName(Utils.color(displayName));
+            itemMeta.setDisplayName(ManiaUtils.color(displayName));
         }
         
         if (!lore.isEmpty()) {
             List<String> coloredLore = new LinkedList<>();
-            lore.forEach(line -> coloredLore.add(Utils.color(line)));
+            lore.forEach(line -> coloredLore.add(ManiaUtils.color(line)));
             itemMeta.setLore(coloredLore);
         }
         
@@ -92,10 +92,10 @@ public class ItemBuilder {
         if (itemMeta instanceof BookMeta) {
             BookMeta bookMeta = (BookMeta) itemMeta;
             if (bookTitle != null) {
-                bookMeta.setTitle(Utils.color(bookTitle));
+                bookMeta.setTitle(ManiaUtils.color(bookTitle));
             }
             if (bookAuthor != null) {
-                bookMeta.setTitle(Utils.color(bookAuthor));
+                bookMeta.setTitle(ManiaUtils.color(bookAuthor));
             }
             
             if (!bookPages.isEmpty()) {
@@ -135,7 +135,7 @@ public class ItemBuilder {
                 if (user != null) {
                     skullOwner = user.getName();
                 } else {
-                    skullOwner = Utils.getNameFromUUID(this.skullOwner);
+                    skullOwner = ManiaUtils.getNameFromUUID(this.skullOwner);
                 }
     
                 if (skullOwner != null) {

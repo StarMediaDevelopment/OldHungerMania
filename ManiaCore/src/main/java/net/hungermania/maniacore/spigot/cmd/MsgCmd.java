@@ -4,7 +4,7 @@ import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.maniacore.api.user.*;
 import net.hungermania.maniacore.api.user.toggle.Toggles;
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.api.util.ManiaUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
@@ -17,7 +17,7 @@ public class MsgCmd implements CommandExecutor {
     
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(Utils.color("&cOnly players may use that command."));
+            sender.sendMessage(ManiaUtils.color("&cOnly players may use that command."));
             return true;
         }
         
@@ -26,7 +26,7 @@ public class MsgCmd implements CommandExecutor {
         
         if (cmd.getName().equalsIgnoreCase("message")) {
             if (!(args.length > 1)) {
-                sender.sendMessage(Utils.color("&cUsage: /message <player> <message>"));
+                sender.sendMessage(ManiaUtils.color("&cUsage: /message <player> <message>"));
                 return true;
             }
             
@@ -34,7 +34,7 @@ public class MsgCmd implements CommandExecutor {
             target = Bukkit.getPlayer(args[0]);
         } else if (cmd.getName().equalsIgnoreCase("reply")) {
             if (!(args.length > 0)) {
-                sender.sendMessage(Utils.color("&cUsage: /reply <message>"));
+                sender.sendMessage(ManiaUtils.color("&cUsage: /reply <message>"));
                 return true;
             }
             
@@ -46,7 +46,7 @@ public class MsgCmd implements CommandExecutor {
         }
         
         if (target == null) {
-            player.sendMessage(Utils.color("&cCould not find the message target. Are they offline?"));
+            player.sendMessage(ManiaUtils.color("&cCould not find the message target. Are they offline?"));
             return true;
         }
         

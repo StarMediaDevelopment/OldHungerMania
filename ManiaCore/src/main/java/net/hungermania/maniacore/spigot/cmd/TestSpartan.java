@@ -1,7 +1,7 @@
 package net.hungermania.maniacore.spigot.cmd;
 
 import net.hungermania.maniacore.api.ManiaCore;
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.api.util.ManiaUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
@@ -17,7 +17,7 @@ public class TestSpartan implements CommandExecutor {
             //SpartanUtils.sendSpartanMessage(server, sender.getName(), args[0], Integer.parseInt(args[1]), Boolean.parseBoolean(args[2]), tps, ping);
         } catch (Exception e) {
             e.printStackTrace();
-            sender.sendMessage(Utils.color("&cError handling that command."));
+            sender.sendMessage(ManiaUtils.color("&cError handling that command."));
         }
         
         return true;

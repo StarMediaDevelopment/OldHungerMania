@@ -4,7 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.Setter;
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.api.util.ManiaUtils;
 import org.bukkit.Bukkit;
 
 import java.io.Serializable;
@@ -30,7 +30,7 @@ public class Skin implements Serializable {
         String profileURL = skinUrlString.replace("{uuid}", uuid.toString().replace("-", ""));
 
         try {
-            JsonObject json = Utils.getJsonObject(profileURL);
+            JsonObject json = ManiaUtils.getJsonObject(profileURL);
             JsonArray properties = (JsonArray) json.get("properties");
     
             JsonObject property = (JsonObject) properties.get(0);

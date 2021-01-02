@@ -2,7 +2,7 @@ package net.hungermania.maniacore.spigot.cmd;
 
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.user.User;
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.api.util.ManiaUtils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -23,9 +23,9 @@ public class SayCmd implements CommandExecutor {
             }
             String message = "&8[&f&l&oSAY&8] &b" + senderName + ": &b" + StringUtils.join(args, " ");
             for (Player player : Bukkit.getOnlinePlayers()) {
-                player.sendMessage(Utils.color(message));
+                player.sendMessage(ManiaUtils.color(message));
             }
-            Bukkit.getConsoleSender().sendMessage(Utils.color(message));
+            Bukkit.getConsoleSender().sendMessage(ManiaUtils.color(message));
         }
         return true;
     }

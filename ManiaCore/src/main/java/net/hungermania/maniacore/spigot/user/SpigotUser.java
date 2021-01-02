@@ -5,7 +5,7 @@ import lombok.Setter;
 import net.hungermania.maniacore.api.channel.Channel;
 import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.maniacore.api.user.User;
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -45,7 +45,7 @@ public class SpigotUser extends User {
     public void sendMessage(String s) {
         Player player = getBukkitPlayer();
         if (player != null) {
-            player.sendMessage(Utils.color(s));
+            player.sendMessage(ManiaUtils.color(s));
         }
     }
     

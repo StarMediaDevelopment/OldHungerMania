@@ -2,7 +2,7 @@ package net.hungermania.maniacore.spigot.cmd;
 
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.ranks.Rank;
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.api.util.ManiaUtils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;
@@ -18,7 +18,7 @@ public class BroadcastCmd implements CommandExecutor {
             rank = Rank.CONSOLE;
         }
         if (rank.ordinal() <= Rank.ADMIN.ordinal()) {
-            String message = Utils.color(StringUtils.join(args, " "));
+            String message = ManiaUtils.color(StringUtils.join(args, " "));
             Bukkit.getConsoleSender().sendMessage(message);
             for (Player player : Bukkit.getOnlinePlayers()) {
                 player.sendMessage(message);

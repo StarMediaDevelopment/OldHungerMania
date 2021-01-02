@@ -16,7 +16,7 @@ import net.hungermania.maniacore.api.skin.Skin;
 import net.hungermania.maniacore.api.stats.Stats;
 import net.hungermania.maniacore.api.user.*;
 import net.hungermania.maniacore.api.user.toggle.Toggles;
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.plugin.ManiaPlugin;
 import net.hungermania.maniacore.spigot.events.UserJoinEvent;
 import net.hungermania.maniacore.spigot.updater.UpdateEvent;
@@ -129,7 +129,7 @@ public class SpigotUserManager extends UserManager implements Listener {
                 }
                 
                 if (send) {
-                    p.sendMessage(Utils.color(format));
+                    p.sendMessage(ManiaUtils.color(format));
                 }
             }
         }

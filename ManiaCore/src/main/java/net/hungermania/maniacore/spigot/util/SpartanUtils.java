@@ -4,7 +4,7 @@ import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.channel.Channel;
 import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.user.toggle.Toggles;
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.api.util.ManiaUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -23,7 +23,7 @@ public class SpartanUtils {
             if (p.hasPermission(Channel.STAFF.getPermission())) {
                 User user = ManiaCore.getInstance().getUserManager().getUser(p.getUniqueId());
                 if (user.getToggle(Toggles.SPARTAN_NOTIFICATIONS).getAsBoolean()) {
-                    p.sendMessage(Utils.color(format));
+                    p.sendMessage(ManiaUtils.color(format));
                 }
             }
         }

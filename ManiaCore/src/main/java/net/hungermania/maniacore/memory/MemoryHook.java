@@ -2,7 +2,7 @@ package net.hungermania.maniacore.memory;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.api.util.ManiaUtils;
 
 @Getter @Setter
 public class MemoryHook {
@@ -57,7 +57,7 @@ public class MemoryHook {
         
         public Task end() {
             this.end = System.currentTimeMillis();
-            Utils.updateMemoryHook(memoryHook, start, end);
+            ManiaUtils.updateMemoryHook(memoryHook, start, end);
             return this;
         }
     }

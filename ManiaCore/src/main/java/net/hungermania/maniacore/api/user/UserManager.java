@@ -7,7 +7,7 @@ import net.hungermania.maniacore.api.stats.Stat;
 import net.hungermania.maniacore.api.stats.Statistic;
 import net.hungermania.maniacore.api.user.toggle.Toggle;
 import net.hungermania.maniacore.api.user.toggle.Toggles;
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.manialib.sql.IRecord;
 
 import java.util.*;
@@ -29,7 +29,7 @@ public abstract class UserManager {
             if (!userRecords.isEmpty()) {
                 user = constructUser(((UserRecord) userRecords.get(0)).toObject());
             } else {
-                user = constructUser(uuid, Utils.getNameFromUUID(uuid));
+                user = constructUser(uuid, ManiaUtils.getNameFromUUID(uuid));
                 ManiaCore.getInstance().getDatabase().pushRecord(new UserRecord(user));
             }
             
@@ -72,7 +72,7 @@ public abstract class UserManager {
         user.setToggles(toggles);
         
         if (user.getName() == null || user.getName().equals("") || user.getName().equals("null")) {
-            user.setName(Utils.getNameFromUUID(uuid));
+            user.setName(ManiaUtils.getNameFromUUID(uuid));
             ManiaCore.getInstance().getDatabase().pushRecord(new UserRecord(user));
         }
         Redis.pushUser(user);
@@ -119,7 +119,7 @@ public abstract class UserManager {
             if (!records.isEmpty()) {
                 user = constructUser(((UserRecord) records.get(0)).toObject());
             } else {
-                user = constructUser(Utils.getUUIDFromName(name), name);
+                user = constructUser(ManiaUtils.getUUIDFromName(name), name);
                 ManiaCore.getInstance().getDatabase().pushRecord(new UserRecord(user));
             }
             Redis.pushUser(user);

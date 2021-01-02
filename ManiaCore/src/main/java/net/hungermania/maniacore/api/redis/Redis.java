@@ -15,6 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.Map.Entry;
 
+@SuppressWarnings("DuplicatedCode")
 public class Redis {
     
     public static String CROSSTALK_CHANNEL;

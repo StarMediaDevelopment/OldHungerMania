@@ -4,7 +4,7 @@ import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.leveling.Level;
 import net.hungermania.maniacore.api.stats.Stats;
 import net.hungermania.maniacore.api.user.User;
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.manialib.util.Constants;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
@@ -17,7 +17,7 @@ public class StatsCmd implements CommandExecutor {
             target = ManiaCore.getInstance().getUserManager().getUser(args[0]);
         } else {
             if (!(sender instanceof Player)) {
-                sender.sendMessage(Utils.color("&cYou must provide a target."));
+                sender.sendMessage(ManiaUtils.color("&cYou must provide a target."));
                 return true;
             }
             
@@ -25,7 +25,7 @@ public class StatsCmd implements CommandExecutor {
         }
         
         if (target == null) {
-            sender.sendMessage(Utils.color("&cCould not determine the target of the command."));
+            sender.sendMessage(ManiaUtils.color("&cCould not determine the target of the command."));
             return true;
         }
     
@@ -44,19 +44,19 @@ public class StatsCmd implements CommandExecutor {
         int deathmatches = user.getStat(Stats.HG_DEATHMATCHES).getValueAsInt();
         int chestsFound = user.getStat(Stats.HG_CHESTS_FOUND).getValueAsInt();
     
-        sender.sendMessage(Utils.color("&6&l>> &a" + target.getName() + "'s Stats"));
-        sender.sendMessage(Utils.color("&6&l> &7Coins: &b" + target.getStat(Stats.COINS).getValueAsInt()));
-        sender.sendMessage(Utils.color("&6&l> &7Level: &b" + level.getNumber()));
-        sender.sendMessage(Utils.color("&6&l> &7Experience: &b" + target.getStat(Stats.EXPERIENCE).getValueAsInt() + "     &e&lNext Level: &b" + (nextLevel.getTotalXp() - target.getStat(Stats.EXPERIENCE).getValueAsInt())));
-        sender.sendMessage(Utils.color("&6&l> &7Kills: &b" + kills));
-        sender.sendMessage(Utils.color("&6&l> &7Deaths: &b" + deaths));
-        sender.sendMessage(Utils.color("&6&l> &7K/D: &b" + Constants.NUMBER_FORMAT.format(kdr)));
-        sender.sendMessage(Utils.color("&6&l> &7Wins: &b" + wins));
-        sender.sendMessage(Utils.color("&6&l> &7Losses: &b" + losses));
-        sender.sendMessage(Utils.color("&6&l> &7W/L: &b" + Constants.NUMBER_FORMAT.format(wlr)));
-        sender.sendMessage(Utils.color("&6&l> &7Win Streak: &b" + user.getStat(Stats.HG_WINSTREAK).getValue()));
-        sender.sendMessage(Utils.color("&6&l> &7Deathmatches Reached: &b" + deathmatches));
-        sender.sendMessage(Utils.color("&6&l> &7Chests Found: &b" + chestsFound));
+        sender.sendMessage(ManiaUtils.color("&6&l>> &a" + target.getName() + "'s Stats"));
+        sender.sendMessage(ManiaUtils.color("&6&l> &7Coins: &b" + target.getStat(Stats.COINS).getValueAsInt()));
+        sender.sendMessage(ManiaUtils.color("&6&l> &7Level: &b" + level.getNumber()));
+        sender.sendMessage(ManiaUtils.color("&6&l> &7Experience: &b" + target.getStat(Stats.EXPERIENCE).getValueAsInt() + "     &e&lNext Level: &b" + (nextLevel.getTotalXp() - target.getStat(Stats.EXPERIENCE).getValueAsInt())));
+        sender.sendMessage(ManiaUtils.color("&6&l> &7Kills: &b" + kills));
+        sender.sendMessage(ManiaUtils.color("&6&l> &7Deaths: &b" + deaths));
+        sender.sendMessage(ManiaUtils.color("&6&l> &7K/D: &b" + Constants.NUMBER_FORMAT.format(kdr)));
+        sender.sendMessage(ManiaUtils.color("&6&l> &7Wins: &b" + wins));
+        sender.sendMessage(ManiaUtils.color("&6&l> &7Losses: &b" + losses));
+        sender.sendMessage(ManiaUtils.color("&6&l> &7W/L: &b" + Constants.NUMBER_FORMAT.format(wlr)));
+        sender.sendMessage(ManiaUtils.color("&6&l> &7Win Streak: &b" + user.getStat(Stats.HG_WINSTREAK).getValue()));
+        sender.sendMessage(ManiaUtils.color("&6&l> &7Deathmatches Reached: &b" + deathmatches));
+        sender.sendMessage(ManiaUtils.color("&6&l> &7Chests Found: &b" + chestsFound));
         
         return true;
     }

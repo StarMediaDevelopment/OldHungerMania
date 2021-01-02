@@ -1,6 +1,6 @@
 package net.hungermania.maniacore.spigot.user;
 
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.spigot.util.ScoreboardBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -24,7 +24,7 @@ public class PlayerBoard {
     public PlayerBoard(String name) {
         this.name = name;
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-        objective = this.scoreboard.registerNewObjective(Utils.color(name), "dummy");
+        objective = this.scoreboard.registerNewObjective(ManiaUtils.color(name), "dummy");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
     }
     

@@ -9,7 +9,7 @@ import net.hungermania.maniacore.api.records.FriendshipRecord;
 import net.hungermania.maniacore.api.redis.Redis;
 import net.hungermania.maniacore.api.user.IgnoreInfo;
 import net.hungermania.maniacore.api.user.User;
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.manialib.util.Pair;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
@@ -21,7 +21,7 @@ public class FriendsCmd implements CommandExecutor {
     
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(Utils.color("&cOnly players may use that command."));
+            sender.sendMessage(ManiaUtils.color("&cOnly players may use that command."));
             return true;
         }
         
@@ -34,7 +34,7 @@ public class FriendsCmd implements CommandExecutor {
         
         FriendsManager friendsManager = ManiaCore.getInstance().getFriendsManager();
         
-        if (Utils.checkCmdAliases(args, 0, "list", "l")) {
+        if (ManiaUtils.checkCmdAliases(args, 0, "list", "l")) {
             List<Friendship> friendships = friendsManager.getFriendships(user.getUniqueId());
             Paginator<Friendship> paginator = PaginatorFactory.generatePaginator(7, friendships, new HashMap<DefaultVariables, String>() {{
                 put(DefaultVariables.TYPE, "Friends");
@@ -45,7 +45,7 @@ public class FriendsCmd implements CommandExecutor {
             } else {
                 paginator.display(user, args[1], user.getUniqueId().toString());
             }
-        } else if (Utils.checkCmdAliases(args, 0, "add")) {
+        } else if (ManiaUtils.checkCmdAliases(args, 0, "add")) {
             if (!(args.length > 1)) {
                 user.sendMessage("&cUsage: /friends add <name>");
                 return true;
@@ -90,7 +90,7 @@ public class FriendsCmd implements CommandExecutor {
             }
             
             user.sendMessage(message);
-        } else if (Utils.checkCmdAliases(args, 0, "remove")) {
+        } else if (ManiaUtils.checkCmdAliases(args, 0, "remove")) {
             if (!(args.length > 1)) {
                 user.sendMessage("&cUsage: /friends remove <name>");
                 return true;
@@ -129,9 +129,9 @@ public class FriendsCmd implements CommandExecutor {
             }
             
             user.sendMessage(message);
-        } else if (Utils.checkCmdAliases(args, 0, "requests")) {
+        } else if (ManiaUtils.checkCmdAliases(args, 0, "requests")) {
             //List
-        } else if (Utils.checkCmdAliases(args, 0, "accept", "deny")) {
+        } else if (ManiaUtils.checkCmdAliases(args, 0, "accept", "deny")) {
             if (!(args.length > 1)) {
                 user.sendMessage("&cYou must provide a name.");
                 return true;
@@ -148,7 +148,7 @@ public class FriendsCmd implements CommandExecutor {
             Type notificationType;
             FriendResult result;
             Pair<FriendResult, FriendRequest> resultPair;
-            if (Utils.checkCmdAliases(args, 0, "accept")) {
+            if (ManiaUtils.checkCmdAliases(args, 0, "accept")) {
                 resultPair = friendsManager.acceptRequest(user, target);
                 result = resultPair.getValue1();
                 switch (result) {
