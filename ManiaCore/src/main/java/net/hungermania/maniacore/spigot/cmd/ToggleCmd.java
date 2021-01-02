@@ -12,14 +12,14 @@ import org.bukkit.entity.Player;
 public class ToggleCmd implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ManiaManiaUtils.color("&cOnly players may use that command."));
+            sender.sendMessage(ManiaUtils.color("&cOnly players may use that command."));
             return true;
         }
         
         Player player = ((Player) sender);
         
         if (!(args.length > 0)) {
-            player.sendMessage(ManiaManiaUtils.color("&cYou must provide a type."));
+            player.sendMessage(ManiaUtils.color("&cYou must provide a type."));
             return true;
         }
     
@@ -42,7 +42,7 @@ public class ToggleCmd implements CommandExecutor {
         
         toggle = user.getToggle(type);
         if (!user.hasPermission(type.getRank())) {
-            user.sendMessage(ManiaManiaUtils.color("&cYou do not have permission to use that toggle."));
+            user.sendMessage(ManiaUtils.color("&cYou do not have permission to use that toggle."));
             return true;
         }
         
@@ -55,8 +55,8 @@ public class ToggleCmd implements CommandExecutor {
         } else {
             settingValue = "&c&lOFF";
         }
-
-        player.sendMessage(ManiaManiaUtils.color("&6&l>> &fYou have turned " + settingValue + " &fthe toggle &e" + type.name().toLowerCase().replace("_", " ") + "&f."));
+    
+        player.sendMessage(ManiaUtils.color("&6&l>> &fYou have turned " + settingValue + " &fthe toggle &e" + type.name().toLowerCase().replace("_", " ") + "&f."));
         return true;
     }
 }

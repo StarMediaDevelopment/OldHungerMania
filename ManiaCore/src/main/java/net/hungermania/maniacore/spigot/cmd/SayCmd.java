@@ -5,9 +5,7 @@ import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.util.ManiaUtils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
 public class SayCmd implements CommandExecutor {
@@ -23,9 +21,9 @@ public class SayCmd implements CommandExecutor {
             }
             String message = "&8[&f&l&oSAY&8] &b" + senderName + ": &b" + StringUtils.join(args, " ");
             for (Player player : Bukkit.getOnlinePlayers()) {
-                player.sendMessage(ManiaManiaUtils.color(message));
+                player.sendMessage(ManiaUtils.color(message));
             }
-            Bukkit.getConsoleSender().sendMessage(ManiaManiaUtils.color(message));
+            Bukkit.getConsoleSender().sendMessage(ManiaUtils.color(message));
         }
         return true;
     }

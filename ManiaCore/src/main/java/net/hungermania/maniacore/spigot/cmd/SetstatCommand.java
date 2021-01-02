@@ -20,23 +20,23 @@ public class SetstatCommand implements CommandExecutor {
             User user = ManiaCore.getInstance().getUserManager().getUser(((Player) sender).getUniqueId());
             rank = user.getRank();
         } else {
-            sender.sendMessage(ManiaManiaUtils.color("&cYou are not allowed to use that command."));
+            sender.sendMessage(ManiaUtils.color("&cYou are not allowed to use that command."));
             return true;
         }
         
         if (rank.ordinal() > Rank.ADMIN.ordinal()) {
-            sender.sendMessage(ManiaManiaUtils.color("&cYou do not have permission to use that command."));
+            sender.sendMessage(ManiaUtils.color("&cYou do not have permission to use that command."));
             return true;
         }
         
         if (!(args.length > 2)) {
-            sender.sendMessage(ManiaManiaUtils.color("&cUsage: /setstat <player> <statname> <value>"));
+            sender.sendMessage(ManiaUtils.color("&cUsage: /setstat <player> <statname> <value>"));
             return true;
         }
         
         User target = ManiaCore.getInstance().getUserManager().getUser(args[0]);
         if (target == null) {
-            sender.sendMessage(ManiaManiaUtils.color("&cThe name you provided does not match a player that has joined the server."));
+            sender.sendMessage(ManiaUtils.color("&cThe name you provided does not match a player that has joined the server."));
             return true;
         }
         
@@ -44,28 +44,28 @@ public class SetstatCommand implements CommandExecutor {
         try {
             stat = Stats.valueOf(args[1].toUpperCase());
         } catch (IllegalArgumentException e) {
-            sender.sendMessage(ManiaManiaUtils.color("&cInvalid stat name."));
+            sender.sendMessage(ManiaUtils.color("&cInvalid stat name."));
             return true;
         }
         
         Statistic statistic = target.getStat(stat);
         if (!stat.isNumber()) {
             statistic.setValue(StringUtils.join(args, " ", 2, args.length));
-            sender.sendMessage(ManiaManiaUtils.color("&aSet the stat " + stat.name().toLowerCase() + " to " + statistic.getValue()));
+            sender.sendMessage(ManiaUtils.color("&aSet the stat " + stat.name().toLowerCase() + " to " + statistic.getValue()));
         } else {
             String a = args[2];
             if (a.startsWith("+")) {
                 int v = Integer.parseInt(a.substring(1));
                 statistic.setValue((statistic.getValueAsInt() + v) + "");
-                sender.sendMessage(ManiaManiaUtils.color("&aIncreased the stat " + stat.name().toLowerCase() + " by " + v));
+                sender.sendMessage(ManiaUtils.color("&aIncreased the stat " + stat.name().toLowerCase() + " by " + v));
             } else if (a.startsWith("-")) {
                 int v = Integer.parseInt(a.substring(1));
                 statistic.setValue((statistic.getValueAsInt() - v) + "");
-                sender.sendMessage(ManiaManiaUtils.color("&aDecreased the stat " + stat.name().toLowerCase() + " by " + v));
+                sender.sendMessage(ManiaUtils.color("&aDecreased the stat " + stat.name().toLowerCase() + " by " + v));
             } else {
                 int v = Integer.parseInt(a);
                 statistic.setValue(v + "");
-                sender.sendMessage(ManiaManiaUtils.color("&aSet the stat " + stat.name().toLowerCase() + " to " + v));
+                sender.sendMessage(ManiaUtils.color("&aSet the stat " + stat.name().toLowerCase() + " to " + v));
             }
         }
         

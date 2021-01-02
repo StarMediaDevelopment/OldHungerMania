@@ -6,15 +6,10 @@ import net.hungermania.hungergames.game.death.*;
 import net.hungermania.hungergames.game.team.GameTeam;
 import net.hungermania.hungergames.game.team.GameTeam.Perms;
 import net.hungermania.hungergames.loot.Loot;
-import net.hungermania.maniacore.spigot.perks.PerkInfo;
-import net.hungermania.maniacore.spigot.perks.Perks;
 import net.hungermania.hungergames.profile.LobbyBoard;
-import net.hungermania.maniacore.spigot.perks.PerkInfoRecord;
 import net.hungermania.hungergames.settings.GameSettings;
-import net.hungermania.hungergames.user.GameUser;
 import net.hungermania.hungergames.util.Messager;
 import net.hungermania.maniacore.api.ManiaCore;
-import net.hungermania.maniacore.spigot.mutations.MutationType;
 import net.hungermania.maniacore.api.channel.Channel;
 import net.hungermania.maniacore.api.leveling.Level;
 import net.hungermania.maniacore.api.ranks.Rank;
@@ -28,6 +23,8 @@ import net.hungermania.maniacore.api.util.*;
 import net.hungermania.maniacore.spigot.events.UserIncognitoEvent;
 import net.hungermania.maniacore.spigot.events.UserJoinEvent;
 import net.hungermania.maniacore.spigot.gui.Gui;
+import net.hungermania.maniacore.spigot.mutations.MutationType;
+import net.hungermania.maniacore.spigot.perks.*;
 import net.hungermania.maniacore.spigot.updater.UpdateEvent;
 import net.hungermania.maniacore.spigot.updater.UpdateType;
 import net.hungermania.maniacore.spigot.user.SpigotUser;
@@ -273,7 +270,7 @@ public class PlayerListeners extends GameListener {
                 } else if (block.getType() == Material.CAKE_BLOCK) {
                     if (e.getPlayer().getFoodLevel() != 20) {
                         try {
-                            GameUser user = (GameUser) ManiaCore.getInstance().getUserManager().getUser(e.getPlayer().getUniqueId());
+                            SpigotUser user = (SpigotUser) ManiaCore.getInstance().getUserManager().getUser(e.getPlayer().getUniqueId());
                             Perks.FATTY.activate(user);
                         } catch (Exception ex) {}
                     }
@@ -698,7 +695,7 @@ public class PlayerListeners extends GameListener {
             e.setCancelled(true);
             e.getPlayer().teleport(e.getTo(), TeleportCause.PLUGIN);
             try {
-                GameUser user = (GameUser) ManiaCore.getInstance().getUserManager().getUser(e.getPlayer().getUniqueId());
+                SpigotUser user = (SpigotUser) ManiaCore.getInstance().getUserManager().getUser(e.getPlayer().getUniqueId());
                 if (user.getPerkInfo(Perks.ENDERMAN).getValue()) {
                     e.getPlayer().damage(5.0);
                 }
@@ -730,7 +727,7 @@ public class PlayerListeners extends GameListener {
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerQuit(PlayerQuitEvent e) {
         Player player = e.getPlayer();
-        GameUser user = (GameUser) plugin.getManiaCore().getUserManager().getUser(player.getUniqueId());
+        SpigotUser user = (SpigotUser) plugin.getManiaCore().getUserManager().getUser(player.getUniqueId());
         this.handleRemove(user);
         plugin.getManiaCore().getDatabase().pushQueue();
         lobby.getVoteStart().remove(player.getUniqueId());

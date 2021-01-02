@@ -2,9 +2,7 @@ package net.hungermania.maniacore.spigot.gui;
 
 import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.spigot.util.ItemBuilder;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -183,7 +181,7 @@ public class Gui implements InventoryHolder {
                 Gui menu = (Gui) event.getInventory().getHolder();
                 
                 if (!menu.previousPage()) {
-                    event.getWhoClicked().sendMessage(ManiaManiaUtils.color("&cThere are no previous pages"));
+                    event.getWhoClicked().sendMessage(ManiaUtils.color("&cThere are no previous pages"));
                     return;
                 }
                 
@@ -197,7 +195,7 @@ public class Gui implements InventoryHolder {
                 Gui menu = (Gui) event.getInventory().getHolder();
                 
                 if (!menu.nextPage()) {
-                    event.getWhoClicked().sendMessage(ManiaManiaUtils.color("&cThere are no additional pages"));
+                    event.getWhoClicked().sendMessage(ManiaUtils.color("&cThere are no additional pages"));
                     return;
                 }
                 

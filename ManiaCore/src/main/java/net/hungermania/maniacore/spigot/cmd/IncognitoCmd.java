@@ -27,14 +27,14 @@ public class IncognitoCmd implements CommandExecutor {
     
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ManiaManiaUtils.color("&cOnly players may use that command."));
+            sender.sendMessage(ManiaUtils.color("&cOnly players may use that command."));
             return true;
         }
         
         Player player = (Player) sender;
         User user = ManiaCore.getInstance().getUserManager().getUser(player.getUniqueId());
         if (!user.hasPermission(Rank.HELPER)) {
-            player.sendMessage(ManiaManiaUtils.color("&cYou do not have permission to use that command."));
+            player.sendMessage(ManiaUtils.color("&cYou do not have permission to use that command."));
             return true;
         }
         
@@ -53,7 +53,7 @@ public class IncognitoCmd implements CommandExecutor {
         plugin.getServer().getPluginManager().callEvent(event);
         
         if (event.isCancelled()) {
-            player.sendMessage(ManiaManiaUtils.color("&cCould not complete incognito command for the reason " + event.getCancelledReason()));
+            player.sendMessage(ManiaUtils.color("&cCould not complete incognito command for the reason " + event.getCancelledReason()));
             return true;
         }
         
@@ -61,9 +61,9 @@ public class IncognitoCmd implements CommandExecutor {
         incognito.setValue((!incognito.getAsBoolean()) + "");
     
         if (incognito.getAsBoolean()) {
-            player.sendMessage(ManiaManiaUtils.color("&6&l>> &9You are &b&lINCOGNITO&9, nobody can see you and your whereabouts aren't being reported."));
+            player.sendMessage(ManiaUtils.color("&6&l>> &9You are &b&lINCOGNITO&9, nobody can see you and your whereabouts aren't being reported."));
         } else {
-            player.sendMessage(ManiaManiaUtils.color("&6&l>> &cYou are no longer &b&lINCOGNITO&c."));
+            player.sendMessage(ManiaUtils.color("&6&l>> &cYou are no longer &b&lINCOGNITO&c."));
         }
         
         for (Entry<UUID, Boolean> entry : affectedPlayers.entrySet()) {

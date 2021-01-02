@@ -3,8 +3,8 @@ package net.hungermania.hungergames.game.death;
 import lombok.Getter;
 import net.hungermania.hungergames.HungerGames;
 import net.hungermania.hungergames.game.Game;
-import net.hungermania.maniacore.api.util.Utils;
 import net.hungermania.maniacore.spigot.user.SpigotUser;
+import net.hungermania.manialib.util.Utils;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 

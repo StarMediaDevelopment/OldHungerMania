@@ -23,7 +23,7 @@ public class SpartanUtils {
             if (p.hasPermission(Channel.STAFF.getPermission())) {
                 User user = ManiaCore.getInstance().getUserManager().getUser(p.getUniqueId());
                 if (user.getToggle(Toggles.SPARTAN_NOTIFICATIONS).getAsBoolean()) {
-                    p.sendMessage(ManiaManiaUtils.color(format));
+                    p.sendMessage(ManiaUtils.color(format));
                 }
             }
         }

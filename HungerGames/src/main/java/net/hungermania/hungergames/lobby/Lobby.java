@@ -15,7 +15,7 @@ import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.maniacore.api.redis.Redis;
 import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.user.toggle.Toggles;
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.memory.MemoryHook;
 import net.hungermania.maniacore.memory.MemoryHook.Task;
 import net.hungermania.maniacore.spigot.user.SpigotUser;
@@ -470,31 +470,31 @@ public class Lobby implements Listener, CommandExecutor {
                 player.sendMessage(ManiaUtils.color("&cYou must provide a sub command."));
                 return true;
             }
-            
-            if (Utils.checkCmdAliases(args, 0, "signs")) {
+    
+            if (ManiaUtils.checkCmdAliases(args, 0, "signs")) {
                 if (!(args.length > 1)) {
                     player.sendMessage(ManiaUtils.color("&cYou must provide a subcommand."));
                     return true;
                 }
-                
+        
                 Block target = player.getTargetBlock((Set<Material>) null, 20);
                 if (!(target.getState() instanceof Sign)) {
                     player.sendMessage(ManiaUtils.color("&cYou must be looking at a sign."));
                     return true;
                 }
-                
-                if (Utils.checkCmdAliases(args, 1, "setvotetitle")) {
+        
+                if (ManiaUtils.checkCmdAliases(args, 1, "setvotetitle")) {
                     this.lobbySigns.setVoteTitleSign(SpigotUtils.locationToPosition(target.getLocation()));
                     player.sendMessage(ManiaUtils.color("&aSet the voting title sign to the block you are looking at."));
-                } else if (Utils.checkCmdAliases(args, 1, "setvotinginfo")) {
+                } else if (ManiaUtils.checkCmdAliases(args, 1, "setvotinginfo")) {
                     this.lobbySigns.setVotingInfo(SpigotUtils.locationToPosition(target.getLocation()));
                     player.sendMessage(ManiaUtils.color("&aSet the voting info sign to the block you are looking at."));
-                } else if (Utils.checkCmdAliases(args, 1, "setmapsign")) {
+                } else if (ManiaUtils.checkCmdAliases(args, 1, "setmapsign")) {
                     if (!(args.length > 2)) {
                         sender.sendMessage(ManiaUtils.color("&cYou must provide the map position number for that sign."));
                         return true;
                     }
-                    
+            
                     int pos;
                     try {
                         pos = Integer.parseInt(args[2]);

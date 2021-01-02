@@ -5,7 +5,7 @@ import net.hungermania.hungergames.game.death.DeathInfo;
 import net.hungermania.hungergames.game.death.DeathInfoPlayerKill;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.user.User;
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.spigot.util.ItemBuilder;
 import org.bukkit.*;
 import org.bukkit.entity.Player;

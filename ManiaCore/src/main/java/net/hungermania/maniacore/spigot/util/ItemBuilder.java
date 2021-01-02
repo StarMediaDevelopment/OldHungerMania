@@ -5,9 +5,9 @@ import lombok.Getter;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.records.SkinRecord;
 import net.hungermania.maniacore.api.skin.Skin;
-import net.hungermania.manialib.sql.IRecord;
 import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.util.ManiaUtils;
+import net.hungermania.manialib.sql.IRecord;
 import org.bukkit.*;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.banner.Pattern;
@@ -50,12 +50,12 @@ public class ItemBuilder {
         ItemStack itemStack = new ItemStack(material, amount, damage);
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (displayName != null) {
-            itemMeta.setDisplayName(ManiaManiaUtils.color(displayName));
+            itemMeta.setDisplayName(ManiaUtils.color(displayName));
         }
         
         if (!lore.isEmpty()) {
             List<String> coloredLore = new LinkedList<>();
-            lore.forEach(line -> coloredLore.add(ManiaManiaUtils.color(line)));
+            lore.forEach(line -> coloredLore.add(ManiaUtils.color(line)));
             itemMeta.setLore(coloredLore);
         }
         
@@ -92,10 +92,10 @@ public class ItemBuilder {
         if (itemMeta instanceof BookMeta) {
             BookMeta bookMeta = (BookMeta) itemMeta;
             if (bookTitle != null) {
-                bookMeta.setTitle(ManiaManiaUtils.color(bookTitle));
+                bookMeta.setTitle(ManiaUtils.color(bookTitle));
             }
             if (bookAuthor != null) {
-                bookMeta.setTitle(ManiaManiaUtils.color(bookAuthor));
+                bookMeta.setTitle(ManiaUtils.color(bookAuthor));
             }
             
             if (!bookPages.isEmpty()) {

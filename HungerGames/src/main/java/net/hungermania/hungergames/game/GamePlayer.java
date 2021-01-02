@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.hungermania.hungergames.game.death.DeathInfo;
 import net.hungermania.maniacore.api.ManiaCore;
+import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.spigot.mutations.MutationType;
 import net.hungermania.maniacore.spigot.user.SpigotUser;
 import org.bukkit.Bukkit;
@@ -49,7 +50,7 @@ public class GamePlayer {
             field.setAccessible(true);
             field.set(skullMeta, mcProfile);
         } catch (Exception e) {}
-        skullMeta.setDisplayName(ManiaManiaUtils.color("&f" + playerName));
+        skullMeta.setDisplayName(ManiaUtils.color("&f" + playerName));
         skull.setItemMeta(skullMeta);
     }
     

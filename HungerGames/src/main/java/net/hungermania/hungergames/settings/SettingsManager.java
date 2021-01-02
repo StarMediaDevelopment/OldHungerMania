@@ -4,7 +4,7 @@ import net.hungermania.hungergames.HungerGames;
 import net.hungermania.hungergames.records.GameSettingsRecord;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.events.EventInfo;
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.manialib.sql.IRecord;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.command.*;
@@ -58,14 +58,14 @@ public class SettingsManager implements CommandExecutor {
     }
     
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (Utils.checkCmdAliases(args, 0, "create")) {
+        if (ManiaUtils.checkCmdAliases(args, 0, "create")) {
             if (!(args.length > 1)) {
                 sender.sendMessage(ManiaUtils.color("&cYou must provide a name"));
                 return true;
             }
-            
+        
             String name = StringUtils.join(args, " ", 1, args.length);
-    
+        
             for (GameSettings value : this.otherSettings.values()) {
                 if (value.getName().equalsIgnoreCase(name)) {
                     sender.sendMessage(ManiaUtils.color("&cThere is already a settings value with that name."));

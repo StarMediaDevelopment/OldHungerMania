@@ -3,14 +3,15 @@ package net.hungermania.hungergames.game;
 import net.hungermania.hungergames.HungerGames;
 import net.hungermania.hungergames.game.death.*;
 import net.hungermania.hungergames.lobby.Lobby;
-import net.hungermania.maniacore.spigot.mutations.Mutations;
 import net.hungermania.hungergames.records.GameSettingsRecord;
 import net.hungermania.hungergames.settings.*;
-import net.hungermania.maniacore.spigot.mutations.MutationType;
 import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.maniacore.api.user.User;
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.api.util.ManiaUtils;
+import net.hungermania.maniacore.spigot.mutations.MutationType;
+import net.hungermania.maniacore.spigot.mutations.Mutations;
 import net.hungermania.maniacore.spigot.user.SpigotUser;
+import net.hungermania.manialib.util.Utils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;
@@ -46,14 +47,14 @@ public class HGCommand implements CommandExecutor {
             sender.sendMessage(ManiaUtils.color("&cYou must provide a sub command."));
             return true;
         }
-        
-        if (Utils.checkCmdAliases(args, 0, "playertrackers", "pt")) {
+    
+        if (ManiaUtils.checkCmdAliases(args, 0, "playertrackers", "pt")) {
             Game game = plugin.getGameManager().getCurrentGame();
             if (game == null) {
                 sender.sendMessage(ManiaUtils.color("&cThere is no active game."));
                 return true;
             }
-            
+        
             if (!(args.length > 1)) {
                 sender.sendMessage(ManiaUtils.color("&cYou must provide a value"));
                 return true;
@@ -66,22 +67,22 @@ public class HGCommand implements CommandExecutor {
                 sender.sendMessage(ManiaUtils.color("&cYou must provide either true or false"));
                 return true;
             }
-            
+        
             if (game.isPlayerTrackers() == value) {
                 sender.sendMessage("&cThe player trackers setting is already " + value);
                 return true;
             }
-            
+        
             game.setPlayerTrackers(value);
-        } else if (Utils.checkCmdAliases(args, 0, "gameinfo", "gi")) {
+        } else if (ManiaUtils.checkCmdAliases(args, 0, "gameinfo", "gi")) {
             Game game = plugin.getGameManager().getCurrentGame();
             if (game == null) {
                 sender.sendMessage(ManiaUtils.color("&cCurrent game is not available."));
                 return true;
             }
-            
+        
             sender.sendMessage(ManiaUtils.color("&6&l>> &eGame Information"));
-            
+        
             if (args.length == 1) {
                 String[] messages = new String[]{
                         "&eGame ID: &f" + game.getId(), "&eMap: &f" + game.getMap().getName(), "&eTotal Players: &f" + game.getPlayers().length, "&eTributes: &f" + game.getTributesTeam().size(), "&eSpectators: &f" + game.getSpectatorsTeam().size(), "&eMutations: &f" + game.getMutationsTeam().size(), "&eGame Start: &f" + Utils.formatDate(game.getGameStart()), "&eGrace End: &f" + Utils.formatDate(game.getGracePeriodEnd()), "&eCountdown Start: &f" + Utils.formatDate(game.getCountdownStart()), "&eDeathmatch Countdown Start: &f" + Utils.formatDate(game.getDeathmatchCountdownStart()), "&eState: &f" + game.getState().name(), "&eLooted Chests: &f" + game.getLootedChests().size()
@@ -92,38 +93,38 @@ public class HGCommand implements CommandExecutor {
                 }
                 return true;
             }
-            
-            if (Utils.checkCmdAliases(args, 1, "players")) {
+        
+            if (ManiaUtils.checkCmdAliases(args, 1, "players")) {
                 if (!(args.length > 2)) {
                     sender.sendMessage(ManiaUtils.color("&cYou do not have enough arguments"));
                     return true;
                 }
-                
-                if (Utils.checkCmdAliases(args, 2, "list")) {
+            
+                if (ManiaUtils.checkCmdAliases(args, 2, "list")) {
                     sender.sendMessage(ManiaUtils.color("&6&l>> &eList of all game players."));
                     List<String> tributes = new ArrayList<>();
                     for (UUID tribute : game.getTributesTeam()) {
                         tributes.add(Bukkit.getPlayer(tribute).getName());
                     }
                     sender.sendMessage(ManiaUtils.color("&6&l> &aTributes&8: &f" + StringUtils.join(tributes, "&7, &f")));
-    
+                
                     List<String> spectators = new ArrayList<>();
                     for (UUID spectator : game.getSpectatorsTeam()) {
                         spectators.add(Bukkit.getPlayer(spectator).getName());
                     }
                     sender.sendMessage(ManiaUtils.color("&6&l> &cSpectators&8: &f" + StringUtils.join(spectators, "&7, &f")));
-    
+                
                     List<String> mutations = new ArrayList<>();
                     for (UUID tribute : game.getMutationsTeam()) {
                         mutations.add(Bukkit.getPlayer(tribute).getName());
                     }
                     sender.sendMessage(ManiaUtils.color("&6&l> &dMutations&8: &f" + StringUtils.join(mutations, "&7, &f")));
-                } else if (Utils.checkCmdAliases(args, 2, "view")) {
+                } else if (ManiaUtils.checkCmdAliases(args, 2, "view")) {
                     if (!(args.length > 3)) {
                         sender.sendMessage(ManiaUtils.color("&cYou must provide a player name"));
                         return true;
                     }
-                    
+                
                     GamePlayer gamePlayer = null;
                     for (GamePlayer gp : game.getPlayers()) {
                         if (gp.getUser().getName().equalsIgnoreCase(args[3])) {
@@ -193,12 +194,12 @@ public class HGCommand implements CommandExecutor {
                     }
                 }
             }
-        } else if (Utils.checkCmdAliases(args, 0, "revive")) {
+        } else if (ManiaUtils.checkCmdAliases(args, 0, "revive")) {
             Game game = plugin.getGameManager().getCurrentGame();
             if (game == null) {
                 sender.sendMessage(ManiaUtils.color("&cThere is no active game"));
             }
-            
+        
             if (!(args.length > 1)) {
                 sender.sendMessage(ManiaUtils.color("&cYou must provide a target name."));
                 return true;
@@ -231,17 +232,17 @@ public class HGCommand implements CommandExecutor {
                     message = "&cInvalid game state to add a tribute.";
                     break;
             }
-            
+        
             if (message != null) {
                 sender.sendMessage(ManiaUtils.color(message));
             }
-        } else if (Utils.checkCmdAliases(args, 0, "addtribute")) {
+        } else if (ManiaUtils.checkCmdAliases(args, 0, "addtribute")) {
             Game game = plugin.getGameManager().getCurrentGame();
             if (game == null) {
                 sender.sendMessage(ManiaUtils.color("&cThere is no game currently running."));
                 return true;
             }
-            
+        
             if (!(args.length > 1)) {
                 sender.sendMessage(ManiaUtils.color("&cYou must provide a target name."));
                 return true;
@@ -274,53 +275,53 @@ public class HGCommand implements CommandExecutor {
                     message = "&cInvalid game state to add a tribute.";
                     break;
             }
-            
+        
             if (message != null) {
                 sender.sendMessage(ManiaUtils.color(message));
             }
-        } else if (Utils.checkCmdAliases(args, 0, "forcedeathmatch", "fdm")) {
+        } else if (ManiaUtils.checkCmdAliases(args, 0, "forcedeathmatch", "fdm")) {
             Game game = plugin.getGameManager().getCurrentGame();
             if (game == null) {
                 sender.sendMessage(ManiaUtils.color("&cThere is no game currently running."));
                 return true;
             }
-            
+        
             String senderName;
             if (sender instanceof Player) {
                 senderName = user.getColoredName();
             } else {
                 senderName = "&4&lCONSOLE";
             }
-            
+        
             game.beginDeathmatch();
             game.sendMessage(ManiaUtils.color("&5&l>> &6The deathmatch has been forcefully started by " + senderName + "&6."));
-        } else if (Utils.checkCmdAliases(args, 0, "restockchests", "rc")) {
+        } else if (ManiaUtils.checkCmdAliases(args, 0, "restockchests", "rc")) {
             Game game = plugin.getGameManager().getCurrentGame();
             if (game == null) {
                 sender.sendMessage(ManiaUtils.color("&cThere is no game currently running."));
                 return true;
             }
-            
+        
             String senderName;
             if (sender instanceof Player) {
                 senderName = user.getColoredName();
             } else {
                 senderName = "&4&lCONSOLE";
             }
-            
+        
             game.restockChests();
             game.sendMessage(ManiaUtils.color("&5&l>> &6The chests have been forcefully restocked by " + senderName + "&6."));
-        } else if (Utils.checkCmdAliases(args, 0, "setspawn")) {
+        } else if (ManiaUtils.checkCmdAliases(args, 0, "setspawn")) {
             plugin.setSpawn(player.getLocation());
             sender.sendMessage(ManiaUtils.color("&aSet the spawnpoint to your current location."));
             plugin.getConfig().set("spawn", plugin.getSpawn());
             plugin.saveConfig();
-        } else if (Utils.checkCmdAliases(args, 0, "mutations")) {
+        } else if (ManiaUtils.checkCmdAliases(args, 0, "mutations")) {
             if (!sender.hasPermission("mania.hungergames.playertrackers")) {
                 sender.sendMessage(ManiaUtils.color("&cYou do not have permission to use that command."));
                 return true;
             }
-            
+        
             Game game = plugin.getGameManager().getCurrentGame();
             if (game == null) {
                 sender.sendMessage(ManiaUtils.color("&cThere is no active game."));
@@ -339,19 +340,19 @@ public class HGCommand implements CommandExecutor {
                 sender.sendMessage(ManiaUtils.color("&cYou must provide either true or false"));
                 return true;
             }
-            
+        
             if (game.getGameSettings().isMutations() == value) {
                 sender.sendMessage("&cThe mutations setting is already " + value);
                 return true;
             }
-            
+        
             game.setMutations(value);
-        } else if (Utils.checkCmdAliases(args, 0, "mutate")) {
+        } else if (ManiaUtils.checkCmdAliases(args, 0, "mutate")) {
             if (!(args.length > 1)) {
                 player.sendMessage(ManiaUtils.color("&cYou must provide a player."));
                 return true;
             }
-            
+        
             Game game = plugin.getGameManager().getCurrentGame();
             if (game == null) {
                 sender.sendMessage(ManiaUtils.color("&cThere is no active game."));
@@ -411,41 +412,41 @@ public class HGCommand implements CommandExecutor {
                     player.sendMessage(ManiaUtils.color("&cThat player is not a tribute in the game."));
                     return true;
                 }
-                
+    
                 mutantTarget = p.getUniqueId();
             }
-            
+        
             if (mutantTarget == null) {
                 player.sendMessage(ManiaUtils.color("&cCould not determine mutation target."));
                 return true;
             }
-            
+        
             game.mutatePlayer(target.getUniqueId(), Mutations.MUTATIONS.get(type), mutantTarget);
             game.sendMessage("&d&l>> &c" + target.getName() + " has been forceully mutated by " + player.getName());
-        } else if (Utils.checkCmdAliases(args, 0, "forcestart")) {
+        } else if (ManiaUtils.checkCmdAliases(args, 0, "forcestart")) {
             Game game = plugin.getGameManager().getCurrentGame();
             if (game != null) {
                 sender.sendMessage(ManiaUtils.color("&cThere is already an active game."));
                 return true;
             }
-            
+        
             Lobby lobby = plugin.getLobby();
-            
+        
             if (lobby.getVoteTimer() != null) {
                 player.sendMessage(ManiaUtils.color("&cThe timer has already started!"));
                 return true;
             }
-            
+        
             lobby.startTimer();
             lobby.getVoteTimer().setForceStarted(true);
             lobby.sendMessage(ManiaUtils.color("&aThe lobby timer has been forcefully started by &b" + player.getName()));
-        } else if (Utils.checkCmdAliases(args, 0, "settings")) {
+        } else if (ManiaUtils.checkCmdAliases(args, 0, "settings")) {
             if (!(args.length > 1)) {
                 player.sendMessage(ManiaUtils.color("&cYou must provide either a game setting name or update"));
                 return true;
             }
-            
-            if (Utils.checkCmdAliases(args, 1, "update")) {
+        
+            if (ManiaUtils.checkCmdAliases(args, 1, "update")) {
                 plugin.getSettingsManager().load();
                 player.sendMessage("&aUpdated the game settings from the database.");
                 if (args.length > 2) {
@@ -469,13 +470,13 @@ public class HGCommand implements CommandExecutor {
     
             Field[] declaredFields = GameSettings.class.getDeclaredFields();
             for (Field field : declaredFields) {
-                if (Utils.checkCmdAliases(args, 1, field.getName())) {
+                if (ManiaUtils.checkCmdAliases(args, 1, field.getName())) {
                     //Currently there is only ints, booleans and the Time and Weather types for the game settings
                     Object value = null;
                     try {
                         value = Integer.parseInt(args[2]);
                     } catch (Exception e) {}
-                    
+        
                     if (value == null) {
                         try {
                             value = Boolean.parseBoolean(args[2]);

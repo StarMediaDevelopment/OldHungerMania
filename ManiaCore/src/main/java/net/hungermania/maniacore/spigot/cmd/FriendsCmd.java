@@ -21,7 +21,7 @@ public class FriendsCmd implements CommandExecutor {
     
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ManiaManiaUtils.color("&cOnly players may use that command."));
+            sender.sendMessage(ManiaUtils.color("&cOnly players may use that command."));
             return true;
         }
         

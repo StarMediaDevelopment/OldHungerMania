@@ -5,8 +5,8 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import lombok.experimental.UtilityClass;
 import net.hungermania.maniacore.api.skin.Skin;
-import net.hungermania.maniacore.api.util.Position;
 import net.hungermania.maniacore.api.util.ManiaUtils;
+import net.hungermania.maniacore.api.util.Position;
 import net.minecraft.server.v1_8_R3.ChatComponentText;
 import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 import org.bukkit.Location;
@@ -32,7 +32,7 @@ public class SpigotUtils {
     }
     
     public static void sendActionBar(Player player, String text) {
-        PacketPlayOutChat packet = new PacketPlayOutChat(new ChatComponentText(ManiaManiaUtils.color(text)), (byte) 2);
+        PacketPlayOutChat packet = new PacketPlayOutChat(new ChatComponentText(ManiaUtils.color(text)), (byte) 2);
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
     }
 

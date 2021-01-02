@@ -48,7 +48,7 @@ public class SpigotUser extends User {
     public void sendMessage(String s) {
         Player player = getBukkitPlayer();
         if (player != null) {
-            player.sendMessage(ManiaManiaUtils.color(s));
+            player.sendMessage(ManiaUtils.color(s));
         }
     }
     

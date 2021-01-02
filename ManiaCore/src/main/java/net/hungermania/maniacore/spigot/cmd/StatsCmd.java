@@ -17,7 +17,7 @@ public class StatsCmd implements CommandExecutor {
             target = ManiaCore.getInstance().getUserManager().getUser(args[0]);
         } else {
             if (!(sender instanceof Player)) {
-                sender.sendMessage(ManiaManiaUtils.color("&cYou must provide a target."));
+                sender.sendMessage(ManiaUtils.color("&cYou must provide a target."));
                 return true;
             }
             
@@ -25,7 +25,7 @@ public class StatsCmd implements CommandExecutor {
         }
         
         if (target == null) {
-            sender.sendMessage(ManiaManiaUtils.color("&cCould not determine the target of the command."));
+            sender.sendMessage(ManiaUtils.color("&cCould not determine the target of the command."));
             return true;
         }
     
@@ -36,28 +36,28 @@ public class StatsCmd implements CommandExecutor {
         int kills = user.getStat(Stats.HG_KILLS).getValueAsInt();
         int deaths = user.getStat(Stats.HG_DEATHS).getValueAsInt();
         double kdr = kills / (deaths * 1.0);
-        
+    
         int wins = user.getStat(Stats.HG_WINS).getValueAsInt();
         int losses = user.getStat(Stats.HG_GAMES).getValueAsInt() - wins;
         double wlr = wins / (losses * 1.0);
-        
+    
         int deathmatches = user.getStat(Stats.HG_DEATHMATCHES).getValueAsInt();
         int chestsFound = user.getStat(Stats.HG_CHESTS_FOUND).getValueAsInt();
     
-        sender.sendMessage(ManiaManiaUtils.color("&6&l>> &a" + target.getName() + "'s Stats"));
-        sender.sendMessage(ManiaManiaUtils.color("&6&l> &7Coins: &b" + target.getStat(Stats.COINS).getValueAsInt()));
-        sender.sendMessage(ManiaManiaUtils.color("&6&l> &7Level: &b" + level.getNumber()));
-        sender.sendMessage(ManiaManiaUtils.color("&6&l> &7Experience: &b" + target.getStat(Stats.EXPERIENCE).getValueAsInt() + "     &e&lNext Level: &b" + (nextLevel.getTotalXp() - target.getStat(Stats.EXPERIENCE).getValueAsInt())));
-        sender.sendMessage(ManiaManiaUtils.color("&6&l> &7Kills: &b" + kills));
-        sender.sendMessage(ManiaManiaUtils.color("&6&l> &7Deaths: &b" + deaths));
-        sender.sendMessage(ManiaManiaUtils.color("&6&l> &7K/D: &b" + Constants.NUMBER_FORMAT.format(kdr)));
-        sender.sendMessage(ManiaManiaUtils.color("&6&l> &7Wins: &b" + wins));
-        sender.sendMessage(ManiaManiaUtils.color("&6&l> &7Losses: &b" + losses));
-        sender.sendMessage(ManiaManiaUtils.color("&6&l> &7W/L: &b" + Constants.NUMBER_FORMAT.format(wlr)));
-        sender.sendMessage(ManiaManiaUtils.color("&6&l> &7Win Streak: &b" + user.getStat(Stats.HG_WINSTREAK).getValue()));
-        sender.sendMessage(ManiaManiaUtils.color("&6&l> &7Deathmatches Reached: &b" + deathmatches));
-        sender.sendMessage(ManiaManiaUtils.color("&6&l> &7Chests Found: &b" + chestsFound));
-        
+        sender.sendMessage(ManiaUtils.color("&6&l>> &a" + target.getName() + "'s Stats"));
+        sender.sendMessage(ManiaUtils.color("&6&l> &7Coins: &b" + target.getStat(Stats.COINS).getValueAsInt()));
+        sender.sendMessage(ManiaUtils.color("&6&l> &7Level: &b" + level.getNumber()));
+        sender.sendMessage(ManiaUtils.color("&6&l> &7Experience: &b" + target.getStat(Stats.EXPERIENCE).getValueAsInt() + "     &e&lNext Level: &b" + (nextLevel.getTotalXp() - target.getStat(Stats.EXPERIENCE).getValueAsInt())));
+        sender.sendMessage(ManiaUtils.color("&6&l> &7Kills: &b" + kills));
+        sender.sendMessage(ManiaUtils.color("&6&l> &7Deaths: &b" + deaths));
+        sender.sendMessage(ManiaUtils.color("&6&l> &7K/D: &b" + Constants.NUMBER_FORMAT.format(kdr)));
+        sender.sendMessage(ManiaUtils.color("&6&l> &7Wins: &b" + wins));
+        sender.sendMessage(ManiaUtils.color("&6&l> &7Losses: &b" + losses));
+        sender.sendMessage(ManiaUtils.color("&6&l> &7W/L: &b" + Constants.NUMBER_FORMAT.format(wlr)));
+        sender.sendMessage(ManiaUtils.color("&6&l> &7Win Streak: &b" + user.getStat(Stats.HG_WINSTREAK).getValue()));
+        sender.sendMessage(ManiaUtils.color("&6&l> &7Deathmatches Reached: &b" + deathmatches));
+        sender.sendMessage(ManiaUtils.color("&6&l> &7Chests Found: &b" + chestsFound));
+    
         return true;
     }
 }

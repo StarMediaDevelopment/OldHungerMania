@@ -4,7 +4,7 @@ import net.hungermania.hungergames.HungerGames;
 import net.hungermania.hungergames.game.Game;
 import net.hungermania.hungergames.game.PlayerType;
 import net.hungermania.maniacore.api.user.User;
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.api.util.ManiaUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;

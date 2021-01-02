@@ -3,14 +3,14 @@ package net.hungermania.hungergames.listeners;
 import net.hungermania.hungergames.game.Game;
 import net.hungermania.hungergames.game.GamePlayer;
 import net.hungermania.hungergames.game.team.GameTeam.Perms;
+import net.hungermania.maniacore.api.ManiaCore;
+import net.hungermania.maniacore.api.util.ManiaUtils;
+import net.hungermania.maniacore.api.util.State;
+import net.hungermania.maniacore.spigot.mutations.MutationType;
 import net.hungermania.maniacore.spigot.perks.Perks;
 import net.hungermania.maniacore.spigot.perks.TieredPerk;
 import net.hungermania.maniacore.spigot.perks.TieredPerk.Tier;
-import net.hungermania.hungergames.user.GameUser;
-import net.hungermania.maniacore.api.ManiaCore;
-import net.hungermania.maniacore.spigot.mutations.MutationType;
-import net.hungermania.maniacore.api.util.State;
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.spigot.user.SpigotUser;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.*;
@@ -67,7 +67,7 @@ public class EntityListeners extends GameListener {
                     }
                 }
             } else {
-                GameUser user = (GameUser) ManiaCore.getInstance().getUserManager().getUser(e.getEntity().getUniqueId());
+                SpigotUser user = (SpigotUser) ManiaCore.getInstance().getUserManager().getUser(e.getEntity().getUniqueId());
                 try {
                     if (Perks.FEATHERWEIGHT.activate(user)) {
                         Tier tier = ((TieredPerk) Perks.FEATHERWEIGHT).getTier(user);
@@ -173,7 +173,7 @@ public class EntityListeners extends GameListener {
                         }
     
                         try {
-                            Perks.SHARPSHOOTER.activate((GameUser) shooterPlayer.getUser());
+                            Perks.SHARPSHOOTER.activate(shooterPlayer.getUser());
                         } catch (Exception ex) {}
                     }
                 }

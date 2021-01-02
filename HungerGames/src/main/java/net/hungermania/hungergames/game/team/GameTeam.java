@@ -7,7 +7,7 @@ import net.hungermania.hungergames.game.Game;
 import net.hungermania.hungergames.game.PlayerType;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.user.User;
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.spigot.util.SpigotUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Player;

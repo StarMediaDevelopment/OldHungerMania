@@ -14,7 +14,7 @@ import net.hungermania.maniacore.api.server.ManiaServer;
 import net.hungermania.maniacore.api.server.ServerType;
 import net.hungermania.maniacore.api.stats.Stats;
 import net.hungermania.maniacore.api.user.User;
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.memory.MemoryHook;
 import net.hungermania.maniacore.memory.MemoryHook.Task;
 import net.hungermania.maniacore.plugin.ManiaPlugin;
@@ -136,8 +136,8 @@ public final class Hub extends JavaPlugin implements Listener, ManiaPlugin {
                 sender.sendMessage(ManiaUtils.color("&cYou must provide a sub command"));
                 return true;
             }
-            
-            if (Utils.checkCmdAliases(args, 0, "info")) {
+    
+            if (ManiaUtils.checkCmdAliases(args, 0, "info")) {
                 sender.sendMessage(ManiaUtils.color("&6&l>> &eHG Test Information"));
                 sender.sendMessage(ManiaUtils.color("&6&l> &bActive&8: &e" + getConfig().getBoolean("testinfo.active")));
                 sender.sendMessage(ManiaUtils.color("&6&l> &bServer&8: &e" + getConfig().getString("testinfo.server")));
@@ -148,8 +148,8 @@ public final class Hub extends JavaPlugin implements Listener, ManiaPlugin {
                 sender.sendMessage(ManiaUtils.color("&cYou must provide a value"));
                 return true;
             }
-            
-            if (Utils.checkCmdAliases(args, 0, "setactive")) {
+    
+            if (ManiaUtils.checkCmdAliases(args, 0, "setactive")) {
                 try {
                     boolean value = Boolean.parseBoolean(args[1]);
                     getConfig().set("testinfo.active", value);
@@ -158,7 +158,7 @@ public final class Hub extends JavaPlugin implements Listener, ManiaPlugin {
                 } catch (Exception e) {
                     sender.sendMessage(ManiaUtils.color("&4&l>> &cYou must provide the values true or false"));
                 }
-            } else if (Utils.checkCmdAliases(args, 0, "setserver")) {
+            } else if (ManiaUtils.checkCmdAliases(args, 0, "setserver")) {
                 getConfig().set("testinfo.server", args[1]);
                 saveConfig();
                 sender.sendMessage(ManiaUtils.color("&6&l>> &aYou set the HG Test Server to " + args[1]));

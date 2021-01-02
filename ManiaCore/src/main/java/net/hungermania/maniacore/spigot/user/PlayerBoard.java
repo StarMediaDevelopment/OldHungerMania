@@ -5,10 +5,7 @@ import net.hungermania.maniacore.spigot.util.ScoreboardBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
+import org.bukkit.scoreboard.*;
 
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -24,7 +21,7 @@ public class PlayerBoard {
     public PlayerBoard(String name) {
         this.name = name;
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-        objective = this.scoreboard.registerNewObjective(ManiaManiaUtils.color(name), "dummy");
+        objective = this.scoreboard.registerNewObjective(ManiaUtils.color(name), "dummy");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
     }
     

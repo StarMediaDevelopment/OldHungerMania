@@ -2,8 +2,8 @@ package net.hungermania.hungergames.listeners;
 
 import net.hungermania.hungergames.game.Game;
 import net.hungermania.hungergames.game.team.GameTeam.Perms;
+import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.api.util.State;
-import net.hungermania.maniacore.api.util.Utils;
 import net.minecraft.server.v1_8_R3.EntityTNTPrimed;
 import org.bukkit.Location;
 import org.bukkit.Material;

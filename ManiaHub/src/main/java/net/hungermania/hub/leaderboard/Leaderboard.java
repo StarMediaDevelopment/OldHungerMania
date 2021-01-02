@@ -9,7 +9,7 @@ import lombok.Setter;
 import net.hungermania.hub.Hub;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.events.EventInfo;
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.api.util.ManiaUtils;
 import org.bukkit.Location;
 
 import java.util.*;

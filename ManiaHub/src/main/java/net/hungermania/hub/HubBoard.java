@@ -6,7 +6,7 @@ import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.maniacore.api.server.ManiaServer;
 import net.hungermania.maniacore.api.stats.Stats;
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.spigot.user.PlayerBoard;
 import net.hungermania.maniacore.spigot.user.SpigotUser;
 import org.bukkit.ChatColor;

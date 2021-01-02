@@ -21,7 +21,7 @@ public class InventoryListenerGUI implements Listener {
                     if (button != null && button.getListener() != null) {
                         button.getListener().onClick(event);
                     } else if (!gui.allowedToInsert(event.getSlot())) {
-                        player.sendMessage(ManiaManiaUtils.color("&cYou are not allowed to insert items into that slot."));
+                        player.sendMessage(ManiaUtils.color("&cYou are not allowed to insert items into that slot."));
                         return;
                     }
                 }

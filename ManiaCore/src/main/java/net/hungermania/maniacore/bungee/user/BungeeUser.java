@@ -41,7 +41,7 @@ public class BungeeUser extends User {
     public void sendMessage(String s) {
         ProxiedPlayer proxiedPlayer = getProxyPlayer();
         if (proxiedPlayer != null) {
-            proxiedPlayer.sendMessage(ChatMessageType.CHAT, TextComponent.fromLegacyText(ManiaManiaUtils.color(s)));
+            proxiedPlayer.sendMessage(ChatMessageType.CHAT, TextComponent.fromLegacyText(ManiaUtils.color(s)));
         }
     }
     
