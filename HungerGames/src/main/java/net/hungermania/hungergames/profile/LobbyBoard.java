@@ -15,7 +15,7 @@ public class LobbyBoard extends PlayerBoard {
     private final int waitingLine, neededLine, maximumnLine, roundNumberLine, timeLeftLine, votePowerLine;
     
     public LobbyBoard(Lobby lobby, SpigotUser user) {
-        super(Utils.color("&6&lLOBBY"));
+        super(ManiaUtils.color("&6&lLOBBY"));
         this.user = user;
         this.lobby = lobby;
         

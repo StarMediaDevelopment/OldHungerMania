@@ -276,7 +276,7 @@ public class Lobby implements Listener, CommandExecutor {
             p.setExp(0);
             p.setLevel(0);
             p.setTotalExperience(0);
-            p.setPlayerListName(Utils.color(user.getDisplayName()));
+            p.setPlayerListName(ManiaUtils.color(user.getDisplayName()));
         }
         generateMapOptions();
         this.game = null;
@@ -286,7 +286,7 @@ public class Lobby implements Listener, CommandExecutor {
         if (this.game == null) {
             Entry<HGMap, Integer> mostVotedMap = mapOptions.getMostVotedMap();
             if (mostVotedMap == null) {
-                sendMessage(Utils.color("&cThere was an error determining the map to be used."));
+                sendMessage(ManiaUtils.color("&cThere was an error determining the map to be used."));
                 return;
             }
             
@@ -401,7 +401,7 @@ public class Lobby implements Listener, CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (cmd.getName().equalsIgnoreCase("map")) {
             if (!(args.length > 0)) {
-                sender.sendMessage(Utils.color("&cYou must provide a map name"));
+                sender.sendMessage(ManiaUtils.color("&cYou must provide a map name"));
                 return true;
             }
             
@@ -409,13 +409,13 @@ public class Lobby implements Listener, CommandExecutor {
             try {
                 map = Integer.parseInt(args[0]);
             } catch (NumberFormatException e) {
-                sender.sendMessage(Utils.color("&cInvalid number."));
+                sender.sendMessage(ManiaUtils.color("&cInvalid number."));
                 return true;
             }
             
             HGMap hgMap = mapOptions.getMaps().get(map);
             if (hgMap == null) {
-                sender.sendMessage(Utils.color("&cInvalid map option."));
+                sender.sendMessage(ManiaUtils.color("&cInvalid map option."));
                 return true;
             }
             
@@ -423,7 +423,7 @@ public class Lobby implements Listener, CommandExecutor {
             
             for (SpigotUser user : this.hiddenStaff) {
                 if (user.getUniqueId().equals(player.getUniqueId())) {
-                    player.sendMessage(Utils.color("&cYou cannot vote for a map."));
+                    player.sendMessage(ManiaUtils.color("&cYou cannot vote for a map."));
                     return true;
                 }
             }
@@ -443,7 +443,7 @@ public class Lobby implements Listener, CommandExecutor {
                 }
             }
             
-            player.sendMessage(Utils.color("&6&l>> &eYou voted for&8: &b" + hgMap.getName() + " &7&oby " + creatorNames.toString()));
+            player.sendMessage(ManiaUtils.color("&6&l>> &eYou voted for&8: &b" + hgMap.getName() + " &7&oby " + creatorNames.toString()));
             User user = plugin.getManiaCore().getUserManager().getUser(player.getUniqueId());
             Rank rank = user.getRank();
             
@@ -452,46 +452,46 @@ public class Lobby implements Listener, CommandExecutor {
                 weight = rank.getVoteWeight();
             }
             
-            player.sendMessage(Utils.color("&6&l>> &eVoting Weight&8: &b" + weight + " Vote(s)&e."));
+            player.sendMessage(ManiaUtils.color("&6&l>> &eVoting Weight&8: &b" + weight + " Vote(s)&e."));
         } else if (cmd.getName().equalsIgnoreCase("lobby")) {
             if (!(sender instanceof Player)) {
-                sender.sendMessage(Utils.color("&cOnly players may use that command."));
+                sender.sendMessage(ManiaUtils.color("&cOnly players may use that command."));
                 return true;
             }
             
             Player player = (Player) sender;
             User user = ManiaCore.getInstance().getUserManager().getUser(player.getUniqueId());
             if (!user.hasPermission(Rank.ADMIN)) {
-                player.sendMessage(Utils.color("&cYou do not have permission to use that command."));
+                player.sendMessage(ManiaUtils.color("&cYou do not have permission to use that command."));
                 return true;
             }
             
             if (!(args.length > 0)) {
-                player.sendMessage(Utils.color("&cYou must provide a sub command."));
+                player.sendMessage(ManiaUtils.color("&cYou must provide a sub command."));
                 return true;
             }
             
             if (Utils.checkCmdAliases(args, 0, "signs")) {
                 if (!(args.length > 1)) {
-                    player.sendMessage(Utils.color("&cYou must provide a subcommand."));
+                    player.sendMessage(ManiaUtils.color("&cYou must provide a subcommand."));
                     return true;
                 }
                 
                 Block target = player.getTargetBlock((Set<Material>) null, 20);
                 if (!(target.getState() instanceof Sign)) {
-                    player.sendMessage(Utils.color("&cYou must be looking at a sign."));
+                    player.sendMessage(ManiaUtils.color("&cYou must be looking at a sign."));
                     return true;
                 }
                 
                 if (Utils.checkCmdAliases(args, 1, "setvotetitle")) {
                     this.lobbySigns.setVoteTitleSign(SpigotUtils.locationToPosition(target.getLocation()));
-                    player.sendMessage(Utils.color("&aSet the voting title sign to the block you are looking at."));
+                    player.sendMessage(ManiaUtils.color("&aSet the voting title sign to the block you are looking at."));
                 } else if (Utils.checkCmdAliases(args, 1, "setvotinginfo")) {
                     this.lobbySigns.setVotingInfo(SpigotUtils.locationToPosition(target.getLocation()));
-                    player.sendMessage(Utils.color("&aSet the voting info sign to the block you are looking at."));
+                    player.sendMessage(ManiaUtils.color("&aSet the voting info sign to the block you are looking at."));
                 } else if (Utils.checkCmdAliases(args, 1, "setmapsign")) {
                     if (!(args.length > 2)) {
-                        sender.sendMessage(Utils.color("&cYou must provide the map position number for that sign."));
+                        sender.sendMessage(ManiaUtils.color("&cYou must provide the map position number for that sign."));
                         return true;
                     }
                     
@@ -499,45 +499,45 @@ public class Lobby implements Listener, CommandExecutor {
                     try {
                         pos = Integer.parseInt(args[2]);
                     } catch (NumberFormatException e) {
-                        player.sendMessage(Utils.color("&cInvalid number"));
+                        player.sendMessage(ManiaUtils.color("&cInvalid number"));
                         return true;
                     }
                     
                     if (pos == 0 || pos > gameSettings.getMaxMapOptions()) {
-                        player.sendMessage(Utils.color("&cInvalid position, it must be between 1 and " + gameSettings.getMaxMapOptions()));
+                        player.sendMessage(ManiaUtils.color("&cInvalid position, it must be between 1 and " + gameSettings.getMaxMapOptions()));
                         return true;
                     }
                     
                     this.lobbySigns.getMapSigns().put(pos, SpigotUtils.locationToPosition(target.getLocation()));
-                    player.sendMessage(Utils.color("&aSet the current location to the map sign position &b" + pos));
+                    player.sendMessage(ManiaUtils.color("&aSet the current location to the map sign position &b" + pos));
                 }
             }
         } else if (cmd.getName().equalsIgnoreCase("votestart")) {
             if (!(sender instanceof Player)) {
-                sender.sendMessage(Utils.color("&cOnly players can do that."));
+                sender.sendMessage(ManiaUtils.color("&cOnly players can do that."));
                 return true;
             }
             
             Player player = (Player) sender;
             
             if (game != null) {
-                player.sendMessage(Utils.color("&cThere is a game already running."));
+                player.sendMessage(ManiaUtils.color("&cThere is a game already running."));
                 return true;
             }
             
             if (this.voteTimer != null) {
-                player.sendMessage(Utils.color("&cThe vote timer has already started."));
+                player.sendMessage(ManiaUtils.color("&cThe vote timer has already started."));
                 return true;
             }
             
             if (this.voteStart.contains(player.getUniqueId())) {
-                player.sendMessage(Utils.color("&cYou have already voted to start the game."));
+                player.sendMessage(ManiaUtils.color("&cYou have already voted to start the game."));
                 return true;
             }
             
             for (SpigotUser user : this.hiddenStaff) {
                 if (user.getUniqueId().equals(player.getUniqueId())) {
-                    player.sendMessage(Utils.color("&cYou cannot vote for a map."));
+                    player.sendMessage(ManiaUtils.color("&cYou cannot vote for a map."));
                     return true;
                 }
             }

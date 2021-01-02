@@ -6,15 +6,15 @@ import net.hungermania.hungergames.game.death.*;
 import net.hungermania.hungergames.game.team.GameTeam;
 import net.hungermania.hungergames.game.team.GameTeam.Perms;
 import net.hungermania.hungergames.loot.Loot;
-import net.hungermania.hungergames.perks.PerkInfo;
-import net.hungermania.hungergames.perks.Perks;
+import net.hungermania.maniacore.spigot.perks.PerkInfo;
+import net.hungermania.maniacore.spigot.perks.Perks;
 import net.hungermania.hungergames.profile.LobbyBoard;
-import net.hungermania.hungergames.records.PerkInfoRecord;
+import net.hungermania.maniacore.spigot.perks.PerkInfoRecord;
 import net.hungermania.hungergames.settings.GameSettings;
 import net.hungermania.hungergames.user.GameUser;
 import net.hungermania.hungergames.util.Messager;
 import net.hungermania.maniacore.api.ManiaCore;
-import net.hungermania.maniacore.api.MutationType;
+import net.hungermania.maniacore.spigot.mutations.MutationType;
 import net.hungermania.maniacore.api.channel.Channel;
 import net.hungermania.maniacore.api.leveling.Level;
 import net.hungermania.maniacore.api.ranks.Rank;
@@ -137,7 +137,7 @@ public class PlayerListeners extends GameListener {
                 }
                 
                 if (send) {
-                    p.sendMessage(Utils.color(format));
+                    p.sendMessage(ManiaUtils.color(format));
                 }
             }
             return;
@@ -172,7 +172,7 @@ public class PlayerListeners extends GameListener {
                     Player spectator = Bukkit.getPlayer(s);
                     if (spectator != null) {
                         format = format.replace("{gamechannel}", "&8[&cSpectators&8] ");
-                        spectator.sendMessage(Utils.color(format));
+                        spectator.sendMessage(ManiaUtils.color(format));
                     }
                 }
                 
@@ -181,7 +181,7 @@ public class PlayerListeners extends GameListener {
         }
         
         format = format.replace("{gamechannel}", "");
-        e.setFormat(Utils.color(format.replace("%", "%%")));
+        e.setFormat(ManiaUtils.color(format.replace("%", "%%")));
         e.setCancelled(false);
     }
     
@@ -265,7 +265,7 @@ public class PlayerListeners extends GameListener {
                     if (mapPosition == 0) { return; }
                     for (SpigotUser user : lobby.getHiddenStaff()) {
                         if (user.getUniqueId().equals(e.getPlayer().getUniqueId())) {
-                            e.getPlayer().sendMessage(Utils.color("&cYou cannot vote for a map."));
+                            e.getPlayer().sendMessage(ManiaUtils.color("&cYou cannot vote for a map."));
                             return;
                         }
                     }
@@ -293,7 +293,7 @@ public class PlayerListeners extends GameListener {
                                 long nextUse = lastUse + TimeUnit.SECONDS.toMillis(game.getGameSettings().getPearlCooldown());
                                 if (System.currentTimeMillis() < nextUse) {
                                     e.setCancelled(true);
-                                    e.getPlayer().sendMessage(Utils.color("&cThe enderpearl is still on cooldown."));
+                                    e.getPlayer().sendMessage(ManiaUtils.color("&cThe enderpearl is still on cooldown."));
                                     return;
                                 }
                             }
@@ -327,51 +327,51 @@ public class PlayerListeners extends GameListener {
                     }
                     
                     if (!game.getGameSettings().isMutations()) {
-                        e.getPlayer().sendMessage(Utils.color("&cMutations have been disabled."));
+                        e.getPlayer().sendMessage(ManiaUtils.color("&cMutations have been disabled."));
                         return;
                     }
                     
                     if (game.getGameStart() + TimeUnit.MINUTES.toMillis(game.getGameSettings().getMutationDelay()) > System.currentTimeMillis()) {
-                        e.getPlayer().sendMessage(Utils.color("&cYou must wait " + game.getGameSettings().getMutationDelay() + " minute(s) after the game starts to mutate."));
+                        e.getPlayer().sendMessage(ManiaUtils.color("&cYou must wait " + game.getGameSettings().getMutationDelay() + " minute(s) after the game starts to mutate."));
                         return;
                     }
                     
                     GamePlayer gamePlayer = game.getPlayer(e.getPlayer().getUniqueId());
                     if (gamePlayer.hasMutated()) {
-                        e.getPlayer().sendMessage(Utils.color("&6&l>> &cYou have already mutated."));
+                        e.getPlayer().sendMessage(ManiaUtils.color("&6&l>> &cYou have already mutated."));
                         return;
                     }
                     
                     if (!gamePlayer.isSpectatorByDeath()) {
-                        e.getPlayer().sendMessage(Utils.color("&6&l>> &cYou were not killed. No one to take revenge on!"));
+                        e.getPlayer().sendMessage(ManiaUtils.color("&6&l>> &cYou were not killed. No one to take revenge on!"));
                         return;
                     }
                     
                     if (!(game.getState() == State.PLAYING || game.getState() == State.PLAYING_DEATHMATCH)) {
-                        e.getPlayer().sendMessage(Utils.color("&6&l>> &cYou cannot mutate right now."));
+                        e.getPlayer().sendMessage(ManiaUtils.color("&6&l>> &cYou cannot mutate right now."));
                         return;
                     }
                     
                     if (gamePlayer.isMutating()) {
-                        e.getPlayer().sendMessage(Utils.color("&6&l>> &cYou are already mutating."));
+                        e.getPlayer().sendMessage(ManiaUtils.color("&6&l>> &cYou are already mutating."));
                         return;
                     }
                     
                     DeathInfo deathInfo = gamePlayer.getDeathInfo();
                     if (!(deathInfo instanceof DeathInfoPlayerKill)) {
-                        e.getPlayer().sendMessage(Utils.color("&6&l>> &cNo one to take revenge on!"));
+                        e.getPlayer().sendMessage(ManiaUtils.color("&6&l>> &cNo one to take revenge on!"));
                         return;
                     }
                     
                     DeathInfoPlayerKill playerDeath = (DeathInfoPlayerKill) deathInfo;
                     UUID target = playerDeath.getKiller();
                     if (!game.getTributesTeam().isMember(target)) {
-                        e.getPlayer().sendMessage(Utils.color("&6&l>> &cYour target died, you cannot take revenge."));
+                        e.getPlayer().sendMessage(ManiaUtils.color("&6&l>> &cYour target died, you cannot take revenge."));
                         return;
                     }
                     
                     if (playerDeath.isMutationKill()) {
-                        e.getPlayer().sendMessage(Utils.color("&6&l>> &cYou were killed by a mutation, you cannot take revenge."));
+                        e.getPlayer().sendMessage(ManiaUtils.color("&6&l>> &cYou were killed by a mutation, you cannot take revenge."));
                         return;
                     }
                     
@@ -379,7 +379,7 @@ public class PlayerListeners extends GameListener {
                     for (GamePlayer gp : game.getPlayers()) {
                         if (game.getMutationsTeam().isMember(gp.getUniqueId()) || gp.isMutating()) {
                             if (gp.getMutationTarget().equals(target)) {
-                                e.getPlayer().sendMessage(Utils.color("&cYou cannot mutate against that player because there already is a mutation against them."));
+                                e.getPlayer().sendMessage(ManiaUtils.color("&cYou cannot mutate against that player because there already is a mutation against them."));
                                 return;
                             }
                         }
@@ -392,7 +392,7 @@ public class PlayerListeners extends GameListener {
                     }
                     
                     if (previousMutations.size() >= 2) {
-                        e.getPlayer().sendMessage(Utils.color("&cYou cannot mutate against that player because they already had 2 or more mutations against them already."));
+                        e.getPlayer().sendMessage(ManiaUtils.color("&cYou cannot mutate against that player because they already had 2 or more mutations against them already."));
                         return;
                     }
                     
@@ -666,7 +666,7 @@ public class PlayerListeners extends GameListener {
                                 }
                             }
                             
-                            user.getBukkitPlayer().setPlayerListName(Utils.color(user.getDisplayName()));
+                            user.getBukkitPlayer().setPlayerListName(ManiaUtils.color(user.getDisplayName()));
                             
                             messager = lobby.getMessager();
                             gameSettings = lobby.getGameSettings();
@@ -714,14 +714,14 @@ public class PlayerListeners extends GameListener {
             if (lobby.getPlayers().size() >= lobby.getGameSettings().getMaxPlayers()) {
                 User user = ManiaCore.getInstance().getUserManager().getUser(e.getUniqueId());
                 if (!user.hasPermission(Rank.HELPER)) {
-                    e.disallow(Result.KICK_FULL, Utils.color("&cThe game is full"));
+                    e.disallow(Result.KICK_FULL, ManiaUtils.color("&cThe game is full"));
                 }
             }
         } else {
             if (game.getPlayers().length >= game.getGameSettings().getMaxPlayers()) {
                 User user = ManiaCore.getInstance().getUserManager().getUser(e.getUniqueId());
                 if (!user.hasPermission(Rank.HELPER)) {
-                    e.disallow(Result.KICK_FULL, Utils.color("&cThe game is full"));
+                    e.disallow(Result.KICK_FULL, ManiaUtils.color("&cThe game is full"));
                 }
             }
         }

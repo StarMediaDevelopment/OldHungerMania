@@ -101,11 +101,11 @@ public class Leaderboard {
             if (mainLine instanceof TextLine) {
                 TextLine textLine = (TextLine) mainLine;
                 if (!textLine.getText().contains("LEADERBOARD")) {
-                    textLine.setText(Utils.color("&6&lLEADERBOARD (" + min + " - " + max + ")"));
+                    textLine.setText(ManiaUtils.color("&6&lLEADERBOARD (" + min + " - " + max + ")"));
                 }
             }
         } catch (Exception e) {
-            this.hologram.insertTextLine(0, Utils.color("&6&lLEADERBOARD (" + min + " - " + max + ")"));
+            this.hologram.insertTextLine(0, ManiaUtils.color("&6&lLEADERBOARD (" + min + " - " + max + ")"));
         }
     
 //        for (Entry<Integer, UUID> entry : leaderboardPositions.entrySet()) {

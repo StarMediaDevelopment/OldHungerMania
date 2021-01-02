@@ -25,3 +25,4 @@ commands:
     friends:
         aliases: [f]
     setstat:
+    perks:

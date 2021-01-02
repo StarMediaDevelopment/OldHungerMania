@@ -183,7 +183,7 @@ public class Gui implements InventoryHolder {
                 Gui menu = (Gui) event.getInventory().getHolder();
                 
                 if (!menu.previousPage()) {
-                    event.getWhoClicked().sendMessage(ManiaUtils.color("&cThere are no previous pages"));
+                    event.getWhoClicked().sendMessage(ManiaManiaUtils.color("&cThere are no previous pages"));
                     return;
                 }
                 
@@ -197,7 +197,7 @@ public class Gui implements InventoryHolder {
                 Gui menu = (Gui) event.getInventory().getHolder();
                 
                 if (!menu.nextPage()) {
-                    event.getWhoClicked().sendMessage(ManiaUtils.color("&cThere are no additional pages"));
+                    event.getWhoClicked().sendMessage(ManiaManiaUtils.color("&cThere are no additional pages"));
                     return;
                 }
                 

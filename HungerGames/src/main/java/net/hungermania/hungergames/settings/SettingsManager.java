@@ -60,7 +60,7 @@ public class SettingsManager implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (Utils.checkCmdAliases(args, 0, "create")) {
             if (!(args.length > 1)) {
-                sender.sendMessage(Utils.color("&cYou must provide a name"));
+                sender.sendMessage(ManiaUtils.color("&cYou must provide a name"));
                 return true;
             }
             
@@ -68,7 +68,7 @@ public class SettingsManager implements CommandExecutor {
     
             for (GameSettings value : this.otherSettings.values()) {
                 if (value.getName().equalsIgnoreCase(name)) {
-                    sender.sendMessage(Utils.color("&cThere is already a settings value with that name."));
+                    sender.sendMessage(ManiaUtils.color("&cThere is already a settings value with that name."));
                     return true;
                 }
             }
@@ -77,12 +77,12 @@ public class SettingsManager implements CommandExecutor {
             gameSettings.setName(name);
             plugin.getManiaCore().getDatabase().pushRecord(new GameSettingsRecord(gameSettings));
             if (gameSettings.getId() == 0) {
-                sender.sendMessage(Utils.color("&cThere was an error saving the new settings to the database."));
+                sender.sendMessage(ManiaUtils.color("&cThere was an error saving the new settings to the database."));
                 return true;
             }
             
             this.otherSettings.put(gameSettings.getId(), gameSettings);
-            sender.sendMessage(Utils.color("&aCreated a new set of settings with the name &b" + gameSettings.getName() + " &aand the id &b" + gameSettings.getId()));
+            sender.sendMessage(ManiaUtils.color("&aCreated a new set of settings with the name &b" + gameSettings.getName() + " &aand the id &b" + gameSettings.getId()));
         }
         
         return true;

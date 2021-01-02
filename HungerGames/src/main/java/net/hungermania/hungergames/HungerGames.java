@@ -9,21 +9,19 @@ import net.hungermania.hungergames.lobby.Lobby;
 import net.hungermania.hungergames.loot.LootManager;
 import net.hungermania.hungergames.map.HGMap;
 import net.hungermania.hungergames.map.MapManager;
-import net.hungermania.hungergames.perks.Perks;
-import net.hungermania.hungergames.perks.cmd.PerkCmd;
 import net.hungermania.hungergames.records.*;
 import net.hungermania.hungergames.settings.SettingsManager;
-import net.hungermania.hungergames.user.HGUserManager;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.server.ServerType;
-import net.hungermania.maniacore.api.util.Utils;
 import net.hungermania.maniacore.memory.MemoryHook;
 import net.hungermania.maniacore.plugin.ManiaPlugin;
 import net.hungermania.maniacore.plugin.ManiaTask;
 import net.hungermania.maniacore.spigot.gui.Gui;
+import net.hungermania.maniacore.spigot.perks.Perks;
 import net.hungermania.maniacore.spigot.plugin.SpigotManiaTask;
 import net.hungermania.maniacore.spigot.user.PlayerBoard;
 import net.hungermania.maniacore.spigot.user.SpigotUser;
+import net.hungermania.manialib.util.Utils;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -51,14 +49,12 @@ public final class HungerGames extends JavaPlugin implements ManiaPlugin {
     public void onEnable() {
         instance = this;
         maniaCore = ManiaCore.getInstance();
-        maniaCore.setUserManager(new HGUserManager(this));
         this.saveDefaultConfig();
         Gui.prepare(this);
         
         maniaCore.getDatabase().registerRecordType(GameSettingsRecord.class);
         maniaCore.getDatabase().registerRecordType(GameRecord.class);
         maniaCore.getDatabase().registerRecordType(LootRecord.class);
-        maniaCore.getDatabase().registerRecordType(PerkInfoRecord.class);
         maniaCore.getDatabase().generateTables();
         
         maniaCore.getServerManager().getCurrentServer().setType(ServerType.HUNGER_GAMES);
@@ -81,7 +77,6 @@ public final class HungerGames extends JavaPlugin implements ManiaPlugin {
         this.lobby = new Lobby(this, getSpawn());
         this.getCommand("map").setExecutor(lobby);
         this.getCommand("lobby").setExecutor(lobby);
-        this.getCommand("perks").setExecutor(new PerkCmd());
         this.getServer().getPluginManager().registerEvents(lobby, this);
         this.getServer().getPluginManager().registerEvents(new PlayerListeners(), this);
         this.getServer().getPluginManager().registerEvents(new EntityListeners(), this);

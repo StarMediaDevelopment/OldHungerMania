@@ -99,21 +99,21 @@ public final class Hub extends JavaPlugin implements Listener, ManiaPlugin {
     
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
-        e.getPlayer().sendMessage(Utils.color("&6&l>> &bWelcome to &3&lHungerMania&b!"));
+        e.getPlayer().sendMessage(ManiaUtils.color("&6&l>> &bWelcome to &3&lHungerMania&b!"));
         if (getConfig().getBoolean("testinfo.active")) {
-            e.getPlayer().sendMessage(Utils.color("&6&l>> &bThe HG Test is currently active use &3/hgtest &bto go to the server!"));
+            e.getPlayer().sendMessage(ManiaUtils.color("&6&l>> &bThe HG Test is currently active use &3/hgtest &bto go to the server!"));
         }
         if (e.getPlayer().hasPermission(Channel.STAFF.getPermission())) {
-            e.getPlayer().sendMessage(Utils.color("&6&l>> &9Use &3@ &9in front of messages to talk in staff chat."));
+            e.getPlayer().sendMessage(ManiaUtils.color("&6&l>> &9Use &3@ &9in front of messages to talk in staff chat."));
         }
         if (e.getPlayer().hasPermission(Channel.ADMIN.getPermission())) {
-            e.getPlayer().sendMessage(Utils.color("&6&l>> &9Use &3$ &9in front of messages to talk in admin chat."));
+            e.getPlayer().sendMessage(ManiaUtils.color("&6&l>> &9Use &3$ &9in front of messages to talk in admin chat."));
         }
         e.getPlayer().setGameMode(GameMode.ADVENTURE);
         e.getPlayer().getInventory().clear();
         ItemStack gameBrowser = new ItemStack(Material.COMPASS);
         ItemMeta browserMeta = gameBrowser.getItemMeta();
-        browserMeta.setDisplayName(Utils.color("&e&lGAME BROWSER &7&o(Right Click)"));
+        browserMeta.setDisplayName(ManiaUtils.color("&e&lGAME BROWSER &7&o(Right Click)"));
         gameBrowser.setItemMeta(browserMeta);
         e.getPlayer().getInventory().setItem(4, gameBrowser);
         e.getPlayer().teleport(getServer().getWorld("world").getSpawnLocation());
@@ -121,31 +121,31 @@ public final class Hub extends JavaPlugin implements Listener, ManiaPlugin {
         String[] motd = new String[]{"&6&l>> &bWelcome to HungerMania!", "", "----Server Info----", "&6&l>> &eDiscord: &fhttps://discord.gg/Z95xgD7", "&6&l>> &eWebsite: &fhttps://hungermania.net/", "&6&l>> &eStore: &fhttps://hunger-mania.tebex.io/", "&6&l>> &eRules: &f/rules"};
         
         for (String message : motd) {
-            e.getPlayer().sendMessage(Utils.color(message));
+            e.getPlayer().sendMessage(ManiaUtils.color(message));
         }
     }
     
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (cmd.getName().equalsIgnoreCase("testadmin")) {
             if (!sender.hasPermission("hungermania.hub.testadmin")) {
-                sender.sendMessage(Utils.color("&cYou do not have permission to use that command."));
+                sender.sendMessage(ManiaUtils.color("&cYou do not have permission to use that command."));
                 return true;
             }
             
             if (!(args.length > 0)) {
-                sender.sendMessage(Utils.color("&cYou must provide a sub command"));
+                sender.sendMessage(ManiaUtils.color("&cYou must provide a sub command"));
                 return true;
             }
             
             if (Utils.checkCmdAliases(args, 0, "info")) {
-                sender.sendMessage(Utils.color("&6&l>> &eHG Test Information"));
-                sender.sendMessage(Utils.color("&6&l> &bActive&8: &e" + getConfig().getBoolean("testinfo.active")));
-                sender.sendMessage(Utils.color("&6&l> &bServer&8: &e" + getConfig().getString("testinfo.server")));
+                sender.sendMessage(ManiaUtils.color("&6&l>> &eHG Test Information"));
+                sender.sendMessage(ManiaUtils.color("&6&l> &bActive&8: &e" + getConfig().getBoolean("testinfo.active")));
+                sender.sendMessage(ManiaUtils.color("&6&l> &bServer&8: &e" + getConfig().getString("testinfo.server")));
                 return true;
             }
             
             if (!(args.length > 1)) {
-                sender.sendMessage(Utils.color("&cYou must provide a value"));
+                sender.sendMessage(ManiaUtils.color("&cYou must provide a value"));
                 return true;
             }
             
@@ -154,19 +154,19 @@ public final class Hub extends JavaPlugin implements Listener, ManiaPlugin {
                     boolean value = Boolean.parseBoolean(args[1]);
                     getConfig().set("testinfo.active", value);
                     saveConfig();
-                    sender.sendMessage(Utils.color("&6&l>> &aYou set the HG Test to " + value));
+                    sender.sendMessage(ManiaUtils.color("&6&l>> &aYou set the HG Test to " + value));
                 } catch (Exception e) {
-                    sender.sendMessage(Utils.color("&4&l>> &cYou must provide the values true or false"));
+                    sender.sendMessage(ManiaUtils.color("&4&l>> &cYou must provide the values true or false"));
                 }
             } else if (Utils.checkCmdAliases(args, 0, "setserver")) {
                 getConfig().set("testinfo.server", args[1]);
                 saveConfig();
-                sender.sendMessage(Utils.color("&6&l>> &aYou set the HG Test Server to " + args[1]));
-                sender.sendMessage(Utils.color("&6&l>> &cNote: This server must exist to work. This command does not check if it does."));
+                sender.sendMessage(ManiaUtils.color("&6&l>> &aYou set the HG Test Server to " + args[1]));
+                sender.sendMessage(ManiaUtils.color("&6&l>> &cNote: This server must exist to work. This command does not check if it does."));
             }
         } else if (cmd.getName().equalsIgnoreCase("spawn")) {
             if (!(sender instanceof Player)) {
-                sender.sendMessage(Utils.color("&cOnly players may use that command."));
+                sender.sendMessage(ManiaUtils.color("&cOnly players may use that command."));
                 return true;
             }
             
@@ -174,31 +174,31 @@ public final class Hub extends JavaPlugin implements Listener, ManiaPlugin {
             player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
         } else if (cmd.getName().equalsIgnoreCase("fly")) {
             if (!(sender instanceof Player)) {
-                sender.sendMessage(Utils.color("&cOnly players may use that command."));
+                sender.sendMessage(ManiaUtils.color("&cOnly players may use that command."));
                 return true;
             }
             
             Player player = (Player) sender;
             User user = ManiaCore.getInstance().getUserManager().getUser(player.getUniqueId());
             if (!user.hasPermission(Rank.HELPER)) {
-                player.sendMessage(Utils.color("&cYou do not have permission to use that command."));
+                player.sendMessage(ManiaUtils.color("&cYou do not have permission to use that command."));
                 return true;
             }
             
             player.setAllowFlight(!player.getAllowFlight());
             if (player.getAllowFlight()) {
-                player.sendMessage(Utils.color("&6&l>> &fFly mode &a&lENABLED&f."));
+                player.sendMessage(ManiaUtils.color("&6&l>> &fFly mode &a&lENABLED&f."));
             } else {
-                player.sendMessage(Utils.color("&6&l>> &fFly mode &c&lDISABLED&f."));
+                player.sendMessage(ManiaUtils.color("&6&l>> &fFly mode &c&lDISABLED&f."));
             }
         } else if (cmd.getName().equalsIgnoreCase("leaderboard")) {
             if (!(args.length > 1)) {
-                sender.sendMessage(Utils.color("&cYou did not provide enough arguments"));
+                sender.sendMessage(ManiaUtils.color("&cYou did not provide enough arguments"));
                 return true;
             }
             
             if (!(sender instanceof Player)) {
-                sender.sendMessage(Utils.color("&cOnly players can use that command."));
+                sender.sendMessage(ManiaUtils.color("&cOnly players can use that command."));
                 return true;
             }
             
@@ -206,20 +206,20 @@ public final class Hub extends JavaPlugin implements Listener, ManiaPlugin {
             try {
                 start = Integer.parseInt(args[0]);
             } catch (NumberFormatException e) {
-                sender.sendMessage(Utils.color("&cYou provided an invalid number for the starting number."));
+                sender.sendMessage(ManiaUtils.color("&cYou provided an invalid number for the starting number."));
                 return true;
             }
             
             try {
                 end = Integer.parseInt(args[1]);
             } catch (NumberFormatException e) {
-                sender.sendMessage(Utils.color("&cYou provided an invalid number for the ending number."));
+                sender.sendMessage(ManiaUtils.color("&cYou provided an invalid number for the ending number."));
                 return true;
             }
             
             for (Range<Leaderboard> range : leaderboardManager.getLeaderboards()) {
                 if (range.contains(start) || range.contains(end)) {
-                    sender.sendMessage(Utils.color("&cA leaderboard already exists with one of those numbers."));
+                    sender.sendMessage(ManiaUtils.color("&cA leaderboard already exists with one of those numbers."));
                     return true;
                 }
             }
@@ -259,7 +259,7 @@ public final class Hub extends JavaPlugin implements Listener, ManiaPlugin {
                         if (activeEvent != null) {
                             if (activeEvent.getServers().contains(server.getName())) {
                                 itemMaterial = Material.ENDER_STONE;
-                                lore.add(Utils.color("&3&lACTIVE EVENT"));
+                                lore.add(ManiaUtils.color("&3&lACTIVE EVENT"));
                             }
                         } else {
                             if (server.getState().equalsIgnoreCase("online") || server.getState().equalsIgnoreCase("lobby")) {
@@ -269,7 +269,7 @@ public final class Hub extends JavaPlugin implements Listener, ManiaPlugin {
                             }
                             
                             lore.add("");
-                            lore.add(Utils.color("&d&lStatus &f" + server.getState()));
+                            lore.add(ManiaUtils.color("&d&lStatus &f" + server.getState()));
                             String time = "", map = "";
                             String extra = server.getExtra();
                             if (extra != null && !extra.isEmpty()) {
@@ -287,20 +287,20 @@ public final class Hub extends JavaPlugin implements Listener, ManiaPlugin {
                                     }
                                 }
                             }
-                            lore.add(Utils.color("&d&lMap &f" + map));
-                            lore.add(Utils.color("&d&lTime &f" + time));
+                            lore.add(ManiaUtils.color("&d&lMap &f" + map));
+                            lore.add(ManiaUtils.color("&d&lTime &f" + time));
                             lore.add("");
-                            lore.add(Utils.color("&3&l" + server.getOnlinePlayerCount() + "/" + server.getMaxPlayerCount()));
+                            lore.add(ManiaUtils.color("&3&l" + server.getOnlinePlayerCount() + "/" + server.getMaxPlayerCount()));
                         }
                     } else if (server.getState().equalsIgnoreCase("starting")) {
                         itemMaterial = Material.DIAMOND_BLOCK;
-                        lore.addAll(Arrays.asList("", Utils.color("&c&lSERVER IS STARTING")));
+                        lore.addAll(Arrays.asList("", ManiaUtils.color("&c&lSERVER IS STARTING")));
                     } else if (server.getState().equalsIgnoreCase("restarting")) {
                         itemMaterial = Material.REDSTONE_BLOCK;
-                        lore.addAll(Arrays.asList("", Utils.color("&c&lSERVER IS RESTARTING")));
+                        lore.addAll(Arrays.asList("", ManiaUtils.color("&c&lSERVER IS RESTARTING")));
                     } else {
                         itemMaterial = Material.BEDROCK;
-                        lore.addAll(Arrays.asList("", Utils.color("&c&lSERVER IS OFFLINE")));
+                        lore.addAll(Arrays.asList("", ManiaUtils.color("&c&lSERVER IS OFFLINE")));
                     }
                     
                     ItemStack itemStack = new ItemStack(itemMaterial);
@@ -310,7 +310,7 @@ public final class Hub extends JavaPlugin implements Listener, ManiaPlugin {
                     
                     ItemMeta itemMeta = itemStack.getItemMeta();
                     int number = Integer.parseInt(server.getName().split("-")[1]);
-                    itemMeta.setDisplayName(Utils.color("&a&lSERVER " + number));
+                    itemMeta.setDisplayName(ManiaUtils.color("&a&lSERVER " + number));
                     itemMeta.setLore(lore);
                     itemStack.setItemMeta(itemMeta);
                     serverStacks.put(number, itemStack);
@@ -333,7 +333,7 @@ public final class Hub extends JavaPlugin implements Listener, ManiaPlugin {
                     } else {
                         user.getScoreboard().update();
                     }
-                    user.getBukkitPlayer().setPlayerListName(Utils.color(user.getDisplayName()));
+                    user.getBukkitPlayer().setPlayerListName(ManiaUtils.color(user.getDisplayName()));
                     
                     Level level = ManiaCore.getInstance().getLevelManager().getLevel(user.getStat(Stats.EXPERIENCE).getValueAsInt());
                     if (level != null) {

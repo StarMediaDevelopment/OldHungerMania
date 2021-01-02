@@ -103,7 +103,7 @@ public abstract class GameTeam implements Iterable<UUID> {
             player.removePotionEffect(activePotionEffect.getType());
         }
         DisguiseAPI.undisguiseToAll(player);
-        player.setPlayerListName(Utils.color(user.getRank().getPrefix() + " " + getColor() + player.getName()));
+        player.setPlayerListName(ManiaUtils.color(user.getRank().getPrefix() + " " + getColor() + player.getName()));
     }
     
     public abstract void join(UUID uuid);

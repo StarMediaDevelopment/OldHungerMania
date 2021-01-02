@@ -17,7 +17,7 @@ public class TestSpartan implements CommandExecutor {
             //SpartanUtils.sendSpartanMessage(server, sender.getName(), args[0], Integer.parseInt(args[1]), Boolean.parseBoolean(args[2]), tps, ping);
         } catch (Exception e) {
             e.printStackTrace();
-            sender.sendMessage(ManiaUtils.color("&cError handling that command."));
+            sender.sendMessage(ManiaManiaUtils.color("&cError handling that command."));
         }
         
         return true;

@@ -13,14 +13,14 @@ import java.util.Date;
 public class IgnoreCmd implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ManiaUtils.color("&cOnly players may use that command."));
+            sender.sendMessage(ManiaManiaUtils.color("&cOnly players may use that command."));
             return true;
         }
         
         Player player = (Player) sender;
         
         if (!(args.length > 0)) {
-            sender.sendMessage(ManiaUtils.color("&cUsage: /ignore <add|remove|list> [player]"));
+            sender.sendMessage(ManiaManiaUtils.color("&cUsage: /ignore <add|remove|list> [player]"));
             return true;
         }
         
@@ -28,13 +28,13 @@ public class IgnoreCmd implements CommandExecutor {
         
         if (ManiaUtils.checkCmdAliases(args, 0, "add", "a")) {
             if (!(args.length > 1)) {
-                sender.sendMessage(ManiaUtils.color("&cYou must provide a player name."));
+                sender.sendMessage(ManiaManiaUtils.color("&cYou must provide a player name."));
                 return true;
             }
             
             User target = ManiaCore.getInstance().getUserManager().getUser(args[1]);
             if (target == null) {
-                sender.sendMessage(ManiaUtils.color("&cYou provided an invalid name."));
+                sender.sendMessage(ManiaManiaUtils.color("&cYou provided an invalid name."));
                 return true;
             }
             
@@ -56,16 +56,16 @@ public class IgnoreCmd implements CommandExecutor {
                     break;
             }
             
-            player.sendMessage(ManiaUtils.color(message));
+            player.sendMessage(ManiaManiaUtils.color(message));
         } else if (ManiaUtils.checkCmdAliases(args, 0, "remove", "r")) {
             if (!(args.length > 1)) {
-                sender.sendMessage(ManiaUtils.color("&cYou must provide a player name."));
+                sender.sendMessage(ManiaManiaUtils.color("&cYou must provide a player name."));
                 return true;
             }
             
             User target = ManiaCore.getInstance().getUserManager().getUser(args[1]);
             if (target == null) {
-                sender.sendMessage(ManiaUtils.color("&cYou provided an invalid name."));
+                sender.sendMessage(ManiaManiaUtils.color("&cYou provided an invalid name."));
                 return true;
             }
             
@@ -86,11 +86,11 @@ public class IgnoreCmd implements CommandExecutor {
                     break;
             }
             
-            player.sendMessage(ManiaUtils.color(message));
+            player.sendMessage(ManiaManiaUtils.color(message));
         } else if (ManiaUtils.checkCmdAliases(args, 0, "list", "l")) {
-            player.sendMessage(ManiaUtils.color("&6&l>> &bAll ignored players."));
+            player.sendMessage(ManiaManiaUtils.color("&6&l>> &bAll ignored players."));
             for (IgnoreInfo ignoredPlayer : user.getIgnoredPlayers()) {
-                player.sendMessage(ManiaUtils.color("&6&l> &b" + ignoredPlayer.getIgnoredName() + " &fwas ignored on &a" + Constants.DATE_FORMAT.format(new Date(ignoredPlayer.getTimestamp()))));
+                player.sendMessage(ManiaManiaUtils.color("&6&l> &b" + ignoredPlayer.getIgnoredName() + " &fwas ignored on &a" + Constants.DATE_FORMAT.format(new Date(ignoredPlayer.getTimestamp()))));
             }
         }
         

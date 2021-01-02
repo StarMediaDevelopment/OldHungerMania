@@ -3,10 +3,10 @@ package net.hungermania.hungergames.game;
 import net.hungermania.hungergames.HungerGames;
 import net.hungermania.hungergames.game.death.*;
 import net.hungermania.hungergames.lobby.Lobby;
-import net.hungermania.hungergames.mutations.Mutations;
+import net.hungermania.maniacore.spigot.mutations.Mutations;
 import net.hungermania.hungergames.records.GameSettingsRecord;
 import net.hungermania.hungergames.settings.*;
-import net.hungermania.maniacore.api.MutationType;
+import net.hungermania.maniacore.spigot.mutations.MutationType;
 import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.util.Utils;
@@ -31,31 +31,31 @@ public class HGCommand implements CommandExecutor {
     
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(Utils.color("&cOnly players may do that."));
+            sender.sendMessage(ManiaUtils.color("&cOnly players may do that."));
             return true;
         }
         
         Player player = (Player) sender;
         User user = plugin.getManiaCore().getUserManager().getUser(player.getUniqueId());
         if (!user.hasPermission(Rank.ADMIN)) {
-            player.sendMessage(Utils.color("&cYou do not have permission to use that command."));
+            player.sendMessage(ManiaUtils.color("&cYou do not have permission to use that command."));
             return true;
         }
         
         if (!(args.length > 0)) {
-            sender.sendMessage(Utils.color("&cYou must provide a sub command."));
+            sender.sendMessage(ManiaUtils.color("&cYou must provide a sub command."));
             return true;
         }
         
         if (Utils.checkCmdAliases(args, 0, "playertrackers", "pt")) {
             Game game = plugin.getGameManager().getCurrentGame();
             if (game == null) {
-                sender.sendMessage(Utils.color("&cThere is no active game."));
+                sender.sendMessage(ManiaUtils.color("&cThere is no active game."));
                 return true;
             }
             
             if (!(args.length > 1)) {
-                sender.sendMessage(Utils.color("&cYou must provide a value"));
+                sender.sendMessage(ManiaUtils.color("&cYou must provide a value"));
                 return true;
             }
             
@@ -63,7 +63,7 @@ public class HGCommand implements CommandExecutor {
             try {
                 value = Boolean.parseBoolean(args[1]);
             } catch (Exception e) {
-                sender.sendMessage(Utils.color("&cYou must provide either true or false"));
+                sender.sendMessage(ManiaUtils.color("&cYou must provide either true or false"));
                 return true;
             }
             
@@ -76,11 +76,11 @@ public class HGCommand implements CommandExecutor {
         } else if (Utils.checkCmdAliases(args, 0, "gameinfo", "gi")) {
             Game game = plugin.getGameManager().getCurrentGame();
             if (game == null) {
-                sender.sendMessage(Utils.color("&cCurrent game is not available."));
+                sender.sendMessage(ManiaUtils.color("&cCurrent game is not available."));
                 return true;
             }
             
-            sender.sendMessage(Utils.color("&6&l>> &eGame Information"));
+            sender.sendMessage(ManiaUtils.color("&6&l>> &eGame Information"));
             
             if (args.length == 1) {
                 String[] messages = new String[]{
@@ -88,39 +88,39 @@ public class HGCommand implements CommandExecutor {
                 };
                 
                 for (String m : messages) {
-                    sender.sendMessage(Utils.color("&6&l> " + m));
+                    sender.sendMessage(ManiaUtils.color("&6&l> " + m));
                 }
                 return true;
             }
             
             if (Utils.checkCmdAliases(args, 1, "players")) {
                 if (!(args.length > 2)) {
-                    sender.sendMessage(Utils.color("&cYou do not have enough arguments"));
+                    sender.sendMessage(ManiaUtils.color("&cYou do not have enough arguments"));
                     return true;
                 }
                 
                 if (Utils.checkCmdAliases(args, 2, "list")) {
-                    sender.sendMessage(Utils.color("&6&l>> &eList of all game players."));
+                    sender.sendMessage(ManiaUtils.color("&6&l>> &eList of all game players."));
                     List<String> tributes = new ArrayList<>();
                     for (UUID tribute : game.getTributesTeam()) {
                         tributes.add(Bukkit.getPlayer(tribute).getName());
                     }
-                    sender.sendMessage(Utils.color("&6&l> &aTributes&8: &f" + StringUtils.join(tributes, "&7, &f")));
+                    sender.sendMessage(ManiaUtils.color("&6&l> &aTributes&8: &f" + StringUtils.join(tributes, "&7, &f")));
     
                     List<String> spectators = new ArrayList<>();
                     for (UUID spectator : game.getSpectatorsTeam()) {
                         spectators.add(Bukkit.getPlayer(spectator).getName());
                     }
-                    sender.sendMessage(Utils.color("&6&l> &cSpectators&8: &f" + StringUtils.join(spectators, "&7, &f")));
+                    sender.sendMessage(ManiaUtils.color("&6&l> &cSpectators&8: &f" + StringUtils.join(spectators, "&7, &f")));
     
                     List<String> mutations = new ArrayList<>();
                     for (UUID tribute : game.getMutationsTeam()) {
                         mutations.add(Bukkit.getPlayer(tribute).getName());
                     }
-                    sender.sendMessage(Utils.color("&6&l> &dMutations&8: &f" + StringUtils.join(mutations, "&7, &f")));
+                    sender.sendMessage(ManiaUtils.color("&6&l> &dMutations&8: &f" + StringUtils.join(mutations, "&7, &f")));
                 } else if (Utils.checkCmdAliases(args, 2, "view")) {
                     if (!(args.length > 3)) {
-                        sender.sendMessage(Utils.color("&cYou must provide a player name"));
+                        sender.sendMessage(ManiaUtils.color("&cYou must provide a player name"));
                         return true;
                     }
                     
@@ -133,40 +133,40 @@ public class HGCommand implements CommandExecutor {
                     }
                     
                     if (gamePlayer == null) {
-                        player.sendMessage(Utils.color("&cThe name you provided doesn't match an active player."));
+                        player.sendMessage(ManiaUtils.color("&cThe name you provided doesn't match an active player."));
                         return true;
                     }
                     
                     PlayerType playerType = game.getPlayerType(gamePlayer.getUniqueId());
-                    player.sendMessage(Utils.color("&6&l>> &dViewing information for player &e" + gamePlayer.getUser().getName()));
-                    player.sendMessage(Utils.color("&6&l> &ePlayer Type: &f" + playerType.name()));
-                    player.sendMessage(Utils.color("&6&l> &eGame Kills: &f" + gamePlayer.getKills()));
-                    player.sendMessage(Utils.color("&6&l> &eKill Streak: &f" + gamePlayer.getKillStreak()));
-                    player.sendMessage(Utils.color("&6&l> &eEarned Coins: &f" + gamePlayer.getEarnedCoins()));
-                    player.sendMessage(Utils.color("&6&l> &eHas Mutated: &f" + gamePlayer.hasMutated()));
-                    player.sendMessage(Utils.color("&6&l> &eHas Sponsored: &f" + gamePlayer.isHasSponsored()));
-                    player.sendMessage(Utils.color("&6&l> &eIs Mutating: &f" + gamePlayer.isMutating()));
+                    player.sendMessage(ManiaUtils.color("&6&l>> &dViewing information for player &e" + gamePlayer.getUser().getName()));
+                    player.sendMessage(ManiaUtils.color("&6&l> &ePlayer Type: &f" + playerType.name()));
+                    player.sendMessage(ManiaUtils.color("&6&l> &eGame Kills: &f" + gamePlayer.getKills()));
+                    player.sendMessage(ManiaUtils.color("&6&l> &eKill Streak: &f" + gamePlayer.getKillStreak()));
+                    player.sendMessage(ManiaUtils.color("&6&l> &eEarned Coins: &f" + gamePlayer.getEarnedCoins()));
+                    player.sendMessage(ManiaUtils.color("&6&l> &eHas Mutated: &f" + gamePlayer.hasMutated()));
+                    player.sendMessage(ManiaUtils.color("&6&l> &eHas Sponsored: &f" + gamePlayer.isHasSponsored()));
+                    player.sendMessage(ManiaUtils.color("&6&l> &eIs Mutating: &f" + gamePlayer.isMutating()));
                     if (playerType == PlayerType.MUTATION) {
-                        player.sendMessage(Utils.color("&6&l> &eMutation Target: &f" + game.getPlayer(gamePlayer.getMutationTarget()).getUser().getName()));
-                        player.sendMessage(Utils.color("&6&l> &eMutation Type: &f" + gamePlayer.getMutationType().name()));
+                        player.sendMessage(ManiaUtils.color("&6&l> &eMutation Target: &f" + game.getPlayer(gamePlayer.getMutationTarget()).getUser().getName()));
+                        player.sendMessage(ManiaUtils.color("&6&l> &eMutation Type: &f" + gamePlayer.getMutationType().name()));
                     }
                     if (playerType == PlayerType.SPECTATOR) {
-                        player.sendMessage(Utils.color("&6&l> &eKilled by a Player: &f" + gamePlayer.isSpectatorByDeath()));
+                        player.sendMessage(ManiaUtils.color("&6&l> &eKilled by a Player: &f" + gamePlayer.isSpectatorByDeath()));
                     }
                     DeathInfo deathInfo = gamePlayer.getDeathInfo();
                     if (deathInfo != null) {
-                        player.sendMessage(Utils.color("&6&l> &eDeath Type: &f" + deathInfo.getType()));
+                        player.sendMessage(ManiaUtils.color("&6&l> &eDeath Type: &f" + deathInfo.getType()));
                         if (deathInfo instanceof DeathInfoEntity) {
                             DeathInfoEntity deathInfoEntity = (DeathInfoEntity) deathInfo; 
-                            player.sendMessage(Utils.color("&6&l> &eKilled by Entity: &f" + deathInfoEntity.getKiller()));
+                            player.sendMessage(ManiaUtils.color("&6&l> &eKilled by Entity: &f" + deathInfoEntity.getKiller()));
                         } else if (deathInfo instanceof DeathInfoKilledSuicide) {
                             DeathInfoKilledSuicide deathInfoKilledSuicide = (DeathInfoKilledSuicide) deathInfo;
-                            player.sendMessage(Utils.color("&6&l> &eKilled by: &f" + game.getPlayer(deathInfoKilledSuicide.getKiller()).getUser().getName() + "'s Creeper Suicide"));
+                            player.sendMessage(ManiaUtils.color("&6&l> &eKilled by: &f" + game.getPlayer(deathInfoKilledSuicide.getKiller()).getUser().getName() + "'s Creeper Suicide"));
                         } else if (deathInfo instanceof DeathInfoPlayerKill) {
                             DeathInfoPlayerKill deathInfoPlayerKill = (DeathInfoPlayerKill) deathInfo;
                             GamePlayer killer = game.getPlayer(deathInfoPlayerKill.getKiller());
                             String itemName = DeathInfo.getHandItem(deathInfoPlayerKill.getHandItem());
-                            player.sendMessage(Utils.color("&6&l> &eKilled by: &f" + killer.getUser().getName() + " using " + itemName));
+                            player.sendMessage(ManiaUtils.color("&6&l> &eKilled by: &f" + killer.getUser().getName() + " using " + itemName));
                         } else if (deathInfo instanceof DeathInfoProjectile) {
                             DeathInfoProjectile deathInfoProjectile = (DeathInfoProjectile) deathInfo;
                             String killerName;
@@ -178,41 +178,41 @@ public class HGCommand implements CommandExecutor {
                             } else {
                                 killerName = "&f" + Utils.capitalizeEveryWord(shooter.getType().name());
                             }
-                            player.sendMessage(Utils.color("&6&l> &eKilled by: &b" + killerName + " &ffrom " + deathInfoProjectile.getDistance() + " blocks"));
+                            player.sendMessage(ManiaUtils.color("&6&l> &eKilled by: &b" + killerName + " &ffrom " + deathInfoProjectile.getDistance() + " blocks"));
                         } else if (deathInfo instanceof DeathInfoSuicide) {
-                            player.sendMessage(Utils.color("&6&l> &eDeath by: &fCreeper Mutation suicide."));
+                            player.sendMessage(ManiaUtils.color("&6&l> &eDeath by: &fCreeper Mutation suicide."));
                         } else {
-                            player.sendMessage(Utils.color("&6&l> &eDied to unknown reasons."));
+                            player.sendMessage(ManiaUtils.color("&6&l> &eDied to unknown reasons."));
                         }
                     }
                     if (gamePlayer.isForcefullyAdded()) {
-                        player.sendMessage(Utils.color("&6&l> &eForcefully Added by: &f" + gamePlayer.getForcefullyAddedActor().getName()));
+                        player.sendMessage(ManiaUtils.color("&6&l> &eForcefully Added by: &f" + gamePlayer.getForcefullyAddedActor().getName()));
                     }
                     if (gamePlayer.isRevived()) {
-                        player.sendMessage(Utils.color("&6&l> &eRevived by: &f" + gamePlayer.getRevivedActor()));
+                        player.sendMessage(ManiaUtils.color("&6&l> &eRevived by: &f" + gamePlayer.getRevivedActor()));
                     }
                 }
             }
         } else if (Utils.checkCmdAliases(args, 0, "revive")) {
             Game game = plugin.getGameManager().getCurrentGame();
             if (game == null) {
-                sender.sendMessage(Utils.color("&cThere is no active game"));
+                sender.sendMessage(ManiaUtils.color("&cThere is no active game"));
             }
             
             if (!(args.length > 1)) {
-                sender.sendMessage(Utils.color("&cYou must provide a target name."));
+                sender.sendMessage(ManiaUtils.color("&cYou must provide a target name."));
                 return true;
             }
             
             Player target = Bukkit.getPlayer(args[1]);
             if (target == null) {
-                sender.sendMessage(Utils.color("&cThe name you provided did not match an online player."));
+                sender.sendMessage(ManiaUtils.color("&cThe name you provided did not match an online player."));
                 return true;
             }
             
             GamePlayer gamePlayer = game.getPlayer(target.getUniqueId());
             if (gamePlayer == null) {
-                sender.sendMessage(Utils.color("&cThere was an error getting the game data for that player."));
+                sender.sendMessage(ManiaUtils.color("&cThere was an error getting the game data for that player."));
                 return true;
             }
             
@@ -233,29 +233,29 @@ public class HGCommand implements CommandExecutor {
             }
             
             if (message != null) {
-                sender.sendMessage(Utils.color(message));
+                sender.sendMessage(ManiaUtils.color(message));
             }
         } else if (Utils.checkCmdAliases(args, 0, "addtribute")) {
             Game game = plugin.getGameManager().getCurrentGame();
             if (game == null) {
-                sender.sendMessage(Utils.color("&cThere is no game currently running."));
+                sender.sendMessage(ManiaUtils.color("&cThere is no game currently running."));
                 return true;
             }
             
             if (!(args.length > 1)) {
-                sender.sendMessage(Utils.color("&cYou must provide a target name."));
+                sender.sendMessage(ManiaUtils.color("&cYou must provide a target name."));
                 return true;
             }
             
             Player target = Bukkit.getPlayer(args[1]);
             if (target == null) {
-                sender.sendMessage(Utils.color("&cThe name you provided did not match an online player."));
+                sender.sendMessage(ManiaUtils.color("&cThe name you provided did not match an online player."));
                 return true;
             }
             
             GamePlayer gamePlayer = game.getPlayer(target.getUniqueId());
             if (gamePlayer == null) {
-                sender.sendMessage(Utils.color("&cThere was an error getting the game data for that player."));
+                sender.sendMessage(ManiaUtils.color("&cThere was an error getting the game data for that player."));
                 return true;
             }
             
@@ -276,12 +276,12 @@ public class HGCommand implements CommandExecutor {
             }
             
             if (message != null) {
-                sender.sendMessage(Utils.color(message));
+                sender.sendMessage(ManiaUtils.color(message));
             }
         } else if (Utils.checkCmdAliases(args, 0, "forcedeathmatch", "fdm")) {
             Game game = plugin.getGameManager().getCurrentGame();
             if (game == null) {
-                sender.sendMessage(Utils.color("&cThere is no game currently running."));
+                sender.sendMessage(ManiaUtils.color("&cThere is no game currently running."));
                 return true;
             }
             
@@ -293,11 +293,11 @@ public class HGCommand implements CommandExecutor {
             }
             
             game.beginDeathmatch();
-            game.sendMessage(Utils.color("&5&l>> &6The deathmatch has been forcefully started by " + senderName + "&6."));
+            game.sendMessage(ManiaUtils.color("&5&l>> &6The deathmatch has been forcefully started by " + senderName + "&6."));
         } else if (Utils.checkCmdAliases(args, 0, "restockchests", "rc")) {
             Game game = plugin.getGameManager().getCurrentGame();
             if (game == null) {
-                sender.sendMessage(Utils.color("&cThere is no game currently running."));
+                sender.sendMessage(ManiaUtils.color("&cThere is no game currently running."));
                 return true;
             }
             
@@ -309,26 +309,26 @@ public class HGCommand implements CommandExecutor {
             }
             
             game.restockChests();
-            game.sendMessage(Utils.color("&5&l>> &6The chests have been forcefully restocked by " + senderName + "&6."));
+            game.sendMessage(ManiaUtils.color("&5&l>> &6The chests have been forcefully restocked by " + senderName + "&6."));
         } else if (Utils.checkCmdAliases(args, 0, "setspawn")) {
             plugin.setSpawn(player.getLocation());
-            sender.sendMessage(Utils.color("&aSet the spawnpoint to your current location."));
+            sender.sendMessage(ManiaUtils.color("&aSet the spawnpoint to your current location."));
             plugin.getConfig().set("spawn", plugin.getSpawn());
             plugin.saveConfig();
         } else if (Utils.checkCmdAliases(args, 0, "mutations")) {
             if (!sender.hasPermission("mania.hungergames.playertrackers")) {
-                sender.sendMessage(Utils.color("&cYou do not have permission to use that command."));
+                sender.sendMessage(ManiaUtils.color("&cYou do not have permission to use that command."));
                 return true;
             }
             
             Game game = plugin.getGameManager().getCurrentGame();
             if (game == null) {
-                sender.sendMessage(Utils.color("&cThere is no active game."));
+                sender.sendMessage(ManiaUtils.color("&cThere is no active game."));
                 return true;
             }
             
             if (!(args.length > 1)) {
-                sender.sendMessage(Utils.color("&cYou must provide a value"));
+                sender.sendMessage(ManiaUtils.color("&cYou must provide a value"));
                 return true;
             }
             
@@ -336,7 +336,7 @@ public class HGCommand implements CommandExecutor {
             try {
                 value = Boolean.parseBoolean(args[1]);
             } catch (Exception e) {
-                sender.sendMessage(Utils.color("&cYou must provide either true or false"));
+                sender.sendMessage(ManiaUtils.color("&cYou must provide either true or false"));
                 return true;
             }
             
@@ -348,30 +348,30 @@ public class HGCommand implements CommandExecutor {
             game.setMutations(value);
         } else if (Utils.checkCmdAliases(args, 0, "mutate")) {
             if (!(args.length > 1)) {
-                player.sendMessage(Utils.color("&cYou must provide a player."));
+                player.sendMessage(ManiaUtils.color("&cYou must provide a player."));
                 return true;
             }
             
             Game game = plugin.getGameManager().getCurrentGame();
             if (game == null) {
-                sender.sendMessage(Utils.color("&cThere is no active game."));
+                sender.sendMessage(ManiaUtils.color("&cThere is no active game."));
                 return true;
             }
             
             Player target = Bukkit.getPlayer(args[1]);
             if (target == null) {
-                player.sendMessage(Utils.color("&cYou did not provide a valid player name."));
+                player.sendMessage(ManiaUtils.color("&cYou did not provide a valid player name."));
                 return true;
             }
             
             GamePlayer gamePlayer = game.getPlayer(target.getUniqueId());
             if (gamePlayer == null) {
-                player.sendMessage(Utils.color("&cThat player is not a part of the current game."));
+                player.sendMessage(ManiaUtils.color("&cThat player is not a part of the current game."));
                 return true;
             }
             
             if (!game.getSpectatorsTeam().isMember(target.getUniqueId())) {
-                player.sendMessage(Utils.color("&cThat player is not a spectator!"));
+                player.sendMessage(ManiaUtils.color("&cThat player is not a spectator!"));
                 return true;
             }
             
@@ -379,10 +379,10 @@ public class HGCommand implements CommandExecutor {
             try {
                 type = MutationType.valueOf(args[2].toUpperCase());
             } catch (ArrayIndexOutOfBoundsException e) {
-                player.sendMessage(Utils.color("&cYou must provide a mutation type."));
+                player.sendMessage(ManiaUtils.color("&cYou must provide a mutation type."));
                 return true;
             } catch (IllegalArgumentException e) {
-                player.sendMessage(Utils.color("&cInvalid mutation type."));
+                player.sendMessage(ManiaUtils.color("&cInvalid mutation type."));
                 return true;
             }
             
@@ -395,7 +395,7 @@ public class HGCommand implements CommandExecutor {
             
             if (mutantTarget == null) {
                 if (!(args.length > 3)) {
-                    player.sendMessage(Utils.color("&cYou must provide a target for that mutation."));
+                    player.sendMessage(ManiaUtils.color("&cYou must provide a target for that mutation."));
                     return true;
                 }
             }
@@ -403,12 +403,12 @@ public class HGCommand implements CommandExecutor {
             if (args.length > 3) {
                 Player p = Bukkit.getPlayer(args[3]);
                 if (p == null) {
-                    player.sendMessage(Utils.color("&cThat name did not match an online player."));
+                    player.sendMessage(ManiaUtils.color("&cThat name did not match an online player."));
                     return true;
                 }
                 
                 if (!game.getTributesTeam().isMember(p.getUniqueId())) {
-                    player.sendMessage(Utils.color("&cThat player is not a tribute in the game."));
+                    player.sendMessage(ManiaUtils.color("&cThat player is not a tribute in the game."));
                     return true;
                 }
                 
@@ -416,7 +416,7 @@ public class HGCommand implements CommandExecutor {
             }
             
             if (mutantTarget == null) {
-                player.sendMessage(Utils.color("&cCould not determine mutation target."));
+                player.sendMessage(ManiaUtils.color("&cCould not determine mutation target."));
                 return true;
             }
             
@@ -425,23 +425,23 @@ public class HGCommand implements CommandExecutor {
         } else if (Utils.checkCmdAliases(args, 0, "forcestart")) {
             Game game = plugin.getGameManager().getCurrentGame();
             if (game != null) {
-                sender.sendMessage(Utils.color("&cThere is already an active game."));
+                sender.sendMessage(ManiaUtils.color("&cThere is already an active game."));
                 return true;
             }
             
             Lobby lobby = plugin.getLobby();
             
             if (lobby.getVoteTimer() != null) {
-                player.sendMessage(Utils.color("&cThe timer has already started!"));
+                player.sendMessage(ManiaUtils.color("&cThe timer has already started!"));
                 return true;
             }
             
             lobby.startTimer();
             lobby.getVoteTimer().setForceStarted(true);
-            lobby.sendMessage(Utils.color("&aThe lobby timer has been forcefully started by &b" + player.getName()));
+            lobby.sendMessage(ManiaUtils.color("&aThe lobby timer has been forcefully started by &b" + player.getName()));
         } else if (Utils.checkCmdAliases(args, 0, "settings")) {
             if (!(args.length > 1)) {
-                player.sendMessage(Utils.color("&cYou must provide either a game setting name or update"));
+                player.sendMessage(ManiaUtils.color("&cYou must provide either a game setting name or update"));
                 return true;
             }
             
@@ -463,7 +463,7 @@ public class HGCommand implements CommandExecutor {
             }
             
             if (!(args.length > 2)) {
-                player.sendMessage(Utils.color("&cYou must provide a value."));
+                player.sendMessage(ManiaUtils.color("&cYou must provide a value."));
                 return true;
             }
     
@@ -495,7 +495,7 @@ public class HGCommand implements CommandExecutor {
                     }
                     
                     if (value == null) {
-                        player.sendMessage(Utils.color("&cInvalid value type. The only ones are integers, true, false, and the Time and Weather types."));
+                        player.sendMessage(ManiaUtils.color("&cInvalid value type. The only ones are integers, true, false, and the Time and Weather types."));
                         return true;
                     }
     
@@ -510,7 +510,7 @@ public class HGCommand implements CommandExecutor {
                     Game game = plugin.getGameManager().getCurrentGame();
                     if (game == null) {
                         if (!updateGlobal) {
-                            player.sendMessage(Utils.color("&cThere is no active game."));
+                            player.sendMessage(ManiaUtils.color("&cThere is no active game."));
                             return true;
                         }
                     }
@@ -524,7 +524,7 @@ public class HGCommand implements CommandExecutor {
                             field.set(globalSettings, value);
                         }
                     } catch (Exception e) {
-                        player.sendMessage(Utils.color("&cCould not update that setting: " + e.getMessage()));
+                        player.sendMessage(ManiaUtils.color("&cCould not update that setting: " + e.getMessage()));
                         return true;
                     }
                     
@@ -532,7 +532,7 @@ public class HGCommand implements CommandExecutor {
                         plugin.getManiaCore().getDatabase().pushRecord(new GameSettingsRecord(globalSettings));
                     }
                     
-                    player.sendMessage(Utils.color("&aYou have updated the game setting &b" + field.getName().toLowerCase() + " &ato &b" + value.toString()));
+                    player.sendMessage(ManiaUtils.color("&aYou have updated the game setting &b" + field.getName().toLowerCase() + " &ato &b" + value.toString()));
                     break;
                 }
             }

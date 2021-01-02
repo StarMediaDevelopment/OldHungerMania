@@ -18,7 +18,7 @@ public class BroadcastCmd implements CommandExecutor {
             rank = Rank.CONSOLE;
         }
         if (rank.ordinal() <= Rank.ADMIN.ordinal()) {
-            String message = ManiaUtils.color(StringUtils.join(args, " "));
+            String message = ManiaManiaUtils.color(StringUtils.join(args, " "));
             Bukkit.getConsoleSender().sendMessage(message);
             for (Player player : Bukkit.getOnlinePlayers()) {
                 player.sendMessage(message);

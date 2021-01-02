@@ -34,7 +34,7 @@ public class HungerGamesGui extends Gui {
                 }
                 
                 lore.add("");
-                lore.add(Utils.color("&d&lStatus &f" + server.getState()));
+                lore.add(ManiaUtils.color("&d&lStatus &f" + server.getState()));
                 String time = "", map = "";
                 String extra = server.getExtra();
                 if (extra != null && !extra.isEmpty()) {
@@ -52,19 +52,19 @@ public class HungerGamesGui extends Gui {
                         }
                     }
                 }
-                lore.add(Utils.color("&d&lMap &f" + map));
-                lore.add(Utils.color("&d&lTime &f" + time));
+                lore.add(ManiaUtils.color("&d&lMap &f" + map));
+                lore.add(ManiaUtils.color("&d&lTime &f" + time));
                 lore.add("");
-                lore.add(Utils.color("&3&l" + server.getOnlinePlayerCount() + "/" + server.getMaxPlayerCount()));
+                lore.add(ManiaUtils.color("&3&l" + server.getOnlinePlayerCount() + "/" + server.getMaxPlayerCount()));
             } else if (server.getState().equalsIgnoreCase("starting")) {
                 itemMaterial = Material.DIAMOND_BLOCK;
-                lore.addAll(Arrays.asList("", Utils.color("&c&lSERVER IS STARTING")));
+                lore.addAll(Arrays.asList("", ManiaUtils.color("&c&lSERVER IS STARTING")));
             } else if (server.getState().equalsIgnoreCase("restarting")) {
                 itemMaterial = Material.REDSTONE_BLOCK;
-                lore.addAll(Arrays.asList("", Utils.color("&c&lSERVER IS RESTARTING")));
+                lore.addAll(Arrays.asList("", ManiaUtils.color("&c&lSERVER IS RESTARTING")));
             } else {
                 itemMaterial = Material.BEDROCK;
-                lore.addAll(Arrays.asList("", Utils.color("&c&lSERVER IS OFFLINE")));
+                lore.addAll(Arrays.asList("", ManiaUtils.color("&c&lSERVER IS OFFLINE")));
             }
             
             ItemStack itemStack = new ItemStack(itemMaterial);
@@ -74,7 +74,7 @@ public class HungerGamesGui extends Gui {
             
             ItemMeta itemMeta = itemStack.getItemMeta();
             int number = Integer.parseInt(server.getName().split("-")[1]);
-            itemMeta.setDisplayName(Utils.color("&a&lSERVER " + number));
+            itemMeta.setDisplayName(ManiaUtils.color("&a&lSERVER " + number));
             itemMeta.setLore(lore);
             itemStack.setItemMeta(itemMeta);
             serverStacks.put(number, itemStack);

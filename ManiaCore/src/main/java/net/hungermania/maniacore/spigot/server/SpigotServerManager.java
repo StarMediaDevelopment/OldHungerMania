@@ -29,7 +29,7 @@ public class SpigotServerManager extends ServerManager {
             if (player.hasPermission(c.getPermission())) {
                 User user = ManiaCore.getInstance().getUserManager().getUser(player.getUniqueId());
                 if (user.getToggle(Toggles.STAFF_NOTIFICATIONS).getAsBoolean()) {
-                    player.sendMessage(ManiaUtils.color(format.toString()));
+                    player.sendMessage(ManiaManiaUtils.color(format.toString()));
                 }
             }
         }
@@ -40,7 +40,7 @@ public class SpigotServerManager extends ServerManager {
             String message = "&6&l>> &a&lA game is ready at the server " + server + "!";
             //TODO Click text
             for (Player p : Bukkit.getOnlinePlayers()) {
-                p.sendMessage(ManiaUtils.color(message));
+                p.sendMessage(ManiaManiaUtils.color(message));
             }
         }
     }

@@ -20,7 +20,7 @@ public class GameBoard extends PlayerBoard {
     private final int serverLine;
     
     public GameBoard(Game game, SpigotUser spigotUser) {
-        super(Utils.color("&6&lHUNGER GAMES"));
+        super(ManiaUtils.color("&6&lHUNGER GAMES"));
         this.game = game;
         this.user = spigotUser;
         addLine("", ChatColor.GOLD + "" + ChatColor.BOLD + "MAP:", "");

@@ -32,7 +32,7 @@ public class SpigotMessageHandler extends MessageHandler {
             User user = ManiaCore.getInstance().getUserManager().getUser(player.getUniqueId());
             if (user.hasPermission(Rank.HELPER)) {
                 if (user.getToggle(Toggles.STAFF_NOTIFICATIONS).getAsBoolean()) {
-                    player.sendMessage(ManiaUtils.color(format.toString()));
+                    player.sendMessage(ManiaManiaUtils.color(format.toString()));
                 }
             }
         }
@@ -46,7 +46,7 @@ public class SpigotMessageHandler extends MessageHandler {
             User user = ManiaCore.getInstance().getUserManager().getUser(player.getUniqueId());
             if (user.hasPermission(Rank.ADMIN)) {
                 if (user.getToggle(Toggles.ADMIN_NOTIFICATIONS).getAsBoolean()) {
-                    player.sendMessage(ManiaUtils.color(format.toString()));
+                    player.sendMessage(ManiaManiaUtils.color(format.toString()));
                 }
             }
         }
@@ -61,7 +61,7 @@ public class SpigotMessageHandler extends MessageHandler {
         if (Bukkit.getOnlinePlayers().isEmpty()) return;
         SpigotUser user = (SpigotUser) plugin.getManiaCore().getUserManager().getUser(p);
         if (user.hasPermission(Rank.MEDIA)) {
-            String format = ManiaUtils.color(Channel.STAFF.getChatPrefix() + user.getColoredName() + " &7&l-> &6" + server);
+            String format = ManiaManiaUtils.color(Channel.STAFF.getChatPrefix() + user.getColoredName() + " &7&l-> &6" + server);
             for (Player player : Bukkit.getOnlinePlayers()) {
                 User u = ManiaCore.getInstance().getUserManager().getUser(player.getUniqueId());
                 if (u.hasPermission(Rank.HELPER)) {
@@ -77,7 +77,7 @@ public class SpigotMessageHandler extends MessageHandler {
         if (Bukkit.getOnlinePlayers().isEmpty()) return;
         SpigotUser user = new SpigotUser(plugin.getManiaCore().getUserManager().getUser(p));
         if (user.hasPermission(Rank.MEDIA)) {
-            String format = ManiaUtils.color(Channel.STAFF.getChatPrefix() + user.getColoredName() + " &6left the network.");
+            String format = ManiaManiaUtils.color(Channel.STAFF.getChatPrefix() + user.getColoredName() + " &6left the network.");
             for (Player player : Bukkit.getOnlinePlayers()) {
                 User u = ManiaCore.getInstance().getUserManager().getUser(player.getUniqueId());
                 if (u.hasPermission(Rank.HELPER)) {

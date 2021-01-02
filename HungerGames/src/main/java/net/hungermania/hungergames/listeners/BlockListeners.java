@@ -73,7 +73,7 @@ public class BlockListeners extends GameListener {
         
                 if (this.placedCraftingTables.containsKey(e.getPlayer().getUniqueId())) {
                     e.setCancelled(true);
-                    e.getPlayer().sendMessage(Utils.color("&cYou have already placed a crafting table."));
+                    e.getPlayer().sendMessage(ManiaUtils.color("&cYou have already placed a crafting table."));
                     return;
                 }
         
@@ -102,7 +102,7 @@ public class BlockListeners extends GameListener {
     
             if (e.getBlock().getType() == Material.WORKBENCH) {
                 if (!placedCraftingTables.containsValue(e.getBlock().getLocation())) {
-                    e.getPlayer().sendMessage(Utils.color("&cYou can only break crafting tables placed by a player."));
+                    e.getPlayer().sendMessage(ManiaUtils.color("&cYou can only break crafting tables placed by a player."));
                     e.setCancelled(true);
                     return;
                 }

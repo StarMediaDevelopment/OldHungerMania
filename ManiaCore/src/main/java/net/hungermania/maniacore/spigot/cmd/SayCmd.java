@@ -23,9 +23,9 @@ public class SayCmd implements CommandExecutor {
             }
             String message = "&8[&f&l&oSAY&8] &b" + senderName + ": &b" + StringUtils.join(args, " ");
             for (Player player : Bukkit.getOnlinePlayers()) {
-                player.sendMessage(ManiaUtils.color(message));
+                player.sendMessage(ManiaManiaUtils.color(message));
             }
-            Bukkit.getConsoleSender().sendMessage(ManiaUtils.color(message));
+            Bukkit.getConsoleSender().sendMessage(ManiaManiaUtils.color(message));
         }
         return true;
     }

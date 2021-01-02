@@ -22,11 +22,11 @@ public class HubBoard extends PlayerBoard {
     private ManiaCore maniaCore;
     
     public HubBoard(SpigotUser spigotUser) {
-        super(Utils.color("&6&lHUNGER MANIA"));
+        super(ManiaUtils.color("&6&lHUNGER MANIA"));
         this.user = spigotUser;
         addLine("", ChatColor.GOLD + "" + ChatColor.BOLD + "RANK", "");
         maniaCore = ManiaCore.getInstance();
-        this.rankLine = addLine(ChatColor.WHITE + "", ChatColor.DARK_PURPLE.toString(), Utils.color(spigotUser.getRank().getBaseColor() + "&l" + spigotUser.getRank().getName().toUpperCase()));
+        this.rankLine = addLine(ChatColor.WHITE + "", ChatColor.DARK_PURPLE.toString(), ManiaUtils.color(spigotUser.getRank().getBaseColor() + "&l" + spigotUser.getRank().getName().toUpperCase()));
         addLine("", ChatColor.LIGHT_PURPLE.toString(), "");
         addLine("", ChatColor.GOLD + "" + ChatColor.BOLD + "ONLINE", "");
         int hubOnline = 0, gameOnline = 0;
@@ -62,7 +62,7 @@ public class HubBoard extends PlayerBoard {
     
     public void update() {
         Rank rank = user.getRank();
-        setLine(rankLine, Utils.color(rank.getBaseColor() + "&l" + rank.getName().toUpperCase()));
+        setLine(rankLine, ManiaUtils.color(rank.getBaseColor() + "&l" + rank.getName().toUpperCase()));
         int hubOnline = 0, gameOnline = 0;
         for (ServerObject server : TimoCloudAPI.getUniversalAPI().getServerGroup("Hub").getServers()) {
             hubOnline += server.getOnlinePlayerCount();

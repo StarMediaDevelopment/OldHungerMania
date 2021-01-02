@@ -129,7 +129,7 @@ public class SpigotUserManager extends UserManager implements Listener {
                 }
                 
                 if (send) {
-                    p.sendMessage(ManiaUtils.color(format));
+                    p.sendMessage(ManiaManiaUtils.color(format));
                 }
             }
         }

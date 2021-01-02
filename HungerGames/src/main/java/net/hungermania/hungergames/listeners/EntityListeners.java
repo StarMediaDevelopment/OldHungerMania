@@ -3,12 +3,12 @@ package net.hungermania.hungergames.listeners;
 import net.hungermania.hungergames.game.Game;
 import net.hungermania.hungergames.game.GamePlayer;
 import net.hungermania.hungergames.game.team.GameTeam.Perms;
-import net.hungermania.hungergames.perks.Perks;
-import net.hungermania.hungergames.perks.TieredPerk;
-import net.hungermania.hungergames.perks.TieredPerk.Tier;
+import net.hungermania.maniacore.spigot.perks.Perks;
+import net.hungermania.maniacore.spigot.perks.TieredPerk;
+import net.hungermania.maniacore.spigot.perks.TieredPerk.Tier;
 import net.hungermania.hungergames.user.GameUser;
 import net.hungermania.maniacore.api.ManiaCore;
-import net.hungermania.maniacore.api.MutationType;
+import net.hungermania.maniacore.spigot.mutations.MutationType;
 import net.hungermania.maniacore.api.util.State;
 import net.hungermania.maniacore.api.util.Utils;
 import org.bukkit.entity.*;
@@ -117,7 +117,7 @@ public class EntityListeners extends GameListener {
                 
                 if (game.getMutationsTeam().isMember(target.getUniqueId())) {
                     if (!targetPlayer.getMutationTarget().equals(damager.getUniqueId())) {
-                        damager.sendMessage(Utils.color("&cThat mutation is not your target. You cannot damage it."));
+                        damager.sendMessage(ManiaUtils.color("&cThat mutation is not your target. You cannot damage it."));
                         e.setCancelled(true);
                         return;
                     }
@@ -129,7 +129,7 @@ public class EntityListeners extends GameListener {
                 
                 if (game.getMutationsTeam().isMember(damager.getUniqueId())) {
                     if (!damagerPlayer.getMutationTarget().equals(target.getUniqueId())) {
-                        damager.sendMessage(Utils.color("&cYou can only damage your target as a mutation."));
+                        damager.sendMessage(ManiaUtils.color("&cYou can only damage your target as a mutation."));
                         e.setCancelled(true);
                     }
                 }
@@ -137,7 +137,7 @@ public class EntityListeners extends GameListener {
                 long revengeTime = targetPlayer.getRevengeTime() + TimeUnit.SECONDS.toMillis(10);
                 if (System.currentTimeMillis() < revengeTime) {
                     e.setCancelled(true);
-                    damager.sendMessage(Utils.color("&cThat player recently took revenge. They have a 10 second grace period."));
+                    damager.sendMessage(ManiaUtils.color("&cThat player recently took revenge. They have a 10 second grace period."));
                 }
             } else if (e.getEntity() instanceof ItemFrame || e.getEntity() instanceof ArmorStand) {
                 e.setCancelled(true);

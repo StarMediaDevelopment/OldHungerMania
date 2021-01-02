@@ -1,11 +1,11 @@
 package net.hungermania.hungergames.game;
 
 import net.hungermania.hungergames.HungerGames;
-import net.hungermania.hungergames.mutations.Mutation;
-import net.hungermania.hungergames.mutations.Mutations;
-import net.hungermania.maniacore.MutationStatus;
+import net.hungermania.maniacore.spigot.mutations.Mutation;
+import net.hungermania.maniacore.spigot.mutations.Mutations;
+import net.hungermania.maniacore.spigot.mutations.MutationStatus;
 import net.hungermania.maniacore.api.ManiaCore;
-import net.hungermania.maniacore.api.MutationType;
+import net.hungermania.maniacore.spigot.mutations.MutationType;
 import net.hungermania.maniacore.api.stats.Stats;
 import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.util.Utils;
@@ -113,7 +113,7 @@ public class MutateGui extends Gui {
                         User user = ManiaCore.getInstance().getUserManager().getUser(e.getWhoClicked().getUniqueId());
                         if (user.getStat(Stats.COINS).getValueAsInt() < Mutations.MUTATIONS.get(entry.getKey()).getUseCost()) {
                             e.getWhoClicked().closeInventory();
-                            e.getWhoClicked().sendMessage(Utils.color("&cYou do not have enough coins to use that mutation."));
+                            e.getWhoClicked().sendMessage(ManiaUtils.color("&cYou do not have enough coins to use that mutation."));
                             return;
                         }
                         game.mutatePlayer(e.getWhoClicked().getUniqueId(), Mutations.MUTATIONS.get(entry.getKey()), target);

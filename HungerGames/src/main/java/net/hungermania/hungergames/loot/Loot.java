@@ -59,7 +59,7 @@ public class Loot {
         ItemStack itemStack = new ItemStack(this.material, amount);
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (!name.equalsIgnoreCase(material.name().replace("_", " "))) {
-            itemMeta.setDisplayName(Utils.color("&f" + this.name));
+            itemMeta.setDisplayName(ManiaUtils.color("&f" + this.name));
         }
         if (this.material == Material.FLINT_AND_STEEL) {
             itemStack.setDurability((short) (material.getMaxDurability() -4));

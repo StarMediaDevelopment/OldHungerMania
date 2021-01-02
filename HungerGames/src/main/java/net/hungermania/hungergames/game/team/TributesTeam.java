@@ -32,7 +32,7 @@ public class TributesTeam extends GameTeam {
             player.removePotionEffect(activePotionEffect.getType());
         }
     
-        player.setPlayerListName(Utils.color(getColor() + player.getName()));
+        player.setPlayerListName(ManiaUtils.color(getColor() + player.getName()));
         player.spigot().setCollidesWithEntities(true);
         
         this.members.add(player.getUniqueId());

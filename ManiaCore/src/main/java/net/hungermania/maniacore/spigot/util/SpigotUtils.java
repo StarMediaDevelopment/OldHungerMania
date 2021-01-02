@@ -32,7 +32,7 @@ public class SpigotUtils {
     }
     
     public static void sendActionBar(Player player, String text) {
-        PacketPlayOutChat packet = new PacketPlayOutChat(new ChatComponentText(ManiaUtils.color(text)), (byte) 2);
+        PacketPlayOutChat packet = new PacketPlayOutChat(new ChatComponentText(ManiaManiaUtils.color(text)), (byte) 2);
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
     }
 

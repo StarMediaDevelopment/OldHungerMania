@@ -24,7 +24,7 @@ public class PlayerBoard {
     public PlayerBoard(String name) {
         this.name = name;
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-        objective = this.scoreboard.registerNewObjective(ManiaUtils.color(name), "dummy");
+        objective = this.scoreboard.registerNewObjective(ManiaManiaUtils.color(name), "dummy");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
     }
     

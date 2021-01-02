@@ -29,7 +29,7 @@ public class SpectatorsTeam extends GameTeam {
         game.addPlayer(uuid);
         Player player = Bukkit.getPlayer(uuid);
         setPlayerStats(player, false, true, true);
-        player.setPlayerListName(Utils.color(getColor() + player.getName()));
+        player.setPlayerListName(ManiaUtils.color(getColor() + player.getName()));
         ItemStack tributesBook = ItemBuilder.start(Material.ENCHANTED_BOOK).setDisplayName("&a&lTributes &7&o(Right Click)").build();
         ItemStack spectatorsBook = ItemBuilder.start(Material.ENCHANTED_BOOK).setDisplayName("&c&lSpectators &7&o(Right Click)").build();
         ItemStack mutationsBook = ItemBuilder.start(Material.ENCHANTED_BOOK).setDisplayName("&d&lMutations &7&o(Right Click)").build();

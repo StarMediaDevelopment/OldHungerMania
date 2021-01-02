@@ -50,12 +50,12 @@ public class ItemBuilder {
         ItemStack itemStack = new ItemStack(material, amount, damage);
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (displayName != null) {
-            itemMeta.setDisplayName(ManiaUtils.color(displayName));
+            itemMeta.setDisplayName(ManiaManiaUtils.color(displayName));
         }
         
         if (!lore.isEmpty()) {
             List<String> coloredLore = new LinkedList<>();
-            lore.forEach(line -> coloredLore.add(ManiaUtils.color(line)));
+            lore.forEach(line -> coloredLore.add(ManiaManiaUtils.color(line)));
             itemMeta.setLore(coloredLore);
         }
         
@@ -92,10 +92,10 @@ public class ItemBuilder {
         if (itemMeta instanceof BookMeta) {
             BookMeta bookMeta = (BookMeta) itemMeta;
             if (bookTitle != null) {
-                bookMeta.setTitle(ManiaUtils.color(bookTitle));
+                bookMeta.setTitle(ManiaManiaUtils.color(bookTitle));
             }
             if (bookAuthor != null) {
-                bookMeta.setTitle(ManiaUtils.color(bookAuthor));
+                bookMeta.setTitle(ManiaManiaUtils.color(bookAuthor));
             }
             
             if (!bookPages.isEmpty()) {

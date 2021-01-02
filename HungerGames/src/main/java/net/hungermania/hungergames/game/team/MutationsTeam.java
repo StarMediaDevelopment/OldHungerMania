@@ -26,7 +26,7 @@ public class MutationsTeam extends GameTeam {
         setPlayerStats(player, true, false, false);
         this.members.add(uuid);
         user.sendMessage(getJoinMessage());
-        player.setPlayerListName(Utils.color(getColor() + player.getName()));
+        player.setPlayerListName(ManiaUtils.color(getColor() + player.getName()));
         Set<UUID> shown = new HashSet<>(game.getTributesTeam().getMembers());
         shown.addAll(game.getMutationsTeam().getMembers());
         for (UUID gp : shown) {

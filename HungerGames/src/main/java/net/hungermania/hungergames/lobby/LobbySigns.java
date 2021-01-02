@@ -103,10 +103,10 @@ public class LobbySigns {
                 Location location = SpigotUtils.positionToLocation(world, voteTitleSign);
                 if (world.getBlockAt(location).getState() instanceof Sign) {
                     Sign sign = (Sign) world.getBlockAt(location).getState();
-                    sign.setLine(0, Utils.color("&m--------------"));
-                    sign.setLine(1, Utils.color("&lVote for a"));
-                    sign.setLine(2, Utils.color("&lMap!"));
-                    sign.setLine(3, Utils.color("&m--------------"));
+                    sign.setLine(0, ManiaUtils.color("&m--------------"));
+                    sign.setLine(1, ManiaUtils.color("&lVote for a"));
+                    sign.setLine(2, ManiaUtils.color("&lMap!"));
+                    sign.setLine(3, ManiaUtils.color("&m--------------"));
                     sign.update();
                 }
             }
@@ -115,8 +115,8 @@ public class LobbySigns {
                 Location location = SpigotUtils.positionToLocation(world, votingInfo);
                 if (world.getBlockAt(location).getState() instanceof Sign) {
                     Sign sign = (Sign) world.getBlockAt(location).getState();
-                    sign.setLine(0, Utils.color("&nVoting Power"));
-                    sign.setLine(2, Utils.color("&nTime Left"));
+                    sign.setLine(0, ManiaUtils.color("&nVoting Power"));
+                    sign.setLine(2, ManiaUtils.color("&nTime Left"));
                     if (lobby.getVoteTimer() != null) {
                         sign.setLine(3, lobby.getVoteTimer().getRemainingSeconds() + "");
                     } else {
@@ -146,18 +146,18 @@ public class LobbySigns {
                         }
                         sign.setLine(1, mapName);
                         int votes = lobby.getMapOptions().getVotes(map);
-                        sign.setLine(3, Utils.color("&n" + votes + " Vote(s)"));
+                        sign.setLine(3, ManiaUtils.color("&n" + votes + " Vote(s)"));
     
                         for (Player player : Bukkit.getOnlinePlayers()) {
                             if (lobby.getMapOptions().hasVoted(player.getUniqueId())) {
-                                sign.setLine(0, Utils.color("&n#" + entry.getKey()));
+                                sign.setLine(0, ManiaUtils.color("&n#" + entry.getKey()));
                                 if (map.equals(lobby.getMapOptions().getVotedMap(player.getUniqueId()))) {
-                                    sign.setLine(2, Utils.color("&2&lVOTED!"));
+                                    sign.setLine(2, ManiaUtils.color("&2&lVOTED!"));
                                 } else {
                                     sign.setLine(2, "");
                                 }
                             } else {
-                                sign.setLine(0, Utils.color("&nClick to Vote"));
+                                sign.setLine(0, ManiaUtils.color("&nClick to Vote"));
                                 sign.setLine(2, "");
                             }
                             player.sendSignChange(location, sign.getLines());

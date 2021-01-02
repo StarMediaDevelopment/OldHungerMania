@@ -14,6 +14,9 @@ import net.hungermania.maniacore.plugin.ManiaTask;
 import net.hungermania.maniacore.spigot.anticheat.SpartanManager;
 import net.hungermania.maniacore.spigot.cmd.*;
 import net.hungermania.maniacore.spigot.communication.SpigotMessageHandler;
+import net.hungermania.maniacore.spigot.perks.PerkInfoRecord;
+import net.hungermania.maniacore.spigot.perks.Perks;
+import net.hungermania.maniacore.spigot.perks.cmd.PerkCmd;
 import net.hungermania.maniacore.spigot.plugin.SpigotManiaTask;
 import net.hungermania.maniacore.spigot.server.SpigotServerManager;
 import net.hungermania.maniacore.spigot.updater.Updater;
@@ -38,6 +41,8 @@ public final class ManiaCorePlugin extends JavaPlugin implements Listener, Mania
         ManiaCore.setInstance(this.maniaCore = new ManiaCore());
         maniaCore.init(getLogger());
         maniaCore.setLogger(getLogger());
+        ManiaCore.getInstance().getDatabase().registerRecordType(PerkInfoRecord.class);
+        ManiaCore.getInstance().getDatabase().generateTables();
         this.saveDefaultConfig();
         runTask(() -> {
             //This makes sure that there is a user manager registered after the server has finished loading
@@ -70,6 +75,7 @@ public final class ManiaCorePlugin extends JavaPlugin implements Listener, Mania
         getCommand("rank").setExecutor(new RankCmd());
         getCommand("friends").setExecutor(new FriendsCmd());
         getCommand("setstat").setExecutor(new SetstatCommand());
+        this.getCommand("perks").setExecutor(new PerkCmd());
         
         new BukkitRunnable() {
             public void run() {
@@ -138,6 +144,7 @@ public final class ManiaCorePlugin extends JavaPlugin implements Listener, Mania
         
         this.runTaskLater(() -> maniaCore.getServerManager().sendServerStart(getManiaCore().getServerManager().getCurrentServer().getName()), 1L);
         this.runTaskTimer(new Updater(this), 1L, 1L);
+        Perks.PERKS.size();
     }
     
     public ManiaCore getManiaCore() {

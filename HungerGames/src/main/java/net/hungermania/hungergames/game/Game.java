@@ -13,15 +13,14 @@ import net.hungermania.hungergames.game.death.*;
 import net.hungermania.hungergames.game.team.*;
 import net.hungermania.hungergames.lobby.Lobby;
 import net.hungermania.hungergames.map.HGMap;
-import net.hungermania.hungergames.mutations.Mutation;
-import net.hungermania.hungergames.perks.Perks;
+import net.hungermania.maniacore.spigot.mutations.Mutation;
+import net.hungermania.maniacore.spigot.perks.Perks;
 import net.hungermania.hungergames.profile.GameBoard;
 import net.hungermania.hungergames.records.GameRecord;
 import net.hungermania.hungergames.settings.GameSettings;
-import net.hungermania.hungergames.user.GameUser;
 import net.hungermania.hungergames.util.Messager;
 import net.hungermania.maniacore.api.ManiaCore;
-import net.hungermania.maniacore.api.MutationType;
+import net.hungermania.maniacore.spigot.mutations.MutationType;
 import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.maniacore.api.redis.Redis;
 import net.hungermania.maniacore.api.stats.Stats;
@@ -32,6 +31,7 @@ import net.hungermania.maniacore.memory.MemoryHook.Task;
 import net.hungermania.maniacore.spigot.user.SpigotUser;
 import net.hungermania.maniacore.spigot.util.SpigotUtils;
 import net.hungermania.manialib.util.Pair;
+import net.hungermania.manialib.util.Utils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
@@ -238,7 +238,7 @@ public class Game {
                 }
                 if (!spawnFound) {
                     tributesTeam.leave(tribute);
-                    player.sendMessage(Utils.color("&cNo more spawn locations exist. You have been set as a spectator."));
+                    player.sendMessage(ManiaUtils.color("&cNo more spawn locations exist. You have been set as a spectator."));
                     spectatorsTeam.leave(tribute);
                 }
             }
@@ -277,7 +277,7 @@ public class Game {
             UUID mutation = mutationIterator.next();
             resetMutation(mutation);
             Player player = Bukkit.getPlayer(mutation);
-            player.sendMessage(Utils.color("&d&l<< &7You left &dMutations"));
+            player.sendMessage(ManiaUtils.color("&d&l<< &7You left &dMutations"));
             spectatorsTeam.join(mutation);
             mutationIterator.remove();
         }
@@ -311,7 +311,7 @@ public class Game {
             
             for (UUID u : players) {
                 Player player = Bukkit.getPlayer(u);
-                player.sendMessage(Utils.color("&4&l>> &c&lTHE SERVER WILL RESTART AFTER THIS GAME FOR CLEANUP!"));
+                player.sendMessage(ManiaUtils.color("&4&l>> &c&lTHE SERVER WILL RESTART AFTER THIS GAME FOR CLEANUP!"));
             }
         }
     }
@@ -384,19 +384,19 @@ public class Game {
     
     public ForceAddResult forceAddPlayer(GamePlayer gamePlayer, CommandSender sender) {
         if (gamePlayer.isSpectatorByDeath()) {
-            sender.sendMessage(Utils.color("&cThat player was a tribute originally. Please use the command /hungergames revive instead."));
+            sender.sendMessage(ManiaUtils.color("&cThat player was a tribute originally. Please use the command /hungergames revive instead."));
             return ForceAddResult.WAS_TRIBUTE;
         }
         
         if (!(getState() == State.PLAYING || getState() == State.PLAYING_DEATHMATCH || getState() == State.COUNTDOWN)) {
-            sender.sendMessage(Utils.color("&cInvalid game state to add a tribute."));
+            sender.sendMessage(ManiaUtils.color("&cInvalid game state to add a tribute."));
             return ForceAddResult.INVALID_STATE;
         }
         
         spectatorsTeam.leave(gamePlayer.getUniqueId());
         tributesTeam.join(gamePlayer.getUniqueId());
         if (!tributesTeam.isMember(gamePlayer.getUniqueId())) {
-            sender.sendMessage(Utils.color("&cThere was a problem finding a spawn for that player. They were set as a spectator as a result."));
+            sender.sendMessage(ManiaUtils.color("&cThere was a problem finding a spawn for that player. They were set as a spectator as a result."));
             return ForceAddResult.SPAWN_ERROR;
         } else {
             String senderName;
@@ -538,7 +538,7 @@ public class Game {
             
             if (!players.isEmpty()) {
                 for (Player player : players) {
-                    player.kickPlayer(Utils.color("&cAll of the hubs are full."));
+                    player.kickPlayer(ManiaUtils.color("&cAll of the hubs are full."));
                 }
             }
     
@@ -619,7 +619,7 @@ public class Game {
             }
             
             GamePlayer killer = this.players.get(playerDeath.getKiller());
-            GameUser killerUser = killer.getUser();
+            SpigotUser killerUser = killer.getUser();
             Player killerPlayer = Bukkit.getPlayer(killerUser.getUniqueId());
             
             int coins = 25, experience = 10;

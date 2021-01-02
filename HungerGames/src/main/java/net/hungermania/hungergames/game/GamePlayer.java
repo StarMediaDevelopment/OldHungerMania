@@ -4,10 +4,9 @@ import com.mojang.authlib.GameProfile;
 import lombok.Getter;
 import lombok.Setter;
 import net.hungermania.hungergames.game.death.DeathInfo;
-import net.hungermania.hungergames.user.GameUser;
 import net.hungermania.maniacore.api.ManiaCore;
-import net.hungermania.maniacore.api.MutationType;
-import net.hungermania.maniacore.api.util.Utils;
+import net.hungermania.maniacore.spigot.mutations.MutationType;
+import net.hungermania.maniacore.spigot.user.SpigotUser;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -21,7 +20,7 @@ import java.util.UUID;
 
 @Getter
 public class GamePlayer {
-    private GameUser user;
+    private SpigotUser user;
     private boolean forcefullyAdded;
     private CommandSender forcefullyAddedActor;
     @Setter private boolean hasMutated = false, hasSponsored = false;
@@ -39,7 +38,7 @@ public class GamePlayer {
     @Setter private long revengeTime = 0;
     
     public GamePlayer(UUID uuid) {
-        this.user = (GameUser) ManiaCore.getInstance().getUserManager().getUser(uuid); 
+        this.user = (SpigotUser) ManiaCore.getInstance().getUserManager().getUser(uuid); 
         this.skull = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
         SkullMeta skullMeta = ((SkullMeta) skull.getItemMeta());
         String playerName = Bukkit.getPlayer(uuid).getName();
@@ -50,7 +49,7 @@ public class GamePlayer {
             field.setAccessible(true);
             field.set(skullMeta, mcProfile);
         } catch (Exception e) {}
-        skullMeta.setDisplayName(Utils.color("&f" + playerName));
+        skullMeta.setDisplayName(ManiaManiaUtils.color("&f" + playerName));
         skull.setItemMeta(skullMeta);
     }
     
