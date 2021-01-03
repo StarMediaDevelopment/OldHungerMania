@@ -16,11 +16,11 @@ import net.hungermania.maniacore.spigot.cmd.*;
 import net.hungermania.maniacore.spigot.communication.SpigotMessageHandler;
 import net.hungermania.maniacore.spigot.perks.PerkInfoRecord;
 import net.hungermania.maniacore.spigot.perks.Perks;
-import net.hungermania.maniacore.spigot.perks.cmd.PerkCmd;
 import net.hungermania.maniacore.spigot.plugin.SpigotManiaTask;
 import net.hungermania.maniacore.spigot.server.SpigotServerManager;
 import net.hungermania.maniacore.spigot.updater.Updater;
-import net.hungermania.maniacore.spigot.user.*;
+import net.hungermania.maniacore.spigot.user.FriendsRedisListener;
+import net.hungermania.maniacore.spigot.user.SpigotUserManager;
 import net.hungermania.manialib.sql.Database;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -75,14 +75,15 @@ public final class ManiaCorePlugin extends JavaPlugin implements Listener, Mania
         getCommand("rank").setExecutor(new RankCmd());
         getCommand("friends").setExecutor(new FriendsCmd());
         getCommand("setstat").setExecutor(new SetstatCommand());
-        this.getCommand("perks").setExecutor(new PerkCmd());
-        
+        getCommand("perks").setExecutor(new PerkCmd());
+        getCommand("mutations").setExecutor(new MutationsCmd());
+    
         new BukkitRunnable() {
             public void run() {
                 getManiaDatabase().pushQueue();
             }
         }.runTaskTimerAsynchronously(this, 6000, 6000);
-        
+    
         maniaCore.setMessageHandler(new SpigotMessageHandler(this));
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         

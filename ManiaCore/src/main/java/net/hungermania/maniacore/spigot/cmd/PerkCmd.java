@@ -1,8 +1,8 @@
-package net.hungermania.maniacore.spigot.perks.cmd;
+package net.hungermania.maniacore.spigot.cmd;
 
+import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.spigot.perks.gui.PerkMainGui;
-import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.spigot.user.SpigotUser;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;

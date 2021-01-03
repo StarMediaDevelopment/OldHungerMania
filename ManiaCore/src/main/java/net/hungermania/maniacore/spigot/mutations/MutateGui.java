@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class MutateGui extends Gui {
     public MutateGui(UUID mutator) {
-        super(Bukkit.getPluginManager().getPlugin("ManiaCorePlugin"), "Mutates", false, 27);
+        super(Bukkit.getPluginManager().getPlugin("ManiaCorePlugin"), "Purchase Mutations", false, 27);
         
         GUIButton unlockedWool = new GUIButton(ItemBuilder.start(Material.WOOL, 1, (short) 13).setDisplayName("&a&lAvailable").build());
         GUIButton purchasableWool = new GUIButton(ItemBuilder.start(Material.WOOL, 1, (short) 4).setDisplayName("&e&lPurchasable").build());
