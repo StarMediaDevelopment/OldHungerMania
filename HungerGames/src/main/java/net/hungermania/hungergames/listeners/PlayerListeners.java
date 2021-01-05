@@ -97,13 +97,14 @@ public class PlayerListeners extends GameListener {
             
             String format;
             if (channel == Channel.GLOBAL) {
-                format = "&8[{levelcolor}{level}&8] {displayname}&8: {chatcolor}{message}";
+                format = "&8[{levelcolor}{level}&8] &8<&3{score}&8> {displayname}&8: {chatcolor}{message}";
             } else {
-                format = "{prefix} {displayname}&8: {chatcolor}{message}";
+                format = "&8<&3{score}&8> {prefix} {displayname}&8: {chatcolor}{message}";
             }
             
             format = format.replace("{displayname}", user.getDisplayName());
             format = format.replace("{prefix}", channelPrefix);
+            format = format.replace("{score}", user.getStat(Stats.HG_SCORE).getValueAsString());
             Rank rank = user.getRank();
             if (StringUtils.isNotEmpty(rank.getChatColor()) && channel == Channel.GLOBAL) {
                 if (rank.getChatColor() == null) {
@@ -141,13 +142,14 @@ public class PlayerListeners extends GameListener {
         }
         User user = plugin.getManiaCore().getUserManager().getUser(e.getPlayer().getUniqueId());
         Rank rank = user.getRank();
-        String format = "&8[{levelcolor}{level}&8] {gamechannel}&r{name}&8: &r{chatcolor}{message}";
+        String format = "&8[{levelcolor}{level}&8] {gamechannel}&8<&3{score}&8> &r{name}&8: &r{chatcolor}{message}";
         format = format.replace("{prefix}", rank.getPrefix());
         GameTeam team = game.getGameTeam(user.getUniqueId());
         format = format.replace("{teamcolor}", team.getColor());
         Level level = plugin.getManiaCore().getLevelManager().getLevel(user.getStat(Stats.EXPERIENCE).getValueAsInt());
         format = format.replace("{levelcolor}", level.getNumberColor().toString());
         format = format.replace("{level}", level.getNumber() + "");
+        format = format.replace("{score}", user.getStat(Stats.HG_SCORE).getValueAsString());
         
         format = format.replace("{name}", user.getDisplayName());
         format = format.replace("{message}", e.getMessage());

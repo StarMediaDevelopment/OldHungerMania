@@ -20,6 +20,7 @@ import net.hungermania.hungergames.util.Messager;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.maniacore.api.redis.Redis;
+import net.hungermania.maniacore.api.stats.Statistic;
 import net.hungermania.maniacore.api.stats.Stats;
 import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.util.*;
@@ -581,7 +582,14 @@ public class Game {
         player.getInventory().clear();
         gamePlayer.getUser().incrementStat(Stats.HG_DEATHS);
         gamePlayer.setDeathInfo(deathInfo);
-        
+        Statistic points = gamePlayer.getUser().getStat(Stats.HG_SCORE);
+        int lost = (int) Math.ceil((float) points.getValueAsInt() / 8F);
+        int gained = lost;
+        if (points.getValueAsInt() > 0) {
+            points.setValue(points.getValueAsInt() - lost);
+            gamePlayer.getUser().sendMessage("&4&l>> &cYou lost " + lost + " Score for dying.");
+        }
+    
         if (tributesTeam.isMember(uniqueId)) {
             sendMessage("&6&l>> &c&l" + (tributesTeam.size() - 1) + " tributes remain.");
             if ((this.tributesTeam.size() - 1) <= gameSettings.getDeathmatchPlayerStart()) {
@@ -631,20 +639,30 @@ public class Game {
             killer.setKillStreak(killer.getKillStreak() + 1);
             killer.setKills(killer.getKills() + 1);
             if (killer.getUser().getStat(Stats.HG_HIGHEST_KILL_STREAK).getValueAsInt() < killer.getKillStreak()) {
+                gained += (int) Math.ceil(gained / 3);
                 killer.getUser().setStat(Stats.HG_HIGHEST_KILL_STREAK, killer.getKillStreak());
             }
             killerName += killer.getUser().getName();
-            
+    
             if (firstKiller == null) {
                 sendMessage("&6&l>> &c&l" + (killer.getUser().getName() + " drew first blood!").toUpperCase());
                 playSound(Sound.WOLF_HOWL);
                 this.firstKiller = killer.getUniqueId();
                 experience += 15;
                 coins += 15;
+                gained += (int) Math.ceil((gained / 2));
             }
-            
+    
+            if (tributesTeam.size() == 1) {
+                gained += gained;
+            }
+    
+            Statistic killerScore = killer.getUser().getStat(Stats.HG_SCORE);
+            killerScore.setValue(killerScore.getValueAsInt() + gained);
+            killer.getUser().sendMessage("&6&l>> &a+" + gained + " Score!");
+    
             gamePlayer.getUser().sendMessage("&4&l>> &cYour killer &8(" + killerName + "&8) &chad &4" + Utils.formatNumber(playerDeath.getKillerHealth()) + " HP &cremaining!");
-            
+    
             if (playerDeath.isMutationKill()) {
                 sendMessage("&6&l>> " + killerName + " &ahas taken revenge , and is back in the game!");
                 mutationsTeam.leave(killer.getUniqueId());
