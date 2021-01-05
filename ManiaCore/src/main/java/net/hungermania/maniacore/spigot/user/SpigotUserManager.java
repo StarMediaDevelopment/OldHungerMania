@@ -222,9 +222,13 @@ public class SpigotUserManager extends UserManager implements Listener {
     }
     
     public User getUser(UUID uuid) {
+        if (uuid == null) {
+            return null;
+        }
         if (this.users.containsKey(uuid)) {
             return this.users.get(uuid);
         }
+    
         User user = super.getUser(uuid);
         ((SpigotUser) user).loadPerks();
         this.users.put(user.getUniqueId(), user);

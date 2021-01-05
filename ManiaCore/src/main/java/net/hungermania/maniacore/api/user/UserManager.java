@@ -13,6 +13,54 @@ import net.hungermania.manialib.sql.IRecord;
 import java.util.*;
 
 public abstract class UserManager {
+    public User getUser(String name) {
+        if (name == null && name.isEmpty()) { return null; }
+        UUID uuid = Redis.getUUIDFromName(name);
+        User user = getUser(uuid);
+        if (user == null) {
+            List<IRecord> records = ManiaCore.getInstance().getDatabase().getRecords(UserRecord.class, "name", name);
+            if (!records.isEmpty()) {
+                user = constructUser(((UserRecord) records.get(0)).toObject());
+            } else {
+                user = constructUser(ManiaUtils.getUUIDFromName(name), name);
+                ManiaCore.getInstance().getDatabase().pushRecord(new UserRecord(user));
+            }
+            user = getUser(user.getUniqueId()); //TODO Inefficient, temporary fix, trying to find the cause
+        }
+        
+        return user;
+    }
+    
+    public void loadIgnoredPlayers(User user) {
+        List<IRecord> records = ManiaCore.getInstance().getDatabase().getRecords(IgnoreInfoRecord.class, "player", user.getUniqueId().toString());
+        Set<IgnoreInfo> ignoredPlayers = new HashSet<>();
+        if (!records.isEmpty()) {
+            for (IRecord record : records) {
+                if (record instanceof IgnoreInfoRecord) {
+                    ignoredPlayers.add(((IgnoreInfoRecord) record).toObject());
+                }
+            }
+        }
+        
+        user.setIgnoredPlayers(ignoredPlayers);
+    }
+    
+    public User getUser(int userId) {
+        if (userId < 1) { return null; }
+        UUID uuid = Redis.getUUIDFromID(userId);
+        User user = getUser(uuid);
+        
+        if (user == null) {
+            List<IRecord> records = ManiaCore.getInstance().getDatabase().getRecords(UserRecord.class, "id", userId);
+            if (!records.isEmpty()) {
+                user = constructUser(((UserRecord) records.get(0)).toObject());
+                Redis.pushUser(user);
+            }
+        }
+        
+        return user;
+    }
+    
     public User getUser(UUID uuid) {
         if (uuid == null) { return null; }
         
@@ -76,55 +124,6 @@ public abstract class UserManager {
             ManiaCore.getInstance().getDatabase().pushRecord(new UserRecord(user));
         }
         Redis.pushUser(user);
-        
-        return user;
-    }
-    
-    public void loadIgnoredPlayers(User user) {
-        List<IRecord> records = ManiaCore.getInstance().getDatabase().getRecords(IgnoreInfoRecord.class, "player", user.getUniqueId().toString());
-        Set<IgnoreInfo> ignoredPlayers = new HashSet<>();
-        if (!records.isEmpty()) {
-            for (IRecord record : records) {
-                if (record instanceof IgnoreInfoRecord) {
-                    ignoredPlayers.add(((IgnoreInfoRecord) record).toObject());
-                }
-            }
-        }
-        
-        user.setIgnoredPlayers(ignoredPlayers);
-    }
-    
-    public User getUser(int userId) {
-        if (userId < 1) { return null; }
-        UUID uuid = Redis.getUUIDFromID(userId);
-        User user = getUser(uuid);
-        
-        if (user == null) {
-            List<IRecord> records = ManiaCore.getInstance().getDatabase().getRecords(UserRecord.class, "id", userId);
-            if (!records.isEmpty()) {
-                user = constructUser(((UserRecord) records.get(0)).toObject());
-                Redis.pushUser(user);
-            }
-        }
-        
-        return user;
-    }
-    
-    public User getUser(String name) {
-        if (name == null && name.isEmpty()) { return null; }
-        UUID uuid = Redis.getUUIDFromName(name);
-        User user = getUser(uuid);
-        if (user == null) {
-            List<IRecord> records = ManiaCore.getInstance().getDatabase().getRecords(UserRecord.class, "name", name);
-            if (!records.isEmpty()) {
-                user = constructUser(((UserRecord) records.get(0)).toObject());
-            } else {
-                user = constructUser(ManiaUtils.getUUIDFromName(name), name);
-                ManiaCore.getInstance().getDatabase().pushRecord(new UserRecord(user));
-            }
-            Redis.pushUser(user);
-        }
-        
         return user;
     }
     

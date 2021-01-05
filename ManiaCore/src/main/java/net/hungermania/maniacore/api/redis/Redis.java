@@ -293,11 +293,10 @@ public class Redis {
     }
     
     public static Map<String, String> getUserData(UUID uuid) {
-        Map<String, String> data;
+        Map<String, String> data = new HashMap<>();
         try (Jedis jedis = getConnection()) {
-            data = new HashMap<>();
             if (jedis.exists("USER:" + uuid.toString())) {
-                data = jedis.hgetAll("USER:" + uuid.toString());
+                data.putAll(jedis.hgetAll("USER:" + uuid.toString()));
             }
         }
         return data;
