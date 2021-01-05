@@ -218,31 +218,32 @@ public class Game {
         List<UUID> tributes = new LinkedList<>(tributesTeam.getMembers());
         this.spawns.entrySet().forEach(entry -> entry.setValue(null));
         List<Entry<Integer, UUID>> spawns = new ArrayList<>(this.spawns.entrySet());
-        Collections.shuffle(spawns);
+        int spawnIndex = 0;
         for (UUID tribute : tributes) {
             Player player = Bukkit.getPlayer(tribute);
             if (player != null) {
                 boolean spawnFound = false;
-                for (Entry<Integer, UUID> entry : spawns) {
-                    if (entry.getValue() == null) {
-                        Location spawn = SpigotUtils.positionToLocation(map.getWorld(), this.map.getSpawns().get(entry.getKey()));
-                        player.teleport(spawn);
-                        player.setGameMode(GameMode.SURVIVAL);
-                        player.setHealth(player.getMaxHealth());
-                        player.setFoodLevel(20);
-                        player.setSaturation(20);
-                        player.getInventory().clear();
-                        player.getInventory().setArmorContents(null);
-                        entry.setValue(player.getUniqueId());
-                        spawnFound = true;
-                        break;
+                int index = 0;
+                if (this.tributesTeam.size() > 0) {
+                    index = spawnIndex;
+                    spawnIndex += Math.max(1, (int) Math.floor(spawns.size() / this.tributesTeam.size()));
+                } else {
+                    for (int i = 0; i < spawns.size(); i++) {
+                        if (spawns.get(i) == null) {
+                            index = i;
+                        }
                     }
                 }
-                if (!spawnFound) {
-                    tributesTeam.leave(tribute);
-                    player.sendMessage(ManiaUtils.color("&cNo more spawn locations exist. You have been set as a spectator."));
-                    spectatorsTeam.leave(tribute);
-                }
+    
+                Location spawn = SpigotUtils.positionToLocation(map.getWorld(), this.map.getSpawns().get(index));
+                player.teleport(spawn);
+                player.setGameMode(GameMode.SURVIVAL);
+                player.setHealth(player.getMaxHealth());
+                player.setFoodLevel(20);
+                player.setSaturation(20);
+                player.getInventory().clear();
+                player.getInventory().setArmorContents(null);
+                this.spawns.put(index, player.getUniqueId());
             }
         }
         
@@ -431,7 +432,7 @@ public class Game {
         this.tributesTeam.forEach(uuid -> {
             Player player = Bukkit.getPlayer(uuid);
             player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 200, 0));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 200, 254));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 200, -50));
         });
     }
     
