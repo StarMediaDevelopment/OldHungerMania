@@ -4,6 +4,7 @@ import net.hungermania.hungergames.HungerGames;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.util.State;
 import net.hungermania.maniacore.spigot.util.SpigotUtils;
+import net.hungermania.manialib.util.Constants;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -85,16 +86,19 @@ public class PlayerTrackerTask extends BukkitRunnable {
             if (distance == -1) {
                 distance = player.getLocation().distance(target.getLocation());
             }
-            
+    
             Player finalClosest = target;
             new BukkitRunnable() {
                 public void run() {
                     player.setCompassTarget(finalClosest.getLocation());
                 }
             }.runTask(HungerGames.getInstance());
-            
+    
+            String health = Constants.NUMBER_FORMAT.format(player.getHealth());
+            String maxHealth = Constants.NUMBER_FORMAT.format(player.getMaxHealth());
+    
             if (holdingTracker) {
-                SpigotUtils.sendActionBar(player, "&f&lTARGET: &a" + target.getName() + " &7| &f&lDISTANCE: &a" + ((int) distance) + "m");
+                SpigotUtils.sendActionBar(player, "&f&lTARGET: &a" + target.getName() + "   &f&lDISTANCE: &a" + ((int) distance) + "m" + "   &f&lHEALTH: &a" + health + "&f/&a" + maxHealth + " HP");
             }
         }
         

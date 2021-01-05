@@ -13,14 +13,11 @@ import net.hungermania.hungergames.game.death.*;
 import net.hungermania.hungergames.game.team.*;
 import net.hungermania.hungergames.lobby.Lobby;
 import net.hungermania.hungergames.map.HGMap;
-import net.hungermania.maniacore.spigot.mutations.Mutation;
-import net.hungermania.maniacore.spigot.perks.Perks;
 import net.hungermania.hungergames.profile.GameBoard;
 import net.hungermania.hungergames.records.GameRecord;
 import net.hungermania.hungergames.settings.GameSettings;
 import net.hungermania.hungergames.util.Messager;
 import net.hungermania.maniacore.api.ManiaCore;
-import net.hungermania.maniacore.spigot.mutations.MutationType;
 import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.maniacore.api.redis.Redis;
 import net.hungermania.maniacore.api.stats.Stats;
@@ -28,6 +25,9 @@ import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.util.*;
 import net.hungermania.maniacore.memory.MemoryHook;
 import net.hungermania.maniacore.memory.MemoryHook.Task;
+import net.hungermania.maniacore.spigot.mutations.Mutation;
+import net.hungermania.maniacore.spigot.mutations.MutationType;
+import net.hungermania.maniacore.spigot.perks.Perks;
 import net.hungermania.maniacore.spigot.user.SpigotUser;
 import net.hungermania.maniacore.spigot.util.SpigotUtils;
 import net.hungermania.manialib.util.Pair;
@@ -37,6 +37,8 @@ import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
@@ -426,6 +428,11 @@ public class Game {
         this.deathmatchCountdownStart = System.currentTimeMillis();
         sendMessage("&6&l>> &e&lPREPARE FOR THE DEATHMATCH...");
         teleportDeathmatch();
+        this.tributesTeam.forEach(uuid -> {
+            Player player = Bukkit.getPlayer(uuid);
+            player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 200, 0));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 200, 254));
+        });
     }
     
     public void startDeathmatch() {
@@ -445,6 +452,9 @@ public class Game {
             player.setEarnedCoins(player.getEarnedCoins() + result.getValue1());
             user.sendMessage("&2&l>> &a+" + result.getValue1() + " &3COINS&a! " + result.getValue2());
             user.addNetworkExperience(5);
+            for (PotionEffect effect : player.getUser().getBukkitPlayer().getActivePotionEffects()) {
+                player.getUser().getBukkitPlayer().removePotionEffect(effect.getType());
+            }
         }
     }
     
@@ -479,13 +489,6 @@ public class Game {
                 user.sendMessage("&2&l>> &a+" + result.getValue1() + " &3COINS&a! " + result.getValue2());
                 user.addNetworkExperience(30);
                 user.incrementStat(Stats.HG_WINSTREAK);
-//                EventInfo activeEvent = ManiaCore.getInstance().getEventManager().getActiveEvent();
-//                if (activeEvent != null) {
-//                    if (activeEvent.getServers().contains(ManiaCore.getInstance().getServerManager().getCurrentServer().getName())) {
-//                        profile.setScore(profile.getScore() + 25);
-//                    }
-//                }
-                
                 winnerName = user.getDisplayName();
             } else {
                 winnerName = "&f&lNo one";
