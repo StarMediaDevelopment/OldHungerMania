@@ -96,12 +96,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.MilkBowl</groupId>
-            <artifactId>VaultAPI</artifactId>
-            <version>1.7</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.12</version>
@@ -114,25 +108,12 @@
             <version>8.6.7</version>
             <systemPath>${project.basedir}/../Libs/LibsDisguises.jar</systemPath>
         </dependency>
-        <dependency>
-            <groupId>com.comphenix.protocol</groupId>
-            <artifactId>ProtocolLib</artifactId>
-            <version>4.5.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../Libs/ProtocolLib.jar</systemPath>
-        </dependency>
+
         <dependency>
             <groupId>cloud.timo.TimoCloud</groupId>
             <artifactId>TimoCloud-API</artifactId>
             <version>6.2.0</version>
             <scope>provided</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>cloud.timo.TimoCloud</groupId>-->
-<!--            <artifactId>TimoCloud-API</artifactId>-->
-<!--            <version>5.3.1</version>-->
-<!--            <scope>system</scope>-->
-<!--            <systemPath>${project.basedir}/../Libs/TimoCloud.jar</systemPath>-->
-<!--        </dependency>-->
     </dependencies>
 </project>

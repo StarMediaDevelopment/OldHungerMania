@@ -1,6 +1,5 @@
 package net.hungermania.manialib.sql;
 
-import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Method;
 import java.sql.*;
@@ -203,7 +202,7 @@ public class Database {
                 logger.severe("An error occured: " + e.getMessage());
             }
             
-            if (!StringUtils.isEmpty(querySQL)) {
+            if (querySQL != null && !querySQL.equals("")) {
                 try (Connection connection = dataSource.getConnection(); Statement statement = connection.createStatement()) {
                     statement.execute(querySQL);
                 } catch (Exception e) {
@@ -213,8 +212,8 @@ public class Database {
                 }
             }
         }
-        
-        if (StringUtils.isEmpty(querySQL)) {
+    
+        if (querySQL != null && !querySQL.equals("")) {
             StringBuilder colBuilder = new StringBuilder(), valueBuilder = new StringBuilder();
             Iterator<Column> columnIterator = table.getColumns().iterator();
             while (columnIterator.hasNext()) {
