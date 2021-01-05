@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.hungermania</groupId>
-    <artifactId>ManiaCore</artifactId>
-    <version>1.21-SNAPSHOT</version>
+    <artifactId>LibsDisguises</artifactId>
+    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>ManiaCore</name>
+    <name>LibsDisguises</name>
 
-    <description>Library Plugin for HungerMania</description>
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -88,49 +87,6 @@
             <artifactId>spigot</artifactId>
             <version>1.8.8-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.md-5</groupId>
-            <artifactId>bungeecord-api</artifactId>
-            <version>1.16-R0.4-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.MilkBowl</groupId>
-            <artifactId>VaultAPI</artifactId>
-            <version>1.7</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.12</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.hungermania</groupId>
-            <artifactId>ManiaLib</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>me.vagdedes</groupId>
-            <artifactId>spartan-api</artifactId>
-            <version>385.1</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../Libs/SpartanAPI.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>cloud.timo.TimoCloud</groupId>
-            <artifactId>TimoCloud-API</artifactId>
-            <version>6.2.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.hungermania</groupId>
-            <artifactId>LibsDisguises</artifactId>
-            <scope>provided</scope>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.github.dmulloy2</groupId>
