@@ -25,14 +25,7 @@ public class SpigotServerManager extends ServerManager {
     protected void handleServerStart(String server) {
         Channel c = Channel.STAFF;
         StringBuilder format = new StringBuilder().append(c.getChatPrefix()).append(server).append(" has started.");
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (player.hasPermission(c.getPermission())) {
-                User user = ManiaCore.getInstance().getUserManager().getUser(player.getUniqueId());
-                if (user.getToggle(Toggles.STAFF_NOTIFICATIONS).getAsBoolean()) {
-                    player.sendMessage(ManiaUtils.color(format.toString()));
-                }
-            }
-        }
+        handleServerMessage(c, format);
     }
     
     protected void handleGameReady(String server) {
@@ -41,6 +34,23 @@ public class SpigotServerManager extends ServerManager {
             //TODO Click text
             for (Player p : Bukkit.getOnlinePlayers()) {
                 p.sendMessage(ManiaUtils.color(message));
+            }
+        }
+    }
+    
+    protected void handleServerStop(String server) {
+        Channel c = Channel.STAFF;
+        StringBuilder format = new StringBuilder().append(c.getChatPrefix()).append(server).append(" has stopped.");
+        handleServerMessage(c, format);
+    }
+    
+    private void handleServerMessage(Channel c, StringBuilder format) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (player.hasPermission(c.getPermission())) {
+                User user = ManiaCore.getInstance().getUserManager().getUser(player.getUniqueId());
+                if (user.getToggle(Toggles.STAFF_NOTIFICATIONS).getAsBoolean()) {
+                    player.sendMessage(ManiaUtils.color(format.toString()));
+                }
             }
         }
     }

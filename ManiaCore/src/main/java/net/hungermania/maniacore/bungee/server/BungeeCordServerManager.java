@@ -22,4 +22,8 @@ public class BungeeCordServerManager extends ServerManager {
     protected void handleGameReady(String server) {
         
     }
+    
+    protected void handleServerStop(String server) {
+        
+    }
 }

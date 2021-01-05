@@ -21,7 +21,6 @@ public abstract class ServerManager implements RedisListener {
     
     protected abstract void handleServerStart(String server);
     protected abstract void handleGameReady(String server);
-    
     public void onCommand(String cmd, String[] args) {
         if (cmd.equals("serverStart")) {
             if (args.length != 1) return;
@@ -32,12 +31,21 @@ public abstract class ServerManager implements RedisListener {
             String server = args[0];
             handleGameReady(server);
         } else if (cmd.equals("serverStop")) {
-            //TODO
+            if (args.length != 1) {
+                String server = args[0];
+                handleServerStop(server);
+            }
         }
     }
     
+    protected abstract void handleServerStop(String server);
+    
     public void sendServerStart(String server) {
         Redis.sendCommand("serverStart " + server);
+    }
+    
+    public void sendServerStop(String server) {
+        Redis.sendCommand("serverstop " + server);
     }
     
     public void sendGameReady(String server) {
