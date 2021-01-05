@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class GotoCmd extends Command {
     public GotoCmd() {
-        super("goto", "hungermania.command.goto");
+        super("goto");
     }
     
     public void execute(CommandSender sender, String[] args) {
