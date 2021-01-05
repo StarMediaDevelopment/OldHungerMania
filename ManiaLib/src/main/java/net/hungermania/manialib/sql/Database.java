@@ -213,7 +213,7 @@ public class Database {
             }
         }
     
-        if (querySQL != null && !querySQL.equals("")) {
+        if (querySQL == null || querySQL.equals("")) {
             StringBuilder colBuilder = new StringBuilder(), valueBuilder = new StringBuilder();
             Iterator<Column> columnIterator = table.getColumns().iterator();
             while (columnIterator.hasNext()) {

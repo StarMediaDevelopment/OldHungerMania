@@ -4,7 +4,7 @@ import net.hungermania.hungergames.HungerGames;
 import net.hungermania.hungergames.game.Game;
 import net.hungermania.hungergames.map.HGMap;
 import net.hungermania.manialib.sql.*;
-import org.apache.commons.lang3.StringUtils;
+import net.hungermania.manialib.util.Utils;
 
 import java.util.*;
 
@@ -67,7 +67,7 @@ public class GameRecord implements IRecord<Game> {
             put("gameStart", game.getGameStart());
             put("gameEnd", game.getGameEnd());
             put("archived", game.isArchived());
-            put("profiles", StringUtils.join(game.getArchivedProfiles(), ","));
+            put("profiles", Utils.join(game.getArchivedProfiles(), ","));
             put("serverId", game.getServerId());
         }};
     }

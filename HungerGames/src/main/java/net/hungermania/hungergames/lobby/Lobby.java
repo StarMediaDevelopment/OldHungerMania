@@ -292,11 +292,10 @@ public class Lobby implements Listener, CommandExecutor {
             
             this.game = new Game(mostVotedMap.getKey(), this.gameSettings);
             try {
-                new GameRecord(game).push(plugin.getManiaCore().getDatabase());
+                plugin.getManiaCore().getDatabase().pushRecord(new GameRecord(game));
             } catch (Exception e) {
+                e.printStackTrace();
                 handleError(e.getMessage());
-                this.game = null;
-                this.voteTimer = null;
                 return;
             }
             if (this.game.getId() == -1) {
@@ -316,6 +315,7 @@ public class Lobby implements Listener, CommandExecutor {
     public void handleError(String message) {
         sendMessage("&cThere was an error generating the game: " + message);
         this.voteTimer = null;
+        this.game = null;
         if (this.players.size() >= gameSettings.getMinPlayers()) {
             startTimer();
         }
