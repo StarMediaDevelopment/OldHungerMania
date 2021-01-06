@@ -289,7 +289,12 @@ public class Lobby implements Listener, CommandExecutor {
                 sendMessage(ManiaUtils.color("&cThere was an error determining the map to be used."));
                 return;
             }
-            
+    
+            if (mostVotedMap.getKey() == null) {
+                sendMessage(ManiaUtils.color("&cThere was an error generating the map"));
+                return;
+            }
+    
             this.game = new Game(mostVotedMap.getKey(), this.gameSettings);
             try {
                 plugin.getManiaCore().getDatabase().pushRecord(new GameRecord(game));
