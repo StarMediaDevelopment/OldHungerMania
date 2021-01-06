@@ -94,8 +94,8 @@ public class PlayerTrackerTask extends BukkitRunnable {
                 }
             }.runTask(HungerGames.getInstance());
     
-            String health = Constants.NUMBER_FORMAT.format(player.getHealth());
-            String maxHealth = Constants.NUMBER_FORMAT.format(player.getMaxHealth());
+            String health = Constants.NUMBER_FORMAT.format(target.getHealth());
+            String maxHealth = Constants.NUMBER_FORMAT.format(target.getMaxHealth());
     
             if (holdingTracker) {
                 SpigotUtils.sendActionBar(player, "&f&lTARGET: &a" + target.getName() + "   &f&lDISTANCE: &a" + ((int) distance) + "m" + "   &f&lHEALTH: &a" + health + "&f/&a" + maxHealth + " HP");
