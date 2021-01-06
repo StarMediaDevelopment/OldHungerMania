@@ -231,8 +231,6 @@ public class Lobby implements Listener, CommandExecutor {
                 maps.remove(map);
             }
         }
-        Redis.sendCommand("gameReady " + ManiaCore.getInstance().getServerManager().getCurrentServer().getName());
-        TimoCloudAPI.getBukkitAPI().getThisServer().setState("LOBBY");
         String time;
         if (this.voteTimer != null) {
             time = this.voteTimer.getRemainingSeconds() + "";
@@ -240,6 +238,8 @@ public class Lobby implements Listener, CommandExecutor {
             time = gameSettings.getStartTimer() + "";
         }
         TimoCloudAPI.getBukkitAPI().getThisServer().setExtra("map:Undecided;time:" + time + "s");
+        TimoCloudAPI.getBukkitAPI().getThisServer().setState("LOBBY");
+        Redis.sendCommand("gameReady " + ManiaCore.getInstance().getServerManager().getCurrentServer().getName());
     }
     
     public void startTimer() {
