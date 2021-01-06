@@ -415,28 +415,36 @@ public class HGCommand implements CommandExecutor {
     
                 mutantTarget = p.getUniqueId();
             }
-        
+    
             if (mutantTarget == null) {
                 player.sendMessage(ManiaUtils.color("&cCould not determine mutation target."));
                 return true;
             }
-        
+    
             game.mutatePlayer(target.getUniqueId(), Mutations.MUTATIONS.get(type), mutantTarget);
             game.sendMessage("&d&l>> &c" + target.getName() + " has been forceully mutated by " + player.getName());
-        } else if (ManiaUtils.checkCmdAliases(args, 0, "forcestart")) {
+        } else if (ManiaUtils.checkCmdAliases(args, 0, "forcestart", "fs")) {
             Game game = plugin.getGameManager().getCurrentGame();
             if (game != null) {
                 sender.sendMessage(ManiaUtils.color("&cThere is already an active game."));
                 return true;
             }
-        
+    
             Lobby lobby = plugin.getLobby();
-        
+    
             if (lobby.getVoteTimer() != null) {
                 player.sendMessage(ManiaUtils.color("&cThe timer has already started!"));
                 return true;
             }
-        
+    
+            for (String a : args) {
+                if (a.startsWith("-t")) {
+                    lobby.startGame();
+                    lobby.sendMessage(ManiaUtils.color("&aThe lobby timer has been forcefully started by &b" + player.getName() + " &aand the timer was skipped."));
+                    return true;
+                }
+            }
+    
             lobby.startTimer();
             lobby.getVoteTimer().setForceStarted(true);
             lobby.sendMessage(ManiaUtils.color("&aThe lobby timer has been forcefully started by &b" + player.getName()));
