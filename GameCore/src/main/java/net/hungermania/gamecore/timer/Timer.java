@@ -1,5 +1,6 @@
-package net.hungermania.maniacore.api.util;
+package net.hungermania.gamecore.timer;
 
+import net.hungermania.maniacore.api.util.ReturnableCallback;
 import net.hungermania.maniacore.spigot.updater.UpdateType;
 import org.bukkit.plugin.java.JavaPlugin;
 

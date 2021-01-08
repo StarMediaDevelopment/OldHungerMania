@@ -1,4 +1,4 @@
-package net.hungermania.maniacore.api.util;
+package net.hungermania.gamecore.timer;
 
 import net.hungermania.maniacore.spigot.updater.UpdateType;
 
