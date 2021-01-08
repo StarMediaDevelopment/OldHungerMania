@@ -79,7 +79,7 @@ public class Database {
                 if (columnName != null) {
                     Column column = table.getColumn(columnName);
                     if (column == null) { continue; }
-                    sql += " WHERE " + column.getName() + " = '" + value + "'";
+                    sql += " WHERE '" + column.getName() + "' = '" + value + "'";
                 }
     
                 try (Connection connection = dataSource.getConnection(); Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(sql)) {
@@ -88,8 +88,8 @@ public class Database {
                         records.add(row.getRecord());
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
                     logger.severe("An error occured: " + e.getMessage());
+                    e.printStackTrace();
                 }
             }
         }
