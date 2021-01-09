@@ -164,7 +164,7 @@ public class Redis {
         try (Jedis jedis = getConnection()) {
             Map<String, String> data = new HashMap<>();
             data.put("id", request.getId() + "");
-            data.put("from", request.getFrom().toString());
+            data.put("from", request.getSender().toString());
             data.put("to", request.getTo().toString());
             data.put("timestamp", request.getTimestamp() + "");
             jedis.hmset("FRIENDREQUEST:" + request.getId(), data);

@@ -90,7 +90,7 @@ public class FriendsManager {
     public List<FriendRequest> getFriendRequestsByRequester(UUID requester) {
         List<FriendRequest> friendRequests = new ArrayList<>();
         for (FriendRequest friendRequest : Redis.getFriendRequests()) {
-            if (friendRequest.getFrom().equals(requester)) {
+            if (friendRequest.getSender().equals(requester)) {
                 friendRequests.add(friendRequest);
             }
         }
@@ -119,9 +119,9 @@ public class FriendsManager {
     
     public FriendRequest getFriendRequest(UUID uuid1, UUID uuid2) {
         for (FriendRequest request : Redis.getFriendRequests()) {
-            if (request.getFrom().equals(uuid1) && request.getTo().equals(uuid2)) {
+            if (request.getSender().equals(uuid1) && request.getTo().equals(uuid2)) {
                 return request;
-            } else if (request.getFrom().equals(uuid2) && request.getTo().equals(uuid1)) {
+            } else if (request.getSender().equals(uuid2) && request.getTo().equals(uuid1)) {
                 return request;
             }
         }
@@ -154,7 +154,7 @@ public class FriendsManager {
             return new Pair<>(FriendResult.NO_REQUEST, null);
         }
     
-        if (request.getFrom().equals(user.getUniqueId())) {
+        if (request.getSender().equals(user.getUniqueId())) {
             return new Pair<>(FriendResult.REQUEST_SENDER, null);
         }
         return null;

@@ -8,13 +8,8 @@ import java.util.Map;
 
 public class FriendRequestRecord implements IRecord<FriendRequest> {
     
-    public static Table generateTable(Database database) {
-        Table table = new Table(database, "friendrequests");
-        table.addColumn("id", DataType.INT, true, true);
-        table.addColumn("from", DataType.VARCHAR, 36);
-        table.addColumn("to", DataType.VARCHAR, 36);
-        table.addColumn("timestamp", DataType.BIGINT);
-        return table;
+    public FriendRequestRecord(Row row) {
+        this.object = FriendRequest.builder().id(row.getInt("id")).sender(row.getUUID("from")).to(row.getUUID("to")).timestamp(row.getLong("timestamp")).build();
     }
     
     private FriendRequest object;
@@ -23,8 +18,13 @@ public class FriendRequestRecord implements IRecord<FriendRequest> {
         this.object = object;
     }
     
-    public FriendRequestRecord(Row row) {
-        this.object = FriendRequest.builder().id(row.getInt("id")).from(row.getUUID("from")).to(row.getUUID("to")).timestamp(row.getLong("timestamp")).build();
+    public static Table generateTable(Database database) {
+        Table table = new Table(database, "friendrequests");
+        table.addColumn("id", DataType.INT, true, true);
+        table.addColumn("sender", DataType.VARCHAR, 36);
+        table.addColumn("to", DataType.VARCHAR, 36);
+        table.addColumn("timestamp", DataType.BIGINT);
+        return table;
     }
     
     public int getId() {
@@ -38,7 +38,7 @@ public class FriendRequestRecord implements IRecord<FriendRequest> {
     public Map<String, Object> serialize() {
         return new HashMap<String, Object>() {{
             put("id", object.getId());
-            put("from", object.getFrom().toString());
+            put("sender", object.getSender().toString());
             put("to", object.getTo().toString());
             put("timestamp", object.getTimestamp());
         }};
