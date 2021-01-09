@@ -48,7 +48,7 @@ public class RankCmd implements CommandExecutor {
             return true;
         }
     
-        if (newRank == Rank.CONSOLE || newRank == Rank.ROOT) {
+        if (newRank == Rank.ROOT) {
             sender.sendMessage(ManiaUtils.color("&cYou are not allowed to use those ranks as they cannot be set via commands."));
             return true;
         }
@@ -72,7 +72,6 @@ public class RankCmd implements CommandExecutor {
         ManiaCore.getInstance().getDatabase().pushRecord(new UserRecord(target));
         Redis.sendCommand("rankUpdate " + target.getUniqueId().toString() + " " + newRank.name());
         sender.sendMessage(ManiaUtils.color("&aSuccessfully set &b" + target.getName() + "&a's rank to " + newRank.getPrefix()));
-        sender.sendMessage(ManiaUtils.color("  &7&oYou must also set their LuckPerms group."));
         return true;
     }
 }
