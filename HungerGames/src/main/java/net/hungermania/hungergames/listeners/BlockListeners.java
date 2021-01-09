@@ -51,7 +51,7 @@ public class BlockListeners extends GameListener {
             if (e.getBlock().getType() == Material.TNT) {
                 TNTPrimed entity = (TNTPrimed) e.getBlock().getWorld().spawnEntity(e.getBlock().getLocation(), EntityType.PRIMED_TNT);
                 entity.setFuseTicks(20);
-                entity.setYield(2.0F);
+                entity.setYield(3.0F);
                 EntityTNTPrimed nmsTnt = ((CraftTNTPrimed) entity).getHandle();
                 try {
                     Field source = nmsTnt.getClass().getDeclaredField("source");
