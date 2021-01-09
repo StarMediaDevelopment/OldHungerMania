@@ -72,15 +72,17 @@ public class Database {
                         table = t;
                     }
                 }
-                
+    
                 if (table == null) { continue; }
-                
+    
                 String sql = "SELECT * FROM " + table.getName();
                 if (columnName != null) {
                     Column column = table.getColumn(columnName);
                     if (column == null) { continue; }
-                    sql += " WHERE '" + column.getName() + "' = '" + value + "'";
+                    sql += " WHERE `" + column.getName() + "` = '" + value + "'";
                 }
+    
+                System.out.println(sql);
     
                 try (Connection connection = dataSource.getConnection(); Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(sql)) {
                     while (resultSet.next()) {
