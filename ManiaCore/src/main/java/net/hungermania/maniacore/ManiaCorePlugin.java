@@ -14,6 +14,7 @@ import net.hungermania.maniacore.plugin.ManiaTask;
 import net.hungermania.maniacore.spigot.anticheat.SpartanManager;
 import net.hungermania.maniacore.spigot.cmd.*;
 import net.hungermania.maniacore.spigot.communication.SpigotMessageHandler;
+import net.hungermania.maniacore.spigot.map.GameMapRecord;
 import net.hungermania.maniacore.spigot.perks.PerkInfoRecord;
 import net.hungermania.maniacore.spigot.perks.Perks;
 import net.hungermania.maniacore.spigot.plugin.SpigotManiaTask;
@@ -39,10 +40,8 @@ public final class ManiaCorePlugin extends JavaPlugin implements Listener, Mania
     @Override
     public void onEnable() {
         ManiaCore.setInstance(this.maniaCore = new ManiaCore());
-        maniaCore.init(getLogger());
+        maniaCore.init(getLogger(), this);
         maniaCore.setLogger(getLogger());
-        ManiaCore.getInstance().getDatabase().registerRecordType(PerkInfoRecord.class);
-        ManiaCore.getInstance().getDatabase().generateTables();
         this.saveDefaultConfig();
         runTask(() -> {
             //This makes sure that there is a user manager registered after the server has finished loading
@@ -52,13 +51,6 @@ public final class ManiaCorePlugin extends JavaPlugin implements Listener, Mania
             }
             getServer().getPluginManager().registerEvents((SpigotUserManager) maniaCore.getUserManager(), this);
         });
-        maniaCore.setServerManager(new SpigotServerManager(maniaCore));
-        maniaCore.getServerManager().init();
-        
-        maniaCore.setPlugin(this);
-        Redis.startRedis();
-        Redis.registerListener(new RankRedisListener());
-        Redis.registerListener(new FriendsRedisListener());
         
         getServer().getPluginManager().registerEvents(new SpartanManager(), this);
         
@@ -151,7 +143,22 @@ public final class ManiaCorePlugin extends JavaPlugin implements Listener, Mania
     public ManiaCore getManiaCore() {
         return maniaCore;
     }
-    
+
+    public void setupDatabaseRecords() {
+        ManiaCore.getInstance().getDatabase().registerRecordType(PerkInfoRecord.class);
+        ManiaCore.getInstance().getDatabase().registerRecordType(GameMapRecord.class);
+    }
+
+    public void setupRedisListeners() {
+        Redis.registerListener(new RankRedisListener());
+        Redis.registerListener(new FriendsRedisListener());
+    }
+
+    public void setupUserManager() {
+        maniaCore.setServerManager(new SpigotServerManager(maniaCore));
+        maniaCore.getServerManager().init();
+    }
+
     @Override
     public void onDisable() {
         for (Skin skin : getManiaCore().getSkinManager().getSkins()) {

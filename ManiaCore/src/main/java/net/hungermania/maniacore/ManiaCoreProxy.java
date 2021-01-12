@@ -31,33 +31,36 @@ public class ManiaCoreProxy extends Plugin implements ManiaPlugin {
         ManiaCore.setInstance(this.maniaCore = new ManiaCore());
         maniaCore.setLogger(getLogger());
         this.saveDefaultConfig();
-        maniaCore.init(getLogger());
+        maniaCore.init(getLogger(), this);
         maniaCore.setServerManager(new BungeeCordServerManager(maniaCore));
         maniaCore.getServerManager().init();
         getProxy().getPluginManager().registerListener(this, new BungeeListener(this));
-        maniaCore.setUserManager(new BungeeUserManager(this));
         
-        maniaCore.setPlugin(this);
-        Redis.startRedis();
-        Redis.registerListener(new RankRedisListener());
-        Redis.registerListener(new UserRedisListener());
-    
-        try (Jedis jedis = Redis.getConnection()) {
-            jedis.del("uuidtoidmap");
-            jedis.del("uuidtonamemap");
-        }
-    
         getProxy().getPluginManager().registerCommand(this, new HubCommand());
         getProxy().getPluginManager().registerCommand(this, new DiscordCommand());
-        //getProxy().getPluginManager().registerCommand(this, new EventsCommand(this));
         getProxy().getPluginManager().registerCommand(this, new GotoCmd());
         getProxy().getPluginManager().registerCommand(this, new RulesCommand());
         maniaCore.setMessageHandler(new BungeeMessageHandler());
         maniaCore.getMemoryManager().addManiaPlugin(this);
-        
-        
     }
-    
+
+    public void setupDatabaseRecords() {
+        maniaCore.setServerManager(new BungeeCordServerManager(maniaCore));
+    }
+
+    public void setupRedisListeners() {
+        Redis.registerListener(new RankRedisListener());
+        Redis.registerListener(new UserRedisListener());
+        try (Jedis jedis = Redis.getConnection()) {
+            jedis.del("uuidtoidmap");
+            jedis.del("uuidtonamemap");
+        }
+    }
+
+    public void setupUserManager() {
+        maniaCore.setUserManager(new BungeeUserManager(this));
+    }
+
     public void onDisable() {
         maniaCore.getDatabase().pushQueue();
         Redis.getConnection().flushAll();

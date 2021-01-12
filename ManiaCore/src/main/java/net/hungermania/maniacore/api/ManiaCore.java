@@ -43,8 +43,9 @@ public class ManiaCore {
     private EventManager eventManager;
     private FriendsManager friendsManager;
     
-    public void init(Logger logger) {
+    public void init(Logger logger, ManiaPlugin plugin) {
         this.logger = logger;
+        this.plugin = plugin;
         databasePropertiesFile = new File("./mania-mysql.properties");
         databaseProperties = new Properties();
         if (!databasePropertiesFile.exists()) {
@@ -85,8 +86,17 @@ public class ManiaCore {
         this.database.registerRecordType(FriendshipRecord.class);
         this.database.registerRecordType(FriendNotificationRecord.class);
         this.database.registerRecordType(ToggleRecord.class);
+        plugin.setupDatabaseRecords();
         this.database.generateTables();
-    
+        
+        plugin.setupUserManager();
+        if (this.userManager == null) {
+            getLogger().severe("No UserManager found!");
+        }
+
+        Redis.startRedis();
+        plugin.setupRedisListeners();
+        
         this.skinManager = new SkinManager(this);
         skinManager.loadFromDatabase();
         this.levelManager = new LevelManager(this);
