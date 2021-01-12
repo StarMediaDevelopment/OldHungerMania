@@ -7,11 +7,16 @@ import java.util.Collection;
 public class Table {
     protected String name;
     protected IncrementalMap<Column> columns = new IncrementalMap<>();
-    protected MysqlDatabase database;
     
-    public Table(MysqlDatabase database, String name) {
+    public Table(String name) {
         this.name = name;
-        this.database = database;
+    }
+    
+    public Table(String name, Collection<Column> columns) {
+        this(name);
+        for (Column column : columns) {
+            this.columns.add(column);
+        }
     }
     
 //    public String generateCreationStatement() {
@@ -32,10 +37,6 @@ public class Table {
         for (Column column : columns) {
             this.columns.add(column);
         }
-    }
-    
-    public MysqlDatabase getDatabase() {
-        return database;
     }
     
     public String getName() {
