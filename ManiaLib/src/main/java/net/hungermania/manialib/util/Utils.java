@@ -4,6 +4,7 @@ import net.hungermania.manialib.exceptions.InvalidDateFormatException;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -15,6 +16,26 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 public final class Utils {
     public static void printCurrentStack() {
         System.out.println(Arrays.toString(new Throwable().getStackTrace()));
+    }
+    
+    public static Set<Field> getClassFields(Class<?> clazz) {
+        Set<Field> fields = new HashSet<>(Arrays.asList(clazz.getDeclaredFields()));
+        if (clazz.getSuperclass() != null) {
+            getClassFields(clazz.getSuperclass(), fields);
+        }
+        return fields;
+    }
+    
+    public static Set<Field> getClassFields(Class<?> clazz, Set<Field> fields) {
+        if (fields == null) {
+            fields = new HashSet<>();
+        }
+        
+        fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
+        if (clazz.getSuperclass() != null) {
+            getClassFields(clazz.getSuperclass(), fields);
+        }
+        return fields;
     }
     
     public static Calendar parseCalendarDate(String rawDate) throws InvalidDateFormatException {
