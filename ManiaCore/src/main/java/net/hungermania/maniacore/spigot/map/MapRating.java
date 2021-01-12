@@ -8,8 +8,9 @@ import java.util.UUID;
 @Getter
 @Setter
 public class MapRating {
-    private long lastRated;
+    private int id;
+    private UUID uuid;
     private int mapId;
     private int rating;
-    private UUID uuid;
+    private long lastRated;
 }

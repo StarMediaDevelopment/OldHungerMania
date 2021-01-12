@@ -18,7 +18,9 @@ public class MapManager {
         this.plugin = plugin;
         downloadFolder = new File(plugin.getDataFolder(), "downloads");
         if (!downloadFolder.exists()) {
-            downloadFolder.mkdirs();
+            if (!downloadFolder.mkdirs()) {
+                plugin.getLogger().severe("Could not create Map Download Folder");
+            }
         }
     }
 }
