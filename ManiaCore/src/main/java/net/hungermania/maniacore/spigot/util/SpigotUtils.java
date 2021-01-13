@@ -28,7 +28,7 @@ public class SpigotUtils {
     }
     
     public Position locationToPosition(Location location) {
-        return new Position(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+        return new Position(location.getBlockX(), location.getBlockY(), location.getBlockZ(), location.getYaw(), location.getPitch());
     }
     
     public static void sendActionBar(Player player, String text) {

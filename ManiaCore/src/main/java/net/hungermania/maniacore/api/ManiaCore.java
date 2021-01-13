@@ -12,6 +12,7 @@ import net.hungermania.maniacore.api.user.UserManager;
 import net.hungermania.maniacore.memory.MemoryManager;
 import net.hungermania.maniacore.plugin.ManiaPlugin;
 import net.hungermania.manialib.ManiaLib;
+import net.hungermania.manialib.data.DatabaseManager;
 import net.hungermania.manialib.sql.Database;
 
 import java.io.*;
@@ -30,6 +31,8 @@ public class ManiaCore {
     
     private ManiaLib maniaLib;
     private static ManiaCore instance;
+    
+    private DatabaseManager databaseManager;
     
     private ManiaPlugin plugin;
     
@@ -74,6 +77,7 @@ public class ManiaCore {
         
         this.maniaLib = new ManiaLib(databaseProperties, logger);
         this.database = maniaLib.getDatabase();
+        this.databaseManager = maniaLib.getDatabaseManager();
         this.database.registerRecordType(UserRecord.class);
         this.database.registerRecordType(ChatEntryRecord.class);
         this.database.registerRecordType(CmdEntryRecord.class);

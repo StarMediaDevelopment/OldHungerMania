@@ -49,18 +49,18 @@ public class LobbySigns {
         config = YamlConfiguration.loadConfiguration(file);
         
         if (config.contains("votetitlesign")) {
-            this.voteTitleSign = new Position(config.getDouble("votetitlesign.x"), config.getDouble("votetitlesign.y"), config.getDouble("votetitlesign.z"));
+            this.voteTitleSign = new Position(config.getInt("votetitlesign.x"), config.getInt("votetitlesign.y"), config.getInt("votetitlesign.z"));
         }
         
         if (config.contains("votinginfosign")) {
-            this.voteTitleSign = new Position(config.getDouble("votinginfosign.x"), config.getDouble("votinginfosign.y"), config.getDouble("votinginfosign.z"));
+            this.voteTitleSign = new Position(config.getInt("votinginfosign.x"), config.getInt("votinginfosign.y"), config.getInt("votinginfosign.z"));
         }
         
         if (config.contains("mapsigns")) {
             ConfigurationSection mapSection = config.getConfigurationSection("mapsigns");
             for (String p : mapSection.getKeys(false)) {
                 int position = Integer.parseInt(p);
-                this.mapSigns.put(position, new Position(mapSection.getDouble(p + ".x"), mapSection.getDouble(p + ".y"), mapSection.getDouble(p + ".z")));
+                this.mapSigns.put(position, new Position(mapSection.getInt(p + ".x"), mapSection.getInt(p + ".y"), mapSection.getInt(p + ".z")));
             }
         }
     }

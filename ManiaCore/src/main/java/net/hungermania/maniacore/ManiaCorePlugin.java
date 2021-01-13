@@ -14,7 +14,6 @@ import net.hungermania.maniacore.plugin.ManiaTask;
 import net.hungermania.maniacore.spigot.anticheat.SpartanManager;
 import net.hungermania.maniacore.spigot.cmd.*;
 import net.hungermania.maniacore.spigot.communication.SpigotMessageHandler;
-import net.hungermania.maniacore.spigot.map.GameMapRecord;
 import net.hungermania.maniacore.spigot.perks.PerkInfoRecord;
 import net.hungermania.maniacore.spigot.perks.Perks;
 import net.hungermania.maniacore.spigot.plugin.SpigotManiaTask;
@@ -148,7 +147,6 @@ public final class ManiaCorePlugin extends JavaPlugin implements Listener, Mania
 
     public void setupDatabaseRecords() {
         ManiaCore.getInstance().getDatabase().registerRecordType(PerkInfoRecord.class);
-        ManiaCore.getInstance().getDatabase().registerRecordType(GameMapRecord.class);
     }
 
     public void setupRedisListeners() {

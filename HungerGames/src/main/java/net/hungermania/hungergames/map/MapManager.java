@@ -395,9 +395,9 @@ public class MapManager implements CommandExecutor {
     }
     
     private Position getPosition(Player player) {
-        double x = player.getLocation().getBlockX() + .5;
-        double y = player.getLocation().getBlockY() + 1;
-        double z = player.getLocation().getBlockZ() + .5;
+        int x = player.getLocation().getBlockX();
+        int y = player.getLocation().getBlockY() + 1;
+        int z = player.getLocation().getBlockZ();
         float yaw = player.getLocation().getYaw();
         float pitch = player.getLocation().getPitch();
         return new Position(x, y, z, yaw, pitch);

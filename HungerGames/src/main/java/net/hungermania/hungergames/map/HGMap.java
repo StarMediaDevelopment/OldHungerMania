@@ -42,9 +42,9 @@ public class HGMap {
             this.name = config.getString("name");
             ConfigurationSection centerSection = config.getConfigurationSection("center");
             if (centerSection != null) {
-                double spawnX = centerSection.getDouble("x");
-                double spawnY = centerSection.getDouble("y");
-                double spawnZ = centerSection.getDouble("z");
+                int spawnX = centerSection.getInt("x");
+                int spawnY = centerSection.getInt("y");
+                int spawnZ = centerSection.getInt("z");
                 float spawnYaw = (float) centerSection.getDouble("yaw");
                 float spawnPitch = (float) centerSection.getDouble("pitch");
                 this.center = new Position(spawnX, spawnY, spawnZ, spawnYaw, spawnPitch);
@@ -53,9 +53,9 @@ public class HGMap {
             ConfigurationSection spawnsSection = config.getConfigurationSection("spawns");
             if (spawnsSection != null) {
                 for (String s : spawnsSection.getKeys(false)) {
-                    double x = spawnsSection.getDouble(s + ".x");
-                    double y = spawnsSection.getDouble(s + ".y");
-                    double z = spawnsSection.getDouble(s + ".z");
+                    int x = spawnsSection.getInt(s + ".x");
+                    int y = spawnsSection.getInt(s + ".y");
+                    int z = spawnsSection.getInt(s + ".z");
                     float yaw = (float) spawnsSection.getDouble(s + ".yaw");
                     float pitch = (float) spawnsSection.getDouble(s + ".pitch");
                     Integer id = Integer.parseInt(s);

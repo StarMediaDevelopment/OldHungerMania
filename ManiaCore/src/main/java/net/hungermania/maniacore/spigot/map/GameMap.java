@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import net.hungermania.maniacore.api.util.Position;
 import net.hungermania.maniacore.spigot.util.SpigotUtils;
+import net.hungermania.manialib.data.annotations.TableInfo;
+import net.hungermania.manialib.data.model.IRecord;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -17,7 +19,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 @Getter
-public class GameMap {
+@TableInfo(tableName = "gamemaps")
+public class GameMap implements IRecord {
 
     @Setter protected int id; //Database id, isn't really used outside of database things
     @Setter protected String name; //The display name of the map
