@@ -24,7 +24,7 @@ public final class Utils {
         if (cachedFields.containsKey(clazz)) {
             return cachedFields.get(clazz);
         }
-        Set<Field> fields = new HashSet<>(Arrays.asList(clazz.getDeclaredFields()));
+        Set<Field> fields = new LinkedHashSet<>(Arrays.asList(clazz.getDeclaredFields()));
         if (clazz.getSuperclass() != null) {
             getClassFields(clazz.getSuperclass(), fields);
         }
@@ -42,7 +42,7 @@ public final class Utils {
             return fields;
         }
         if (fields == null) {
-            fields = new HashSet<>();
+            fields = new LinkedHashSet<>();
         }
         
         fields.addAll(Arrays.asList(clazz.getDeclaredFields()));

@@ -91,7 +91,7 @@ public class Redis {
             }
             
             try {
-                DataTypeHandler<?> handler = manager.getHandler(field.get(record));
+                DataTypeHandler<?> handler = manager.getHandler(field.getType());
                 String value = handler.serializeRedis(field.get(record));
                 if (value == null || value.equals("")) continue;
                 serialized.put(field.getName(), value);

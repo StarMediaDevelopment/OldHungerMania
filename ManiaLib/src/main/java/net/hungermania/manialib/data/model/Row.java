@@ -37,14 +37,14 @@ public class Row {
         return (int) dataMap.get(key);
     }
     
-    public IRecord getRecord(DatabaseManager databaseManager) {
-        Class<? extends IRecord> recordClass = databaseManager.getRecordClassByTable(table);
+    public <T extends IRecord> T getRecord(Class<T> recordClass, DatabaseManager databaseManager) {
         try {
             Constructor<?> constructor = recordClass.getDeclaredConstructor();
             if (constructor == null) {
                 return null;
             }
-            IRecord record = (IRecord) constructor.newInstance();
+            constructor.setAccessible(true);
+            T record = (T) constructor.newInstance();
             Set<Field> fields = Utils.getClassFields(recordClass);
             for (Field field : fields) {
                 field.setAccessible(true);

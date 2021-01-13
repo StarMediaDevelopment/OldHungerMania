@@ -25,12 +25,14 @@ public class DatabaseManager {
     
     public DatabaseManager() {
         try {
+            System.out.println("Registering Type Handlers");
             registerTypeHandler(new BooleanHandler());
-            registerTypeHandler(new BooleanHandler());
+            registerTypeHandler(new DoubleHandler());
             registerTypeHandler(new IntegerHandler());
             registerTypeHandler(new LongHandler());
             registerTypeHandler(new StringHandler());
             registerTypeHandler(new UUIDHandler());
+            System.out.println("Registered " + typeHandlers.size() + " out of 6");
         } catch (AlreadyRegisteredException e) {
             e.printStackTrace();
         }
@@ -81,9 +83,9 @@ public class DatabaseManager {
             if (typeHandler.getJavaClass().equals(handler.getJavaClass())) {
                 throw new AlreadyRegisteredException("Class " + handler.getJavaClass().getName() + " is already being handled by " + typeHandler.getClass().getName());
             }
-            
-            this.typeHandlers.add(handler);
         }
+
+        this.typeHandlers.add(handler);
     }
     
     public void registerRecord(Class<? extends IRecord> recordClass, MysqlDatabase database) {
@@ -112,8 +114,10 @@ public class DatabaseManager {
             for (Field field : fields) {
                 field.setAccessible(true);
                 ColumnInfo columnInfo = field.getAnnotation(ColumnInfo.class);
-                if (columnInfo.ignored()) {
-                    continue;
+                if (columnInfo != null) {
+                    if (columnInfo.ignored()) {
+                        continue;
+                    }
                 }
                 
                 DataTypeHandler<?> handler;
@@ -126,18 +130,13 @@ public class DatabaseManager {
                     colAutoIncrement = columnInfo.autoIncrement();
                     colUnique = columnInfo.unique();
                 }
-                
-                try {
-                    handler = getHandler(field.get(recordClass));
-                    if (handler == null) {
-                        System.out.println("Field " + field.getName() + " of the type " + recordClass.getName() + " does not have a valid MysqlTypeHandler.");
-                        return;
-                    }
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+
+                handler = getHandler(field.getType());
+                if (handler == null) {
+                    System.out.println("Field " + field.getName() + " which has the type " + field.getType() + " of the record " + recordClass.getName() + " does not have a valid MysqlTypeHandler.");
                     return;
                 }
-                
+
                 if (field.getName().equalsIgnoreCase("id")) {
                     if (field.getType().isAssignableFrom(int.class) || field.getType().isAssignableFrom(long.class)) {
                         colAutoIncrement = true;
@@ -164,9 +163,13 @@ public class DatabaseManager {
         this.tableRegistry.add(table);
     }
     
-    public DataTypeHandler<?> getHandler(Object object) {
+    public DataTypeHandler<?> getHandler(Class<?> clazz) {
+        System.out.println("Getting DataTypeHandler for class type " + clazz.getName());
+        System.out.println("Total Type Handlers " + typeHandlers.size());
         for (DataTypeHandler<?> typeHandler : this.typeHandlers) {
-            if (typeHandler.matchesType(object)) {
+            System.out.println("Checking Type Handler " + typeHandler.getClass().getName());
+            if (typeHandler.matchesType(clazz)) {
+                System.out.println("Handler Matches!");
                 return typeHandler;
             }
         }

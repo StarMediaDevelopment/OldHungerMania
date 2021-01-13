@@ -8,7 +8,7 @@ import java.util.UUID;
 public class UUIDHandler extends DataTypeHandler<UUID> {
 
     public UUIDHandler() {
-        super(UUID.class, DataType.VARCHAR);
+        super(UUID.class, DataType.VARCHAR, 36);
     }
 
     public Object serializeSql(Object object) {

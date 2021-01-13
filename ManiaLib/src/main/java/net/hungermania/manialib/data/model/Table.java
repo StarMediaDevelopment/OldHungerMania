@@ -23,6 +23,7 @@ public class Table {
     }
     
     public String generateCreationStatement() {
+        //TODO Column sorting will also need to add something to ColumnInfo annotation as well
         StringBuilder colBuilder = new StringBuilder();
         Iterator<Column> columnIterator = columns.values().iterator();
         while (columnIterator.hasNext()) {

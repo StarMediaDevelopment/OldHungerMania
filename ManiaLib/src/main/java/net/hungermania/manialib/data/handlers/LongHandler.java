@@ -7,8 +7,13 @@ public class LongHandler extends DataTypeHandler<Long> {
         super(Long.class, DataType.BIGINT);
     }
 
-    public boolean matchesType(Object object) {
-        return super.matchesType(object) || object.getClass().isAssignableFrom(long.class);
+    @Override
+    public boolean matchesType(Class<?> clazz) {
+        System.out.println("Checking Long Type Handler");
+        System.out.println("Class type " + clazz.getName());
+        System.out.println("Super Matches: " + super.matchesType(clazz));
+        System.out.println("Primitive Matches: " + clazz.isAssignableFrom(long.class));
+        return super.matchesType(clazz) || clazz.isAssignableFrom(long.class);
     }
 
     public Object serializeSql(Object object) {

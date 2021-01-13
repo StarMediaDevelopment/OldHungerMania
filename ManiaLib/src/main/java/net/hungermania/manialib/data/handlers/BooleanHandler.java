@@ -7,8 +7,8 @@ public class BooleanHandler extends DataTypeHandler<Boolean> {
         super(Boolean.class, DataType.VARCHAR, 5);
     }
 
-    public boolean matchesType(Object object) {
-        return super.matchesType(object) || object.getClass().isAssignableFrom(boolean.class);
+    public boolean matchesType(Class<?> clazz) {
+        return super.matchesType(clazz) || clazz.isAssignableFrom(boolean.class);
     }
 
     public Object serializeSql(Object object) {

@@ -7,8 +7,8 @@ public class DoubleHandler extends DataTypeHandler<Double> {
         super(Double.class, DataType.DOUBLE);
     }
 
-    public boolean matchesType(Object object) {
-        return super.matchesType(object) || object.getClass().isAssignableFrom(double.class);
+    public boolean matchesType(Class<?> clazz) {
+        return super.matchesType(clazz) || clazz.isAssignableFrom(double.class);
     }
 
     public Object serializeSql(Object object) {

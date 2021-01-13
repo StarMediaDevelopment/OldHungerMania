@@ -7,8 +7,8 @@ public class IntegerHandler extends DataTypeHandler<Integer> {
         super(Integer.class, DataType.INT);
     }
 
-    public boolean matchesType(Object object) {
-        return super.matchesType(object) || object.getClass().isAssignableFrom(int.class);
+    public boolean matchesType(Class<?> clazz) {
+        return super.matchesType(clazz) || clazz.isAssignableFrom(int.class);
     }
 
     public Object serializeSql(Object object) {

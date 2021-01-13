@@ -21,8 +21,8 @@ public abstract class DataTypeHandler<T> {
     
     protected DataTypeHandler() {}
     
-    public boolean matchesType(Object object) {
-       return object.getClass().isAssignableFrom(javaClass);
+    public boolean matchesType(Class<?> clazz) {
+       return clazz.isAssignableFrom(javaClass);
     }
 
     public abstract Object serializeSql(Object object);
