@@ -1,6 +1,5 @@
 package net.hungermania.manialib.data.handlers;
 
-import javafx.beans.binding.ObjectExpression;
 import net.hungermania.manialib.data.model.DataType;
 
 import java.util.UUID;

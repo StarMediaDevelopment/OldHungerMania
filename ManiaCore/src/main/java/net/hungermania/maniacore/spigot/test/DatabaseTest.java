@@ -10,7 +10,7 @@ import java.util.*;
 
 public class DatabaseTest {
     
-    public static void test(ManiaCore maniaCore) throws IOException {
+    public static void testNew(ManiaCore maniaCore) throws IOException {
         Properties properties = new Properties();
         properties.load(new FileInputStream("./mania-mysql.properties"));
         properties.setProperty("mysql-database", "test");

@@ -12,7 +12,7 @@ public class TestCmd implements CommandExecutor {
     
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         try {
-            DatabaseTest.test(ManiaCore.getInstance());
+            DatabaseTest.testNew(ManiaCore.getInstance());
         } catch (IOException e) {
             sender.sendMessage(ManiaUtils.color("&cAn error occurred: " + e.getMessage()));
         }

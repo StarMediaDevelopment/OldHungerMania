@@ -1,23 +1,17 @@
-package net.hungermania.maniacore.spigot.test;
-
-import net.hungermania.manialib.data.annotations.ColumnInfo;
-import net.hungermania.manialib.data.annotations.TableInfo;
-import net.hungermania.manialib.data.model.IRecord;
+package net.hungermania.maniacore.spigot.test.old;
 
 import java.util.UUID;
 
-@TableInfo(tableName = "testusers")
-public class TestUser implements IRecord {
+public class OldTestUser {
     private int id;
     private UUID uuid;
-    @ColumnInfo(length = 16) private String name;
+    private String name;
     private boolean incognito;
     private long lastLogin;
     private double coins;
 
-    private TestUser() {}
-    
-    public TestUser(UUID uuid, String name, boolean incognito, long lastLogin, double coins) {
+    public OldTestUser(int id, UUID uuid, String name, boolean incognito, long lastLogin, double coins) {
+        this.id = id;
         this.uuid = uuid;
         this.name = name;
         this.incognito = incognito;
@@ -26,7 +20,7 @@ public class TestUser implements IRecord {
     }
 
     public int getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(int id) {
@@ -71,16 +65,5 @@ public class TestUser implements IRecord {
 
     public void setCoins(double coins) {
         this.coins = coins;
-    }
-
-    public String toString() {
-        return "TestUser{" +
-                "id=" + id +
-                ", uuid=" + uuid +
-                ", name='" + name + '\'' +
-                ", incognito=" + incognito +
-                ", lastLogin=" + lastLogin +
-                ", coins=" + coins +
-                '}';
     }
 }
