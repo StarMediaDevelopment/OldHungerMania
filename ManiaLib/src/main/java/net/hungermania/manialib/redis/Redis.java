@@ -1,10 +1,20 @@
 package net.hungermania.manialib.redis;
 
-import redis.clients.jedis.*;
+import net.hungermania.manialib.data.DatabaseManager;
+import net.hungermania.manialib.data.annotations.ColumnInfo;
+import net.hungermania.manialib.data.handlers.DataTypeHandler;
+import net.hungermania.manialib.data.model.IRecord;
+import net.hungermania.manialib.util.Utils;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.JedisPubSub;
 
-import java.io.*;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -70,22 +80,53 @@ public class Redis {
         subscribe();
     }
     
-    public static void pushObject(String key, RedisObject object) {
+    public static void cacheRecord(IRecord record, DatabaseManager manager) {
+        Set<Field> fields = Utils.getClassFields(record.getClass());
+        Map<String, String> serialized = new HashMap<>();
+        for (Field field : fields) {
+            field.setAccessible(true);
+            ColumnInfo columnInfo = field.getAnnotation(ColumnInfo.class);
+            if (columnInfo.ignored()) {
+                continue;
+            }
+            
+            try {
+                DataTypeHandler<?> handler = manager.getHandler(field.get(record));
+                String value = handler.serializeRedis(field.get(record));
+                if (value == null || value.equals("")) continue;
+                serialized.put(field.getName(), value);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        
         try (Jedis jedis = getConnection()) {
-            jedis.hmset(key, object.serialize());
+            jedis.hmset(record.getClass().getName() + ":" + record.getId(), serialized);
         }
     }
     
-    public static RedisObject getObject(Class<? extends RedisObject> type, String key) {
+    public static IRecord getCachedRecord(DatabaseManager manager, Class<? extends IRecord> recordClass, int id) {
+        Set<Field> fields = Utils.getClassFields(recordClass);
+        Map<String, String> recordData;
         try (Jedis jedis = getConnection()) {
-            Map<String, String> data = jedis.hgetAll(key);
-            Constructor<?> constructor = type.getConstructor(data.getClass());
-            if (constructor != null) {
-                return (RedisObject) constructor.newInstance(data);
-            }
-        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
+            recordData = jedis.hgetAll(recordClass.getName() + ":" + id);
         }
+        
+        try {
+            IRecord record = recordClass.getDeclaredConstructor().newInstance();
+
+            for (Field field : fields) {
+                field.setAccessible(true);
+                ColumnInfo columnInfo = field.getAnnotation(ColumnInfo.class);
+                if (columnInfo.ignored()) {
+                    continue;
+                }
+
+                DataTypeHandler<?> handler = manager.getTableByRecordClass(recordClass).getColumn(field.getName()).getTypeHandler();
+                Object value = handler.deserialize(recordData.get(field.getName()));
+                field.set(record, value);
+            }
+        } catch (Exception e) {}
         return null;
     }
     

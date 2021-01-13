@@ -18,15 +18,29 @@ public final class Utils {
         System.out.println(Arrays.toString(new Throwable().getStackTrace()));
     }
     
+    private static Map<Class<?>, Set<Field>> cachedFields = new HashMap<>();
+    
     public static Set<Field> getClassFields(Class<?> clazz) {
+        if (cachedFields.containsKey(clazz)) {
+            return cachedFields.get(clazz);
+        }
         Set<Field> fields = new HashSet<>(Arrays.asList(clazz.getDeclaredFields()));
         if (clazz.getSuperclass() != null) {
             getClassFields(clazz.getSuperclass(), fields);
+        }
+        if (cachedFields.containsKey(clazz)) {
+            cachedFields.get(clazz).addAll(fields);
+        } else {
+            cachedFields.put(clazz, fields);
         }
         return fields;
     }
     
     public static Set<Field> getClassFields(Class<?> clazz, Set<Field> fields) {
+        if (cachedFields.containsKey(clazz)) {
+            fields.addAll(cachedFields.get(clazz));
+            return fields;
+        }
         if (fields == null) {
             fields = new HashSet<>();
         }
@@ -34,6 +48,11 @@ public final class Utils {
         fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
         if (clazz.getSuperclass() != null) {
             getClassFields(clazz.getSuperclass(), fields);
+        }
+        if (cachedFields.containsKey(clazz)) {
+            cachedFields.get(clazz).addAll(fields);
+        } else {
+            cachedFields.put(clazz, fields);
         }
         return fields;
     }

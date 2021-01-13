@@ -1,9 +1,8 @@
 package net.hungermania.manialib.data.handlers;
 
-import net.hungermania.manialib.data.DataType;
-import net.hungermania.manialib.data.MysqlTypeHandler;
+import net.hungermania.manialib.data.model.DataType;
 
-public class DoubleHandler extends MysqlTypeHandler<Double> {
+public class DoubleHandler extends DataTypeHandler<Double> {
     public DoubleHandler() {
         super(Double.class, DataType.DOUBLE);
     }
@@ -12,8 +11,11 @@ public class DoubleHandler extends MysqlTypeHandler<Double> {
         return super.matchesType(object) || object.getClass().isAssignableFrom(double.class);
     }
 
-    public Object serialize(Double object) {
-        return object;
+    public Object serializeSql(Object object) {
+        if (object.getClass().isAssignableFrom(javaClass)) {
+            return object;
+        }
+        return null;
     }
 
     public Double deserialize(Object object) {
@@ -24,5 +26,9 @@ public class DoubleHandler extends MysqlTypeHandler<Double> {
             value = Double.parseDouble((String) object);
         }
         return value;
+    }
+
+    public String serializeRedis(Object object) {
+        return Double.toString((double) object);
     }
 }

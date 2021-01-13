@@ -1,9 +1,8 @@
 package net.hungermania.manialib.data.handlers;
 
-import net.hungermania.manialib.data.DataType;
-import net.hungermania.manialib.data.MysqlTypeHandler;
+import net.hungermania.manialib.data.model.DataType;
 
-public class LongHandler extends MysqlTypeHandler<Long> {
+public class LongHandler extends DataTypeHandler<Long> {
     public LongHandler() {
         super(Long.class, DataType.BIGINT);
     }
@@ -12,7 +11,7 @@ public class LongHandler extends MysqlTypeHandler<Long> {
         return super.matchesType(object) || object.getClass().isAssignableFrom(long.class);
     }
 
-    public Object serialize(Long object) {
+    public Object serializeSql(Object object) {
         return object;
     }
 
@@ -24,5 +23,9 @@ public class LongHandler extends MysqlTypeHandler<Long> {
             value = Long.parseLong((String) object);
         }
         return value;
+    }
+
+    public String serializeRedis(Object object) {
+        return Long.toString((long) object);
     }
 }

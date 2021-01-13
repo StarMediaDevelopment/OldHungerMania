@@ -1,24 +1,35 @@
 package net.hungermania.manialib.data.handlers;
 
-import net.hungermania.manialib.data.DataType;
-import net.hungermania.manialib.data.MysqlTypeHandler;
+import javafx.beans.binding.ObjectExpression;
+import net.hungermania.manialib.data.model.DataType;
 
 import java.util.UUID;
 
-public class UUIDHandler extends MysqlTypeHandler<UUID> {
+public class UUIDHandler extends DataTypeHandler<UUID> {
 
     public UUIDHandler() {
         super(UUID.class, DataType.VARCHAR);
     }
 
-    public Object serialize(UUID object) {
-        return object.toString();
+    public Object serializeSql(Object object) {
+        if (object.getClass().isAssignableFrom(javaClass)) {
+            return ((UUID) object).toString();
+        }
+        return null;
     }
 
     public UUID deserialize(Object object) {
         if (object instanceof String) {
             return UUID.fromString((String) object);
         }
+        return null;
+    }
+
+    public String serializeRedis(Object object) {
+        if (object instanceof UUID) {
+            return ((UUID) object).toString();
+        }
+        
         return null;
     }
 }
