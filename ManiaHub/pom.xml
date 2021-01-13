@@ -9,13 +9,13 @@
     <version>1.14.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Hub</name>
+    <name>ManiaHub</name>
 
     <description>HungerMania's Hub</description>
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jar.output>/home/firestar311/Documents/Output</jar.output>
+        <jar.output>${project.basedir}/../Output</jar.output>
     </properties>
 
     <build>

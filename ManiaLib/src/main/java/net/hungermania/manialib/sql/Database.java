@@ -210,7 +210,6 @@ public class Database {
                 } catch (Exception e) {
                     System.out.println(querySQL);
                     e.printStackTrace();
-                    logger.severe("An error occured: " + e.getMessage());
                 }
             }
         }
@@ -243,7 +242,6 @@ public class Database {
             } catch (Exception e) {
                 System.out.println(querySQL);
                 e.printStackTrace();
-                logger.severe("An error occured: " + e.getMessage());
             }
         }
     }
@@ -275,8 +273,8 @@ public class Database {
             try (Connection con = dataSource.getConnection(); Statement statement = con.createStatement()) {
                 statement.execute(sql);
             } catch (Exception e) {
+                System.out.println(sql);
                 e.printStackTrace();
-                logger.severe("An error occured: " + e.getMessage());
             }
             
             try (Connection con = dataSource.getConnection()) {
@@ -316,6 +314,11 @@ public class Database {
                         for (String columnSql : columnSqls) {
                             try (Statement statement = con.createStatement()) {
                                 statement.executeUpdate(columnSql);
+                            } catch (Exception e) {
+                                if (!e.getMessage().contains("Can't DROP")) {
+                                    System.out.println(columnSql);
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     }

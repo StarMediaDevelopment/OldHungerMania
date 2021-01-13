@@ -21,6 +21,7 @@ import net.hungermania.maniacore.spigot.plugin.SpigotManiaTask;
 import net.hungermania.maniacore.spigot.server.SpigotServerManager;
 import net.hungermania.maniacore.spigot.updater.Updater;
 import net.hungermania.maniacore.spigot.user.FriendsRedisListener;
+import net.hungermania.maniacore.spigot.user.SpigotUser;
 import net.hungermania.maniacore.spigot.user.SpigotUserManager;
 import net.hungermania.manialib.sql.Database;
 import org.bukkit.Bukkit;
@@ -155,8 +156,12 @@ public final class ManiaCorePlugin extends JavaPlugin implements Listener, Mania
     }
 
     public void setupUserManager() {
-        maniaCore.setServerManager(new SpigotServerManager(maniaCore));
-        maniaCore.getServerManager().init();
+        maniaCore.setUserManager(new SpigotUserManager(this));
+    }
+
+    public void setupServerManager() {
+        ManiaCore.getInstance().setServerManager(new SpigotServerManager(maniaCore));
+        ManiaCore.getInstance().getServerManager().init();
     }
 
     @Override

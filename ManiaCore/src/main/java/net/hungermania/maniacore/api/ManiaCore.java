@@ -93,6 +93,8 @@ public class ManiaCore {
         if (this.userManager == null) {
             getLogger().severe("No UserManager found!");
         }
+        
+        plugin.setupServerManager();
 
         Redis.startRedis();
         plugin.setupRedisListeners();

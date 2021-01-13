@@ -57,6 +57,11 @@ public class ManiaCoreProxy extends Plugin implements ManiaPlugin {
         }
     }
 
+    public void setupServerManager() {
+        maniaCore.setServerManager(new BungeeCordServerManager(maniaCore));
+        maniaCore.getServerManager().init();
+    }
+
     public void setupUserManager() {
         maniaCore.setUserManager(new BungeeUserManager(this));
     }
