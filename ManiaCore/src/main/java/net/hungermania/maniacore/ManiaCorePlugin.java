@@ -18,7 +18,6 @@ import net.hungermania.maniacore.spigot.perks.PerkInfoRecord;
 import net.hungermania.maniacore.spigot.perks.Perks;
 import net.hungermania.maniacore.spigot.plugin.SpigotManiaTask;
 import net.hungermania.maniacore.spigot.server.SpigotServerManager;
-import net.hungermania.maniacore.spigot.test.TestCmd;
 import net.hungermania.maniacore.spigot.updater.Updater;
 import net.hungermania.maniacore.spigot.user.FriendsRedisListener;
 import net.hungermania.maniacore.spigot.user.SpigotUserManager;
@@ -69,7 +68,6 @@ public final class ManiaCorePlugin extends JavaPlugin implements Listener, Mania
         getCommand("setstat").setExecutor(new SetstatCommand());
         getCommand("perks").setExecutor(new PerkCmd());
         getCommand("mutations").setExecutor(new MutationsCmd());
-        getCommand("test").setExecutor(new TestCmd());
     
         new BukkitRunnable() {
             public void run() {
