@@ -134,10 +134,16 @@ public class EntityListeners extends GameListener {
                     }
                 }
                 
-                long revengeTime = targetPlayer.getRevengeTime() + TimeUnit.SECONDS.toMillis(10);
-                if (System.currentTimeMillis() < revengeTime) {
+                long targetRevengeTime = targetPlayer.getRevengeTime() + TimeUnit.SECONDS.toMillis(10);
+                if (System.currentTimeMillis() < targetRevengeTime) {
                     e.setCancelled(true);
                     damager.sendMessage(ManiaUtils.color("&cThat player recently took revenge. They have a 10 second grace period."));
+                }
+                
+                long damagerRevengeTime = damagerPlayer.getRevengeTime() + TimeUnit.SECONDS.toMillis(10);
+                if (System.currentTimeMillis() < damagerRevengeTime) {
+                    e.setCancelled(true);
+                    damager.sendMessage(ManiaUtils.color("&cYou just recently took revenge, you cannot attack in the 10 second grace period"));
                 }
             } else if (e.getEntity() instanceof ItemFrame || e.getEntity() instanceof ArmorStand) {
                 e.setCancelled(true);
