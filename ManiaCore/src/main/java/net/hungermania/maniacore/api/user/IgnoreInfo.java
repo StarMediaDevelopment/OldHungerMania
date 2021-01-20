@@ -2,12 +2,13 @@ package net.hungermania.maniacore.api.user;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.hungermania.manialib.data.model.IRecord;
 
 import java.util.Objects;
 import java.util.UUID;
 
 @Getter
-public class IgnoreInfo {
+public class IgnoreInfo implements IRecord {
     
     @Setter private int id;
     private UUID player, ignored;

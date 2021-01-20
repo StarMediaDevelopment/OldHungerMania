@@ -1,6 +1,8 @@
 package net.hungermania.maniacore.plugin;
 
-public interface ManiaPlugin {
+import net.hungermania.manialib.data.model.DatabaseHandler;
+
+public interface ManiaPlugin extends DatabaseHandler {
     String getVersion();
     String getName();
     

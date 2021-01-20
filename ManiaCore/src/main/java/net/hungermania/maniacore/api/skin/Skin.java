@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.Setter;
 import net.hungermania.maniacore.api.util.ManiaUtils;
+import net.hungermania.manialib.data.model.IRecord;
 import org.bukkit.Bukkit;
 
 import java.io.Serializable;
@@ -13,7 +14,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 @Getter @Setter
-public class Skin implements Serializable {
+public class Skin implements Serializable, IRecord {
     private static final String skinUrlString = "https://sessionserver.mojang.com/session/minecraft/profile/{uuid}?unsigned=false";
     private static final long serialVersionUID = 1L;
     

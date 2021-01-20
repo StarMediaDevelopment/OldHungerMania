@@ -1,12 +1,13 @@
 package net.hungermania.maniacore.api.friends;
 
 import lombok.*;
+import net.hungermania.manialib.data.model.IRecord;
 
 import java.util.Map;
 import java.util.UUID;
 
 @Getter @Builder @AllArgsConstructor
-public class FriendNotification {
+public class FriendNotification implements IRecord {
     
     public enum Type {
         ACCEPTED, DENIED, REMOVED

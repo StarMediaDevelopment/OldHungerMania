@@ -10,6 +10,8 @@ import net.hungermania.maniacore.api.records.IgnoreInfoRecord;
 import net.hungermania.maniacore.api.stats.*;
 import net.hungermania.maniacore.api.user.toggle.Toggle;
 import net.hungermania.maniacore.api.user.toggle.Toggles;
+import net.hungermania.manialib.data.annotations.ColumnInfo;
+import net.hungermania.manialib.data.model.IRecord;
 import net.hungermania.manialib.util.Pair;
 import net.md_5.bungee.api.chat.BaseComponent;
 
@@ -17,15 +19,15 @@ import java.util.*;
 
 @Getter
 @Setter
-public class User {
+public class User implements IRecord {
     private static final UUID FIRESTAR311 = UUID.fromString("3f7891ce-5a73-4d52-a2ba-299839053fdc");
     
     protected int id = 0;
     protected UUID uniqueId;
     protected String name;
-    protected Channel channel = Channel.GLOBAL;
-    protected Set<IgnoreInfo> ignoredPlayers = new HashSet<>();
-    protected Rank rank = Rank.DEFAULT;
+    protected Channel channel = Channel.GLOBAL; //TODO Type handler (Probably just a default enum handler
+    protected Set<IgnoreInfo> ignoredPlayers = new HashSet<>(); //TODO Set type handlers
+    protected Rank rank = Rank.DEFAULT; //TODO Type handler
     
     protected Map<String, Statistic> stats = new HashMap<>();
     protected Map<Toggles, Toggle> toggles = new HashMap<>();

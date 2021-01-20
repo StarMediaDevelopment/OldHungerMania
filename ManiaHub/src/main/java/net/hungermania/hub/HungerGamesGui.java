@@ -18,7 +18,7 @@ import java.util.*;
 import java.util.Map.Entry;
 
 public class HungerGamesGui extends Gui {
-    public HungerGamesGui(Hub plugin) {
+    public HungerGamesGui(ManiaHub plugin) {
         super(plugin, "&3&lHUNGER GAMES &8- &rServer Select", false, 54);
         Map<Integer, ItemStack> serverStacks = new TreeMap<>();
         int onlinePlayers = 0, maximumPlayers = 0;

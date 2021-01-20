@@ -6,13 +6,14 @@ import lombok.*;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.pagination.IElement;
 import net.hungermania.maniacore.api.user.User;
+import net.hungermania.manialib.data.model.IRecord;
 
 import java.util.*;
 
 @Getter
 @AllArgsConstructor
 @Builder
-public class Friendship implements IElement {
+public class Friendship implements IElement, IRecord {
     
     @Setter
     private int id;

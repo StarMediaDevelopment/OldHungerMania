@@ -4,13 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.util.ManiaUtils;
+import net.hungermania.manialib.data.model.IRecord;
 import net.hungermania.manialib.util.Utils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 @Getter @Setter
-public class Loot {
+public class Loot implements IRecord {
     private int id, maxAmount;
     private Material material;
     private String name;

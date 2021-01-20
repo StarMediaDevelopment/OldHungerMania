@@ -1,6 +1,6 @@
 name: ManiaHub
 version: ${project.version}
-main: net.hungermania.hub.Hub
+main: net.hungermania.hub.ManiaHub
 description: HungerMania's Hub
 depend: [ManiaCore]
 commands:

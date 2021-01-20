@@ -2,9 +2,10 @@ package net.hungermania.maniacore.api.logging.entry;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.hungermania.manialib.data.model.IRecord;
 
 @Getter
-public abstract class Entry {
+public abstract class Entry implements IRecord {
     @Setter protected int id = -1;
     protected long date;
     protected String server;

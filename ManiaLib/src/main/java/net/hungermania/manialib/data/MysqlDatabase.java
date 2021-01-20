@@ -20,25 +20,24 @@ public class MysqlDatabase {
     private Logger logger;
 
     private DataSource dataSource;
-    private String database;
 
     private DatabaseManager databaseManager;
 
     private Set<IRecord> localCache = new HashSet<>();
 
     @Getter private Map<String, Table> tables = new HashMap<>();
+    @Getter private String databaseName;
 
     public MysqlDatabase(Properties properties, Logger logger, DatabaseManager databaseManager) {
         this.logger = logger;
         this.databaseManager = databaseManager;
         String host = properties.getProperty("mysql-host");
         int port = Integer.parseInt(properties.getProperty("mysql-port"));
-        String database = properties.getProperty("mysql-database");
+        databaseName = properties.getProperty("mysql-database");
         String username = properties.getProperty("mysql-username");
         String password = properties.getProperty("mysql-password");
-        String url = URL.replace("{hostname}", host).replace("{port}", port + "").replace("{database}", database);
+        String url = URL.replace("{hostname}", host).replace("{port}", port + "").replace("{database}", databaseName);
         this.dataSource = new DataSource(url, username, password);
-        this.database = database;
     }
 
     public <T extends IRecord> List<T> getRecords(Class<T> recordType, String columnName, Object value) {
@@ -124,7 +123,7 @@ public class MysqlDatabase {
 
         if (unique != null) {
             String where = Statements.WHERE.replace("{column}", unique.getName()).replace("{value}", serialized.get(unique.getName()) + "");
-            String selectSql = Statements.SELECT.replace("{database}", this.database).replace("{table}", table.getName()) + " " + where;
+            String selectSql = Statements.SELECT.replace("{database}", this.databaseName).replace("{table}", table.getName()) + " " + where;
 
             try (Connection con = dataSource.getConnection(); Statement statement = con.createStatement(); ResultSet resultSet = statement.executeQuery(selectSql)) {
                 if (resultSet.next()) {

@@ -44,12 +44,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.*;
 import java.util.Map.Entry;
 
-public final class Hub extends JavaPlugin implements Listener, ManiaPlugin {
+public final class ManiaHub extends JavaPlugin implements Listener, ManiaPlugin {
     
     @Getter
     private LeaderboardManager leaderboardManager;
     
-    public static Hub instance;
+    public static ManiaHub instance;
     
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
@@ -403,7 +403,7 @@ public final class Hub extends JavaPlugin implements Listener, ManiaPlugin {
         leaderboardManager.saveData(true);
     }
     
-    public static Hub getInstance() {
+    public static ManiaHub getInstance() {
         return instance;
     }
     

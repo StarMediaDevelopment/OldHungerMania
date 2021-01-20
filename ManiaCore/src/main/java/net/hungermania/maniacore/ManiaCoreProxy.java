@@ -44,10 +44,6 @@ public class ManiaCoreProxy extends Plugin implements ManiaPlugin {
         maniaCore.getMemoryManager().addManiaPlugin(this);
     }
 
-    public void setupDatabaseRecords() {
-        maniaCore.setServerManager(new BungeeCordServerManager(maniaCore));
-    }
-
     public void setupRedisListeners() {
         Redis.registerListener(new RankRedisListener());
         Redis.registerListener(new UserRedisListener());

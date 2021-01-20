@@ -6,7 +6,7 @@ import com.gmail.filoghost.holographicdisplays.api.line.HologramLine;
 import com.gmail.filoghost.holographicdisplays.api.line.TextLine;
 import lombok.Getter;
 import lombok.Setter;
-import net.hungermania.hub.Hub;
+import net.hungermania.hub.ManiaHub;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.events.EventInfo;
 import net.hungermania.maniacore.api.util.ManiaUtils;
@@ -28,7 +28,7 @@ public class Leaderboard {
     }
     
     public void spawn() {
-        this.hologram = HologramsAPI.createHologram(Hub.getInstance(), location);
+        this.hologram = HologramsAPI.createHologram(ManiaHub.getInstance(), location);
         update();
     }
     

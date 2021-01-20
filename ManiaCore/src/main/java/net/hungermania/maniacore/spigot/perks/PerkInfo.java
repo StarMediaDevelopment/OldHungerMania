@@ -1,11 +1,12 @@
 package net.hungermania.maniacore.spigot.perks;
 
 import lombok.*;
+import net.hungermania.manialib.data.model.IRecord;
 
 import java.util.*;
 
 @Getter
-public class PerkInfo {
+public class PerkInfo implements IRecord {
     @Setter private int id;
     private UUID uuid;
     private String name;

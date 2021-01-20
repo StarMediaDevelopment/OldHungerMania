@@ -2,11 +2,12 @@ package net.hungermania.maniacore.api.user.toggle;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.hungermania.manialib.data.model.IRecord;
 
 import java.util.UUID;
 
 @Getter @Setter
-public class Toggle {
+public class Toggle implements IRecord {
     
     private int id; //Database purposes
     private UUID uuid;

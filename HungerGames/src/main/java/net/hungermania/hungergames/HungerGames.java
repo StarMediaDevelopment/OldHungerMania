@@ -2,14 +2,17 @@ package net.hungermania.hungergames;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.hungermania.hungergames.game.Game;
 import net.hungermania.hungergames.game.GameManager;
 import net.hungermania.hungergames.game.HGCommand;
 import net.hungermania.hungergames.listeners.*;
 import net.hungermania.hungergames.lobby.Lobby;
+import net.hungermania.hungergames.loot.Loot;
 import net.hungermania.hungergames.loot.LootManager;
 import net.hungermania.hungergames.map.HGMap;
 import net.hungermania.hungergames.map.MapManager;
 import net.hungermania.hungergames.records.*;
+import net.hungermania.hungergames.settings.GameSettings;
 import net.hungermania.hungergames.settings.SettingsManager;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.server.ServerType;
@@ -21,6 +24,9 @@ import net.hungermania.maniacore.spigot.perks.Perks;
 import net.hungermania.maniacore.spigot.plugin.SpigotManiaTask;
 import net.hungermania.maniacore.spigot.user.PlayerBoard;
 import net.hungermania.maniacore.spigot.user.SpigotUser;
+import net.hungermania.manialib.ManiaLib;
+import net.hungermania.manialib.data.DatabaseManager;
+import net.hungermania.manialib.data.MysqlDatabase;
 import net.hungermania.manialib.util.Utils;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -110,7 +116,13 @@ public final class HungerGames extends JavaPlugin implements ManiaPlugin {
     
         getLogger().info("Loaded " + Perks.PERKS.size() + " Perks");
     }
-    
+
+    public void registerRecordTypes() {
+        DatabaseManager databaseManager = ManiaLib.getInstance().getDatabaseManager();
+        MysqlDatabase database = ManiaLib.getInstance().getMysqlDatabase();
+        databaseManager.registerRecordClasses(database, Game.class, GameSettings.class, Loot.class);
+    }
+
     @Override
     public void onDisable() {
         File parentFile = new File(getDataFolder() + File.separator + ".." + File.separator + "..");

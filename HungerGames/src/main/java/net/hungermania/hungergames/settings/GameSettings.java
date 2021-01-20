@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.hungermania.manialib.data.model.IRecord;
 
 /**
  * This controls default settings that all games will use. It is loaded from the database on each restart
@@ -14,7 +15,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Builder
-public class GameSettings implements Cloneable {
+public class GameSettings implements Cloneable, IRecord {
     private int id;
     private String name = "default";
     

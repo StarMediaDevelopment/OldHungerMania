@@ -5,6 +5,7 @@ import net.hungermania.manialib.data.annotations.TableInfo;
 import net.hungermania.manialib.data.exceptions.AlreadyRegisteredException;
 import net.hungermania.manialib.data.handlers.*;
 import net.hungermania.manialib.data.model.Column;
+import net.hungermania.manialib.data.model.DatabaseHandler;
 import net.hungermania.manialib.data.model.IRecord;
 import net.hungermania.manialib.data.model.Table;
 import net.hungermania.manialib.util.Utils;
@@ -16,28 +17,56 @@ import java.util.Map;
 import java.util.Set;
 
 public class DatabaseManager {
-    
+
     private Map<String, MysqlDatabase> databases = new HashMap<>();
     private Set<DataTypeHandler<?>> typeHandlers = new HashSet<>();
     private Set<Class<? extends IRecord>> recordRegistry = new HashSet<>();
     private Set<Table> tableRegistry = new HashSet<>();
+    private Set<DatabaseHandler> databaseHandlers = new HashSet<>();
     
-    
-    public DatabaseManager() {
+    private boolean registeredTypeHandlers = false, registeredDatabases = false, registeredRecordTypes = false;
+
+    public DatabaseManager() {}
+
+    public void registerTypeHandlers() {
         try {
-            System.out.println("Registering Type Handlers");
             registerTypeHandler(new BooleanHandler());
             registerTypeHandler(new DoubleHandler());
             registerTypeHandler(new IntegerHandler());
             registerTypeHandler(new LongHandler());
             registerTypeHandler(new StringHandler());
             registerTypeHandler(new UUIDHandler());
-            System.out.println("Registered " + typeHandlers.size() + " out of 6");
         } catch (AlreadyRegisteredException e) {
             e.printStackTrace();
         }
+
+        for (DatabaseHandler databaseHandler : this.databaseHandlers) {
+            databaseHandler.registerTypeHandlers();
+        }
+        
+        this.registeredTypeHandlers = true;
     }
     
+    public void registerDatabases() {
+        for (DatabaseHandler databaseHandler : this.databaseHandlers) {
+            databaseHandler.registerDatabases();
+        }
+        
+        this.registeredDatabases = true;
+    }
+    
+    public void registerRecordTypes() {
+        for (DatabaseHandler databaseHandler : this.databaseHandlers) {
+            databaseHandler.registerRecordTypes();
+        }
+
+        for (MysqlDatabase value : this.databases.values()) {
+            value.generateTables();
+        }
+        
+        this.registeredRecordTypes = true;
+    }
+
     public Class<? extends IRecord> getRecordClassByTable(Table table) {
         for (Class<? extends IRecord> recordClass : recordRegistry) {
             TableInfo tableInfo = recordClass.getAnnotation(TableInfo.class);
@@ -55,7 +84,7 @@ public class DatabaseManager {
         }
         return null;
     }
-    
+
     public Table getTableByRecordClass(Class<? extends IRecord> recordClass) {
         String tableName = null;
         TableInfo tableInfo = recordClass.getAnnotation(TableInfo.class);
@@ -64,7 +93,7 @@ public class DatabaseManager {
                 tableName = tableInfo.tableName();
             }
         }
-        
+
         if (tableName == null || tableName.equals("")) {
             tableName = recordClass.getSimpleName();
         }
@@ -74,10 +103,10 @@ public class DatabaseManager {
                 return table;
             }
         }
-        
+
         return null;
     }
-    
+
     public void registerTypeHandler(DataTypeHandler<?> handler) throws AlreadyRegisteredException {
         for (DataTypeHandler<?> typeHandler : this.typeHandlers) {
             if (typeHandler.getJavaClass().equals(handler.getJavaClass())) {
@@ -88,6 +117,14 @@ public class DatabaseManager {
         this.typeHandlers.add(handler);
     }
     
+    public void registerRecordClasses(MysqlDatabase database, Class<? extends IRecord>... recordClasses) {
+        if (recordClasses != null) {
+            for (Class<? extends IRecord> recordClass : recordClasses) {
+                registerRecord(recordClass, database);
+            }
+        }
+    }
+
     public void registerRecord(Class<? extends IRecord> recordClass, MysqlDatabase database) {
         Table table = getTableByRecordClass(recordClass);
         if (table == null) {
@@ -119,12 +156,12 @@ public class DatabaseManager {
                         continue;
                     }
                 }
-                
+
                 DataTypeHandler<?> handler;
                 String colName = field.getName();
                 int colLength = 0;
                 boolean colAutoIncrement = false, colUnique = false;
-                
+
                 if (columnInfo != null) {
                     colLength = columnInfo.length();
                     colAutoIncrement = columnInfo.autoIncrement();
@@ -162,7 +199,7 @@ public class DatabaseManager {
         this.recordRegistry.add(recordClass);
         this.tableRegistry.add(table);
     }
-    
+
     public DataTypeHandler<?> getHandler(Class<?> clazz) {
         System.out.println("Getting DataTypeHandler for class type " + clazz.getName());
         System.out.println("Total Type Handlers " + typeHandlers.size());
@@ -174,5 +211,25 @@ public class DatabaseManager {
             }
         }
         return null;
+    }
+
+    public void registerDatabase(MysqlDatabase mysqlDatabase) {
+        this.databases.put(mysqlDatabase.getDatabaseName(), mysqlDatabase);
+    }
+    
+    public void addDatabaseHandler(DatabaseHandler databaseHandler) {
+        this.databaseHandlers.add(databaseHandler);
+        
+        if (this.registeredDatabases) {
+            databaseHandler.registerDatabases();
+        }
+        
+        if (this.registeredTypeHandlers) {
+            databaseHandler.registerTypeHandlers();
+        }
+        
+        if (this.registeredRecordTypes) {
+            databaseHandler.registerRecordTypes();
+        }
     }
 }

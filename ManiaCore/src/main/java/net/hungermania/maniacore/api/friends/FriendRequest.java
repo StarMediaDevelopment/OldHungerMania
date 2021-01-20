@@ -1,6 +1,7 @@
 package net.hungermania.maniacore.api.friends;
 
 import lombok.*;
+import net.hungermania.manialib.data.model.IRecord;
 
 import java.util.Map;
 import java.util.UUID;
@@ -8,7 +9,7 @@ import java.util.UUID;
 @Getter
 @Builder
 @AllArgsConstructor
-public class FriendRequest {
+public class FriendRequest implements IRecord {
     
     @Setter private int id;
     private UUID sender;

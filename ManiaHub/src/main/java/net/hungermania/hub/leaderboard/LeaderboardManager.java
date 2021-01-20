@@ -3,7 +3,7 @@ package net.hungermania.hub.leaderboard;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import lombok.Getter;
-import net.hungermania.hub.Hub;
+import net.hungermania.hub.ManiaHub;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.manialib.util.Range;
 import org.bukkit.Location;
@@ -18,13 +18,13 @@ import java.util.Map.Entry;
 
 public class LeaderboardManager {
     
-    private final Hub plugin;
+    private final ManiaHub plugin;
     @Getter private Map<Integer, NPC> npcs = new HashMap<>();
     @Getter private Set<Range<Leaderboard>> leaderboards = new HashSet<>();
     private File file;
     private FileConfiguration config;
     
-    public LeaderboardManager(Hub plugin) {
+    public LeaderboardManager(ManiaHub plugin) {
         this.plugin = plugin;
         file = new File(plugin.getDataFolder(), "leaderboards.yml");
         if (!file.exists()) {

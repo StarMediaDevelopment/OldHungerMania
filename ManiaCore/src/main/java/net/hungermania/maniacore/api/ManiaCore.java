@@ -2,25 +2,40 @@ package net.hungermania.maniacore.api;
 
 import net.hungermania.maniacore.api.communication.MessageHandler;
 import net.hungermania.maniacore.api.events.EventManager;
+import net.hungermania.maniacore.api.friends.FriendNotification;
+import net.hungermania.maniacore.api.friends.FriendRequest;
 import net.hungermania.maniacore.api.friends.FriendsManager;
+import net.hungermania.maniacore.api.friends.Friendship;
+import net.hungermania.maniacore.api.leveling.Level;
 import net.hungermania.maniacore.api.leveling.LevelManager;
+import net.hungermania.maniacore.api.logging.entry.ChatEntry;
+import net.hungermania.maniacore.api.logging.entry.CmdEntry;
 import net.hungermania.maniacore.api.records.*;
 import net.hungermania.maniacore.api.redis.Redis;
 import net.hungermania.maniacore.api.server.ServerManager;
+import net.hungermania.maniacore.api.skin.Skin;
 import net.hungermania.maniacore.api.skin.SkinManager;
+import net.hungermania.maniacore.api.stats.Statistic;
+import net.hungermania.maniacore.api.user.IgnoreInfo;
+import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.user.UserManager;
+import net.hungermania.maniacore.api.user.toggle.Toggle;
 import net.hungermania.maniacore.memory.MemoryManager;
 import net.hungermania.maniacore.plugin.ManiaPlugin;
 import net.hungermania.manialib.ManiaLib;
 import net.hungermania.manialib.data.DatabaseManager;
+import net.hungermania.manialib.data.model.DatabaseHandler;
 import net.hungermania.manialib.sql.Database;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Properties;
 import java.util.Random;
 import java.util.logging.Logger;
 
-public class ManiaCore {
+public class ManiaCore implements DatabaseHandler {
     
     public static final Random RANDOM = new Random();
     
@@ -78,6 +93,7 @@ public class ManiaCore {
         this.maniaLib = new ManiaLib(databaseProperties, logger);
         this.database = maniaLib.getDatabase();
         this.databaseManager = maniaLib.getDatabaseManager();
+        maniaLib.addDatabaseHandler(this);
         this.database.registerRecordType(UserRecord.class);
         this.database.registerRecordType(ChatEntryRecord.class);
         this.database.registerRecordType(CmdEntryRecord.class);
@@ -114,6 +130,12 @@ public class ManiaCore {
         this.eventManager.loadData();
         
         this.friendsManager = new FriendsManager();
+        plugin.runTaskLater(() -> maniaLib.init(), 1L);
+    }
+
+    public void registerRecordTypes() {
+        this.databaseManager.registerRecordClasses(maniaLib.getMysqlDatabase(), User.class, ChatEntry.class, CmdEntry.class, Skin.class, Level.class, IgnoreInfo.class, Statistic.class, 
+                FriendRequest.class, Friendship.class, FriendNotification.class, Toggle.class);
     }
 
     public void setLogger(Logger logger) {

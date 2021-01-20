@@ -31,6 +31,7 @@ import net.hungermania.maniacore.spigot.mutations.MutationType;
 import net.hungermania.maniacore.spigot.perks.Perks;
 import net.hungermania.maniacore.spigot.user.SpigotUser;
 import net.hungermania.maniacore.spigot.util.SpigotUtils;
+import net.hungermania.manialib.data.model.IRecord;
 import net.hungermania.manialib.util.Pair;
 import net.hungermania.manialib.util.Utils;
 import org.bukkit.*;
@@ -48,7 +49,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings({"DuplicatedCode", "unused"})
-public class Game {
+public class Game implements IRecord {
     @Getter private long deathmatchPlayingStart;
     @Getter @Setter private int id = -1, serverId;
     @Getter private HGMap map;

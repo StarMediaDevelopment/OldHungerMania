@@ -14,6 +14,7 @@ import net.hungermania.maniacore.plugin.ManiaTask;
 import net.hungermania.maniacore.spigot.anticheat.SpartanManager;
 import net.hungermania.maniacore.spigot.cmd.*;
 import net.hungermania.maniacore.spigot.communication.SpigotMessageHandler;
+import net.hungermania.maniacore.spigot.perks.PerkInfo;
 import net.hungermania.maniacore.spigot.perks.PerkInfoRecord;
 import net.hungermania.maniacore.spigot.perks.Perks;
 import net.hungermania.maniacore.spigot.plugin.SpigotManiaTask;
@@ -21,6 +22,7 @@ import net.hungermania.maniacore.spigot.server.SpigotServerManager;
 import net.hungermania.maniacore.spigot.updater.Updater;
 import net.hungermania.maniacore.spigot.user.FriendsRedisListener;
 import net.hungermania.maniacore.spigot.user.SpigotUserManager;
+import net.hungermania.manialib.ManiaLib;
 import net.hungermania.manialib.sql.Database;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -141,6 +143,10 @@ public final class ManiaCorePlugin extends JavaPlugin implements Listener, Mania
     
     public ManiaCore getManiaCore() {
         return maniaCore;
+    }
+
+    public void registerRecordTypes() {
+        ManiaLib.getInstance().getDatabaseManager().registerRecord(PerkInfo.class, ManiaLib.getInstance().getMysqlDatabase());
     }
 
     public void setupDatabaseRecords() {
