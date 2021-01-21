@@ -14,6 +14,8 @@ import net.hungermania.maniacore.plugin.ManiaTask;
 import net.hungermania.maniacore.spigot.anticheat.SpartanManager;
 import net.hungermania.maniacore.spigot.cmd.*;
 import net.hungermania.maniacore.spigot.communication.SpigotMessageHandler;
+import net.hungermania.maniacore.spigot.map.GameMap;
+import net.hungermania.maniacore.spigot.map.Spawn;
 import net.hungermania.maniacore.spigot.perks.PerkInfo;
 import net.hungermania.maniacore.spigot.perks.PerkInfoRecord;
 import net.hungermania.maniacore.spigot.perks.Perks;
@@ -146,7 +148,7 @@ public final class ManiaCorePlugin extends JavaPlugin implements Listener, Mania
     }
 
     public void registerRecordTypes() {
-        ManiaLib.getInstance().getDatabaseManager().registerRecord(PerkInfo.class, ManiaLib.getInstance().getMysqlDatabase());
+        ManiaLib.getInstance().getDatabaseManager().registerRecordClasses(ManiaLib.getInstance().getMysqlDatabase(), PerkInfo.class, GameMap.class, Spawn.class);
     }
 
     public void setupDatabaseRecords() {

@@ -1,5 +1,6 @@
 package net.hungermania.manialib.data;
 
+import lombok.Getter;
 import net.hungermania.manialib.data.annotations.ColumnInfo;
 import net.hungermania.manialib.data.annotations.TableInfo;
 import net.hungermania.manialib.data.exceptions.AlreadyRegisteredException;
@@ -18,15 +19,18 @@ import java.util.Set;
 
 public class DatabaseManager {
 
+    @Getter private final static DatabaseManager instance = new DatabaseManager();
+
     private Map<String, MysqlDatabase> databases = new HashMap<>();
     private Set<DataTypeHandler<?>> typeHandlers = new HashSet<>();
     private Set<Class<? extends IRecord>> recordRegistry = new HashSet<>();
     private Set<Table> tableRegistry = new HashSet<>();
     private Set<DatabaseHandler> databaseHandlers = new HashSet<>();
-    
+
     private boolean registeredTypeHandlers = false, registeredDatabases = false, registeredRecordTypes = false;
 
-    public DatabaseManager() {}
+    private DatabaseManager() {
+    }
 
     public void registerTypeHandlers() {
         try {
@@ -36,6 +40,7 @@ public class DatabaseManager {
             registerTypeHandler(new LongHandler());
             registerTypeHandler(new StringHandler());
             registerTypeHandler(new UUIDHandler());
+            registerTypeHandler(new ArrayHandler());
         } catch (AlreadyRegisteredException e) {
             e.printStackTrace();
         }

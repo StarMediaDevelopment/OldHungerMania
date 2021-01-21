@@ -11,10 +11,14 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.*;
+import java.util.Set;
+import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -25,9 +29,9 @@ public class GameMap implements IRecord {
     @Setter protected int id; //Database id, isn't really used outside of database things
     @Setter protected String name; //The display name of the map
     @Setter protected Position center; //The center of the map
-    protected List<String> creators = new ArrayList<>(); //Map creators
+    protected String[] creators; //Map creators
     @Setter protected String downloadUrl; //The url in which to download the map zip file
-    protected Map<Integer, Position> spawns = new HashMap<>(); //Spawn locations of the map
+    protected Set<Spawn> spawns; //Spawn locations of the map
     //Temp Stuff
     @Setter protected UUID uuid; //This is used for the world
     @Setter protected World world; //The Bukkit World for this map and can be used to easily reference the world
@@ -38,7 +42,7 @@ public class GameMap implements IRecord {
         this.name = name;
     }
 
-    public GameMap(int id, String name, Position center, List<String> creators, String downloadUrl, Map<Integer, Position> spawns) {
+    public GameMap(int id, String name, Position center, String[] creators, String downloadUrl, Set<Spawn> spawns) {
         this.id = id;
         this.name = name;
         this.center = center;
@@ -64,7 +68,6 @@ public class GameMap implements IRecord {
                         }
                     }
 
-
                     File zipFile = new File(mapManager.getDownloadFolder(), fileUUID.toString() + ".zip");
                     tmpFile.renameTo(zipFile);
                     String worldName = fileUUID.toString();
@@ -79,7 +82,8 @@ public class GameMap implements IRecord {
                         while ((entry = zip.getNextEntry()) != null) {
                             String name = entry.getName();
                             File dest = new File(worldContainer, name);
-                            if (entry.isDirectory()) continue;
+                            if (entry.isDirectory())
+                                continue;
                             dest.getParentFile().mkdirs();
                             try (FileOutputStream out = new FileOutputStream(dest)) {
                                 int length;

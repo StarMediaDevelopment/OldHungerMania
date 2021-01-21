@@ -10,7 +10,6 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 public class Row {
     protected Map<String, Object> dataMap = new HashMap<>();
@@ -20,8 +19,7 @@ public class Row {
         this.table = table;
         for (Column column : table.getColumns()) {
             try {
-                Object object = column.typeHandler.deserialize(resultSet.getObject(column.getName()));
-                this.dataMap.put(column.getName(), object);
+                this.dataMap.put(column.getName(), resultSet.getObject(column.getName())); //No longer deserializing here, just storing value from Database
             } catch (Exception throwables) {
                 System.out.println("Error on getting column value " + column.getName() + " of table " + table.getName());
                 throwables.printStackTrace();
@@ -33,12 +31,9 @@ public class Row {
         return dataMap;
     }
     
-    public int getInt(String key) {
-        return (int) dataMap.get(key);
-    }
-    
     public <T extends IRecord> T getRecord(Class<T> recordClass, DatabaseManager databaseManager) {
         try {
+            Table table = databaseManager.getTableByRecordClass(recordClass);
             Constructor<?> constructor = recordClass.getDeclaredConstructor();
             if (constructor == null) {
                 return null;
@@ -50,9 +45,13 @@ public class Row {
                 field.setAccessible(true);
                 ColumnInfo columnInfo = field.getAnnotation(ColumnInfo.class);
                 if (columnInfo != null) {
-                    if (columnInfo.ignored()) continue;
+                    if (columnInfo.ignored())
+                        continue;
                 }
-                field.set(record, this.dataMap.get(field.getName()));
+                String columnName = field.getName();
+                Column column = table.getColumn(columnName);
+                Object object = column.getTypeHandler().deserialize(this.dataMap.get(field.getName()), field.getType());
+                field.set(record, object);
             }
             return record;
         } catch (Exception e) {
@@ -60,29 +59,5 @@ public class Row {
             e.printStackTrace();
         }
         return null;
-    }
-    
-    public String getString(String key) {
-        return (String) this.dataMap.get(key);
-    }
-    
-    public long getLong(String key) {
-        return (long) this.dataMap.get(key);
-    }
-    
-    public boolean getBoolean(String key) {
-        return (boolean) this.dataMap.get(key);
-    }
-    
-    public double getDouble(String key) {
-       return (double) this.dataMap.get(key);
-    }
-    
-    public float getFloat(String key) {
-        return (float) this.dataMap.get(key);
-    }
-    
-    public UUID getUUID(String key) {
-        return (UUID) this.dataMap.get(key);
     }
 }

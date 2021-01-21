@@ -15,7 +15,7 @@ public class ManiaLib {
     private static ManiaLib instance;
     private Logger logger;
     
-    private DatabaseManager databaseManager = new DatabaseManager();
+    private DatabaseManager databaseManager = DatabaseManager.getInstance();
     
     public ManiaLib(Properties databaseProperties, Logger logger) {
         this.database = new Database(databaseProperties, logger);

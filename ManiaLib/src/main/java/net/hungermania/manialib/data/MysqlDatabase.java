@@ -82,7 +82,7 @@ public class MysqlDatabase {
     }
     
     public <T extends IRecord> T getRecord(Class<T> recordType, String columnName, Object value) {
-        System.out.println("Getting a single record of the class " + recordType.getName() + " with column name " + columnName + " and the value " + value);
+        System.out.printf("Getting a single record of the class %s with column name %s and the value %s", recordType.getName(), columnName, value);
         return getRecords(recordType, columnName, value).get(0);
     }
 
@@ -102,7 +102,12 @@ public class MysqlDatabase {
                 }
             }
 
+
             DataTypeHandler<?> handler = table.getColumn(field.getName()).getTypeHandler();
+            if (handler == null) {
+                System.out.printf("There is no DataTypeHandler for field %s in class %s%n", field.getName(), record.getClass().getName());
+                continue;
+            }
             try {
                 serialized.put(field.getName(), handler.serializeSql(field.get(record)));
             } catch (IllegalAccessException e) {
