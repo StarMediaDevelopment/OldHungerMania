@@ -206,12 +206,8 @@ public class DatabaseManager {
     }
 
     public DataTypeHandler<?> getHandler(Class<?> clazz) {
-        System.out.println("Getting DataTypeHandler for class type " + clazz.getName());
-        System.out.println("Total Type Handlers " + typeHandlers.size());
         for (DataTypeHandler<?> typeHandler : this.typeHandlers) {
-            System.out.println("Checking Type Handler " + typeHandler.getClass().getName());
             if (typeHandler.matchesType(clazz)) {
-                System.out.println("Handler Matches!");
                 return typeHandler;
             }
         }

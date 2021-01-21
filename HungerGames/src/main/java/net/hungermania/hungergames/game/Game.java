@@ -23,7 +23,9 @@ import net.hungermania.maniacore.api.redis.Redis;
 import net.hungermania.maniacore.api.stats.Statistic;
 import net.hungermania.maniacore.api.stats.Stats;
 import net.hungermania.maniacore.api.user.User;
-import net.hungermania.maniacore.api.util.*;
+import net.hungermania.maniacore.api.util.ManiaUtils;
+import net.hungermania.maniacore.api.util.Position;
+import net.hungermania.maniacore.api.util.State;
 import net.hungermania.maniacore.memory.MemoryHook;
 import net.hungermania.maniacore.memory.MemoryHook.Task;
 import net.hungermania.maniacore.spigot.mutations.Mutation;
@@ -37,7 +39,9 @@ import net.hungermania.manialib.util.Utils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Monster;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -477,6 +481,7 @@ public class Game implements IRecord {
                 for (Player player1 : Bukkit.getOnlinePlayers()) {
                     player.showPlayer(player1);
                 }
+                player.setAllowFlight(true);
             }
             
             String winnerName;
@@ -541,13 +546,14 @@ public class Game implements IRecord {
                     p.sendPluginMessage(HungerGames.getInstance(), "BungeeCord", out.toByteArray());
                 }
             }
-            
+
             if (!players.isEmpty()) {
                 for (Player player : players) {
                     player.kickPlayer(ManiaUtils.color("&cAll of the hubs are full."));
                 }
             }
-    
+
+            TimoCloudAPI.getBukkitAPI().getThisServer().setState("RESTARTING");
             Bukkit.getServer().shutdown();
         } else {
             HungerGames.getInstance().getLobby().fromGame(this);
