@@ -673,16 +673,21 @@ public class PlayerListeners extends GameListener {
                                 lobby.getPlayers().add(user);
                             }
                             user.getBukkitPlayer().teleport(plugin.getSpawn());
-                            
+
                             if (lobby.getPlayers().size() >= lobby.getGameSettings().getMinPlayers()) {
                                 lobby.startTimer();
                                 if (lobby.getVoteTimer() == null) {
                                     lobby.sendMessage("&6&l>> &aMinimum player requirement met. Game starting shortly...");
                                 }
                             }
-                            
+
                             user.getBukkitPlayer().setPlayerListName(ManiaUtils.color(user.getDisplayName()));
-                            
+                            new BukkitRunnable() {
+                                public void run() {
+                                    user.sendMessage("&6&l>> &e&lDid you know that you can use &f&l/votestart &e&lto start a game early?");
+                                }
+                            }.runTaskLater(HungerGames.getInstance(), 40L);
+
                             messager = lobby.getMessager();
                             gameSettings = lobby.getGameSettings();
                             totalPlayers = lobby.getPlayers().size();

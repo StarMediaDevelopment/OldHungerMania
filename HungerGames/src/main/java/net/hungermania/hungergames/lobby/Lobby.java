@@ -94,45 +94,9 @@ public class Lobby implements Listener, CommandExecutor {
             }
         }.runTaskTimer(HungerGames.getInstance(), 20L, 20L);
         
-        MemoryHook mapAnnounce = new MemoryHook("Map Announcement");
-        ManiaCore.getInstance().getMemoryManager().addMemoryHook(mapAnnounce);
         new BukkitRunnable() {
             public void run() {
-                Task task = mapAnnounce.task().start();
-                if (mapOptions.size() < gameSettings.getMaxMapOptions()) {
-                    for (HGMap hgMap : plugin.getMapManager().getMaps().values()) {
-                        if (!mapOptions.containsMap(hgMap)) {
-                            mapOptions.addMap(hgMap);
-                        }
-                    }
-                }
-                
-                
-                sendMessage("&6&l>> &e&lVOTING OPTIONS - &7Type /map <position> to vote!");
-                for (Entry<Integer, HGMap> entry : mapOptions.getMaps().entrySet()) {
-                    int votes = mapOptions.getVotes(entry.getValue());
-                    
-                    String[] creators = entry.getValue().getCreators().toArray(new String[0]);
-                    StringBuilder creatorNames = new StringBuilder();
-                    
-                    for (int i = 0; i < creators.length; i++) {
-                        if (i == 0) {
-                            creatorNames.append("&3").append(creators[i]);
-                        } else if (i == (creators.length - 1)) {
-                            creatorNames.append(", &7&oand &3").append(creators[i]);
-                        } else {
-                            creatorNames.append("&7&o, &3").append(creators[i]);
-                        }
-                    }
-                    
-                    sendMessage("&6&l> &c&l" + entry.getKey() + "&4: &b" + entry.getValue().getName() + " &7&oby " + creatorNames.toString() + " &7&o(" + votes + " Votes)");
-                }
-                if (players.size() < gameSettings.getMinPlayers()) {
-                    if (voteTimer == null) {
-                        sendMessage("&6&l>> &e&lThe game needs &b&l" + (Math.abs(players.size() - gameSettings.getMinPlayers())) + " more players&e&l to start.");
-                    }
-                }
-                task.end();
+                sendMessage("&6&l>> &e&lDid you know that you can use &f&l/votestart &e&lto start a game early?");
             }
         }.runTaskTimer(plugin, 20L, 600L);
         
