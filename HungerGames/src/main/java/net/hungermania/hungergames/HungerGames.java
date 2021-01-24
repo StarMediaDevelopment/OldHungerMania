@@ -5,13 +5,18 @@ import lombok.Setter;
 import net.hungermania.hungergames.game.Game;
 import net.hungermania.hungergames.game.GameManager;
 import net.hungermania.hungergames.game.HGCommand;
-import net.hungermania.hungergames.listeners.*;
+import net.hungermania.hungergames.game.timer.Timer;
+import net.hungermania.hungergames.listeners.BlockListeners;
+import net.hungermania.hungergames.listeners.EntityListeners;
+import net.hungermania.hungergames.listeners.PlayerListeners;
 import net.hungermania.hungergames.lobby.Lobby;
 import net.hungermania.hungergames.loot.Loot;
 import net.hungermania.hungergames.loot.LootManager;
 import net.hungermania.hungergames.map.HGMap;
 import net.hungermania.hungergames.map.MapManager;
-import net.hungermania.hungergames.records.*;
+import net.hungermania.hungergames.records.GameRecord;
+import net.hungermania.hungergames.records.GameSettingsRecord;
+import net.hungermania.hungergames.records.LootRecord;
 import net.hungermania.hungergames.settings.GameSettings;
 import net.hungermania.hungergames.settings.SettingsManager;
 import net.hungermania.maniacore.api.ManiaCore;
@@ -28,7 +33,9 @@ import net.hungermania.manialib.ManiaLib;
 import net.hungermania.manialib.data.DatabaseManager;
 import net.hungermania.manialib.data.MysqlDatabase;
 import net.hungermania.manialib.util.Utils;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Difficulty;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -113,8 +120,10 @@ public final class HungerGames extends JavaPlugin implements ManiaPlugin {
                 }
             }
         }.runTaskTimer(this, 20L, 10L);
-    
+
         getLogger().info("Loaded " + Perks.PERKS.size() + " Perks");
+
+        Timer.startTimerUpdater(this);
     }
 
     public void registerRecordTypes() {
