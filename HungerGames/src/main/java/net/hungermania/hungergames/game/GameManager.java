@@ -6,16 +6,16 @@ import net.hungermania.hungergames.HungerGames;
 import net.hungermania.hungergames.records.GameRecord;
 import net.hungermania.manialib.sql.IRecord;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class GameManager {
     
     private Map<Integer, Game> games = new HashMap<>();
     private Game currentGame;
     private HungerGames plugin;
-    @Getter
-    @Setter
-    private int gameCounter = 0;
+    @Getter @Setter private int gameCounter = 0;
     
     public GameManager(HungerGames plugin) {
         this.plugin = plugin;
