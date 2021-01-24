@@ -205,9 +205,13 @@ public class Lobby implements Listener, CommandExecutor {
         } else {
             time = gameSettings.getStartTimer() + "";
         }
-        TimoCloudAPI.getBukkitAPI().getThisServer().setExtra("map:Undecided;time:" + time + "s");
-        TimoCloudAPI.getBukkitAPI().getThisServer().setState("LOBBY");
-        Redis.sendCommand("gameReady " + ManiaCore.getInstance().getServerManager().getCurrentServer().getName());
+        new BukkitRunnable() {
+            public void run() {
+                TimoCloudAPI.getBukkitAPI().getThisServer().setExtra("map:Undecided;time:" + time + "s");
+                TimoCloudAPI.getBukkitAPI().getThisServer().setState("LOBBY");
+                Redis.sendCommand("gameReady " + ManiaCore.getInstance().getServerManager().getCurrentServer().getName());
+            }
+        }.runTaskLaterAsynchronously(HungerGames.getInstance(), 10L);
     }
     
     public void startTimer() {

@@ -57,8 +57,13 @@ public class GameTask extends BukkitRunnable {
 
         long calculatedEnd = start + TimeUnit.MINUTES.toMillis(game.getGameSettings().getGameLength());
         long remainingMilliseconds = calculatedEnd - current;
-        TimoCloudAPI.getBukkitAPI().getThisServer().setState("INGAME");
-        TimoCloudAPI.getBukkitAPI().getThisServer().setExtra("map:" + game.getMap().getName() + ";time:" + Utils.formatTime(remainingMilliseconds));
+
+        new BukkitRunnable() {
+            public void run() {
+                TimoCloudAPI.getBukkitAPI().getThisServer().setState("INGAME");
+                TimoCloudAPI.getBukkitAPI().getThisServer().setExtra("map:" + game.getMap().getName() + ";time:" + Utils.formatTime(remainingMilliseconds));
+            }
+        }.runTaskAsynchronously(HungerGames.getInstance());
 
         game.checkWin();
 
