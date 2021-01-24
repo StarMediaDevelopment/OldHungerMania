@@ -27,13 +27,14 @@ import java.util.concurrent.TimeUnit;
 public class GameTask extends BukkitRunnable {
 
     private Game game;
-    private Set<Integer> announcedCountdownSeconds = new HashSet<>(), announcedMinutes = new HashSet<>(), announcedDeathmatchStartSeconds = new HashSet<>(), announcedDeathmatchSeconds = new HashSet<>(), announcedDeathmatchMinutes = new HashSet<>(), announcedGameSeconds = new HashSet<>(), restocked = new HashSet<>(), announcedPlayers = new HashSet<>(), survivalTime = new HashSet<>();
+    private Set<Integer> announcedCountdownSeconds = new HashSet<>(), announcedMinutes = new HashSet<>(), announcedDeathmatchStartSeconds = new HashSet<>(), announcedDeathmatchSeconds = new HashSet<>(), announcedDeathmatchMinutes = new HashSet<>(), announcedGameSeconds = new HashSet<>(), restocked = new HashSet<>(), announcedPlayers = new HashSet<>(), survivalTime = new HashSet<>(), announcedGracePeriod = new HashSet<>();
     private Set<Integer> gameBeginSoundPlayed = new HashSet<>();
 
     private static final Set<Integer> COUNTDOWN_ANNOUNCE = new HashSet<>(Arrays.asList(30, 20, 10, 3, 2, 1, 0));
     private static final Set<Integer> GAME_COUNTDOWN_ANNOUNCE = new HashSet<>(Arrays.asList(60, 45, 30, 15, 10, 5, 4, 3, 2, 1, 0));
     private static final Set<Integer> DEATHMATCH_COUNTDOWN_ANNOUNCE = new HashSet<>(Arrays.asList(10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0));
-    public static final Set<Integer> GAME_END_ANNOUNCE = new HashSet<>(Arrays.asList(60, 45, 30, 15, 10, 5, 4, 3, 2, 1, 0));
+    private static final Set<Integer> GAME_END_ANNOUNCE = new HashSet<>(Arrays.asList(60, 45, 30, 15, 10, 5, 4, 3, 2, 1, 0));
+    private static final Set<Integer> GRACE_PERIOD_ANNOUNCE = new HashSet<>(Arrays.asList(60, 45, 30, 10, 5, 3, 2, 1, 0));
 
     private boolean announcedGraceExpire = false, announcedMapInformation;
 
@@ -193,10 +194,19 @@ public class GameTask extends BukkitRunnable {
                         SpigotUtils.sendActionBar(player, "&fThe grace period ends in &e" + remainingSeconds + "s");
                     }
                 });
-                
-                if (game.getGracePeriodEnd() <= System.currentTimeMillis()) {
-                    game.sendMessage("&6&l>> &c&lTHE GRACE PERIOD HAS ENDED!");
-                    this.announcedGraceExpire = true;
+
+                if (!this.announcedGracePeriod.contains(remainingSeconds)) {
+                    if (GRACE_PERIOD_ANNOUNCE.contains(remainingSeconds)) {
+                        game.playSound(Sound.CLICK);
+                        if (remainingSeconds == 1) {
+                            game.sendMessage("&6&l>> &eThe grace period ends &ein &b" + remainingSeconds + " &esecond!");
+                        } else if (remainingSeconds != 0) {
+                            game.sendMessage("&6&l>> &eThe grace period ends &ein &b" + remainingSeconds + " &eseconds!");
+                        } else {
+                            game.sendMessage("&6&l>> &c&lTHE GRACE PERIOD HAS ENDED!");
+                            this.announcedGraceExpire = true;
+                        }
+                    }
                 }
             } else {
                 long calculatedDMStart = game.getGameStart() + TimeUnit.MINUTES.toMillis(game.getGameSettings().getGameLength());
