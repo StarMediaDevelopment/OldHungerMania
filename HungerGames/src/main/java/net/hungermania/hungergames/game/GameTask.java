@@ -206,6 +206,7 @@ public class GameTask extends BukkitRunnable {
                             game.sendMessage("&6&l>> &c&lTHE GRACE PERIOD HAS ENDED!");
                             this.announcedGraceExpire = true;
                         }
+                        this.announcedGracePeriod.add(remainingSeconds);
                     }
                 }
             } else {
