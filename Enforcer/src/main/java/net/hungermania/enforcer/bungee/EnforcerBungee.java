@@ -1,4 +1,4 @@
-package net.hungermania.enforcer;
+package net.hungermania.enforcer.bungee;
 
 import net.md_5.bungee.api.plugin.Plugin;
 

@@ -1,4 +1,4 @@
-package net.hungermania.enforcer;
+package net.hungermania.enforcer.spigot;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
