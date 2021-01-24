@@ -15,6 +15,8 @@ public class SpartanManager implements Listener {
         String server = ManiaCore.getInstance().getServerManager().getCurrentServer().getName();
         int ping = ((CraftPlayer) e.getPlayer()).getHandle().ping;
         double tps = ((CraftServer) Bukkit.getServer()).getServer().recentTps[0];
-        ManiaCore.getInstance().getMessageHandler().sendSpartanMessage(server, e.getPlayer().getName(), e.getHackType().name(), e.getViolation(), e.isFalsePositive(), tps, ping);
+        if (e.getViolation() >= 5) {
+            ManiaCore.getInstance().getMessageHandler().sendSpartanMessage(server, e.getPlayer().getName(), e.getHackType().name(), e.getViolation(), e.isFalsePositive(), tps, ping);
+        }
     }
 }
