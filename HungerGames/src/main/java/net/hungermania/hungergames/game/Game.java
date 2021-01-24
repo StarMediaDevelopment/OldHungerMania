@@ -79,6 +79,7 @@ public class Game implements IRecord {
     @Getter private Messager messager;
     private Map<UUID, GamePlayer> cachedPlayers = new HashMap<>();
     private Map<State, Long> timeModifications = new HashMap<>(); //Modifications to time
+    @Getter @Setter private int currentMapVotes = 0;
     
     @Getter private GameTeam tributesTeam, spectatorsTeam, hiddenStaffTeam, mutationsTeam;
     

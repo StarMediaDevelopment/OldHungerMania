@@ -3,7 +3,9 @@ package net.hungermania.hungergames.lobby;
 import cloud.timo.TimoCloud.api.TimoCloudAPI;
 import me.libraryaddict.disguise.DisguiseAPI;
 import net.hungermania.hungergames.HungerGames;
-import net.hungermania.hungergames.game.*;
+import net.hungermania.hungergames.game.Game;
+import net.hungermania.hungergames.game.GamePlayer;
+import net.hungermania.hungergames.game.VoteTimer;
 import net.hungermania.hungergames.map.HGMap;
 import net.hungermania.hungergames.map.MapManager;
 import net.hungermania.hungergames.profile.LobbyBoard;
@@ -23,7 +25,9 @@ import net.hungermania.maniacore.spigot.util.SpigotUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
-import org.bukkit.command.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -307,7 +311,7 @@ public class Lobby implements Listener, CommandExecutor {
                 handleError("Game does not have a valid id.");
                 return;
             }
-            
+            this.game.setCurrentMapVotes(mostVotedMap.getValue());
             this.playedMaps.add(mostVotedMap.getKey());
             plugin.getGameManager().setCurrentGame(game);
             this.game.setup(this);

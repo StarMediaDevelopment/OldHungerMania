@@ -3,6 +3,7 @@ package net.hungermania.hungergames.game;
 import cloud.timo.TimoCloud.api.TimoCloudAPI;
 import net.hungermania.hungergames.HungerGames;
 import net.hungermania.hungergames.profile.GameBoard;
+import net.hungermania.hungergames.records.GameRecord;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.maniacore.api.user.User;
@@ -10,6 +11,7 @@ import net.hungermania.maniacore.api.util.State;
 import net.hungermania.maniacore.memory.MemoryHook.Task;
 import net.hungermania.maniacore.spigot.user.SpigotUser;
 import net.hungermania.maniacore.spigot.util.SpigotUtils;
+import net.hungermania.manialib.sql.IRecord;
 import net.hungermania.manialib.util.Pair;
 import net.hungermania.manialib.util.Utils;
 import org.bukkit.Bukkit;
@@ -23,22 +25,22 @@ import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("DuplicatedCode")
 public class GameTask extends BukkitRunnable {
-    
+
     private Game game;
     private Set<Integer> announcedCountdownSeconds = new HashSet<>(), announcedMinutes = new HashSet<>(), announcedDeathmatchStartSeconds = new HashSet<>(), announcedDeathmatchSeconds = new HashSet<>(), announcedDeathmatchMinutes = new HashSet<>(), announcedGameSeconds = new HashSet<>(), restocked = new HashSet<>(), announcedPlayers = new HashSet<>(), survivalTime = new HashSet<>();
     private Set<Integer> gameBeginSoundPlayed = new HashSet<>();
-    
+
     private static final Set<Integer> COUNTDOWN_ANNOUNCE = new HashSet<>(Arrays.asList(30, 20, 10, 3, 2, 1, 0));
     private static final Set<Integer> GAME_COUNTDOWN_ANNOUNCE = new HashSet<>(Arrays.asList(60, 45, 30, 15, 10, 5, 4, 3, 2, 1, 0));
     private static final Set<Integer> DEATHMATCH_COUNTDOWN_ANNOUNCE = new HashSet<>(Arrays.asList(10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0));
     public static final Set<Integer> GAME_END_ANNOUNCE = new HashSet<>(Arrays.asList(60, 45, 30, 15, 10, 5, 4, 3, 2, 1, 0));
-    
-    private boolean announcedGraceExpire = false;
-    
+
+    private boolean announcedGraceExpire = false, announcedMapInformation;
+
     public GameTask(Game game) {
         this.game = game;
     }
-    
+
     public void run() {
         if (game == null) {
             cancel();
@@ -48,21 +50,17 @@ public class GameTask extends BukkitRunnable {
         long start = game.getGameStart();
         long current = System.currentTimeMillis();
         long elapsedTime = current - start;
-        
+
         int elapsedMinutes = (int) TimeUnit.MILLISECONDS.toMinutes(elapsedTime);
         int remainingGameMinutes = game.getGameSettings().getGameLength() - elapsedMinutes;
-        
+
         long calculatedEnd = start + TimeUnit.MINUTES.toMillis(game.getGameSettings().getGameLength());
         long remainingMilliseconds = calculatedEnd - current;
-        new BukkitRunnable() {
-            public void run() {
-                TimoCloudAPI.getBukkitAPI().getThisServer().setState("INGAME");
-                TimoCloudAPI.getBukkitAPI().getThisServer().setExtra("map:" + game.getMap().getName() + ";time:" + Utils.formatTime(remainingMilliseconds));
-            }
-        }.runTaskAsynchronously(HungerGames.getInstance());
-        
+        TimoCloudAPI.getBukkitAPI().getThisServer().setState("INGAME");
+        TimoCloudAPI.getBukkitAPI().getThisServer().setExtra("map:" + game.getMap().getName() + ";time:" + Utils.formatTime(remainingMilliseconds));
+
         game.checkWin();
-        
+
         for (GamePlayer value : game.getPlayers()) {
             SpigotUser spigotUser = value.getUser();
             if (spigotUser != null) {
@@ -97,6 +95,43 @@ public class GameTask extends BukkitRunnable {
         if (game.getState() == State.COUNTDOWN) {
             long calculatedStart = game.getCountdownStart() + TimeUnit.SECONDS.toMillis(game.getGameSettings().getStartingCountdown());
             int remainingSeconds = (int) TimeUnit.MILLISECONDS.toSeconds(calculatedStart - System.currentTimeMillis());
+            if (!this.announcedMapInformation) {
+                long calculatedHalfStart = game.getCountdownStart() + TimeUnit.SECONDS.toMillis(game.getGameSettings().getStartingCountdown() / 2);
+                if (calculatedHalfStart >= System.currentTimeMillis()) {
+                    String[] creators = game.getMap().getCreators().toArray(new String[0]);
+                    StringBuilder creatorNames = new StringBuilder();
+
+                    for (int i = 0; i < creators.length; i++) {
+                        if (i == 0) {
+                            creatorNames.append("&3").append(creators[i]);
+                        } else if (i == (creators.length - 1)) {
+                            creatorNames.append(", &7&oand &3").append(creators[i]);
+                        } else {
+                            creatorNames.append("&7&o, &3").append(creators[i]);
+                        }
+                    }
+
+                    List<IRecord> gamesWithMap = HungerGames.getInstance().getManiaCore().getDatabase().getRecords(GameRecord.class, "mapName", game.getMap().getName());
+                    int timesPlayed = 0;
+                    long lastWeekStart = System.currentTimeMillis() - TimeUnit.DAYS.toMillis(7);
+                    for (IRecord record : gamesWithMap) {
+                        GameRecord gameRecord = ((GameRecord) record);
+                        if (gameRecord.toObject().getGameEnd() > lastWeekStart) {
+                            timesPlayed++;
+                        }
+                    }
+
+
+                    game.sendMessage("");
+                    game.sendMessage("&6&l>> &a&lTHE MAP HAS BEEN SELECTED!");
+                    game.sendMessage("&6&l>> &7Map: &e" + game.getMap().getName());
+                    game.sendMessage("&6&l>> &7Rating: &cNOT IMPLEMENTED YET");
+                    game.sendMessage("&6&l>> &7Votes: &e" + game.getCurrentMapVotes());
+                    game.sendMessage("&6&l>> &7Times Played: &e" + timesPlayed + " time(s) in the last week");
+                    game.sendMessage("&6&l>> &7Creators: " + creatorNames.toString());
+                    this.announcedMapInformation = true;
+                }
+            }
             if (!this.gameBeginSoundPlayed.contains(remainingSeconds)) {
                 game.playSound(Sound.NOTE_BASS);
                 this.gameBeginSoundPlayed.add(remainingSeconds);
