@@ -9,36 +9,16 @@ import net.hungermania.maniacore.spigot.user.SpigotUser;
 import net.hungermania.maniacore.spigot.util.ItemBuilder;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.event.inventory.ClickType;
-import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 public class MutateGui extends Gui {
     public MutateGui(UUID mutator) {
         super(Bukkit.getPluginManager().getPlugin("ManiaCorePlugin"), "Purchase Mutations", false, 27);
-        
-        GUIButton unlockedWool = new GUIButton(ItemBuilder.start(Material.WOOL, 1, (short) 13).setDisplayName("&a&lAvailable").build());
-        GUIButton purchasableWool = new GUIButton(ItemBuilder.start(Material.WOOL, 1, (short) 4).setDisplayName("&e&lPurchasable").build());
-        GUIButton lockedWool = new GUIButton(ItemBuilder.start(Material.WOOL, 1, (short) 14).setDisplayName("&c&lLocked").build());
-        
-        GUIButton unlockedPane = new GUIButton(ItemBuilder.start(Material.STAINED_GLASS_PANE, 1, (short) 5).setDisplayName("&a").build());
-        GUIButton purchasablePane = new GUIButton(ItemBuilder.start(Material.STAINED_GLASS_PANE, 1, (short) 4).setDisplayName("&e").build());
-        GUIButton lockedPane = new GUIButton(ItemBuilder.start(Material.STAINED_GLASS_PANE, 1, (short) 14).setDisplayName("&c").build());
-        
-        setButton(0, unlockedWool);
-        setButton(1, unlockedPane);
-        setButton(9, purchasableWool);
-        setButton(10, purchasablePane);
-        setButton(18, lockedWool);
-        setButton(19, lockedPane);
-        
         Mutation[] mutations = Mutations.MUTATIONS.values().toArray(new Mutation[0]);
-        //ItemStack[] mutationStacks = new ItemStack[mutations.length];
-        Map<MutationStatus, Map<MutationType, ItemStack>> mutationStacks = new HashMap<>();
         SpigotUser user = (SpigotUser) ManiaCore.getInstance().getUserManager().getUser(mutator);
         String[] rawUnlocked = user.getStat(Stats.HG_UNLOCKED_MUTATIONS).getValueAsString().split(";");
         Set<MutationType> unlockedTypes = new HashSet<>();
@@ -90,40 +70,24 @@ public class MutateGui extends Gui {
                 case LOCKED:
                     break;
             }
-            if (mutationStacks.containsKey(status)) {
-                mutationStacks.get(status).put(mutation.getType(), itemBuilder.build());
-            } else {
-                mutationStacks.put(status, new HashMap<MutationType, ItemStack>() {{
-                    put(mutation.getType(), itemBuilder.build());
-                }});
-            }
-        }
-        
-        AtomicInteger availableCounter = new AtomicInteger(2), purchasableCounter = new AtomicInteger(11), lockedCounter = new AtomicInteger(20);
-        mutationStacks.forEach((status, items) -> {
-            if (status == MutationStatus.PURCHASABLE) {
-                for (Entry<MutationType, ItemStack> entry : items.entrySet()) {
-                    setButton(purchasableCounter.get(), new GUIButton(entry.getValue()).setListener(e -> {
-                        if (e.getClick() == ClickType.RIGHT) {
-                            Mutation mutation = Mutations.MUTATIONS.get(entry.getKey());
-                            if (user.getStat(Stats.COINS).getValueAsInt() >= mutation.getUnlockCost()) {
-                                user.getStat(Stats.COINS).setValue((user.getStat(Stats.COINS).getValueAsInt() - mutation.getUnlockCost()) + "");
-                                unlockedTypes.add(entry.getKey());
-                                user.setStat(Stats.HG_UNLOCKED_MUTATIONS, StringUtils.join(unlockedTypes, ";"));
-                                e.getWhoClicked().sendMessage(ManiaUtils.color("&aYou purchased the mutation " + mutation.getName()));
-                            } else {
-                                user.sendMessage("&cYou do not have enough funds to purchase that mutation type.");
-                            }
+            addButton(new GUIButton(itemBuilder.build()).setListener((e) -> {
+                if (status == MutationStatus.AVAILABLE) {
+                    e.getWhoClicked().sendMessage(ManiaUtils.color("&cYou have already purchased that mutation."));
+                } else if (status == MutationStatus.PURCHASABLE) {
+                    if (e.getClick() == ClickType.RIGHT) {
+                        if (user.getStat(Stats.COINS).getValueAsInt() >= mutation.getUnlockCost()) {
+                            user.getStat(Stats.COINS).setValue((user.getStat(Stats.COINS).getValueAsInt() - mutation.getUnlockCost()) + "");
+                            unlockedTypes.add(mutation.getType());
+                            user.setStat(Stats.HG_UNLOCKED_MUTATIONS, StringUtils.join(unlockedTypes, ";"));
+                            e.getWhoClicked().sendMessage(ManiaUtils.color("&aYou purchased the mutation " + mutation.getName()));
+                        } else {
+                            user.sendMessage("&cYou do not have enough funds to purchase that mutation type.");
                         }
-                    }));
-                    purchasableCounter.getAndIncrement();
+                    }
+                } else {
+                    e.getWhoClicked().sendMessage(ManiaUtils.color("&cYou do not have enough funds to purchase that mutation."));
                 }
-            } else if (status == MutationStatus.LOCKED) {
-                for (Entry<MutationType, ItemStack> entry : items.entrySet()) {
-                    setButton(lockedCounter.get(), new GUIButton(entry.getValue()));
-                    lockedCounter.getAndIncrement();
-                }
-            }
-        });
+            }));
+        }
     }
 }
