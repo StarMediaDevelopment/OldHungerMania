@@ -1,7 +1,10 @@
 package net.hungermania.hungergames.listeners;
 
 import net.hungermania.hungergames.HungerGames;
-import net.hungermania.hungergames.game.*;
+import net.hungermania.hungergames.game.Game;
+import net.hungermania.hungergames.game.GamePlayer;
+import net.hungermania.hungergames.game.MutateGui;
+import net.hungermania.hungergames.game.PlayersGui;
 import net.hungermania.hungergames.game.death.*;
 import net.hungermania.hungergames.game.team.GameTeam;
 import net.hungermania.hungergames.game.team.GameTeam.Perms;
@@ -19,27 +22,40 @@ import net.hungermania.maniacore.api.user.IgnoreInfo;
 import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.user.toggle.Toggle;
 import net.hungermania.maniacore.api.user.toggle.Toggles;
-import net.hungermania.maniacore.api.util.*;
+import net.hungermania.maniacore.api.util.ManiaUtils;
+import net.hungermania.maniacore.api.util.Position;
+import net.hungermania.maniacore.api.util.State;
 import net.hungermania.maniacore.spigot.events.UserIncognitoEvent;
 import net.hungermania.maniacore.spigot.events.UserJoinEvent;
 import net.hungermania.maniacore.spigot.gui.Gui;
 import net.hungermania.maniacore.spigot.mutations.MutationType;
-import net.hungermania.maniacore.spigot.perks.*;
+import net.hungermania.maniacore.spigot.perks.PerkInfo;
+import net.hungermania.maniacore.spigot.perks.PerkInfoRecord;
+import net.hungermania.maniacore.spigot.perks.Perks;
 import net.hungermania.maniacore.spigot.updater.UpdateEvent;
 import net.hungermania.maniacore.spigot.updater.UpdateType;
 import net.hungermania.maniacore.spigot.user.SpigotUser;
 import net.hungermania.maniacore.spigot.util.NBTWrapper;
 import net.hungermania.maniacore.spigot.util.SpigotUtils;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.*;
-import org.bukkit.block.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.*;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.inventory.*;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -754,16 +770,27 @@ public class PlayerListeners extends GameListener {
                     int heldTime = Integer.parseInt(rawTime);
                     if (heldTime >= 7) {
                         switch (hand.getType()) {
-                            case RAW_BEEF: hand.setType(Material.COOKED_BEEF); break;
-                            case RAW_FISH: hand.setType(Material.COOKED_FISH); break;
-                            case RAW_CHICKEN: hand.setType(Material.COOKED_CHICKEN); break;
-                            case POTATO: hand.setType(Material.BAKED_POTATO); break;
-                            case MUTTON: hand.setType(Material.COOKED_MUTTON); break;
-                            case RABBIT: hand.setType(Material.COOKED_RABBIT); break;
+                            case RAW_BEEF:
+                                hand.setType(Material.COOKED_BEEF);
+                                break;
+                            case RAW_FISH:
+                                hand.setType(Material.COOKED_FISH);
+                                break;
+                            case RAW_CHICKEN:
+                                hand.setType(Material.COOKED_CHICKEN);
+                                break;
+                            case POTATO:
+                                hand.setType(Material.BAKED_POTATO);
+                                break;
+                            case MUTTON:
+                                hand.setType(Material.COOKED_MUTTON);
+                                break;
+                            case RABBIT:
+                                hand.setType(Material.COOKED_RABBIT);
+                                break;
                         }
                     }
                 } catch (Exception ex) {
-                    ex.printStackTrace();
                 }
             }
         }
