@@ -45,7 +45,7 @@ public abstract class ServerManager implements RedisListener {
     }
     
     public void sendServerStop(String server) {
-        Redis.sendCommand("serverstop " + server);
+        Redis.sendCommand("serverStop " + server);
     }
     
     public void sendGameReady(String server) {

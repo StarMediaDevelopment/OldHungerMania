@@ -171,14 +171,13 @@ public final class ManiaCorePlugin extends JavaPlugin implements Listener, Mania
 
     @Override
     public void onDisable() {
+        ManiaCore.getInstance().getServerManager().sendServerStop(getManiaCore().getServerManager().getCurrentServer().getName());
         for (Skin skin : getManiaCore().getSkinManager().getSkins()) {
             maniaCore.getDatabase().addRecordToQueue(new SkinRecord(skin));
         }
     
         this.maniaCore.getDatabase().pushQueue();
         saveConfig();
-    
-        ManiaCore.getInstance().getServerManager().sendServerStop(getManiaCore().getServerManager().getCurrentServer().getName());
     }
     
     public Database getManiaDatabase() {
