@@ -96,7 +96,9 @@ public class Lobby implements Listener, CommandExecutor {
         
         new BukkitRunnable() {
             public void run() {
-                sendMessage("&6&l>> &e&lDid you know that you can use &f&l/votestart &e&lto start a game early?");
+                if (players.size() < gameSettings.getMinPlayers()) {
+                    sendMessage("&6&l>> &e&lDid you know that you can use &f&l/votestart &e&lto start a game early?");
+                }
             }
         }.runTaskTimer(plugin, 20L, 1200L);
         
