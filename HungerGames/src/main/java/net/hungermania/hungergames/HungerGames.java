@@ -15,6 +15,7 @@ import net.hungermania.hungergames.loot.LootManager;
 import net.hungermania.hungergames.map.HGMap;
 import net.hungermania.hungergames.map.MapManager;
 import net.hungermania.hungergames.records.GameRecord;
+import net.hungermania.hungergames.records.GameSettingRecord;
 import net.hungermania.hungergames.records.GameSettingsRecord;
 import net.hungermania.hungergames.records.LootRecord;
 import net.hungermania.hungergames.settings.GameSettings;
@@ -68,6 +69,7 @@ public final class HungerGames extends JavaPlugin implements ManiaPlugin {
         maniaCore.getDatabase().registerRecordType(GameSettingsRecord.class);
         maniaCore.getDatabase().registerRecordType(GameRecord.class);
         maniaCore.getDatabase().registerRecordType(LootRecord.class);
+        maniaCore.getDatabase().registerRecordType(GameSettingRecord.class);
         maniaCore.getDatabase().generateTables();
         
         maniaCore.getServerManager().getCurrentServer().setType(ServerType.HUNGER_GAMES);

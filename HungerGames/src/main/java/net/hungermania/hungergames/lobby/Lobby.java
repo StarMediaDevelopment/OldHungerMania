@@ -213,7 +213,7 @@ public class Lobby implements Listener, CommandExecutor {
                 TimoCloudAPI.getBukkitAPI().getThisServer().setState("LOBBY");
                 Redis.sendCommand("gameReady " + ManiaCore.getInstance().getServerManager().getCurrentServer().getName());
             }
-        }.runTaskLaterAsynchronously(HungerGames.getInstance(), 10L);
+        }.runTaskLaterAsynchronously(HungerGames.getInstance(), 1L);
     }
     
     public void startTimer() {
