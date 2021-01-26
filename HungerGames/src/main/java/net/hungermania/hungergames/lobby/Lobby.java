@@ -98,7 +98,7 @@ public class Lobby implements Listener, CommandExecutor {
             public void run() {
                 sendMessage("&6&l>> &e&lDid you know that you can use &f&l/votestart &e&lto start a game early?");
             }
-        }.runTaskTimer(plugin, 20L, 600L);
+        }.runTaskTimer(plugin, 20L, 1200L);
         
         MemoryHook worldCheck = new MemoryHook("Lobby World Checker");
         ManiaCore.getInstance().getMemoryManager().addMemoryHook(worldCheck);
