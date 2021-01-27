@@ -6,7 +6,7 @@
 
     <groupId>net.hungermania</groupId>
     <artifactId>HungerGames</artifactId>
-    <version>1.21.1-SNAPSHOT</version>
+    <version>1.21.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>HungerGames</name>
