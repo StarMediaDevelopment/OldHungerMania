@@ -626,10 +626,15 @@ public class Game implements IRecord {
             player.setFlying(true);
         }
         
+        GamePlayer killer = null;
+        String killerName = null;
+        boolean mutationKill = false;
         boolean sendDeathMessage = true;
+        double killerHealth = 0;
+        GameTeam newTeam = this.spectatorsTeam;
         if (deathInfo instanceof DeathInfoPlayerKill) {
             DeathInfoPlayerKill playerDeath = (DeathInfoPlayerKill) deathInfo;
-            String killerName = "";
+            killerName = "";
             if (tributesTeam.isMember(playerDeath.getKiller())) {
                 killerName += "&a";
             } else if (mutationsTeam.isMember(playerDeath.getKiller())) {
@@ -638,12 +643,47 @@ public class Game implements IRecord {
                 killerName += "&c";
             }
             
-            GamePlayer killer = this.players.get(playerDeath.getKiller());
+            killer = this.players.get(playerDeath.getKiller());
+            mutationKill = playerDeath.isMutationKill();
+            killerHealth = playerDeath.getKillerHealth();
+        } else if (deathInfo instanceof DeathInfoSuicide) {
+            if (mutationsTeam.isMember(gamePlayer.getUniqueId())) {
+                if (gamePlayer.getMutationType() == MutationType.CREEPER) {
+                    UUID target = gamePlayer.getMutationTarget();
+                    if (!tributesTeam.isMember(target)) {
+                        sendDeathMessage = false;
+                    }
+                }
+            }
+        } else if (deathInfo instanceof DeathInfoKilledSuicide) {
+            DeathInfoKilledSuicide death = (DeathInfoKilledSuicide) deathInfo;
+            killerName = "";
+            if (tributesTeam.isMember(death.getKiller())) {
+                killerName += "&a";
+            } else {
+                killerName += "&d";
+            }
+            
+            killer = this.players.get(death.getKiller());
+            Player killerPlayer = Bukkit.getPlayer(killer.getUniqueId());
+            killerPlayer.setMaxHealth(gameSettings.getMaxHealth());
+            newTeam = this.tributesTeam;
+            mutationKill = true;
+            killerHealth = 20; //TODO Add better tracking of this for this type of death
+        }
+
+        if (killer != null) {
+            Player killerPlayer = Bukkit.getPlayer(killer.getUniqueId());
+            killer.setKillStreak(killer.getKillStreak() + 1);
+            killer.setKills(killer.getKills() + 1);
+            if (killer.getUser().getStat(Stats.HG_HIGHEST_KILL_STREAK).getValueAsInt() < killer.getKillStreak()) {
+                killer.getUser().setStat(Stats.HG_HIGHEST_KILL_STREAK, killer.getKillStreak());
+            }
+
             SpigotUser killerUser = killer.getUser();
-            Player killerPlayer = Bukkit.getPlayer(killerUser.getUniqueId());
-            
+
             int coins = 25, experience = 10;
-            
+
             killer.setKillStreak(killer.getKillStreak() + 1);
             killer.setKills(killer.getKills() + 1);
             if (killer.getUser().getStat(Stats.HG_HIGHEST_KILL_STREAK).getValueAsInt() < killer.getKillStreak()) {
@@ -651,7 +691,7 @@ public class Game implements IRecord {
                 killer.getUser().setStat(Stats.HG_HIGHEST_KILL_STREAK, killer.getKillStreak());
             }
             killerName += killer.getUser().getName();
-    
+
             if (firstKiller == null) {
                 sendMessage("&6&l>> &c&l" + (killer.getUser().getName() + " drew first blood!").toUpperCase());
                 playSound(Sound.WOLF_HOWL);
@@ -660,25 +700,28 @@ public class Game implements IRecord {
                 coins += 15;
                 gained += (int) Math.ceil((gained / 2));
             }
-    
+            
+            newTeam.join(uniqueId);
+
             if (tributesTeam.size() == 1) {
                 gained += gained;
             }
-    
+
             Statistic killerScore = killer.getUser().getStat(Stats.HG_SCORE);
             killerScore.setValue(killerScore.getValueAsInt() + gained);
             killer.getUser().sendMessage("&6&l>> &a+" + gained + " Score!");
-    
-            gamePlayer.getUser().sendMessage("&4&l>> &cYour killer &8(" + killerName + "&8) &chad &4" + Utils.formatNumber(playerDeath.getKillerHealth()) + " HP &cremaining!");
-    
-            if (playerDeath.isMutationKill()) {
+
+            gamePlayer.getUser().sendMessage("&4&l>> &cYour killer &8(" + killerName + "&8) &chad &4" + Utils.formatNumber(killerHealth) + " HP &cremaining!");
+
+            if (mutationKill) {
                 sendMessage("&6&l>> " + killerName + " &ahas taken revenge , and is back in the game!");
-                mutationsTeam.leave(killer.getUniqueId());
-                tributesTeam.join(killer.getUniqueId());
                 DisguiseAPI.undisguiseToAll(killerPlayer);
                 killerPlayer.setMaxHealth(gameSettings.getMaxHealth());
                 killerPlayer.setHealth(gameSettings.getMaxHealth());
                 killer.setRevengeTime(System.currentTimeMillis());
+                PlayerInventory inventory = killerPlayer.getInventory();
+                inventory.clear();
+                inventory.setArmorContents(null);
             } else {
                 try {
                     Perks.SPEED_KILL.activate(killerUser);
@@ -692,66 +735,14 @@ public class Game implements IRecord {
                     Perks.BETTY.activate(killerUser);
                 } catch (Exception e) {}
             }
-            
+
             gamePlayer.setKillStreak(0);
             killerUser.addNetworkExperience(experience);
             killerUser.sendMessage("&6&l>> &f&lCurrent Streak: &a" + killer.getKillStreak() + "   &f&lPersonal Best: &a" + killer.getUser().getStat(Stats.HG_HIGHEST_KILL_STREAK).getValueAsInt());
             Pair<Integer, String> result = killerUser.addCoins(coins, gameSettings.isCoinMultiplier());
             killer.setEarnedCoins(killer.getEarnedCoins() + result.getValue1());
             killerUser.sendMessage("&2&l>> &a+" + result.getValue1() + " &3COINS&a! " + result.getValue2());
-            
-            for (UUID mutation : this.mutationsTeam) {
-                GamePlayer gp = this.players.get(mutation);
-                if (gp.getMutationTarget() != null) {
-                    if (gp.getMutationTarget().equals(uniqueId)) {
-                        gp.setMutationTarget(killerUser.getUniqueId());
-                        gp.getUser().sendMessage("&6&l>> &eYour previous target died. Your new target is &a" + killerUser.getName());
-                    }
-                }
-            }
-        } else if (deathInfo instanceof DeathInfoSuicide) {
-            if (mutationsTeam.isMember(gamePlayer.getUniqueId())) {
-                if (gamePlayer.getMutationType() == MutationType.CREEPER) {
-                    UUID target = gamePlayer.getMutationTarget();
-                    if (!tributesTeam.isMember(target)) {
-                        sendDeathMessage = false;
-                    }
-                }
-            }
-        } else if (deathInfo instanceof DeathInfoKilledSuicide) {
-            DeathInfoKilledSuicide death = (DeathInfoKilledSuicide) deathInfo;
-            String killerName = "";
-            if (tributesTeam.isMember(death.getKiller())) {
-                killerName += "&a";
-            } else {
-                killerName += "&d";
-            }
-            
-            GamePlayer killer = this.players.get(death.getKiller());
-            Player killerPlayer = Bukkit.getPlayer(killer.getUniqueId());
-            killer.setKillStreak(killer.getKillStreak() + 1);
-            killer.setKills(killer.getKills() + 1);
-            if (killer.getUser().getStat(Stats.HG_HIGHEST_KILL_STREAK).getValueAsInt() < killer.getKillStreak()) {
-                killer.getUser().setStat(Stats.HG_HIGHEST_KILL_STREAK, killer.getKillStreak());
-            }
-            killerName += killer.getUser().getName();
-            
-            sendMessage("&6&l>> " + killerName + " &ahas taken revenge , and is back in the game!");
-            killerPlayer.setMaxHealth(gameSettings.getMaxHealth());
-            mutationsTeam.leave(killer.getUniqueId());
-            tributesTeam.join(killer.getUniqueId());
-            DisguiseAPI.undisguiseToAll(killerPlayer);
-            PlayerInventory inventory = killerPlayer.getInventory();
-            inventory.clear();
-            inventory.setArmorContents(null);
-            killer.setRevengeTime(System.currentTimeMillis());
-            
-            SpigotUser killerUser = killer.getUser();
-            killerUser.sendMessage("&6&l>> &f&lCurrent Streak: &a" + killer.getKillStreak() + "   &f&lPersonal Best: &a" + killer.getUser().getStat(Stats.HG_HIGHEST_KILL_STREAK).getValueAsInt());
-            Pair<Integer, String> result = killerUser.addCoins(50, gameSettings.isCoinMultiplier());
-            killer.setEarnedCoins(killer.getEarnedCoins() + result.getValue1());
-            killerUser.sendMessage("&2&l>> &a+" + result.getValue1() + " &3COINS&a! " + result.getValue2());
-            
+
             for (UUID mutation : this.mutationsTeam) {
                 GamePlayer gp = this.players.get(mutation);
                 if (gp.getMutationTarget() != null) {
