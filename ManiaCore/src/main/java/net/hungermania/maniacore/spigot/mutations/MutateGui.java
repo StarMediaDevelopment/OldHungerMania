@@ -38,7 +38,6 @@ public class MutateGui extends Gui {
         setButton(19, lockedPane);
 
         Mutation[] mutations = Mutations.MUTATIONS.values().toArray(new Mutation[0]);
-        //ItemStack[] mutationStacks = new ItemStack[mutations.length];
         Map<MutationStatus, Map<MutationType, ItemStack>> mutationStacks = new HashMap<>();
         User user = ManiaCore.getInstance().getUserManager().getUser(mutator);
         String[] rawUnlocked = user.getStat(Stats.HG_UNLOCKED_MUTATIONS).getValueAsString().split(";");
@@ -83,12 +82,10 @@ public class MutateGui extends Gui {
             itemBuilder.addLoreLine("").addLoreLine("&7Max HP: &e" + mutation.getMaxHP()).addLoreLine("&7Defense: &e" + mutation.getDefenseType().name()).addLoreLine("");
             switch (status) {
                 case AVAILABLE:
-                    itemBuilder.addLoreLine("&6&lLeft Click &7to use &a" + mutation.getName() + " &efor &a" + mutation.getUseCost() + " &fcoins.");
+                case LOCKED:
                     break;
                 case PURCHASABLE:
                     itemBuilder.addLoreLine("&6&lRight Click &fto purchase &a" + mutation.getName() + " &ffor &e" + mutation.getUnlockCost() + " &fcoins.");
-                    break;
-                case LOCKED:
                     break;
             }
             if (mutationStacks.containsKey(status)) {
