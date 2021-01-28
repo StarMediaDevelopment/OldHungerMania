@@ -6,7 +6,7 @@
 
     <groupId>net.hungermania</groupId>
     <artifactId>ManiaHub</artifactId>
-    <version>1.15-SNAPSHOT</version>
+    <version>1.16-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>ManiaHub</name>
