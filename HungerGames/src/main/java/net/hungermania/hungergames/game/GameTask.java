@@ -60,8 +60,12 @@ public class GameTask extends BukkitRunnable {
 
         new BukkitRunnable() {
             public void run() {
-                TimoCloudAPI.getBukkitAPI().getThisServer().setState("INGAME");
-                TimoCloudAPI.getBukkitAPI().getThisServer().setExtra("map:" + game.getMap().getName() + ";time:" + Utils.formatTime(remainingMilliseconds));
+                if (game.getState() != State.ENDING) {
+                    TimoCloudAPI.getBukkitAPI().getThisServer().setState("INGAME");
+                    TimoCloudAPI.getBukkitAPI().getThisServer().setExtra("map:" + game.getMap().getName() + ";time:" + Utils.formatTime(remainingMilliseconds));
+                } else {
+                    TimoCloudAPI.getBukkitAPI().getThisServer().setState("RESTARTING");
+                }
             }
         }.runTaskAsynchronously(HungerGames.getInstance());
 
