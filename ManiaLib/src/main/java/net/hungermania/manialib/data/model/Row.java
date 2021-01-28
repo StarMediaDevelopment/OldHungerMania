@@ -21,7 +21,7 @@ public class Row {
             try {
                 this.dataMap.put(column.getName(), resultSet.getObject(column.getName())); //No longer deserializing here, just storing value from Database
             } catch (Exception throwables) {
-                System.out.println("Error on getting column value " + column.getName() + " of table " + table.getName());
+                //System.out.println("Error on getting column value " + column.getName() + " of table " + table.getName());
                 throwables.printStackTrace();
             }
         }
@@ -55,7 +55,7 @@ public class Row {
             }
             return record;
         } catch (Exception e) {
-            System.out.println("An error occured loading a record for the class " + recordClass.getSimpleName() + ": " + e.getMessage());
+            //System.out.println("An error occured loading a record for the class " + recordClass.getSimpleName() + ": " + e.getMessage());
             e.printStackTrace();
         }
         return null;

@@ -136,18 +136,18 @@ public class DatabaseManager {
             try {
                 recordClass.getDeclaredConstructor();
             } catch (NoSuchMethodException e) {
-                System.out.println("Could not find a default contructor for record " + recordClass.getName());
+                //System.out.println("Could not find a default contructor for record " + recordClass.getName());
                 return;
             }
 
             try {
                 Field id = recordClass.getDeclaredField("id");
                 if (!(id.getType().isAssignableFrom(int.class) || id.getType().isAssignableFrom(long.class))) {
-                    System.out.println("The ID field is not of type int or long");
+                    //System.out.println("The ID field is not of type int or long");
                     return;
                 }
             } catch (NoSuchFieldException e) {
-                System.out.println("Could not find an id field in the record " + recordClass.getName());
+                //System.out.println("Could not find an id field in the record " + recordClass.getName());
                 return;
             }
 
@@ -175,7 +175,7 @@ public class DatabaseManager {
 
                 handler = getHandler(field.getType());
                 if (handler == null) {
-                    System.out.println("Field " + field.getName() + " which has the type " + field.getType() + " of the record " + recordClass.getName() + " does not have a valid MysqlTypeHandler.");
+                    //System.out.println("Field " + field.getName() + " which has the type " + field.getType() + " of the record " + recordClass.getName() + " does not have a valid MysqlTypeHandler.");
                     return;
                 }
 

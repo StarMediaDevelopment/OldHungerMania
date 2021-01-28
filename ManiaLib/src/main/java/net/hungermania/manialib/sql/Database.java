@@ -11,14 +11,14 @@ import java.util.logging.Logger;
 public class Database {
     private static final String URL = "jdbc:mysql://{hostname}:{port}/{database}?useSSL=false";
     private DataSource dataSource;
-    
+
     private Map<String, Class<? extends IRecord>> tableToRecordMap = new HashMap<>();
     private Set<Table> tables = new HashSet<>();
     private Queue<IRecord> recordQueue = new LinkedBlockingQueue<>();
     private Set<IRecord> records = new HashSet<>();
     private String database;
     private Logger logger;
-    
+
     public Database(Properties properties, Logger logger) {
         this.logger = logger;
         String host = properties.getProperty("mysql-host");
@@ -30,11 +30,12 @@ public class Database {
         this.dataSource = new DataSource(url, username, password);
         this.database = database;
     }
-    
+
     public boolean deleteRecord(IRecord record) {
         Table table = getRecordTable(record);
-        if (table == null) return false;
-    
+        if (table == null)
+            return false;
+
         String where = Statements.WHERE.replace("{column}", "id").replace("{value}", record.getId() + "");
         String sql = Statements.DELETE.replace("{name}", table.getName() + " " + where);
         try (Connection con = dataSource.getConnection(); Statement statement = con.createStatement()) {
@@ -44,7 +45,7 @@ public class Database {
             return false;
         }
     }
-    
+
     private Table getRecordTable(IRecord record) {
         Table table = null;
         recordLoop:
@@ -58,10 +59,10 @@ public class Database {
                 }
             }
         }
-        
+
         return table;
     }
-    
+
     public List<IRecord> getRecords(Class<? extends IRecord> recordType, String columnName, Object value) {
         List<IRecord> records = new ArrayList<>();
         for (Entry<String, Class<? extends IRecord>> entry : tableToRecordMap.entrySet()) {
@@ -72,18 +73,22 @@ public class Database {
                         table = t;
                     }
                 }
-    
-                if (table == null) { continue; }
-    
+
+                if (table == null) {
+                    continue;
+                }
+
                 String sql = "SELECT * FROM " + table.getName();
                 if (columnName != null) {
                     Column column = table.getColumn(columnName);
-                    if (column == null) { continue; }
+                    if (column == null) {
+                        continue;
+                    }
                     sql += " WHERE `" + column.getName() + "` = '" + value + "'";
                 }
-    
+
                 System.out.println(sql);
-    
+
                 try (Connection connection = dataSource.getConnection(); Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(sql)) {
                     while (resultSet.next()) {
                         Row row = new Row(table, resultSet);
@@ -97,7 +102,7 @@ public class Database {
         }
         return records;
     }
-    
+
     public void registerRecordType(Class<? extends IRecord> recordClass) {
         try {
             Method method = recordClass.getDeclaredMethod("generateTable", net.hungermania.manialib.sql.Database.class);
@@ -109,24 +114,24 @@ public class Database {
             e.printStackTrace();
         }
     }
-    
+
     @SafeVarargs
     public final void registerRecordTypes(Class<? extends IRecord>... recordClasses) {
         for (Class<? extends IRecord> recordClass : recordClasses) {
             registerRecordType(recordClass);
         }
     }
-    
+
     public void registerTable(Table table) {
         this.tables.add(table);
     }
-    
+
     public void addRecordsToQueue(IRecord... records) {
         for (IRecord record : records) {
             addRecordToQueue(record);
         }
     }
-    
+
     public void addRecordToQueue(IRecord record) {
         Map<String, Object> serialized = record.serialize();
         for (Object object : serialized.values()) {
@@ -134,10 +139,10 @@ public class Database {
                 addRecordToQueue((IRecord) object);
             }
         }
-        
+
         this.recordQueue.add(record);
     }
-    
+
     public void loadRecords() {
         for (Table table : tables) {
             String sql = "SELECT * FROM `" + table.getName() + "`;";
@@ -153,14 +158,15 @@ public class Database {
             }
         }
     }
-    
+
     public Set<IRecord> getRecords() {
         return records;
     }
-    
+
     public void pushRecord(IRecord record) {
         Table table = getRecordTable(record);
-        if (table == null) return;
+        if (table == null)
+            return;
         Map<String, Object> serialized = record.serialize();
         Column unique = null;
         for (Column column : table.getColumns()) {
@@ -169,32 +175,34 @@ public class Database {
                 break;
             }
         }
-        
+
         String querySQL = null;
         Iterator<Entry<String, Object>> iterator = serialized.entrySet().iterator();
-        
+
         if (unique != null) {
             String where = Statements.WHERE.replace("{column}", unique.getName()).replace("{value}", serialized.get(unique.getName()) + "");
             String selectSql = Statements.SELECT.replace("{database}", this.database).replace("{table}", table.getName()) + " " + where;
-            
+
             try (Connection con = dataSource.getConnection(); Statement statement = con.createStatement(); ResultSet resultSet = statement.executeQuery(selectSql)) {
                 if (resultSet.next()) {
                     Row row = new Row(table, resultSet);
                     if (!row.getDataMap().isEmpty()) {
                         StringBuilder sb = new StringBuilder();
-                        
+
                         while (iterator.hasNext()) {
                             Entry<String, Object> entry = iterator.next();
                             if (entry.getValue() != null) {
                                 DataType type = DataType.getType(entry.getValue());
-                                if (type == null) { continue; }
+                                if (type == null) {
+                                    continue;
+                                }
                                 sb.append(Statements.UPDATE_VALUE.replace("{column}", entry.getKey()).replace("{value}", entry.getValue() + ""));
                                 if (iterator.hasNext()) {
                                     sb.append(",");
                                 }
                             }
                         }
-                        
+
                         querySQL = Statements.UPDATE.replace("{values}", sb.toString()).replace("{location}", unique.getName() + "=" + serialized.get(unique.getName()));
                         querySQL = querySQL.replace("{name}", table.getName());
                     }
@@ -203,7 +211,7 @@ public class Database {
                 e.printStackTrace();
                 logger.severe("An error occured: " + e.getMessage());
             }
-            
+
             if (querySQL != null && !querySQL.equals("")) {
                 try (Connection connection = dataSource.getConnection(); Statement statement = connection.createStatement()) {
                     statement.execute(querySQL);
@@ -213,13 +221,15 @@ public class Database {
                 }
             }
         }
-    
+
         if (querySQL == null || querySQL.equals("")) {
             StringBuilder colBuilder = new StringBuilder(), valueBuilder = new StringBuilder();
             Iterator<Column> columnIterator = table.getColumns().iterator();
             while (columnIterator.hasNext()) {
                 Column column = columnIterator.next();
-                if (column.isUnique()) { continue; }
+                if (column.isUnique()) {
+                    continue;
+                }
                 colBuilder.append("`").append(column.getName()).append("`");
                 valueBuilder.append("'").append(serialized.get(column.getName())).append("'");
                 if (columnIterator.hasNext()) {
@@ -227,13 +237,15 @@ public class Database {
                     valueBuilder.append(",");
                 }
             }
-            
+
             querySQL = Statements.INSERT.replace("{columns}", colBuilder.toString()).replace("{values}", valueBuilder.toString());
             querySQL = querySQL.replace("{name}", table.getName());
-            
+
             try (Connection con = dataSource.getConnection(); PreparedStatement statement = con.prepareStatement(querySQL, Statement.RETURN_GENERATED_KEYS)) {
                 int affectedRows = statement.executeUpdate();
-                if (affectedRows == 0) { return; }
+                if (affectedRows == 0) {
+                    return;
+                }
                 try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         record.setId(generatedKeys.getInt(1));
@@ -245,7 +257,7 @@ public class Database {
             }
         }
     }
-    
+
     public void pushQueue() {
         while (!recordQueue.isEmpty()) {
             IRecord record = recordQueue.poll();
@@ -254,7 +266,7 @@ public class Database {
             }
         }
     }
-    
+
     public void mapTableToRecord(Table table, Class<? extends IRecord> record) {
         try {
             record.getDeclaredConstructor(Row.class);
@@ -262,33 +274,42 @@ public class Database {
             logger.severe("Record class " + record.getName() + " does not have a Constructor with the Row class as a parameter.");
             return;
         }
-        
+
         this.tableToRecordMap.put(table.getName(), record);
     }
-    
+
     public void generateTables() {
+        //System.out.println("Generating Tables in the old way");
         for (Table table : this.tables) {
+            //System.out.println("Working on table " + table.getName());
             String sql = table.generateCreationStatement();
-            
+            //System.out.println("Creation statement " + sql);
+
             try (Connection con = dataSource.getConnection(); Statement statement = con.createStatement()) {
                 statement.execute(sql);
+                //System.out.println("Successfully executed creation statement");
             } catch (Exception e) {
-                System.out.println(sql);
+                // System.out.println(sql);
                 e.printStackTrace();
             }
-            
+
+            //System.out.println("Checking columns");
             try (Connection con = dataSource.getConnection()) {
                 DatabaseMetaData databaseMeta = con.getMetaData();
                 try (ResultSet columns = databaseMeta.getColumns(null, null, table.getName(), null)) {
-                    List<String> existingColumns = new ArrayList<>();
+                    List<String> existingColumns = new ArrayList<>(), ignoredColumns = new ArrayList<>();
                     while (columns.next()) {
                         String name = columns.getString("COLUMN_NAME");
                         existingColumns.add(name);
                     }
-    
+
+                    //System.out.println("Found exising columns " + existingColumns);
+
                     List<String> columnSqls = new ArrayList<>();
                     for (Column column : table.getColumns()) {
+                        //System.out.println("Checking column " + column.getName());
                         if (!existingColumns.contains(column.getName())) {
+                            System.out.println("Column does not exist in the database");
                             String columnType;
                             if (column.getType().equals(DataType.VARCHAR)) {
                                 columnType = column.getType().name() + "(" + column.getLength() + ")";
@@ -297,22 +318,29 @@ public class Database {
                             } else {
                                 columnType = column.getType().name();
                             }
+
+                            //System.out.println("column type is " + columnType);
+
                             String columnSql = Statements.ALTER_TABLE.replace("{table}", table.getName()).replace("{logic}", Statements.ADD_COLUMN.replace("{column}", column.getName()).replace("{type}", columnType));
                             columnSqls.add(columnSql);
+                            //System.out.println("Column alter statement " + columnSql);
                         }
-                        existingColumns.remove(column.getName());
+
+                        ignoredColumns.add(column.getName());
+                        //System.out.println("Removed column " + column.getName() + " from the list of columns to check");
                     }
-    
-                    if (!existingColumns.isEmpty()) {
-                        for (String existingColumn : existingColumns) {
+
+                    for (String existingColumn : existingColumns) {
+                        if (!ignoredColumns.contains(existingColumn)) {
                             String columnSql = Statements.ALTER_TABLE.replace("{table}", table.getName()).replace("{logic}", Statements.DROP_COLUMN.replace("{column}", existingColumn));
                             columnSqls.add(columnSql);
+                            //System.out.println("Column removal sql " + columnSql);
                         }
                     }
-    
                     if (!columnSqls.isEmpty()) {
                         for (String columnSql : columnSqls) {
                             try (Statement statement = con.createStatement()) {
+                                //System.out.println("Executing " + columnSql);
                                 statement.executeUpdate(columnSql);
                             } catch (Exception e) {
                                 if (!e.getMessage().contains("Can't DROP")) {
@@ -331,11 +359,11 @@ public class Database {
             }
         }
     }
-    
+
     public Class<? extends IRecord> getRecordClass(Table table) {
         return this.tableToRecordMap.get(table.getName());
     }
-    
+
     public void executeSql(String s) {
         try (Connection connection = dataSource.getConnection(); Statement statement = connection.createStatement()) {
             statement.execute(s);
