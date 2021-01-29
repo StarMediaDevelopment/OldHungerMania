@@ -33,32 +33,46 @@ public class Statistic implements IRecord {
         this.modified = modified;
     }
     
-    public String getValueAsString() {
+    public String getAsString() {
         return this.value;
     }
-    
-    public int getValueAsInt() {
+
+    public int getAsInt() {
         try {
             return Integer.parseInt(value);
         } catch (Exception e) {
             return 0;
         }
     }
-    
+
+    public boolean getAsBoolean() {
+        try {
+            return Boolean.parseBoolean(value);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public void increment() {
         try {
             int val = Integer.parseInt(this.value);
             val++;
             this.value = val + "";
             this.modified = System.currentTimeMillis();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
-    
+
     public void setValue(String value) {
         this.value = value;
         this.modified = System.currentTimeMillis();
     }
-    
+
+    public void setValue(boolean value) {
+        this.value = value + "";
+        this.modified = System.currentTimeMillis();
+    }
+
     public void setValue(int value) {
         this.value = String.valueOf(value);
         this.modified = System.currentTimeMillis();

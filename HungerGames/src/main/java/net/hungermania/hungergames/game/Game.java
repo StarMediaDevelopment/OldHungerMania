@@ -604,20 +604,22 @@ public class Game implements IRecord {
     }
     
     public void killPlayer(UUID uniqueId, DeathInfo deathInfo) {
-        if (!this.players.containsKey(uniqueId)) { return; }
+        if (!this.players.containsKey(uniqueId)) {
+            return;
+        }
         GamePlayer gamePlayer = this.players.get(uniqueId);
         Player player = Bukkit.getPlayer(gamePlayer.getUniqueId());
         player.getInventory().clear();
         gamePlayer.getUser().incrementStat(Stats.HG_DEATHS);
         gamePlayer.setDeathInfo(deathInfo);
         Statistic points = gamePlayer.getUser().getStat(Stats.HG_SCORE);
-        int lost = (int) Math.ceil((float) points.getValueAsInt() / 8F);
+        int lost = (int) Math.ceil((float) points.getAsInt() / 8F);
         int gained = lost;
-        if (points.getValueAsInt() > 0) {
-            points.setValue(points.getValueAsInt() - lost);
+        if (points.getAsInt() > 0) {
+            points.setValue(points.getAsInt() - lost);
             gamePlayer.getUser().sendMessage("&4&l>> &cYou lost " + lost + " Score for dying.");
         }
-    
+
         if (tributesTeam.isMember(uniqueId)) {
             sendMessage("&6&l>> &c&l" + (tributesTeam.size() - 1) + " tributes remain.");
             if ((this.tributesTeam.size() - 1) <= gameSettings.getDeathmatchPlayerStart()) {
@@ -696,7 +698,7 @@ public class Game implements IRecord {
             Player killerPlayer = Bukkit.getPlayer(killer.getUniqueId());
             killer.setKillStreak(killer.getKillStreak() + 1);
             killer.setKills(killer.getKills() + 1);
-            if (killer.getUser().getStat(Stats.HG_HIGHEST_KILL_STREAK).getValueAsInt() < killer.getKillStreak()) {
+            if (killer.getUser().getStat(Stats.HG_HIGHEST_KILL_STREAK).getAsInt() < killer.getKillStreak()) {
                 killer.getUser().setStat(Stats.HG_HIGHEST_KILL_STREAK, killer.getKillStreak());
             }
 
@@ -706,7 +708,7 @@ public class Game implements IRecord {
 
             killer.setKillStreak(killer.getKillStreak() + 1);
             killer.setKills(killer.getKills() + 1);
-            if (killer.getUser().getStat(Stats.HG_HIGHEST_KILL_STREAK).getValueAsInt() < killer.getKillStreak()) {
+            if (killer.getUser().getStat(Stats.HG_HIGHEST_KILL_STREAK).getAsInt() < killer.getKillStreak()) {
                 gained += (int) Math.ceil(gained / 3);
                 killer.getUser().setStat(Stats.HG_HIGHEST_KILL_STREAK, killer.getKillStreak());
             }
@@ -728,7 +730,7 @@ public class Game implements IRecord {
             }
 
             Statistic killerScore = killer.getUser().getStat(Stats.HG_SCORE);
-            killerScore.setValue(killerScore.getValueAsInt() + gained);
+            killerScore.setValue(killerScore.getAsInt() + gained);
             killer.getUser().sendMessage("&6&l>> &a+" + gained + " Score!");
 
             gamePlayer.getUser().sendMessage("&4&l>> &cYour killer &8(" + killerName + "&8) &chad &4" + Utils.formatNumber(killerHealth) + " HP &cremaining!");
@@ -758,7 +760,7 @@ public class Game implements IRecord {
 
             gamePlayer.setKillStreak(0);
             killerUser.addNetworkExperience(experience);
-            killerUser.sendMessage("&6&l>> &f&lCurrent Streak: &a" + killer.getKillStreak() + "   &f&lPersonal Best: &a" + killer.getUser().getStat(Stats.HG_HIGHEST_KILL_STREAK).getValueAsInt());
+            killerUser.sendMessage("&6&l>> &f&lCurrent Streak: &a" + killer.getKillStreak() + "   &f&lPersonal Best: &a" + killer.getUser().getStat(Stats.HG_HIGHEST_KILL_STREAK).getAsInt());
             Pair<Integer, String> result = killerUser.addCoins(coins, gameSettings.isCoinMultiplier());
             killer.setEarnedCoins(killer.getEarnedCoins() + result.getValue1());
             killerUser.sendMessage("&2&l>> &a+" + result.getValue1() + " &3COINS&a! " + result.getValue2());

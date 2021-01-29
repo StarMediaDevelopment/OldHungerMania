@@ -7,10 +7,11 @@ import net.hungermania.maniacore.api.channel.Channel;
 import net.hungermania.maniacore.api.leveling.Level;
 import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.maniacore.api.records.IgnoreInfoRecord;
-import net.hungermania.maniacore.api.stats.*;
+import net.hungermania.maniacore.api.stats.Stat;
+import net.hungermania.maniacore.api.stats.Statistic;
+import net.hungermania.maniacore.api.stats.Stats;
 import net.hungermania.maniacore.api.user.toggle.Toggle;
 import net.hungermania.maniacore.api.user.toggle.Toggles;
-import net.hungermania.manialib.data.annotations.ColumnInfo;
 import net.hungermania.manialib.data.model.IRecord;
 import net.hungermania.manialib.util.Pair;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -94,9 +95,9 @@ public class User implements IRecord {
     
     public void addNetworkExperience(int exp) {
         Statistic stat = getStat(Stats.EXPERIENCE);
-        Level current = ManiaCore.getInstance().getLevelManager().getLevel(stat.getValueAsInt());
-        stat.setValue((stat.getValueAsInt() + exp) + "");
-        Level newLevel = ManiaCore.getInstance().getLevelManager().getLevel(stat.getValueAsInt());
+        Level current = ManiaCore.getInstance().getLevelManager().getLevel(stat.getAsInt());
+        stat.setValue((stat.getAsInt() + exp) + "");
+        Level newLevel = ManiaCore.getInstance().getLevelManager().getLevel(stat.getAsInt());
         if (current.getNumber() < newLevel.getNumber()) {
             sendMessage("&a&lLevel Up! " + current.getNumber() + " -> " + newLevel.getNumber());
             sendMessage("  &7&oThis message is temporary");
@@ -126,7 +127,7 @@ public class User implements IRecord {
             }
         }
         int totalCoins = (int) Math.round(coins * multiplier);
-        stat.setValue((stat.getValueAsInt() + totalCoins) + "");
+        stat.setValue((stat.getAsInt() + totalCoins) + "");
         return new Pair<>(coins, multiplierString);
     }
     
@@ -228,14 +229,22 @@ public class User implements IRecord {
     public void incrementOnlineTime() {
         Statistic stat = getStat(Stats.ONLINE_TIME);
         stat.increment();
-        
-        if (stat.getValueAsInt() % 600 == 0) {
+
+        if (stat.getAsInt() % 600 == 0) {
             int multiplier = 1;
-            if (hasPermission(Rank.SCAVENGER)) { multiplier = 2; }
-            if (hasPermission(Rank.MEDIA)) { multiplier = 3; }
-            if (hasPermission(Rank.HELPER)) { multiplier = 4; }
-            if (hasPermission(Rank.ROOT)) { multiplier = 5; }
-            
+            if (hasPermission(Rank.SCAVENGER)) {
+                multiplier = 2;
+            }
+            if (hasPermission(Rank.MEDIA)) {
+                multiplier = 3;
+            }
+            if (hasPermission(Rank.HELPER)) {
+                multiplier = 4;
+            }
+            if (hasPermission(Rank.ROOT)) {
+                multiplier = 5;
+            }
+
             int exp = 10 * multiplier;
             addNetworkExperience(exp);
             sendMessage("&e&l>> &7&o+" + exp + " XP - +10m of online time");

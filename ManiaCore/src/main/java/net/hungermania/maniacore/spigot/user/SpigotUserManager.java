@@ -14,7 +14,9 @@ import net.hungermania.maniacore.api.redis.Redis;
 import net.hungermania.maniacore.api.server.ServerType;
 import net.hungermania.maniacore.api.skin.Skin;
 import net.hungermania.maniacore.api.stats.Stats;
-import net.hungermania.maniacore.api.user.*;
+import net.hungermania.maniacore.api.user.IgnoreInfo;
+import net.hungermania.maniacore.api.user.User;
+import net.hungermania.maniacore.api.user.UserManager;
 import net.hungermania.maniacore.api.user.toggle.Toggles;
 import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.plugin.ManiaPlugin;
@@ -27,7 +29,10 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.*;
 
@@ -109,8 +114,8 @@ public class SpigotUserManager extends UserManager implements Listener {
             } else {
                 format = format.replace("{chatcolor}", channel.getColor());
             }
-            
-            Level level = ManiaCore.getInstance().getLevelManager().getLevel(user.getStat(Stats.EXPERIENCE).getValueAsInt());
+
+            Level level = ManiaCore.getInstance().getLevelManager().getLevel(user.getStat(Stats.EXPERIENCE).getAsInt());
             
             format = format.replace("{levelcolor}", level.getNumberColor().toString());
             format = format.replace("{level}", level.getNumber() + "");

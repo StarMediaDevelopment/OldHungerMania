@@ -6,7 +6,9 @@ import net.hungermania.maniacore.api.stats.Stats;
 import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.manialib.util.Constants;
-import org.bukkit.command.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class StatsCmd implements CommandExecutor {
@@ -23,31 +25,31 @@ public class StatsCmd implements CommandExecutor {
             
             target = ManiaCore.getInstance().getUserManager().getUser(((Player) sender).getUniqueId());
         }
-        
+
         if (target == null) {
             sender.sendMessage(ManiaUtils.color("&cCould not determine the target of the command."));
             return true;
         }
-    
-        Level level = ManiaCore.getInstance().getLevelManager().getLevel(target.getStat(Stats.EXPERIENCE).getValueAsInt());
+
+        Level level = ManiaCore.getInstance().getLevelManager().getLevel(target.getStat(Stats.EXPERIENCE).getAsInt());
         Level nextLevel = ManiaCore.getInstance().getLevelManager().getLevels().getOrDefault(level.getNumber() + 1, ManiaCore.getInstance().getLevelManager().getLevel(0));
-    
+
         User user = ManiaCore.getInstance().getUserManager().getUser(target.getUniqueId());
-        int kills = user.getStat(Stats.HG_KILLS).getValueAsInt();
-        int deaths = user.getStat(Stats.HG_DEATHS).getValueAsInt();
+        int kills = user.getStat(Stats.HG_KILLS).getAsInt();
+        int deaths = user.getStat(Stats.HG_DEATHS).getAsInt();
         double kdr = kills / (deaths * 1.0);
-    
-        int wins = user.getStat(Stats.HG_WINS).getValueAsInt();
-        int losses = user.getStat(Stats.HG_GAMES).getValueAsInt() - wins;
+
+        int wins = user.getStat(Stats.HG_WINS).getAsInt();
+        int losses = user.getStat(Stats.HG_GAMES).getAsInt() - wins;
         double wlr = wins / (losses * 1.0);
-    
-        int deathmatches = user.getStat(Stats.HG_DEATHMATCHES).getValueAsInt();
-        int chestsFound = user.getStat(Stats.HG_CHESTS_FOUND).getValueAsInt();
-    
+
+        int deathmatches = user.getStat(Stats.HG_DEATHMATCHES).getAsInt();
+        int chestsFound = user.getStat(Stats.HG_CHESTS_FOUND).getAsInt();
+
         sender.sendMessage(ManiaUtils.color("&6&l>> &a" + target.getName() + "'s Stats"));
-        sender.sendMessage(ManiaUtils.color("&6&l> &7Coins: &b" + target.getStat(Stats.COINS).getValueAsInt()));
+        sender.sendMessage(ManiaUtils.color("&6&l> &7Coins: &b" + target.getStat(Stats.COINS).getAsInt()));
         sender.sendMessage(ManiaUtils.color("&6&l> &7Level: &b" + level.getNumber()));
-        sender.sendMessage(ManiaUtils.color("&6&l> &7Experience: &b" + target.getStat(Stats.EXPERIENCE).getValueAsInt() + "     &e&lNext Level: &b" + (nextLevel.getTotalXp() - target.getStat(Stats.EXPERIENCE).getValueAsInt())));
+        sender.sendMessage(ManiaUtils.color("&6&l> &7Experience: &b" + target.getStat(Stats.EXPERIENCE).getAsInt() + "     &e&lNext Level: &b" + (nextLevel.getTotalXp() - target.getStat(Stats.EXPERIENCE).getAsInt())));
         sender.sendMessage(ManiaUtils.color("&6&l> &7Kills: &b" + kills));
         sender.sendMessage(ManiaUtils.color("&6&l> &7Deaths: &b" + deaths));
         sender.sendMessage(ManiaUtils.color("&6&l> &7K/D: &b" + Constants.NUMBER_FORMAT.format(kdr)));

@@ -40,7 +40,7 @@ public class MutateGui extends Gui {
         Mutation[] mutations = Mutations.MUTATIONS.values().toArray(new Mutation[0]);
         Map<MutationStatus, Map<MutationType, ItemStack>> mutationStacks = new HashMap<>();
         User user = ManiaCore.getInstance().getUserManager().getUser(mutator);
-        String[] rawUnlocked = user.getStat(Stats.HG_UNLOCKED_MUTATIONS).getValueAsString().split(";");
+        String[] rawUnlocked = user.getStat(Stats.HG_UNLOCKED_MUTATIONS).getAsString().split(";");
         Set<MutationType> unlockedTypes = new HashSet<>();
         for (String s : rawUnlocked) {
             unlockedTypes.add(MutationType.valueOf(s.toUpperCase()));
@@ -51,7 +51,7 @@ public class MutateGui extends Gui {
             if (unlockedTypes.contains(mutation.getType())) {
                 status = MutationStatus.AVAILABLE;
             } else {
-                if (user.getStat(Stats.COINS).getValueAsInt() >= mutation.getUnlockCost()) {
+                if (user.getStat(Stats.COINS).getAsInt() >= mutation.getUnlockCost()) {
                     status = MutationStatus.PURCHASABLE;
                 } else {
                     status = MutationStatus.LOCKED;
@@ -112,8 +112,8 @@ public class MutateGui extends Gui {
                     setButton(purchasableCounter.get(), new GUIButton(entry.getValue()).setListener(e -> {
                         if (e.getClick() == ClickType.RIGHT) {
                             Mutation mutation = Mutations.MUTATIONS.get(entry.getKey());
-                            if (user.getStat(Stats.COINS).getValueAsInt() >= mutation.getUnlockCost()) {
-                                user.getStat(Stats.COINS).setValue((user.getStat(Stats.COINS).getValueAsInt() - mutation.getUnlockCost()) + "");
+                            if (user.getStat(Stats.COINS).getAsInt() >= mutation.getUnlockCost()) {
+                                user.getStat(Stats.COINS).setValue((user.getStat(Stats.COINS).getAsInt() - mutation.getUnlockCost()) + "");
                                 unlockedTypes.add(entry.getKey());
                                 user.setStat(Stats.HG_UNLOCKED_MUTATIONS, StringUtils.join(unlockedTypes, ";"));
                                 e.getWhoClicked().closeInventory();

@@ -72,6 +72,7 @@ public final class ManiaCorePlugin extends JavaPlugin implements Listener, Mania
         getCommand("setstat").setExecutor(new SetstatCommand());
         getCommand("perks").setExecutor(new PerkCmd());
         getCommand("mutations").setExecutor(new MutationsCmd());
+        getCommand("tester").setExecutor(new TesterCmd());
     
         new BukkitRunnable() {
             public void run() {

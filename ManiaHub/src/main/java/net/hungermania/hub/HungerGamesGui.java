@@ -4,13 +4,11 @@ import cloud.timo.TimoCloud.api.TimoCloudAPI;
 import cloud.timo.TimoCloud.api.objects.PlayerObject;
 import cloud.timo.TimoCloud.api.objects.ServerGroupObject;
 import cloud.timo.TimoCloud.api.objects.ServerObject;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
-import net.hungermania.maniacore.api.server.ManiaServer;
 import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.spigot.gui.GUIButton;
 import net.hungermania.maniacore.spigot.gui.Gui;
 import net.hungermania.maniacore.spigot.util.ItemBuilder;
+import net.hungermania.maniacore.spigot.util.NBTWrapper;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -20,15 +18,17 @@ import java.util.*;
 import java.util.Map.Entry;
 
 public class HungerGamesGui extends Gui {
+
+    private static final ServerGroupObject HG_GROUP = TimoCloudAPI.getUniversalAPI().getServerGroup("HG");
+
     public HungerGamesGui(ManiaHub plugin) {
         super(plugin, "&3&lHUNGER GAMES &8- &rServer Select", false, 54);
         Map<Integer, ItemStack> serverStacks = new TreeMap<>();
         int onlinePlayers = 0, maximumPlayers = 0;
         int inLobby = 0, runnning = 0, restarting = 0, offline = 0;
 
-        ServerGroupObject hgServerGroup = TimoCloudAPI.getUniversalAPI().getServerGroup("HG");
         List<ServerObject> lobbyServers = new ArrayList<>();
-        for (ServerObject server : hgServerGroup.getServers()) {
+        for (ServerObject server : HG_GROUP.getServers()) {
             Material itemMaterial = null;
             List<String> lore = new LinkedList<>();
 
@@ -83,21 +83,26 @@ public class HungerGamesGui extends Gui {
                 itemMaterial = Material.BEDROCK;
                 lore.addAll(Arrays.asList("", ManiaUtils.color("&c&lSERVER IS OFFLINE")));
             }
-            
+
             ItemStack itemStack = new ItemStack(itemMaterial);
-            
+
             onlinePlayers += server.getOnlinePlayerCount();
             maximumPlayers += server.getMaxPlayerCount();
-            
+
             ItemMeta itemMeta = itemStack.getItemMeta();
             int number = Integer.parseInt(server.getName().split("-")[1]);
             itemMeta.setDisplayName(ManiaUtils.color("&a&lSERVER " + number));
             itemMeta.setLore(lore);
             itemStack.setItemMeta(itemMeta);
+            try {
+                NBTWrapper.addNBTString(itemStack, "serverGroup", "HG");
+                NBTWrapper.addNBTString(itemStack, "serverNumber", number + "");
+            } catch (Exception e) {
+            }
             serverStacks.put(number, itemStack);
         }
 
-        offline += hgServerGroup.getMaxAmount() - (inLobby + runnning + restarting + offline);
+        offline += HG_GROUP.getMaxAmount() - (inLobby + runnning + restarting + offline);
 
         ItemStack back = ItemBuilder.start(Material.COMPASS).setDisplayName("&c&lBACK TO GAME SELECTOR").build();
         ItemStack totalServers = ItemBuilder.start(Material.ENCHANTED_BOOK).setDisplayName("&e&lTOTAL SERVERS").withLore("&7Servers&8: &6" + serverStacks.size(), " &7In Lobby&8: &a" + inLobby, " &7Running&8: &e" + runnning, " &7Restarting&8: &c" + restarting, " &7Offline&8: &4" + offline).build();
@@ -141,23 +146,18 @@ public class HungerGamesGui extends Gui {
         int slot = 27;
 
         for (Entry<Integer, ItemStack> entry : serverStacks.entrySet()) {
-            ManiaServer maniaServer = null;
             ServerObject serverObject = null;
-            for (ServerObject hg : hgServerGroup.getServers()) {
+            for (ServerObject hg : HG_GROUP.getServers()) {
                 if (hg.getName().split("-")[1].equals(entry.getKey() + "")) {
-                    maniaServer = new ManiaServer(hg.getName(), hg.getPort());
                     serverObject = hg;
                 }
             }
-            ManiaServer finalManiaServer = maniaServer;
             if (serverObject.getState().equalsIgnoreCase("online") || serverObject.getState().equalsIgnoreCase("lobby")) {
+                ServerObject finalServerObject = serverObject;
                 setButton(slot++, new GUIButton(entry.getValue()).setListener(event -> {
-                    if (finalManiaServer != null) {
-                        Player player = (Player) event.getWhoClicked();
-                        ByteArrayDataOutput out = ByteStreams.newDataOutput();
-                        out.writeUTF("Connect");
-                        out.writeUTF(finalManiaServer.getName());
-                        player.sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
+                    if (finalServerObject != null) {
+                        PlayerObject player = TimoCloudAPI.getUniversalAPI().getPlayer(event.getWhoClicked().getUniqueId());
+                        player.sendToServer(finalServerObject);
                     }
                 }));
             }

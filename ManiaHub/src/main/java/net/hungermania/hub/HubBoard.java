@@ -40,11 +40,11 @@ public class HubBoard extends PlayerBoard {
         this.inGameLine = addLine("", ChatColor.WHITE + "In Game: " + ChatColor.GREEN, "" + gameOnline);
         addLine("", ChatColor.YELLOW.toString(), "");
         addLine("", ChatColor.GOLD + "" + ChatColor.BOLD + "STATS", "");
-        int totalWins = user.getStat(Stats.HG_WINS).getValueAsInt();
-        int totalKills = user.getStat(Stats.HG_KILLS).getValueAsInt();
+        int totalWins = user.getStat(Stats.HG_WINS).getAsInt();
+        int totalKills = user.getStat(Stats.HG_KILLS).getAsInt();
         this.winsLine = addLine("", ChatColor.WHITE + "Wins: " + ChatColor.YELLOW, "" + totalWins);
         this.killsLine = addLine("", ChatColor.WHITE + "Kills: " + ChatColor.YELLOW, "" + totalKills);
-        this.coinsLine = addLine("", ChatColor.WHITE + "Coins: " + ChatColor.YELLOW, "" + spigotUser.getStat(Stats.COINS).getValueAsInt());
+        this.coinsLine = addLine("", ChatColor.WHITE + "Coins: " + ChatColor.YELLOW, "" + spigotUser.getStat(Stats.COINS).getAsInt());
         addLine("", ChatColor.GRAY.toString(), "");
         addLine("", ChatColor.GOLD + "" + ChatColor.BOLD + "SERVER", "");
         ManiaServer currentServer = maniaCore.getServerManager().getCurrentServer();
@@ -72,10 +72,10 @@ public class HubBoard extends PlayerBoard {
         }
         setLine(hubLine, hubOnline + "");
         setLine(inGameLine, gameOnline + "");
-        int totalWins = user.getStat(Stats.HG_WINS).getValueAsInt();
-        int totalKills = user.getStat(Stats.HG_KILLS).getValueAsInt();
+        int totalWins = user.getStat(Stats.HG_WINS).getAsInt();
+        int totalKills = user.getStat(Stats.HG_KILLS).getAsInt();
         setLine(winsLine, totalWins + "");
         setLine(killsLine, totalKills + "");
-        setLine(coinsLine, user.getStat(Stats.COINS).getValueAsInt() + "");
+        setLine(coinsLine, user.getStat(Stats.COINS).getAsInt() + "");
     }
 }

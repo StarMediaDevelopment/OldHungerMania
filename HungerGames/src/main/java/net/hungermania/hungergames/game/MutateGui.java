@@ -7,7 +7,10 @@ import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.spigot.gui.GUIButton;
 import net.hungermania.maniacore.spigot.gui.Gui;
-import net.hungermania.maniacore.spigot.mutations.*;
+import net.hungermania.maniacore.spigot.mutations.Mutation;
+import net.hungermania.maniacore.spigot.mutations.MutationStatus;
+import net.hungermania.maniacore.spigot.mutations.MutationType;
+import net.hungermania.maniacore.spigot.mutations.Mutations;
 import net.hungermania.maniacore.spigot.util.ItemBuilder;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Material;
@@ -43,7 +46,7 @@ public class MutateGui extends Gui {
         Game game = HungerGames.getInstance().getGameManager().getCurrentGame();
         if (game == null) { return; }
         GamePlayer gamePlayer = game.getPlayer(mutator);
-        String[] rawUnlocked = gamePlayer.getUser().getStat(Stats.HG_UNLOCKED_MUTATIONS).getValueAsString().split(";");
+        String[] rawUnlocked = gamePlayer.getUser().getStat(Stats.HG_UNLOCKED_MUTATIONS).getAsString().split(";");
         Set<MutationType> unlockedTypes = new HashSet<>();
         for (String s : rawUnlocked) {
             unlockedTypes.add(MutationType.valueOf(s.toUpperCase()));
@@ -54,7 +57,7 @@ public class MutateGui extends Gui {
             if (unlockedTypes.contains(mutation.getType())) {
                 status = MutationStatus.AVAILABLE;
             } else {
-                if (gamePlayer.getUser().getStat(Stats.COINS).getValueAsInt() >= mutation.getUnlockCost()) {
+                if (gamePlayer.getUser().getStat(Stats.COINS).getAsInt() >= mutation.getUnlockCost()) {
                     status = MutationStatus.PURCHASABLE;
                 } else {
                     status = MutationStatus.LOCKED;
@@ -108,7 +111,7 @@ public class MutateGui extends Gui {
                 for (Entry<MutationType, ItemStack> entry : items.entrySet()) {
                     setButton(availableCounter.get(), new GUIButton(entry.getValue()).setListener((e) -> {
                         User user = ManiaCore.getInstance().getUserManager().getUser(e.getWhoClicked().getUniqueId());
-                        if (user.getStat(Stats.COINS).getValueAsInt() < Mutations.MUTATIONS.get(entry.getKey()).getUseCost()) {
+                        if (user.getStat(Stats.COINS).getAsInt() < Mutations.MUTATIONS.get(entry.getKey()).getUseCost()) {
                             e.getWhoClicked().closeInventory();
                             e.getWhoClicked().sendMessage(ManiaUtils.color("&cYou do not have enough coins to use that mutation."));
                             return;
@@ -124,8 +127,8 @@ public class MutateGui extends Gui {
                         if (e.getClick() == ClickType.RIGHT) {
                             User user = ManiaCore.getInstance().getUserManager().getUser(e.getWhoClicked().getUniqueId());
                             Mutation mutation = Mutations.MUTATIONS.get(entry.getKey());
-                            if (user.getStat(Stats.COINS).getValueAsInt() >= mutation.getUnlockCost()) {
-                                user.getStat(Stats.COINS).setValue((user.getStat(Stats.COINS).getValueAsInt() - mutation.getUnlockCost()) + "");
+                            if (user.getStat(Stats.COINS).getAsInt() >= mutation.getUnlockCost()) {
+                                user.getStat(Stats.COINS).setValue((user.getStat(Stats.COINS).getAsInt() - mutation.getUnlockCost()) + "");
                                 unlockedTypes.add(entry.getKey());
                                 user.setStat(Stats.HG_UNLOCKED_MUTATIONS, StringUtils.join(unlockedTypes, ";"));
                                 e.getWhoClicked().closeInventory();

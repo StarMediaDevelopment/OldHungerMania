@@ -25,16 +25,23 @@ import net.hungermania.maniacore.spigot.plugin.SpigotManiaTask;
 import net.hungermania.maniacore.spigot.user.SpigotUser;
 import net.hungermania.maniacore.spigot.util.ItemBuilder;
 import net.hungermania.manialib.util.Range;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Difficulty;
+import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.*;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -334,8 +341,8 @@ public final class ManiaHub extends JavaPlugin implements Listener, ManiaPlugin 
                         user.getScoreboard().update();
                     }
                     user.getBukkitPlayer().setPlayerListName(ManiaUtils.color(user.getDisplayName()));
-                    
-                    Level level = ManiaCore.getInstance().getLevelManager().getLevel(user.getStat(Stats.EXPERIENCE).getValueAsInt());
+
+                    Level level = ManiaCore.getInstance().getLevelManager().getLevel(user.getStat(Stats.EXPERIENCE).getAsInt());
                     if (level != null) {
                         player.setLevel(level.getNumber());
                         if (level.getNumber() != 0) {
@@ -347,7 +354,7 @@ public final class ManiaHub extends JavaPlugin implements Listener, ManiaPlugin 
                                 if (previousLevel != null) {
                                     xpToNextLevel = xpToNextLevel - previousLevel.getTotalXp();
                                 }
-                                long currentProgress = user.getStat(Stats.EXPERIENCE).getValueAsInt() - level.getTotalXp();
+                                long currentProgress = user.getStat(Stats.EXPERIENCE).getAsInt() - level.getTotalXp();
                                 xp = (currentProgress * 1F) / (xpToNextLevel * 1F);
                             }
                             player.setExp(xp);

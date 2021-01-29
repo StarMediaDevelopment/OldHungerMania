@@ -46,12 +46,12 @@ public abstract class TieredPerk extends Perk {
             return;
         }
         
-        if (user.getStat(Stats.COINS).getValueAsInt() < nextTier.getCost()) {
+        if (user.getStat(Stats.COINS).getAsInt() < nextTier.getCost()) {
             user.sendMessage("&cYou do not have enough coins to purchase that perk.");
             return;
         }
-        
-        user.getStat(Stats.COINS).setValue(user.getStat(Stats.COINS).getValueAsInt() - nextTier.getCost());
+
+        user.getStat(Stats.COINS).setValue(user.getStat(Stats.COINS).getAsInt() - nextTier.getCost());
         perkInfo.setValue(true);
         perkInfo.getUnlockedTiers().add(nextTier.getNumber());
         ManiaCore.getInstance().getDatabase().pushRecord(new PerkInfoRecord(perkInfo));
@@ -96,7 +96,7 @@ public abstract class TieredPerk extends Perk {
             if (unlockedTiers.contains(entry.getKey())) {
                 color = "&a";
             } else {
-                if (coins.getValueAsInt() >= entry.getValue().getCost()) {
+                if (coins.getAsInt() >= entry.getValue().getCost()) {
                     color = "&e";
                 } else {
                     color = "&c";
@@ -111,13 +111,13 @@ public abstract class TieredPerk extends Perk {
         } else if ((unlockedTiers.size() > 0) && unlockedTiers.size() < this.tiers.size()) {
             status = PerkStatus.PARTIALLY_PURCHASED;
         } else if (current == null) {
-            if (coins.getValueAsInt() >= nextTier.getCost()) {
+            if (coins.getAsInt() >= nextTier.getCost()) {
                 status = PerkStatus.AVAILABLE;
             } else {
                 status = PerkStatus.LOCKED;
             }
         } else if (nextTier != null) {
-            if (coins.getValueAsInt() >= nextTier.getCost()) {
+            if (coins.getAsInt() >= nextTier.getCost()) {
                 status = PerkStatus.AVAILABLE;
             } else {
                 status = PerkStatus.PARTIALLY_PURCHASED;

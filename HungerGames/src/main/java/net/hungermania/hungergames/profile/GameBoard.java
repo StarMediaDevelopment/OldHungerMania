@@ -32,7 +32,7 @@ public class GameBoard extends PlayerBoard {
         this.spectatorsLine = addLine("", ChatColor.WHITE + "Spectators: " + ChatColor.RED, "" + game.getSpectatorsTeam().size());
         addLine("", ChatColor.YELLOW.toString(), "");
         addLine("", ChatColor.GOLD + "" + ChatColor.BOLD + "STATS:", "");
-        this.scoreLine = addLine("", ChatColor.WHITE + "Score: " + ChatColor.YELLOW, spigotUser.getStat(Stats.HG_SCORE).getValueAsString());
+        this.scoreLine = addLine("", ChatColor.WHITE + "Score: " + ChatColor.YELLOW, spigotUser.getStat(Stats.HG_SCORE).getAsString());
         this.killsLine = addLine("", ChatColor.WHITE + "Kills: " + ChatColor.YELLOW, "");
         this.coinsLine = addLine("", ChatColor.WHITE + "Coins: " + ChatColor.YELLOW, "" + game.getPlayer(user.getUniqueId()).getEarnedCoins());
         addLine("", ChatColor.GRAY.toString(), "");
@@ -51,6 +51,6 @@ public class GameBoard extends PlayerBoard {
         setLine(spectatorsLine, "" + game.getSpectatorsTeam().size());
         setLine(killsLine, "" + game.getPlayer(user.getUniqueId()).getKills());
         setLine(coinsLine, "" + game.getPlayer(user.getUniqueId()).getEarnedCoins());
-        setLine(scoreLine, user.getStat(Stats.HG_SCORE).getValueAsString());
+        setLine(scoreLine, user.getStat(Stats.HG_SCORE).getAsString());
     }
 }

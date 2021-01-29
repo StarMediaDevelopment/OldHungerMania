@@ -7,7 +7,10 @@ import net.hungermania.maniacore.api.stats.Stats;
 import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.util.ManiaUtils;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.command.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 public class SetstatCommand implements CommandExecutor {
@@ -56,11 +59,11 @@ public class SetstatCommand implements CommandExecutor {
             String a = args[2];
             if (a.startsWith("+")) {
                 int v = Integer.parseInt(a.substring(1));
-                statistic.setValue((statistic.getValueAsInt() + v) + "");
+                statistic.setValue((statistic.getAsInt() + v) + "");
                 sender.sendMessage(ManiaUtils.color("&aIncreased the stat " + stat.name().toLowerCase() + " by " + v));
             } else if (a.startsWith("-")) {
                 int v = Integer.parseInt(a.substring(1));
-                statistic.setValue((statistic.getValueAsInt() - v) + "");
+                statistic.setValue((statistic.getAsInt() - v) + "");
                 sender.sendMessage(ManiaUtils.color("&aDecreased the stat " + stat.name().toLowerCase() + " by " + v));
             } else {
                 int v = Integer.parseInt(a);

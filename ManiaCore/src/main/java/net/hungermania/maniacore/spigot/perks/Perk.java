@@ -11,7 +11,9 @@ import net.hungermania.manialib.util.Utils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.UUID;
 
 @Getter
 public abstract class Perk implements Comparable<Perk> {
@@ -59,13 +61,13 @@ public abstract class Perk implements Comparable<Perk> {
             user.sendMessage("&cYou have already purchased that perk.");
             return;
         }
-        
-        if (user.getStat(Stats.COINS).getValueAsInt() < this.baseCost) {
+
+        if (user.getStat(Stats.COINS).getAsInt() < this.baseCost) {
             user.sendMessage("&cYou do not have enough coins to purchase that perk.");
             return;
         }
-        
-        user.getStat(Stats.COINS).setValue(user.getStat(Stats.COINS).getValueAsInt() - this.baseCost);
+
+        user.getStat(Stats.COINS).setValue(user.getStat(Stats.COINS).getAsInt() - this.baseCost);
         perkInfo.setValue(true);
         ManiaCore.getInstance().getDatabase().pushRecord(new PerkInfoRecord(perkInfo));
         user.sendMessage("&aYou purchased the perk " + getDisplayName());
@@ -97,7 +99,7 @@ public abstract class Perk implements Comparable<Perk> {
                 lore.add("&6&lRight Click &fto select this perk.");
             }
         } else {
-            if (user.getStat(Stats.COINS).getValueAsInt() >= baseCost) {
+            if (user.getStat(Stats.COINS).getAsInt() >= baseCost) {
                 lore.add(ManiaUtils.color("&e&oAvailable"));
                 lore.add("");
                 lore.add("&6&lLeft Click &fto purchase for " + getBaseCost() + ".");
