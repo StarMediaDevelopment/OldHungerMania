@@ -152,6 +152,11 @@ public class Game implements IRecord {
         
         for (SpigotUser hidden : lobby.getHiddenStaff()) {
             this.hiddenStaffTeam.join(hidden.getUniqueId());
+            new BukkitRunnable() {
+                public void run() {
+                    hidden.sendMessage("&6&l>> &cYou are spectating the game because you are incognito.");
+                }
+            }.runTaskLater(HungerGames.getInstance(), 100L);
         }
         
         this.playerTrackerTask = new PlayerTrackerTask(this);
@@ -197,7 +202,22 @@ public class Game implements IRecord {
                 task.end();
             }
         }.runTaskTimer(HungerGames.getInstance(), 20L, 20L);
-        
+
+        new BukkitRunnable() {
+            public void run() {
+                Set<UUID> members = new HashSet<>(spectatorsTeam.getMembers());
+                members.addAll(hiddenStaffTeam.getMembers());
+                for (UUID member : members) {
+                    Player player = Bukkit.getPlayer(member);
+                    player.sendMessage("");
+                    player.sendMessage(ManiaUtils.color("&6&l>> &eYou might be out of the game, but &f&lDON'T QUIT&e!"));
+                    player.sendMessage(ManiaUtils.color("&6&l>> &eAnother game will be &f&lSTARTING SOON&e!"));
+                    player.sendMessage(ManiaUtils.color("&6&l>> &eOr, &f&lCLICK HERE &eto go to the next available game. &c&l&oNot implemented yet"));
+                    player.sendMessage("");
+                }
+            }
+        }.runTaskTimer(HungerGames.getInstance(), 0L, 6000);
+
         messager = new GameMessager(this);
     }
     

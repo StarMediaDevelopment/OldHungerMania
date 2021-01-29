@@ -1,17 +1,23 @@
 package net.hungermania.hungergames.game.team;
 
-import net.hungermania.hungergames.game.*;
+import net.hungermania.hungergames.game.Game;
+import net.hungermania.hungergames.game.GamePlayer;
+import net.hungermania.hungergames.game.PlayerType;
 import net.hungermania.hungergames.game.death.DeathInfo;
 import net.hungermania.hungergames.game.death.DeathInfoPlayerKill;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.spigot.util.ItemBuilder;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 public class SpectatorsTeam extends GameTeam {
     public SpectatorsTeam(Game game) {
@@ -60,6 +66,7 @@ public class SpectatorsTeam extends GameTeam {
         this.members.add(uuid);
         User user = ManiaCore.getInstance().getUserManager().getUser(uuid);
         user.sendMessage(getJoinMessage());
+        user.sendMessage("&6&l>> &eYou are now spectating the game!");
         
         Set<UUID> players = new HashSet<>(game.getSpectatorsTeam().getMembers());
         players.addAll(game.getTributesTeam().getMembers());
