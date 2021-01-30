@@ -5,6 +5,7 @@ import lombok.Setter;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.channel.Channel;
 import net.hungermania.maniacore.api.leveling.Level;
+import net.hungermania.maniacore.api.nickname.Nickname;
 import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.maniacore.api.records.IgnoreInfoRecord;
 import net.hungermania.maniacore.api.stats.Stat;
@@ -29,12 +30,17 @@ public class User implements IRecord {
     protected Channel channel = Channel.GLOBAL; //TODO Type handler (Probably just a default enum handler
     protected Set<IgnoreInfo> ignoredPlayers = new HashSet<>(); //TODO Set type handlers
     protected Rank rank = Rank.DEFAULT; //TODO Type handler
+    protected Nickname nickname;
     
     protected Map<String, Statistic> stats = new HashMap<>();
     protected Map<Toggles, Toggle> toggles = new HashMap<>();
     
     public User(UUID uniqueId) {
         this.uniqueId = uniqueId;
+    }
+    
+    public void applyNickname() {
+        
     }
     
     public User(UUID uniqueId, String name) {
