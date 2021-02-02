@@ -1,11 +1,12 @@
 package net.hungermania.maniacore.api.nickname;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.UUID;
 
-@Getter
+@Getter @AllArgsConstructor
 public class Nickname {
     @Setter private int id;
     private UUID player;
