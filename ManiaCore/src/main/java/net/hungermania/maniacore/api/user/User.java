@@ -285,4 +285,17 @@ public class User implements IRecord {
             this.stats.put(stat.getName(), s);
         }
     }
+
+    public Level getLevel() {
+        return ManiaCore.getInstance().getLevelManager().getLevel(this.getStat(Stats.EXPERIENCE).getAsInt());
+    }
+
+    public boolean isIgnoring(UUID target) {
+        for (IgnoreInfo ignoredPlayer : this.ignoredPlayers) {
+            if (ignoredPlayer.getPlayer().equals(target)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

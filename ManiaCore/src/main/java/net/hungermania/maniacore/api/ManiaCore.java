@@ -1,5 +1,6 @@
 package net.hungermania.maniacore.api;
 
+import net.hungermania.maniacore.api.chat.ChatManager;
 import net.hungermania.maniacore.api.communication.MessageHandler;
 import net.hungermania.maniacore.api.events.EventManager;
 import net.hungermania.maniacore.api.friends.FriendNotification;
@@ -60,7 +61,8 @@ public class ManiaCore implements DatabaseHandler {
     private MemoryManager memoryManager;
     private EventManager eventManager;
     private FriendsManager friendsManager;
-    
+    private ChatManager chatManager;
+
     public void init(Logger logger, ManiaPlugin plugin) {
         this.logger = logger;
         this.plugin = plugin;
@@ -210,5 +212,9 @@ public class ManiaCore implements DatabaseHandler {
     
     public FriendsManager getFriendsManager() {
         return friendsManager;
+    }
+
+    public ChatManager getChatManager() {
+        return this.chatManager;
     }
 }
