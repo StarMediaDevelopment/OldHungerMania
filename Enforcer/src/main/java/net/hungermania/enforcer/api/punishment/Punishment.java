@@ -1,11 +1,13 @@
 package net.hungermania.enforcer.api.punishment;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class Punishment {
     public enum Type {
         BAN, MUTE, WARN, KICK, UNKNOWN
