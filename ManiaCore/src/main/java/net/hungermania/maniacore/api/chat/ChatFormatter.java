@@ -6,7 +6,7 @@ import net.hungermania.maniacore.api.nickname.Nickname;
 import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.maniacore.api.user.User;
 
-public abstract class ChatFormatter {
+public class ChatFormatter {
     
     //"&8[{levelcolor}{level}&8] {displayname}&8: {chatcolor}{message}";
     
