@@ -8,8 +8,6 @@ import net.hungermania.maniacore.api.user.User;
 
 public class ChatFormatter {
     
-    //"&8[{levelcolor}{level}&8] {displayname}&8: {chatcolor}{message}";
-    
     public static final String CHANNEL_HEADER = "{symbolcolor}&l[{channelcolor}{symbolcolor}&l]"; //Space and color added during processing
     public static final String LEVEL_FORMAT = "&8[{levelcolor}{level}&8]";
     public static final String PLAYER_NAME_FORMAT = "{prefix}{name}{suffix}"; //Spaces added during processing
@@ -41,6 +39,8 @@ public class ChatFormatter {
         format = format.replace("{chatcolor}", rank.getChatColor());
         format = format.replace("{message}", message);
         format = format.replace("{name}", username);
+        format = format.replace("{trueName}", user.getName());
+        format = format.replace("{truePrefix}", user.getRank().getPrefix());
         return format;
     }
 }

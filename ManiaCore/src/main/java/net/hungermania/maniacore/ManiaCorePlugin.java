@@ -1,6 +1,7 @@
 package net.hungermania.maniacore;
 
 import net.hungermania.maniacore.api.ManiaCore;
+import net.hungermania.maniacore.api.chat.ChatHandler;
 import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.maniacore.api.ranks.RankRedisListener;
 import net.hungermania.maniacore.api.records.SkinRecord;
@@ -26,6 +27,7 @@ import net.hungermania.maniacore.spigot.user.FriendsRedisListener;
 import net.hungermania.maniacore.spigot.user.SpigotUserManager;
 import net.hungermania.manialib.ManiaLib;
 import net.hungermania.manialib.sql.Database;
+import net.hungermania.manialib.util.Priority;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -33,6 +35,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 public final class ManiaCorePlugin extends JavaPlugin implements Listener, ManiaPlugin {
     
@@ -142,6 +148,16 @@ public final class ManiaCorePlugin extends JavaPlugin implements Listener, Mania
         this.runTaskLater(() -> maniaCore.getServerManager().sendServerStart(getManiaCore().getServerManager().getCurrentServer().getName()), 1L);
         this.runTaskTimer(new Updater(this), 1L, 1L);
         Perks.PERKS.size();
+        
+        ManiaCore.getInstance().getChatManager().registerHandler(this, new ChatHandler() {
+            public Set<UUID> getAllTargets() {
+                Set<UUID> targets = new HashSet<>();
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    targets.add(player.getUniqueId());
+                }
+                return targets;
+            }
+        }, Priority.LOWEST);
     }
     
     public ManiaCore getManiaCore() {

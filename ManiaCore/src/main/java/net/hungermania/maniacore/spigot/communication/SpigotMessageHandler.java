@@ -3,6 +3,7 @@ package net.hungermania.maniacore.spigot.communication;
 import net.hungermania.maniacore.ManiaCorePlugin;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.channel.Channel;
+import net.hungermania.maniacore.api.chat.ChatFormatter;
 import net.hungermania.maniacore.api.communication.MessageHandler;
 import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.maniacore.api.user.User;
@@ -26,13 +27,13 @@ public class SpigotMessageHandler extends MessageHandler {
     
     protected void handleStaffChat(UUID p, String message) {
         if (Bukkit.getOnlinePlayers().isEmpty()) return;
-        Channel c = Channel.STAFF;
-        StringBuilder format = new StringBuilder().append(c.getChatPrefix()).append(message);
+        ChatFormatter chatFormatter = ManiaCore.getInstance().getChatManager().getChatFormatter(Channel.STAFF);
+        User sender = ManiaCore.getInstance().getUserManager().getUser(p);
         for (Player player : Bukkit.getOnlinePlayers()) {
             User user = ManiaCore.getInstance().getUserManager().getUser(player.getUniqueId());
             if (user.hasPermission(Rank.HELPER)) {
                 if (user.getToggle(Toggles.STAFF_NOTIFICATIONS).getAsBoolean()) {
-                    player.sendMessage(ManiaUtils.color(format.toString()));
+                    player.sendMessage(chatFormatter.format(sender, message));
                 }
             }
         }
@@ -40,13 +41,13 @@ public class SpigotMessageHandler extends MessageHandler {
     
     protected void handleAdminChat(UUID p, String message) {
         if (Bukkit.getOnlinePlayers().isEmpty()) return;
-        Channel c = Channel.ADMIN;
-        StringBuilder format = new StringBuilder().append(c.getChatPrefix()).append(message);
+        ChatFormatter chatFormatter = ManiaCore.getInstance().getChatManager().getChatFormatter(Channel.ADMIN);
+        User sender = ManiaCore.getInstance().getUserManager().getUser(p);
         for (Player player : Bukkit.getOnlinePlayers()) {
             User user = ManiaCore.getInstance().getUserManager().getUser(player.getUniqueId());
             if (user.hasPermission(Rank.ADMIN)) {
                 if (user.getToggle(Toggles.ADMIN_NOTIFICATIONS).getAsBoolean()) {
-                    player.sendMessage(ManiaUtils.color(format.toString()));
+                    player.sendMessage(chatFormatter.format(sender, message));
                 }
             }
         }

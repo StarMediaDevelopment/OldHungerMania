@@ -2,6 +2,8 @@ package net.hungermania.hungergames;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.hungermania.hungergames.chat.HGChatFormatter;
+import net.hungermania.hungergames.chat.HGChatHandler;
 import net.hungermania.hungergames.game.Game;
 import net.hungermania.hungergames.game.GameManager;
 import net.hungermania.hungergames.game.HGCommand;
@@ -21,6 +23,8 @@ import net.hungermania.hungergames.records.LootRecord;
 import net.hungermania.hungergames.settings.GameSettings;
 import net.hungermania.hungergames.settings.SettingsManager;
 import net.hungermania.maniacore.api.ManiaCore;
+import net.hungermania.maniacore.api.channel.Channel;
+import net.hungermania.maniacore.api.chat.ChatManager;
 import net.hungermania.maniacore.api.server.ServerType;
 import net.hungermania.maniacore.memory.MemoryHook;
 import net.hungermania.maniacore.plugin.ManiaPlugin;
@@ -33,6 +37,7 @@ import net.hungermania.maniacore.spigot.user.SpigotUser;
 import net.hungermania.manialib.ManiaLib;
 import net.hungermania.manialib.data.DatabaseManager;
 import net.hungermania.manialib.data.MysqlDatabase;
+import net.hungermania.manialib.util.Priority;
 import net.hungermania.manialib.util.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
@@ -126,6 +131,10 @@ public final class HungerGames extends JavaPlugin implements ManiaPlugin {
         getLogger().info("Loaded " + Perks.PERKS.size() + " Perks");
 
         Timer.startTimerUpdater(this);
+
+        ChatManager chatManager = ManiaCore.getInstance().getChatManager();
+        chatManager.setFormatter(Channel.GLOBAL, new HGChatFormatter());
+        chatManager.registerHandler(this, new HGChatHandler(), Priority.HIGHEST);
     }
 
     public void registerRecordTypes() {

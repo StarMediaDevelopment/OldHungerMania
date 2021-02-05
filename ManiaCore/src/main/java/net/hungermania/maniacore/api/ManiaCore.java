@@ -1,5 +1,7 @@
 package net.hungermania.maniacore.api;
 
+import net.hungermania.maniacore.api.channel.Channel;
+import net.hungermania.maniacore.api.chat.ChatFormatter;
 import net.hungermania.maniacore.api.chat.ChatManager;
 import net.hungermania.maniacore.api.communication.MessageHandler;
 import net.hungermania.maniacore.api.events.EventManager;
@@ -35,6 +37,8 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.Random;
 import java.util.logging.Logger;
+
+import static net.hungermania.maniacore.api.chat.ChatFormatter.*;
 
 public class ManiaCore implements DatabaseHandler {
     
@@ -133,6 +137,12 @@ public class ManiaCore implements DatabaseHandler {
         
         this.friendsManager = new FriendsManager();
         plugin.runTaskLater(() -> maniaLib.init(), 1L);
+        
+        this.chatManager = new ChatManager();
+        this.chatManager.setFormatter(Channel.GLOBAL, new ChatFormatter(LEVEL_FORMAT + " " + PLAYER_NAME_FORMAT + "&8: &r" + MESSAGE_FORMAT));
+        ChatFormatter otherFormatter = new ChatFormatter(CHANNEL_HEADER + " " + "{truePrefix}{trueName}" + "&8: &r" + MESSAGE_FORMAT);
+        this.chatManager.setFormatter(Channel.STAFF, otherFormatter);
+        this.chatManager.setFormatter(Channel.ADMIN, otherFormatter);
     }
 
     public void registerRecordTypes() {

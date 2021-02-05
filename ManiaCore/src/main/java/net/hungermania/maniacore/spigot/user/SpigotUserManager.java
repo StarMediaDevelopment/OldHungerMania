@@ -4,26 +4,21 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.channel.Channel;
-import net.hungermania.maniacore.api.leveling.Level;
+import net.hungermania.maniacore.api.chat.ChatHandler;
 import net.hungermania.maniacore.api.logging.entry.ChatEntry;
 import net.hungermania.maniacore.api.logging.entry.CmdEntry;
 import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.maniacore.api.records.ChatEntryRecord;
 import net.hungermania.maniacore.api.records.CmdEntryRecord;
 import net.hungermania.maniacore.api.redis.Redis;
-import net.hungermania.maniacore.api.server.ServerType;
 import net.hungermania.maniacore.api.skin.Skin;
-import net.hungermania.maniacore.api.stats.Stats;
-import net.hungermania.maniacore.api.user.IgnoreInfo;
 import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.user.UserManager;
 import net.hungermania.maniacore.api.user.toggle.Toggles;
-import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.plugin.ManiaPlugin;
 import net.hungermania.maniacore.spigot.events.UserJoinEvent;
 import net.hungermania.maniacore.spigot.updater.UpdateEvent;
 import net.hungermania.maniacore.spigot.updater.UpdateType;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -67,6 +62,7 @@ public class SpigotUserManager extends UserManager implements Listener {
     public void onPlayerChat(AsyncPlayerChatEvent e) {
         Player player = e.getPlayer();
         SpigotUser user = (SpigotUser) getUser(player.getUniqueId());
+        e.setCancelled(true);
         
         if (e.getMessage().startsWith("@") || e.getMessage().startsWith("$")) {
             char channelChar = e.getMessage().charAt(0);
@@ -86,59 +82,10 @@ public class SpigotUserManager extends UserManager implements Listener {
             }
             return;
         }
-        
-        if (ManiaCore.getInstance().getServerManager().getCurrentServer().getType() != ServerType.HUNGER_GAMES) {
-            Channel channel = user.getChannel();
-            String channelPrefix = "";
-            e.setCancelled(true);
-            if (StringUtils.isNotEmpty(channel.getPrefix())) {
-                channelPrefix = channel.getSymbolColor() + "[" + channel.getColor() + channel.getPrefix() + channel.getSymbolColor() + "] ";
-            }
-            
-            String format;
-            if (channel == Channel.GLOBAL) {
-                format = "&8[{levelcolor}{level}&8] {displayname}&8: {chatcolor}{message}";
-            } else {
-                format = "{prefix} {displayname}&8: {chatcolor}{message}";
-            }
-            
-            format = format.replace("{displayname}", user.getDisplayName());
-            format = format.replace("{prefix}", channelPrefix);
-            Rank rank = user.getRank();
-            if (StringUtils.isNotEmpty(rank.getChatColor()) && channel == Channel.GLOBAL) {
-                if (rank.getChatColor() == null) {
-                    format = format.replace("{chatcolor}", "&f");
-                } else {
-                    format = format.replace("{chatcolor}", rank.getChatColor());
-                }
-            } else {
-                format = format.replace("{chatcolor}", channel.getColor());
-            }
 
-            Level level = ManiaCore.getInstance().getLevelManager().getLevel(user.getStat(Stats.EXPERIENCE).getAsInt());
-            
-            format = format.replace("{levelcolor}", level.getNumberColor().toString());
-            format = format.replace("{level}", level.getNumber() + "");
-            format = format.replace("%", "%%");
-            format = format.replace("{message}", e.getMessage());
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                User u = ManiaCore.getInstance().getUserManager().getUser(p.getUniqueId());
-                boolean send = true;
-                for (IgnoreInfo ignoredPlayer : u.getIgnoredPlayers()) {
-                    if (ignoredPlayer.getIgnored().equals(player.getUniqueId())) {
-                        if (!user.hasPermission(Rank.HELPER)) {
-                            send = false;
-                            break;
-                        }
-                    }
-                }
-                
-                if (send) {
-                    p.sendMessage(ManiaUtils.color(format));
-                }
-            }
-        }
-        
+        ChatHandler handler = ManiaCore.getInstance().getChatManager().getHandler();
+        handler.sendChatMessage(e.getPlayer().getUniqueId(), Channel.GLOBAL, e.getMessage());
+
         ChatEntry chatEntry = new ChatEntry(System.currentTimeMillis(), ManiaCore.getInstance().getServerManager().getCurrentServer().getName(), user.getId(), e.getMessage().replace("'", "\\'"), user.getChannel().name());
         ChatEntryRecord chatEntryRecord = new ChatEntryRecord(chatEntry);
         ManiaCore.getInstance().getDatabase().addRecordToQueue(chatEntryRecord);

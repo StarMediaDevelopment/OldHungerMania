@@ -1,6 +1,7 @@
 package net.hungermania.maniacore.api.records;
 
 import net.hungermania.maniacore.api.nickname.Nickname;
+import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.manialib.sql.*;
 
 import java.util.HashMap;
@@ -16,6 +17,7 @@ public class NicknameRecord implements IRecord<Nickname> {
         table.addColumn("name", DataType.VARCHAR, 16);
         table.addColumn("skinUUID", DataType.VARCHAR, 36);
         table.addColumn("active", DataType.VARCHAR, 5);
+        table.addColumn("rank", DataType.VARCHAR, 50);
         return null;
     }
     
@@ -31,7 +33,8 @@ public class NicknameRecord implements IRecord<Nickname> {
         String name = row.getString("name");
         UUID skinUUID = row.getUUID("skinUUID");
         boolean active = row.getBoolean("active");
-        this.object = new Nickname(id, player, name, skinUUID, active);
+        Rank rank = Rank.valueOf(row.getString("rank"));
+        this.object = new Nickname(id, player, name, skinUUID, active, rank);
     }
     
     public Map<String, Object> serialize() {
@@ -41,6 +44,7 @@ public class NicknameRecord implements IRecord<Nickname> {
             put("name", object.getName());
             put("skinUUID", object.getSkinUUID().toString());
             put("active", object.isActive());
+            put("rank", object.getRank().name());
         }};
     }
     
