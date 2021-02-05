@@ -1,18 +1,25 @@
 package net.hungermania.maniacore.spigot.user;
 
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
+import com.mojang.authlib.properties.PropertyMap;
 import lombok.Getter;
 import lombok.Setter;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.channel.Channel;
 import net.hungermania.maniacore.api.ranks.Rank;
+import net.hungermania.maniacore.api.skin.Skin;
 import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.spigot.perks.*;
 import net.hungermania.manialib.sql.IRecord;
 import net.md_5.bungee.api.chat.BaseComponent;
+import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 @Getter @Setter
@@ -71,7 +78,44 @@ public class SpigotUser extends User {
     public boolean isOnline() {
         return getBukkitPlayer() != null;
     }
-    
+
+    public void applyNickname() {
+        CraftPlayer craftPlayer = (CraftPlayer) this.getBukkitPlayer();
+        EntityPlayer entityPlayer = craftPlayer.getHandle();
+        GameProfile gameProfile = entityPlayer.getProfile();
+
+        Skin skin = ManiaCore.getInstance().getSkinManager().getSkin(nickname.getSkinUUID());
+        PropertyMap properties = gameProfile.getProperties();
+        properties.clear();
+        properties.put("textures", new Property("textures", skin.getValue(), skin.getSignature()));
+        try {
+            Field nameField = gameProfile.getClass().getDeclaredField("name");
+            nameField.setAccessible(true);
+            nameField.set(gameProfile, nickname.getName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        int dim = entityPlayer.getWorld().worldProvider.getDimension();
+        EnumDifficulty diff = entityPlayer.getWorld().getDifficulty();
+        WorldType type = entityPlayer.getWorld().worldData.getType();
+        WorldSettings.EnumGamemode gamemode = WorldSettings.EnumGamemode.valueOf(craftPlayer.getGameMode().name());
+        PacketPlayOutRespawn respawn = new PacketPlayOutRespawn(dim, diff, type, gamemode);
+        entityPlayer.playerConnection.sendPacket(respawn);
+        
+        List<Player> canSee = new ArrayList<>();
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (player.canSee(getBukkitPlayer())) {
+                canSee.add(player);
+                player.hidePlayer(getBukkitPlayer());
+            }
+        }
+
+        for (Player player : canSee) {
+            player.showPlayer(getBukkitPlayer());
+        }
+    }
+
     public void loadPerks() {
         List<IRecord> records = ManiaCore.getInstance().getDatabase().getRecords(PerkInfoRecord.class, "uuid", this.uniqueId.toString());
         for (IRecord record : records) {
