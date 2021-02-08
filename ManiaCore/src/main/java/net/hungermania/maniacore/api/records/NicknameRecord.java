@@ -18,7 +18,7 @@ public class NicknameRecord implements IRecord<Nickname> {
         table.addColumn("skinUUID", DataType.VARCHAR, 36);
         table.addColumn("active", DataType.VARCHAR, 5);
         table.addColumn("rank", DataType.VARCHAR, 50);
-        return null;
+        return table;
     }
     
     private Nickname object;

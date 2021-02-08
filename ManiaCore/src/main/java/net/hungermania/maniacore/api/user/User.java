@@ -8,6 +8,7 @@ import net.hungermania.maniacore.api.leveling.Level;
 import net.hungermania.maniacore.api.nickname.Nickname;
 import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.maniacore.api.records.IgnoreInfoRecord;
+import net.hungermania.maniacore.api.skin.Skin;
 import net.hungermania.maniacore.api.stats.Stat;
 import net.hungermania.maniacore.api.stats.Statistic;
 import net.hungermania.maniacore.api.stats.Stats;
@@ -23,7 +24,9 @@ import java.util.*;
 @Setter
 public class User implements IRecord {
     private static final UUID FIRESTAR311 = UUID.fromString("3f7891ce-5a73-4d52-a2ba-299839053fdc");
-    
+    private static final UUID ASSASSINPLAYS = UUID.fromString("c292df56-5baa-4a11-87a3-cba08ce5f7a6");
+    protected static final Set<Stats> FAKED_STATS = new HashSet<>(Arrays.asList(Stats.EXPERIENCE, Stats.COINS, Stats.HG_CHESTS_FOUND, Stats.HG_SCORE, Stats.HG_KILLS, Stats.HG_WINS, Stats.HG_DEATHMATCHES, Stats.HG_DEATHS, Stats.HG_MUTANT_DEATHS, Stats.HG_GAMES, Stats.HG_HIGHEST_KILL_STREAK, Stats.HG_MUTANT_KILLS, Stats.HG_WINSTREAK));
+
     protected int id = 0;
     protected UUID uniqueId;
     protected String name;
@@ -35,17 +38,36 @@ public class User implements IRecord {
     protected Map<String, Statistic> stats = new HashMap<>();
     protected Map<Toggles, Toggle> toggles = new HashMap<>();
     
+    protected Map<String, Statistic> fakeStats = new HashMap<>();
+    
     public User(UUID uniqueId) {
         this.uniqueId = uniqueId;
+        this.nickname = new Nickname(uniqueId);
     }
     
     public void applyNickname() {
-        
+        Random random = new Random();
+        for (Stats fakedStat : FAKED_STATS) {
+            if (fakedStat == Stats.HG_SCORE) {
+                Statistic value = fakedStat.create(uniqueId);
+                value.setValue(random.nextInt(90) + 10);
+                this.fakeStats.put(fakedStat.name(), value);
+            } else {
+                Statistic stat = getStat(fakedStat);
+                Statistic value = fakedStat.create(uniqueId);
+                value.setValue(random.nextInt(stat.getAsInt()));
+            }
+        }
+    }
+    
+    public void resetNickname() {
+        this.fakeStats.clear();
     }
     
     public User(UUID uniqueId, String name) {
         this.uniqueId = uniqueId;
         this.name = name;
+        this.nickname = new Nickname(uniqueId);
     }
     
     public User(Map<String, String> jedisData) {
@@ -53,6 +75,7 @@ public class User implements IRecord {
         this.uniqueId = UUID.fromString(jedisData.get("uniqueId"));
         this.name = jedisData.get("name");
         this.rank = Rank.valueOf(jedisData.get("rank"));
+        this.nickname = new Nickname(uniqueId);
     }
     
     public boolean isOnline() {
@@ -202,10 +225,29 @@ public class User implements IRecord {
     }
     
     public String getDisplayName() {
-        return getRank().getPrefix() + rank.getBaseColor() + " " + getName();
+        Rank rank;
+        String name;
+        if (nickname.isActive()) {
+            rank = nickname.getRank();
+            name = nickname.getName();
+        } else {
+            rank = getRank();
+            name = getName();
+        }
+        
+        String displayName = rank.getPrefix() + rank.getBaseColor();
+        if (rank != Rank.DEFAULT) {
+            displayName += " ";
+        }
+        displayName += name;
+        
+        return displayName;
     }
     
     public String getColoredName() {
+        if (nickname.isActive()) {
+            return nickname.getRank().getBaseColor() + nickname.getName();
+        }
         return getRank().getBaseColor() + getName();
     }
     
@@ -223,6 +265,8 @@ public class User implements IRecord {
     public Rank getRank() {
         if (getUniqueId().equals(FIRESTAR311)) {
             this.rank = Rank.ROOT;
+        } else if (getUniqueId().equals(ASSASSINPLAYS)) {
+            this.rank = Rank.OWNER;
         }
         
         return rank;
@@ -297,5 +341,16 @@ public class User implements IRecord {
             }
         }
         return false;
+    }
+
+    public Skin getSkin() {
+        return ManiaCore.getInstance().getSkinManager().getSkin(getUniqueId());
+    }
+
+    public String toString() {
+        return "User{" +
+                "uniqueId=" + uniqueId +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

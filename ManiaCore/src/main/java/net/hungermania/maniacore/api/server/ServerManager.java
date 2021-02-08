@@ -3,6 +3,9 @@ package net.hungermania.maniacore.api.server;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.redis.Redis;
 import net.hungermania.maniacore.api.redis.RedisListener;
+import redis.clients.jedis.Jedis;
+
+import static net.hungermania.maniacore.api.redis.Redis.CROSSTALK_CHANNEL;
 
 @SuppressWarnings("DuplicatedCode")
 public abstract class ServerManager implements RedisListener {
@@ -45,7 +48,9 @@ public abstract class ServerManager implements RedisListener {
     }
     
     public void sendServerStop(String server) {
-        Redis.sendCommand("serverStop " + server);
+//        try (Jedis jedis = Redis.getConnection()) {
+//            jedis.publish(CROSSTALK_CHANNEL, "serverStop " + server);
+//        }
     }
     
     public void sendGameReady(String server) {

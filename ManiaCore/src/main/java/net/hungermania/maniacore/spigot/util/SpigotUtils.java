@@ -4,13 +4,18 @@ import com.google.common.base.Preconditions;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import lombok.experimental.UtilityClass;
+import net.hungermania.maniacore.api.ManiaCore;
+import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.maniacore.api.skin.Skin;
+import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.api.util.Position;
 import net.minecraft.server.v1_8_R3.ChatComponentText;
 import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
@@ -25,6 +30,21 @@ public class SpigotUtils {
         gameProfile.getProperties().clear();
         gameProfile.getProperties().put("textures", new Property("textures", skin.getValue(), skin.getSignature()));
         return gameProfile;
+    }
+    
+    public static Rank getRankFromSender(CommandSender sender) {
+        if (sender instanceof ConsoleCommandSender) {
+            return Rank.CONSOLE;
+        } else if (sender instanceof Player) {
+            User user = ManiaCore.getInstance().getUserManager().getUser(((Player) sender).getUniqueId());
+            if (user != null) {
+                return user.getRank();
+            } else {
+                return Rank.DEFAULT;
+            }
+        } else {
+            return Rank.DEFAULT;
+        }
     }
     
     public Position locationToPosition(Location location) {

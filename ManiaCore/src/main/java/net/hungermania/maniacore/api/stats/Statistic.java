@@ -2,6 +2,8 @@ package net.hungermania.maniacore.api.stats;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.hungermania.maniacore.api.ManiaCore;
+import net.hungermania.maniacore.api.user.User;
 import net.hungermania.manialib.data.model.IRecord;
 
 import java.util.UUID;
@@ -16,6 +18,8 @@ public class Statistic implements IRecord {
     private long created;
     @Setter private long modified;
     
+    private User user;
+    
     public Statistic(int id, UUID uuid, String name, String value, long created, long modified) {
         this.id = id;
         this.uuid = uuid;
@@ -23,6 +27,8 @@ public class Statistic implements IRecord {
         this.value = value;
         this.created = created;
         this.modified = modified;
+        
+        user = ManiaCore.getInstance().getUserManager().getUser(uuid);
     }
     
     public Statistic(UUID uuid, String name, String value, long created, long modified) {
@@ -31,6 +37,7 @@ public class Statistic implements IRecord {
         this.value = value;
         this.created = created;
         this.modified = modified;
+        user = ManiaCore.getInstance().getUserManager().getUser(uuid);
     }
     
     public String getAsString() {

@@ -4,6 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.Setter;
+import net.hungermania.maniacore.api.ManiaCore;
+import net.hungermania.maniacore.api.records.SkinRecord;
 import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.manialib.data.model.IRecord;
 import org.bukkit.Bukkit;
@@ -28,16 +30,43 @@ public class Skin implements Serializable, IRecord {
 
     public Skin(UUID uuid) {
         this.uuid = uuid;
+        updateValues();
+    }
+    
+    public void updateValues() {
+        System.out.println("Updating values for skin " + uuid.toString());
         String profileURL = skinUrlString.replace("{uuid}", uuid.toString().replace("-", ""));
 
         try {
             JsonObject json = ManiaUtils.getJsonObject(profileURL);
             JsonArray properties = (JsonArray) json.get("properties");
-    
+
             JsonObject property = (JsonObject) properties.get(0);
-            name = property.get("name").getAsString();
-            value = property.get("value").getAsString();
-            signature = property.get("signature").getAsString();
+            String newName = property.get("name").getAsString();
+            boolean updated = false;
+            if (this.name != null && !this.name.equals(newName)) {
+                System.out.println("Name changed");
+                this.name = newName;
+                updated = true;
+            }
+            String newValue = property.get("value").getAsString();
+            if (this.value != null && !this.value.equals(newValue)) {
+                System.out.println("Value changed");
+                this.value = newValue;
+                updated = true;
+            }
+            String newSignature = property.get("signature").getAsString();
+            if (this.signature != null && !this.signature.equals(newSignature)) {
+                System.out.println("Signature changed");
+                this.signature = newSignature;
+                updated = true;
+            }
+            
+            if (updated) {
+                if (this.name != null && this.value != null && this.signature != null) {
+                    new SkinRecord(this).push(ManiaCore.getInstance().getDatabase());
+                }
+            }
         } catch (Exception e) {
             Bukkit.getLogger().log(Level.SEVERE, "Invalid name/UUID provided, using default skin");
         }

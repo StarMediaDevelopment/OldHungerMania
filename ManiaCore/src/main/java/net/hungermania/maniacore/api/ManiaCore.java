@@ -112,6 +112,7 @@ public class ManiaCore implements DatabaseHandler {
         this.database.registerRecordType(FriendshipRecord.class);
         this.database.registerRecordType(FriendNotificationRecord.class);
         this.database.registerRecordType(ToggleRecord.class);
+        this.database.registerRecordType(NicknameRecord.class);
         plugin.setupDatabaseRecords();
         this.database.generateTables();
         

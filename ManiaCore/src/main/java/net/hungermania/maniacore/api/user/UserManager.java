@@ -64,7 +64,7 @@ public abstract class UserManager {
     public User getUser(UUID uuid) {
         if (uuid == null) { return null; }
     
-        System.out.println("Loaded user " + uuid.toString());
+        System.out.println("Loaded user " + uuid);
         Map<String, String> redisData = Redis.getUserData(uuid);
         Map<String, Statistic> stats = new HashMap<>();
         Map<Toggles, Toggle> toggles = new HashMap<>();

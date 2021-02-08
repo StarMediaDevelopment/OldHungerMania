@@ -542,7 +542,6 @@ public class PlayerListeners extends GameListener {
         new BukkitRunnable() {
             public void run() {
                 Game game = gameManager.getCurrentGame();
-                
                 Redis.pushUser(user);
                 
                 new BukkitRunnable() {

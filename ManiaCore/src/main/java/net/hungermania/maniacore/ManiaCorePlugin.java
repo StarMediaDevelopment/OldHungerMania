@@ -4,6 +4,7 @@ import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.chat.ChatHandler;
 import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.maniacore.api.ranks.RankRedisListener;
+import net.hungermania.maniacore.api.records.NicknameRecord;
 import net.hungermania.maniacore.api.records.SkinRecord;
 import net.hungermania.maniacore.api.redis.Redis;
 import net.hungermania.maniacore.api.skin.Skin;
@@ -79,6 +80,18 @@ public final class ManiaCorePlugin extends JavaPlugin implements Listener, Mania
         getCommand("perks").setExecutor(new PerkCmd());
         getCommand("mutations").setExecutor(new MutationsCmd());
         getCommand("tester").setExecutor(new TesterCmd());
+        NicknameCmd nicknameCmd = new NicknameCmd();
+        getCommand("nick").setExecutor(nicknameCmd);
+        getCommand("unnick").setExecutor(nicknameCmd);
+        getCommand("realname").setExecutor(nicknameCmd);
+        
+        runTaskTimerAsynchronously(() -> {
+            for (Skin skin : ManiaCore.getInstance().getSkinManager().getSkins()) {
+                skin.updateValues();
+                getManiaDatabase().addRecordToQueue(new SkinRecord(skin));
+            }
+            getManiaDatabase().pushQueue();
+        }, 20L, 6000L);
     
         new BukkitRunnable() {
             public void run() {
@@ -97,7 +110,7 @@ public final class ManiaCorePlugin extends JavaPlugin implements Listener, Mania
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     if (player.getScoreboard() != null) {
                         Scoreboard scoreboard = player.getScoreboard();
-                        
+
                         for (Rank rank : Rank.values()) {
                             boolean noTeam = true;
                             for (Team team : scoreboard.getTeams()) {
@@ -109,33 +122,43 @@ public final class ManiaCorePlugin extends JavaPlugin implements Listener, Mania
                                 scoreboard.registerNewTeam(CODE_CHARS[rank.ordinal()] + "_" + rank.getName());
                             }
                         }
-                        
+
                         for (Player p : Bukkit.getOnlinePlayers()) {
                             User user = maniaCore.getUserManager().getUser(p.getUniqueId());
                             Rank rank = user.getRank();
+                            String name = user.getName();
+                            if (user.getNickname().isActive()) {
+                                rank = user.getNickname().getRank();
+                                name = user.getNickname().getName();
+                            }
                             Team team = scoreboard.getTeam(CODE_CHARS[rank.ordinal()] + "_" + rank.getName());
                             boolean existsInTeam = false;
                             if (team != null) {
                                 for (String entry : team.getEntries()) {
-                                    if (entry.equalsIgnoreCase(p.getName())) {
+                                    if (entry.equalsIgnoreCase(name)) {
                                         existsInTeam = true;
                                         break;
                                     }
                                 }
                             }
-                            
+
                             for (Team t : scoreboard.getTeams()) {
-                                if (t.getEntries().contains(p.getName())) {
+                                if (t.getEntries().contains(name)) {
                                     if (!t.getName().equalsIgnoreCase(CODE_CHARS[rank.ordinal()] + "_" + rank.getName())) {
-                                        t.removeEntry(p.getName());
+                                        t.removeEntry(name);
                                     }
                                 }
+                                if (t.getEntries().contains(user.getName()) && user.getNickname().isActive()) {
+                                    t.removeEntry(user.getName());
+                                }
                             }
-                            
+
                             if (!existsInTeam) {
                                 try {
-                                    team.addEntry(p.getName());
-                                } catch (Exception e) {}
+                                    team.addEntry(name);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     }
@@ -188,7 +211,7 @@ public final class ManiaCorePlugin extends JavaPlugin implements Listener, Mania
 
     @Override
     public void onDisable() {
-        ManiaCore.getInstance().getServerManager().sendServerStop(getManiaCore().getServerManager().getCurrentServer().getName());
+        //ManiaCore.getInstance().getServerManager().sendServerStop(getManiaCore().getServerManager().getCurrentServer().getName());
         for (Skin skin : getManiaCore().getSkinManager().getSkins()) {
             maniaCore.getDatabase().addRecordToQueue(new SkinRecord(skin));
         }

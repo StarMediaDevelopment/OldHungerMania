@@ -5,6 +5,7 @@ import net.hungermania.maniacore.api.ranks.RankRedisListener;
 import net.hungermania.maniacore.api.records.StatRecord;
 import net.hungermania.maniacore.api.records.UserRecord;
 import net.hungermania.maniacore.api.redis.Redis;
+import net.hungermania.maniacore.api.skin.Skin;
 import net.hungermania.maniacore.bungee.cmd.*;
 import net.hungermania.maniacore.bungee.communication.BungeeMessageHandler;
 import net.hungermania.maniacore.bungee.listeners.BungeeListener;
@@ -42,6 +43,12 @@ public class ManiaCoreProxy extends Plugin implements ManiaPlugin {
         getProxy().getPluginManager().registerCommand(this, new RulesCommand());
         maniaCore.setMessageHandler(new BungeeMessageHandler());
         maniaCore.getMemoryManager().addManiaPlugin(this);
+        
+        runTaskTimerAsynchronously(() -> {
+            for (Skin skin : ManiaCore.getInstance().getSkinManager().getSkins()) {
+                
+            }
+        }, 20L, 6000);
     }
 
     public void setupRedisListeners() {

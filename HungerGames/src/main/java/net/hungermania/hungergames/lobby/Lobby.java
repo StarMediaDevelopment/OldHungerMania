@@ -365,16 +365,20 @@ public class Lobby implements Listener, CommandExecutor {
         return location;
     }
     
-    public VoteResult addVote(int map, UUID player) {
+    public void addVote(int map, UUID player) {
         User user = plugin.getManiaCore().getUserManager().getUser(player);
         Rank rank = user.getRank();
         
         int weight = 1;
         if (gameSettings.isVoteWeight()) {
-            weight = rank.getVoteWeight();
+            if (user.getNickname().isActive()) {
+                weight = user.getNickname().getRank().getVoteWeight();
+            } else {
+                weight = rank.getVoteWeight();
+            }
         }
-        
-        return mapOptions.addVote(map, player, weight);
+
+        mapOptions.addVote(map, player, weight);
     }
     
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -422,7 +426,7 @@ public class Lobby implements Listener, CommandExecutor {
                 }
             }
             
-            player.sendMessage(ManiaUtils.color("&6&l>> &eYou voted for&8: &b" + hgMap.getName() + " &7&oby " + creatorNames.toString()));
+            player.sendMessage(ManiaUtils.color("&6&l>> &eYou voted for&8: &b" + hgMap.getName() + " &7&oby " + creatorNames));
             User user = plugin.getManiaCore().getUserManager().getUser(player.getUniqueId());
             Rank rank = user.getRank();
             

@@ -7,9 +7,11 @@ import net.hungermania.maniacore.api.channel.Channel;
 import net.hungermania.maniacore.api.chat.ChatHandler;
 import net.hungermania.maniacore.api.logging.entry.ChatEntry;
 import net.hungermania.maniacore.api.logging.entry.CmdEntry;
+import net.hungermania.maniacore.api.nickname.Nickname;
 import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.maniacore.api.records.ChatEntryRecord;
 import net.hungermania.maniacore.api.records.CmdEntryRecord;
+import net.hungermania.maniacore.api.records.NicknameRecord;
 import net.hungermania.maniacore.api.redis.Redis;
 import net.hungermania.maniacore.api.skin.Skin;
 import net.hungermania.maniacore.api.user.User;
@@ -19,6 +21,7 @@ import net.hungermania.maniacore.plugin.ManiaPlugin;
 import net.hungermania.maniacore.spigot.events.UserJoinEvent;
 import net.hungermania.maniacore.spigot.updater.UpdateEvent;
 import net.hungermania.maniacore.spigot.updater.UpdateType;
+import net.hungermania.manialib.sql.IRecord;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -145,7 +148,15 @@ public class SpigotUserManager extends UserManager implements Listener {
                         e.getPlayer().setWhitelisted(true);
                     }
                 }
-                
+
+                List<IRecord> nickRecords = ManiaCore.getInstance().getDatabase().getRecords(NicknameRecord.class, "player", user.getUniqueId().toString());
+                if (nickRecords.size() >= 1) {
+                    plugin.runTask(() -> {
+                        user.setNickname((Nickname) nickRecords.get(0).toObject());
+                        user.applyNickname();
+                    });
+                }
+
                 UserJoinEvent event = new UserJoinEvent((SpigotUser) user);
                 Bukkit.getServer().getPluginManager().callEvent(event);
             }, 1L);

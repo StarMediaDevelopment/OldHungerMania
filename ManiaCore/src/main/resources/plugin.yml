@@ -28,3 +28,6 @@ commands:
     perks:
     mutations:
     tester:
+    nick:
+    unnick:
+    realname:
