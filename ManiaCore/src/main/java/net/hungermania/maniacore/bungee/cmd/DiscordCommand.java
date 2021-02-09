@@ -12,7 +12,6 @@ public class DiscordCommand extends Command {
         super("discord");
     }
     
-    
     @Override
     public void execute(CommandSender sender, String[] strings) {
         sender.sendMessage(new ComponentBuilder("Join Our Public Discord! ").color(ChatColor.RED).bold(true).append("https://discord.gg/Z95xgD7").color(ChatColor.AQUA).underlined(true).event(new ClickEvent(Action.OPEN_URL, "https://discord.gg/Z95xgD7")).create());

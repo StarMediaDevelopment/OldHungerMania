@@ -1,8 +1,8 @@
-package net.hungermania.hungergames.profile;
+package net.hungermania.hungergames.scoreboard;
 
 import net.hungermania.hungergames.HungerGames;
-import net.hungermania.hungergames.game.VoteTimer;
 import net.hungermania.hungergames.lobby.Lobby;
+import net.hungermania.hungergames.lobby.VoteTimer;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.spigot.user.PlayerBoard;

@@ -5,21 +5,29 @@ import net.hungermania.maniacore.api.ranks.RankRedisListener;
 import net.hungermania.maniacore.api.records.StatRecord;
 import net.hungermania.maniacore.api.records.UserRecord;
 import net.hungermania.maniacore.api.redis.Redis;
-import net.hungermania.maniacore.api.skin.Skin;
-import net.hungermania.maniacore.bungee.cmd.*;
+import net.hungermania.maniacore.bungee.cmd.DiscordCommand;
+import net.hungermania.maniacore.bungee.cmd.GotoCmd;
+import net.hungermania.maniacore.bungee.cmd.HubCommand;
+import net.hungermania.maniacore.bungee.cmd.RulesCommand;
 import net.hungermania.maniacore.bungee.communication.BungeeMessageHandler;
 import net.hungermania.maniacore.bungee.listeners.BungeeListener;
 import net.hungermania.maniacore.bungee.plugin.BungeeManiaTask;
 import net.hungermania.maniacore.bungee.server.BungeeCordServerManager;
-import net.hungermania.maniacore.bungee.user.*;
+import net.hungermania.maniacore.bungee.user.BungeeUser;
+import net.hungermania.maniacore.bungee.user.BungeeUserManager;
+import net.hungermania.maniacore.bungee.user.UserRedisListener;
 import net.hungermania.maniacore.plugin.ManiaPlugin;
 import net.hungermania.maniacore.plugin.ManiaTask;
 import net.hungermania.manialib.sql.Database;
 import net.md_5.bungee.api.plugin.Plugin;
-import net.md_5.bungee.config.*;
+import net.md_5.bungee.config.Configuration;
+import net.md_5.bungee.config.ConfigurationProvider;
+import net.md_5.bungee.config.YamlConfiguration;
 import redis.clients.jedis.Jedis;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.concurrent.TimeUnit;
 
@@ -43,12 +51,6 @@ public class ManiaCoreProxy extends Plugin implements ManiaPlugin {
         getProxy().getPluginManager().registerCommand(this, new RulesCommand());
         maniaCore.setMessageHandler(new BungeeMessageHandler());
         maniaCore.getMemoryManager().addManiaPlugin(this);
-        
-        runTaskTimerAsynchronously(() -> {
-            for (Skin skin : ManiaCore.getInstance().getSkinManager().getSkins()) {
-                
-            }
-        }, 20L, 6000);
     }
 
     public void setupRedisListeners() {

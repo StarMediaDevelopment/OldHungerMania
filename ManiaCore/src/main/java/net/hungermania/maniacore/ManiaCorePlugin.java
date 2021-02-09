@@ -4,7 +4,6 @@ import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.chat.ChatHandler;
 import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.maniacore.api.ranks.RankRedisListener;
-import net.hungermania.maniacore.api.records.NicknameRecord;
 import net.hungermania.maniacore.api.records.SkinRecord;
 import net.hungermania.maniacore.api.redis.Redis;
 import net.hungermania.maniacore.api.skin.Skin;

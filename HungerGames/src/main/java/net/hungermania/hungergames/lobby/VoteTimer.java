@@ -1,8 +1,7 @@
-package net.hungermania.hungergames.game;
+package net.hungermania.hungergames.lobby;
 
 import cloud.timo.TimoCloud.api.TimoCloudAPI;
 import net.hungermania.hungergames.HungerGames;
-import net.hungermania.hungergames.lobby.Lobby;
 import net.hungermania.maniacore.spigot.user.SpigotUser;
 import net.hungermania.maniacore.spigot.util.SpigotUtils;
 import org.bukkit.Sound;

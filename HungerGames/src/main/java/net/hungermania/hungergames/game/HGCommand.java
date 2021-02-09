@@ -4,7 +4,9 @@ import net.hungermania.hungergames.HungerGames;
 import net.hungermania.hungergames.game.death.*;
 import net.hungermania.hungergames.lobby.Lobby;
 import net.hungermania.hungergames.records.GameSettingsRecord;
-import net.hungermania.hungergames.settings.*;
+import net.hungermania.hungergames.settings.GameSettings;
+import net.hungermania.hungergames.settings.Time;
+import net.hungermania.hungergames.settings.Weather;
 import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.util.ManiaUtils;
@@ -14,12 +16,16 @@ import net.hungermania.maniacore.spigot.user.SpigotUser;
 import net.hungermania.manialib.util.Utils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.command.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @SuppressWarnings("DuplicatedCode")
 public class HGCommand implements CommandExecutor {
@@ -541,7 +547,7 @@ public class HGCommand implements CommandExecutor {
                         plugin.getManiaCore().getDatabase().pushRecord(new GameSettingsRecord(globalSettings));
                     }
                     
-                    player.sendMessage(ManiaUtils.color("&aYou have updated the game setting &b" + field.getName().toLowerCase() + " &ato &b" + value.toString()));
+                    player.sendMessage(ManiaUtils.color("&aYou have updated the game setting &b" + field.getName().toLowerCase() + " &ato &b" + value));
                     break;
                 }
             }

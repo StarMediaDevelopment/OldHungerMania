@@ -1,4 +1,4 @@
-package net.hungermania.hungergames.profile;
+package net.hungermania.hungergames.scoreboard;
 
 import net.hungermania.hungergames.game.Game;
 import net.hungermania.maniacore.api.ManiaCore;
