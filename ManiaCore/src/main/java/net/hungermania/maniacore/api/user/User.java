@@ -34,17 +34,17 @@ public class User implements IRecord {
     protected Set<IgnoreInfo> ignoredPlayers = new HashSet<>(); //TODO Set type handlers
     protected Rank rank = Rank.DEFAULT; //TODO Type handler
     protected Nickname nickname;
-    
+
     protected Map<String, Statistic> stats = new HashMap<>();
     protected Map<Toggles, Toggle> toggles = new HashMap<>();
-    
+
     protected Map<String, Statistic> fakeStats = new HashMap<>();
-    
+
     public User(UUID uniqueId) {
         this.uniqueId = uniqueId;
         this.nickname = new Nickname(uniqueId);
     }
-    
+
     public void applyNickname() {
         Random random = new Random();
         for (Stats fakedStat : FAKED_STATS) {
@@ -59,17 +59,17 @@ public class User implements IRecord {
             }
         }
     }
-    
+
     public void resetNickname() {
         this.fakeStats.clear();
     }
-    
+
     public User(UUID uniqueId, String name) {
         this.uniqueId = uniqueId;
         this.name = name;
         this.nickname = new Nickname(uniqueId);
     }
-    
+
     public User(Map<String, String> jedisData) {
         this.id = Integer.parseInt(jedisData.get("id"));
         this.uniqueId = UUID.fromString(jedisData.get("uniqueId"));
@@ -77,11 +77,11 @@ public class User implements IRecord {
         this.rank = Rank.valueOf(jedisData.get("rank"));
         this.nickname = new Nickname(uniqueId);
     }
-    
+
     public boolean isOnline() {
         return false;
     }
-    
+
     public void setStats(Map<String, Statistic> stats) {
         if (stats == null) {
             this.stats = new HashMap<>();
@@ -89,7 +89,21 @@ public class User implements IRecord {
             this.stats = stats;
         }
     }
-    
+
+    public Statistic getFakedStat(Stat stat) {
+        Statistic s = null;
+        try {
+            s = fakeStats.get(stat.getName());
+        } catch (IllegalStateException e) {
+        }
+        if (s != null) {
+            if (!this.stats.containsKey(stat.getName())) {
+                this.stats.put(stat.getName(), s);
+            }
+        }
+        return s;
+    }
+
     public void setToggles(Map<Toggles, Toggle> toggles) {
         if (toggles == null) {
             this.toggles = new HashMap<>();
@@ -97,19 +111,22 @@ public class User implements IRecord {
             this.toggles = toggles;
         }
     }
-    
+
     public Toggle getToggle(Toggles type) {
         return this.toggles.get(type);
     }
-    
+
     public void incrementStat(Stat stat) {
         Statistic statistic = this.stats.getOrDefault(stat.getName(), stat.create(this.getUniqueId()));
         statistic.increment();
         if (!this.stats.containsKey(stat.getName())) {
             this.stats.put(stat.getName(), statistic);
         }
+        if (this.fakeStats.containsKey(stat.getName())) {
+            this.fakeStats.get(stat.getName()).increment();
+        }
     }
-    
+
     public User(int id, UUID uniqueId, String name, Rank rank, Channel channel) {
         this.id = id;
         this.uniqueId = uniqueId;
@@ -121,7 +138,7 @@ public class User implements IRecord {
         }
         this.channel = channel;
     }
-    
+
     public void addNetworkExperience(int exp) {
         Statistic stat = getStat(Stats.EXPERIENCE);
         Level current = ManiaCore.getInstance().getLevelManager().getLevel(stat.getAsInt());
@@ -132,19 +149,19 @@ public class User implements IRecord {
             sendMessage("  &7&oThis message is temporary");
         }
     }
-    
+
     public void setIgnoredPlayers(Set<IgnoreInfo> ignoredPlayers) {
         this.ignoredPlayers = ignoredPlayers;
     }
-    
+
     public Channel getChannel() {
         return (channel != null) ? channel : Channel.GLOBAL;
     }
-    
+
     public Set<IgnoreInfo> getIgnoredPlayers() {
         return new HashSet<>(ignoredPlayers);
     }
-    
+
     public Pair<Integer, String> addCoins(int coins, boolean coinMultiplier) {
         Statistic stat = getStat(Stats.COINS);
         double multiplier = 1;
@@ -159,24 +176,24 @@ public class User implements IRecord {
         stat.setValue((stat.getAsInt() + totalCoins) + "");
         return new Pair<>(coins, multiplierString);
     }
-    
+
     public IgnoreResult addIgnoredPlayer(User user) {
         for (IgnoreInfo ignoredPlayer : this.ignoredPlayers) {
             if (ignoredPlayer.getIgnored().equals(user.getUniqueId())) {
                 return IgnoreResult.ALREADY_ADDED;
             }
         }
-        
+
         if (user.hasPermission(Rank.HELPER)) {
             return IgnoreResult.PLAYER_IS_STAFF;
         }
-        
+
         IgnoreInfo ignoreInfo = new IgnoreInfo(this.getUniqueId(), user.getUniqueId(), System.currentTimeMillis(), user.getName());
         this.ignoredPlayers.add(ignoreInfo);
         ManiaCore.getInstance().getDatabase().pushRecord(new IgnoreInfoRecord(ignoreInfo));
         return IgnoreResult.SUCCESS;
     }
-    
+
     public IgnoreResult removeIgnoredPlayer(User user) {
         boolean ignored = false;
         for (IgnoreInfo ignoredPlayer : this.ignoredPlayers) {
@@ -185,11 +202,11 @@ public class User implements IRecord {
                 break;
             }
         }
-        
+
         if (!ignored) {
             return IgnoreResult.NOT_IGNORED;
         }
-        
+
         IgnoreInfo ignoreInfo = null;
         for (IgnoreInfo ignoredPlayer : this.ignoredPlayers) {
             if (ignoredPlayer.getIgnored().equals(user.getUniqueId())) {
@@ -206,24 +223,24 @@ public class User implements IRecord {
                 return IgnoreResult.DATABASE_ERROR;
             }
         }
-        
+
         return IgnoreResult.NOT_IGNORED;
     }
-    
+
     public void sendMessage(BaseComponent baseComponent) {
     }
-    
+
     public void sendMessage(String s) {
     }
-    
+
     public boolean hasPermission(String permission) {
         return false;
     }
-    
+
     public boolean hasPermission(Rank rank) {
         return getRank().ordinal() <= rank.ordinal();
     }
-    
+
     public String getDisplayName() {
         Rank rank;
         String name;
@@ -234,48 +251,52 @@ public class User implements IRecord {
             rank = getRank();
             name = getName();
         }
-        
+
         String displayName = rank.getPrefix() + rank.getBaseColor();
         if (rank != Rank.DEFAULT) {
             displayName += " ";
         }
         displayName += name;
-        
+
         return displayName;
     }
-    
+
     public String getColoredName() {
         if (nickname.isActive()) {
             return nickname.getRank().getBaseColor() + nickname.getName();
         }
         return getRank().getBaseColor() + getName();
     }
-    
+
     public boolean equals(Object o) {
-        if (this == o) { return true; }
-        if (o == null || getClass() != o.getClass()) { return false; }
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         User user = (User) o;
         return Objects.equals(uniqueId, user.uniqueId);
     }
-    
+
     public int hashCode() {
         return Objects.hash(uniqueId);
     }
-    
+
     public Rank getRank() {
         if (getUniqueId().equals(FIRESTAR311)) {
             this.rank = Rank.ROOT;
         } else if (getUniqueId().equals(ASSASSINPLAYS)) {
             this.rank = Rank.OWNER;
         }
-        
+
         return rank;
     }
-    
+
     public void addIgnoredInfo(IgnoreInfo toObject) {
         this.ignoredPlayers.add(toObject);
     }
-    
+
     public void incrementOnlineTime() {
         Statistic stat = getStat(Stats.ONLINE_TIME);
         stat.increment();
@@ -300,12 +321,13 @@ public class User implements IRecord {
             sendMessage("&e&l>> &7&o+" + exp + " XP - +10m of online time");
         }
     }
-    
+
     public Statistic getStat(Stat stat) {
         Statistic s = null;
         try {
             s = stats.getOrDefault(stat.getName(), stat.create(this.uniqueId));
-        } catch (IllegalStateException e) { }
+        } catch (IllegalStateException e) {
+        }
         if (s != null) {
             if (!this.stats.containsKey(stat.getName())) {
                 this.stats.put(stat.getName(), s);
@@ -313,7 +335,7 @@ public class User implements IRecord {
         }
         return s;
     }
-    
+
     public void setStat(Stat stat, int value) {
         Statistic s = stats.getOrDefault(stat.getName(), stat.create(this.uniqueId));
         s.setValue(value + "");
@@ -321,7 +343,7 @@ public class User implements IRecord {
             this.stats.put(stat.getName(), s);
         }
     }
-    
+
     public void setStat(Stat stat, String value) {
         Statistic s = stats.getOrDefault(stat.getName(), stat.create(this.uniqueId));
         s.setValue(value);

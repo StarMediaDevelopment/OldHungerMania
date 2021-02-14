@@ -534,6 +534,7 @@ public class Game implements IRecord {
             for (GamePlayer gp : this.players.values()) {
                 if (!gp.getUser().getUniqueId().equals(winner)) {
                     gp.getUser().getStat(Stats.HG_WINSTREAK).setValue(0);
+                    gp.getUser().getFakeStats().get(Stats.HG_WINSTREAK.getName()).setValue(0);
                 }
                 Redis.pushUser(gp.getUser());
                 gp.getUser().setScoreboard(null);
@@ -612,7 +613,7 @@ public class Game implements IRecord {
         player.getInventory().clear();
         gamePlayer.getUser().incrementStat(Stats.HG_DEATHS);
         gamePlayer.setDeathInfo(deathInfo);
-        Statistic points = gamePlayer.getUser().getStat(Stats.HG_SCORE);
+        Statistic points = gamePlayer.getUser().getStat(Stats.HG_SCORE); //TODO For nicknames
         int lost = (int) Math.ceil((float) points.getAsInt() / 8F);
         int gained = lost;
         if (points.getAsInt() > 0) {
@@ -729,7 +730,7 @@ public class Game implements IRecord {
                 gained += gained;
             }
 
-            Statistic killerScore = killer.getUser().getStat(Stats.HG_SCORE);
+            Statistic killerScore = killer.getUser().getStat(Stats.HG_SCORE); //TODO for nicknames
             killerScore.setValue(killerScore.getAsInt() + gained);
             killer.getUser().sendMessage("&6&l>> &a+" + gained + " Score!");
 

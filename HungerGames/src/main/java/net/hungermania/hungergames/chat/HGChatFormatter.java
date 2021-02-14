@@ -19,6 +19,9 @@ public class HGChatFormatter extends ChatFormatter {
         String format = super.format(user, message);
         Game game = HungerGames.getInstance().getGameManager().getCurrentGame();
         int score = user.getStat(Stats.HG_SCORE).getAsInt();
+        if (user.getNickname().isActive()) {
+            score = user.getFakeStats().get(Stats.HG_SCORE.getName()).getAsInt();
+        }
         format = format.replace("{score}", score + "");
         if (game != null) {
             if (game.getSpectatorsTeam().isMember(user.getUniqueId()) || game.getHiddenStaffTeam().isMember(user.getUniqueId())) {
