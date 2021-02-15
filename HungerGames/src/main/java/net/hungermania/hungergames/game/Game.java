@@ -613,11 +613,13 @@ public class Game implements IRecord {
         player.getInventory().clear();
         gamePlayer.getUser().incrementStat(Stats.HG_DEATHS);
         gamePlayer.setDeathInfo(deathInfo);
-        Statistic points = gamePlayer.getUser().getStat(Stats.HG_SCORE); //TODO For nicknames
+        Statistic points = gamePlayer.getUser().getStat(Stats.HG_SCORE);
         int lost = (int) Math.ceil((float) points.getAsInt() / 8F);
         int gained = lost;
         if (points.getAsInt() > 0) {
             points.setValue(points.getAsInt() - lost);
+            Statistic fakedStat = gamePlayer.getUser().getFakedStat(Stats.HG_SCORE);
+            fakedStat.setValue(fakedStat.getAsInt() - lost);
             gamePlayer.getUser().sendMessage("&4&l>> &cYou lost " + lost + " Score for dying.");
         }
 
@@ -730,8 +732,10 @@ public class Game implements IRecord {
                 gained += gained;
             }
 
-            Statistic killerScore = killer.getUser().getStat(Stats.HG_SCORE); //TODO for nicknames
+            Statistic killerScore = killer.getUser().getStat(Stats.HG_SCORE);
             killerScore.setValue(killerScore.getAsInt() + gained);
+            Statistic killerFakeScore = killer.getUser().getFakedStat(Stats.HG_SCORE);
+            killerFakeScore.setValue(killerFakeScore.getAsInt() + gained);
             killer.getUser().sendMessage("&6&l>> &a+" + gained + " Score!");
 
             gamePlayer.getUser().sendMessage("&4&l>> &cYour killer &8(" + killerName + "&8) &chad &4" + Utils.formatNumber(killerHealth) + " HP &cremaining!");

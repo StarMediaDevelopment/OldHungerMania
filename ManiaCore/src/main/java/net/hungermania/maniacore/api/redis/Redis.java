@@ -2,14 +2,22 @@ package net.hungermania.maniacore.api.redis;
 
 import com.google.gson.Gson;
 import net.hungermania.maniacore.api.ManiaCore;
-import net.hungermania.maniacore.api.friends.*;
+import net.hungermania.maniacore.api.friends.FriendNotification;
+import net.hungermania.maniacore.api.friends.FriendRequest;
+import net.hungermania.maniacore.api.friends.Friendship;
 import net.hungermania.maniacore.api.stats.Statistic;
 import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.user.toggle.Toggle;
 import net.hungermania.maniacore.api.user.toggle.Toggles;
-import redis.clients.jedis.*;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.JedisPubSub;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -247,15 +255,29 @@ public class Redis {
     }
     
     public static void pushUserStats(User user) {
-        Map<String, String> data = new HashMap<>();
+        Map<String, String> realStats = new HashMap<>();
         for (Entry<String, Statistic> entry : user.getStats().entrySet()) {
             String value = new Gson().toJson(entry.getValue());
-            data.put(entry.getKey(), value);
+            realStats.put(entry.getKey(), value);
         }
         
-        if (!data.isEmpty()) {
+        if (!realStats.isEmpty()) {
             try (Jedis jedis = getConnection()) {
-                jedis.hmset("UserStats:" + user.getUniqueId().toString(), data);
+                jedis.hmset("UserStats:" + user.getUniqueId().toString(), realStats);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        Map<String, String> fakedStats = new HashMap<>();
+        for (Entry<String, Statistic> entry : user.getFakeStats().entrySet()) {
+            String value = new Gson().toJson(entry.getValue());
+            fakedStats.put(entry.getKey(), value);
+        }
+
+        if (!fakedStats.isEmpty()) {
+            try (Jedis jedis = getConnection()) {
+                jedis.hmset("UserFakedStats:" + user.getUniqueId().toString(), fakedStats);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -266,6 +288,18 @@ public class Redis {
         Map<String, Statistic> stats = new HashMap<>();
         try (Jedis jedis = getConnection()) {
             Map<String, String> rawData = jedis.hgetAll("UserStats:" + uuid.toString());
+            for (Entry<String, String> entry : rawData.entrySet()) {
+                Statistic statistic = new Gson().fromJson(entry.getValue(), Statistic.class);
+                stats.put(entry.getKey(), statistic);
+            }
+        }
+        return stats;
+    }
+
+    public static Map<String, Statistic> getUserFakedStats(UUID uuid) {
+        Map<String, Statistic> stats = new HashMap<>();
+        try (Jedis jedis = getConnection()) {
+            Map<String, String> rawData = jedis.hgetAll("UserFakedStats:" + uuid.toString());
             for (Entry<String, String> entry : rawData.entrySet()) {
                 Statistic statistic = new Gson().fromJson(entry.getValue(), Statistic.class);
                 stats.put(entry.getKey(), statistic);
@@ -296,7 +330,7 @@ public class Redis {
         Map<String, String> data = new HashMap<>();
         try (Jedis jedis = getConnection()) {
             if (jedis.exists("USER:" + uuid.toString())) {
-                data.putAll(jedis.hgetAll("USER:" + uuid.toString()));
+                data.putAll(jedis.hgetAll("USER:" + uuid));
             }
         }
         return data;

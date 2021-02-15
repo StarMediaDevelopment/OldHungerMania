@@ -1,7 +1,10 @@
 package net.hungermania.maniacore.api.user;
 
 import net.hungermania.maniacore.api.ManiaCore;
-import net.hungermania.maniacore.api.records.*;
+import net.hungermania.maniacore.api.records.IgnoreInfoRecord;
+import net.hungermania.maniacore.api.records.StatRecord;
+import net.hungermania.maniacore.api.records.ToggleRecord;
+import net.hungermania.maniacore.api.records.UserRecord;
 import net.hungermania.maniacore.api.redis.Redis;
 import net.hungermania.maniacore.api.stats.Stat;
 import net.hungermania.maniacore.api.stats.Statistic;
@@ -64,33 +67,25 @@ public abstract class UserManager {
     public User getUser(UUID uuid) {
         if (uuid == null) { return null; }
     
-        System.out.println("Loaded user " + uuid);
         Map<String, String> redisData = Redis.getUserData(uuid);
         Map<String, Statistic> stats = new HashMap<>();
+        Map<String, Statistic> fakedStats = new HashMap<>();
         Map<Toggles, Toggle> toggles = new HashMap<>();
         User user;
         if (!redisData.isEmpty()) {
-            System.out.println("Redis contains user data, loading...");
             user = constructUser(redisData);
             stats = Redis.getUserStats(uuid);
             toggles = Redis.getToggles(uuid);
-            System.out.println("Loaded user data from redis");
+            fakedStats = Redis.getUserFakedStats(uuid);
         } else {
-            System.out.println("Redis does not contain user data, loading from main database");
             List<IRecord> userRecords = ManiaCore.getInstance().getDatabase().getRecords(UserRecord.class, "uniqueId", uuid.toString());
             if (!userRecords.isEmpty()) {
-                System.out.println("Database contains user data, loading...");
                 user = constructUser(((UserRecord) userRecords.get(0)).toObject());
-                System.out.println("Loaded from database");
             } else {
-                System.out.println("Database does not contain user data, creating");
                 user = constructUser(uuid, ManiaUtils.getNameFromUUID(uuid));
-                System.out.println("Created new user data, saving to database...");
                 ManiaCore.getInstance().getDatabase().pushRecord(new UserRecord(user));
-                System.out.println("Saved successfully");
             }
         
-            System.out.println("User: " + user.getName());
             List<IRecord> statsRecords = ManiaCore.getInstance().getDatabase().getRecords(StatRecord.class, "uuid", uuid.toString());
         
             if (!statsRecords.isEmpty()) {
@@ -128,6 +123,7 @@ public abstract class UserManager {
     
         user.setStats(stats);
         user.setToggles(toggles);
+        user.setFakeStats(fakedStats);
         
         if (user.getName() == null || user.getName().equals("") || user.getName().equals("null")) {
             user.setName(ManiaUtils.getNameFromUUID(uuid));
