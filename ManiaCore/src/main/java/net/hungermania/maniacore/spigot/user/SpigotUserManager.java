@@ -2,6 +2,7 @@ package net.hungermania.maniacore.spigot.user;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import lombok.Getter;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.channel.Channel;
 import net.hungermania.maniacore.api.chat.ChatHandler;
@@ -38,7 +39,7 @@ public class SpigotUserManager extends UserManager implements Listener {
     
     private ManiaPlugin plugin;
     
-    private Map<UUID, User> users = new HashMap<>();
+    @Getter private Map<UUID, User> users = new HashMap<>();
     
     public SpigotUserManager(ManiaPlugin plugin) {
         this.plugin = plugin;

@@ -27,8 +27,6 @@ public class Statistic implements IRecord {
         this.value = value;
         this.created = created;
         this.modified = modified;
-        
-        user = ManiaCore.getInstance().getUserManager().getUser(uuid);
     }
     
     public Statistic(UUID uuid, String name, String value, long created, long modified) {
@@ -37,9 +35,15 @@ public class Statistic implements IRecord {
         this.value = value;
         this.created = created;
         this.modified = modified;
-        user = ManiaCore.getInstance().getUserManager().getUser(uuid);
     }
-    
+
+    public User getUser() {
+        if (user == null) {
+            this.user = ManiaCore.getInstance().getUserManager().getUser(uuid);
+        }
+        return user;
+    }
+
     public String getAsString() {
         return this.value;
     }

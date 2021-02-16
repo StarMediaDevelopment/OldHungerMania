@@ -156,7 +156,6 @@ public final class ManiaCorePlugin extends JavaPlugin implements Listener, Mania
                                 try {
                                     team.addEntry(name);
                                 } catch (Exception e) {
-                                    e.printStackTrace();
                                 }
                             }
                         }

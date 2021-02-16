@@ -55,7 +55,12 @@ public class User implements IRecord {
             } else {
                 Statistic stat = getStat(fakedStat);
                 Statistic value = fakedStat.create(uniqueId);
-                value.setValue(random.nextInt(stat.getAsInt()));
+                if (stat.getAsInt() != 0) {
+                    value.setValue(random.nextInt(stat.getAsInt()));
+                } else {
+                    value.setValue(0);
+                }
+                this.fakeStats.put(value.getName(), value);
             }
         }
     }
@@ -95,10 +100,11 @@ public class User implements IRecord {
         try {
             s = fakeStats.get(stat.getName());
         } catch (IllegalStateException e) {
+            e.printStackTrace();
         }
         if (s != null) {
-            if (!this.stats.containsKey(stat.getName())) {
-                this.stats.put(stat.getName(), s);
+            if (!this.fakeStats.containsKey(stat.getName())) {
+                this.fakeStats.put(stat.getName(), s);
             }
         }
         return s;
