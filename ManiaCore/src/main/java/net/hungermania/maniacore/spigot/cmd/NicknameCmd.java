@@ -9,7 +9,9 @@ import net.hungermania.maniacore.api.records.NicknameRecord;
 import net.hungermania.maniacore.api.skin.Skin;
 import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.util.ManiaUtils;
+import net.hungermania.maniacore.spigot.user.SpigotUserManager;
 import net.hungermania.maniacore.spigot.util.SpigotUtils;
+import net.hungermania.manialib.sql.IRecord;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -20,6 +22,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static net.hungermania.maniacore.api.ranks.Rank.*;
@@ -109,15 +112,16 @@ public class NicknameCmd implements CommandExecutor {
                                 }
 
                                 if (!USABLE_RANKS.contains(rank)) {
-                                    user.sendMessage("&cYou are not allowed to use that rank.");
-                                    return;
+                                    if (!senderRank.equals(ROOT)) {
+                                        user.sendMessage("&cYou are not allowed to use that rank.");
+                                        return;
+                                    }
                                 }
                             }
                         }
                     }
 
                     User target = ManiaCore.getInstance().getUserManager().getUser(name);
-                    System.out.println("Target: " + target);
                     if (target != null) {
                         PlayerObject playerObject = TimoCloudAPI.getUniversalAPI().getPlayer(target.getUniqueId());
                         if (playerObject != null) {
@@ -182,7 +186,61 @@ public class NicknameCmd implements CommandExecutor {
             ManiaCore.getInstance().getPlugin().runTaskAsynchronously(() -> new NicknameRecord(user.getNickname()).push(ManiaCore.getInstance().getDatabase()));
             user.sendMessage("&aReset your nickname.");
         } else if (cmd.getName().equalsIgnoreCase("realname")) {
-            //todo
+            if (senderRank.ordinal() > HELPER.ordinal()) {
+                sender.sendMessage(ManiaUtils.color("&fUnknown command. Type \"help\" for help."));
+                return true;
+            }
+
+            User target = null;
+            if (args.length > 0) {
+                Player t = Bukkit.getPlayer(args[0]);
+                if (t != null) {
+                    target = ManiaCore.getInstance().getUserManager().getUser(t.getUniqueId());
+                } else {
+                    for (User value : ((SpigotUserManager) ManiaCore.getInstance().getUserManager()).getUsers().values()) {
+                        if (value.getNickname().isActive()) {
+                            if (value.getNickname().getName().equalsIgnoreCase(args[0])) {
+                                target = value;
+                            }
+                        } else {
+                            if (value.getName().equalsIgnoreCase(args[0])) {
+                                target = value;
+                            }
+                        }
+                    }
+                }
+
+                if (target == null) {
+                    List<IRecord> nicknameRecords = ManiaCore.getInstance().getDatabase().getRecords(NicknameRecord.class, "active", "true");
+                    for (IRecord record : nicknameRecords) {
+                        NicknameRecord nickRecord = (NicknameRecord) record;
+                        if (nickRecord.toObject().getName().equalsIgnoreCase(args[0])) {
+                            target = ManiaCore.getInstance().getUserManager().getUser(nickRecord.toObject().getPlayer());
+                        }
+                    }
+                }
+
+                if (target == null) {
+                    ManiaCore.getInstance().getUserManager().getUser(args[0]);
+                }
+            }
+            
+            if (target == null) {
+                sender.sendMessage(ManiaUtils.color("&cCould not find a player with that name."));
+                return true;
+            }
+            
+            if (target.getRank().ordinal() < senderRank.ordinal()) {
+                sender.sendMessage(ManiaUtils.color("&cThat player does not have a nickname set."));
+                return true;
+            }
+            
+            if (!target.getNickname().isActive()) {
+                sender.sendMessage(ManiaUtils.color("&cThat player does not have a nickname set."));
+                return true;
+            }
+            
+            sender.sendMessage(ManiaUtils.color("&aThe nicked player " + target.getNickname().getName() + " has the real name " + target.getName()));
         }
         return true;
     }

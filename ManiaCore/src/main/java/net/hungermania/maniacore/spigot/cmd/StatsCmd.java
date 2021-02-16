@@ -28,7 +28,7 @@ public class StatsCmd implements CommandExecutor {
             if (args.length > 0) {
                 Player t = Bukkit.getPlayer(args[0]);
                 if (t != null) {
-                    target = ManiaCore.getInstance().getUserManager().getUser(t.getUniqueId()); //TODO This should work with nicknames
+                    target = ManiaCore.getInstance().getUserManager().getUser(t.getUniqueId());
                 } else {
                     for (User value : ((SpigotUserManager) ManiaCore.getInstance().getUserManager()).getUsers().values()) {
                         if (value.getNickname().isActive()) {
