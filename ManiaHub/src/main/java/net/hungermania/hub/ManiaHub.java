@@ -316,7 +316,12 @@ public final class ManiaHub extends JavaPlugin implements Listener, ManiaPlugin 
                     maximumPlayers += server.getMaxPlayerCount();
                     
                     ItemMeta itemMeta = itemStack.getItemMeta();
-                    int number = Integer.parseInt(server.getName().split("-")[1]);
+                    int number;
+                    try {
+                        number = Integer.parseInt(server.getName().split("-")[1]);
+                    } catch (Exception e) {
+                        number = 1;
+                    }
                     itemMeta.setDisplayName(ManiaUtils.color("&a&lSERVER " + number));
                     itemMeta.setLore(lore);
                     itemStack.setItemMeta(itemMeta);

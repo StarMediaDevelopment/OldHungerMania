@@ -18,7 +18,10 @@ import net.hungermania.maniacore.api.skin.Skin;
 import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.user.UserManager;
 import net.hungermania.maniacore.api.user.toggle.Toggles;
+import net.hungermania.maniacore.api.util.ManiaUtils;
+import net.hungermania.maniacore.api.util.ReflectionUtils;
 import net.hungermania.maniacore.plugin.ManiaPlugin;
+import net.hungermania.maniacore.spigot.events.UserActionBarUpdateEvent;
 import net.hungermania.maniacore.spigot.events.UserJoinEvent;
 import net.hungermania.maniacore.spigot.updater.UpdateEvent;
 import net.hungermania.maniacore.spigot.updater.UpdateType;
@@ -33,17 +36,18 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.lang.reflect.Constructor;
 import java.util.*;
 
 public class SpigotUserManager extends UserManager implements Listener {
-    
+
     private ManiaPlugin plugin;
-    
+
     @Getter private Map<UUID, User> users = new HashMap<>();
-    
+
     public SpigotUserManager(ManiaPlugin plugin) {
         this.plugin = plugin;
-        
+
         plugin.runTaskTimer(() -> {
             Map<UUID, User> users = new HashMap<>(SpigotUserManager.this.users);
             Set<UUID> offlinePlayers = new HashSet<>();
@@ -54,32 +58,58 @@ public class SpigotUserManager extends UserManager implements Listener {
                     offlinePlayers.add(value.getUniqueId());
                 }
             }
-            
+
             for (UUID offlinePlayer : offlinePlayers) {
                 SpigotUserManager.this.users.remove(offlinePlayer);
             }
+
+            UserActionBarUpdateEvent event = new UserActionBarUpdateEvent();
+            Bukkit.getServer().getPluginManager().callEvent(event);
+            if (!event.isCancelled()) {
+                for (User value : SpigotUserManager.this.users.values()) {
+                    if (value.generateActionBar() == null || value.generateActionBar().equals("")) {
+                        continue;
+                    }
+                    Player player = Bukkit.getPlayer(value.getUniqueId());
+                    String message = ManiaUtils.color(value.generateActionBar());
+                    String jsonText = "{\"text\":\"" + message + "\"}";
+
+                    try {
+                        Class<?> chatSerializer = ReflectionUtils.getNMSClass("IChatBaseComponent").getDeclaredClasses()[0];
+                        Object chat = chatSerializer.getMethod("a", String.class).invoke(null, jsonText);
+                        Constructor<?> chatConstructor = ReflectionUtils.getNMSClass("PacketPlayOutChat")
+                                .getConstructor(ReflectionUtils.getNMSClass("IChatBaseComponent"), byte.class);
+                        Object packetPlayOutChat = chatConstructor.newInstance(chat, (byte) 2);
+                        Object handle = player.getClass().getMethod("getHandle").invoke(player);
+                        Object playerConnection = handle.getClass().getField("playerConnection").get(handle);
+                        playerConnection.getClass().getMethod("sendPacket", ReflectionUtils.getNMSClass("Packet")).invoke(playerConnection, packetPlayOutChat);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         }, 20L, 20L);
     }
-    
+
     @SuppressWarnings("DuplicatedCode")
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent e) {
         Player player = e.getPlayer();
         SpigotUser user = (SpigotUser) getUser(player.getUniqueId());
         e.setCancelled(true);
-        
+
         if (e.getMessage().startsWith("@") || e.getMessage().startsWith("$")) {
             char channelChar = e.getMessage().charAt(0);
             e.setCancelled(true);
             e.setMessage(e.getMessage().substring(1));
             Channel channel = Channel.GLOBAL;
-            
+
             if (channelChar == '@') {
                 channel = Channel.STAFF;
             } else if (channelChar == '$') {
                 channel = Channel.ADMIN;
             }
-            
+
             String message = e.getMessage();
             user.setChannel(channel);
             if ((channel == Channel.STAFF && user.hasPermission(Rank.HELPER)) || (channel == Channel.ADMIN && user.hasPermission(Rank.ADMIN))) {
@@ -96,7 +126,7 @@ public class SpigotUserManager extends UserManager implements Listener {
         ChatEntryRecord chatEntryRecord = new ChatEntryRecord(chatEntry);
         ManiaCore.getInstance().getDatabase().addRecordToQueue(chatEntryRecord);
     }
-    
+
     @EventHandler
     public void onCommandPreProcess(PlayerCommandPreprocessEvent e) {
         Player player = e.getPlayer();
@@ -105,7 +135,7 @@ public class SpigotUserManager extends UserManager implements Listener {
         CmdEntryRecord cmdEntryRecord = new CmdEntryRecord(cmdEntry);
         ManiaCore.getInstance().getDatabase().addRecordToQueue(cmdEntryRecord);
     }
-    
+
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
         e.setQuitMessage(null);
@@ -113,7 +143,7 @@ public class SpigotUserManager extends UserManager implements Listener {
         Redis.pushUser(user);
         this.users.remove(user.getUniqueId());
     }
-    
+
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         e.setJoinMessage(null);
@@ -124,13 +154,13 @@ public class SpigotUserManager extends UserManager implements Listener {
             value = property.getValue();
             signature = property.getSignature();
         }
-        
+
         Skin skin = new Skin(player.getUniqueId(), player.getName(), value, signature);
         ManiaCore.getInstance().getSkinManager().addSkin(skin);
-        
+
         plugin.runTaskLaterAsynchronously(() -> {
             User user = getUser(player.getUniqueId());
-            
+
             plugin.runTaskLater(() -> {
                 users.put(user.getUniqueId(), user);
                 if (user.getToggle(Toggles.INCOGNITO).getAsBoolean()) {
@@ -145,7 +175,7 @@ public class SpigotUserManager extends UserManager implements Listener {
                         e.getPlayer().setOp(true);
                     }
                 }
-                
+
                 if (user.hasPermission(Rank.HELPER)) {
                     if (!e.getPlayer().isWhitelisted()) {
                         e.getPlayer().setWhitelisted(true);
@@ -165,28 +195,30 @@ public class SpigotUserManager extends UserManager implements Listener {
             }, 1L);
         }, 5L);
     }
-    
+
     @EventHandler
     public void onUpdate(UpdateEvent e) {
-        if (e.getType() != UpdateType.SECOND) { return; }
+        if (e.getType() != UpdateType.SECOND) {
+            return;
+        }
         for (Player player : Bukkit.getOnlinePlayers()) {
             User user = getUser(player.getUniqueId());
             user.incrementOnlineTime();
         }
     }
-    
+
     public User constructUser(UUID uuid, String name) {
         return new SpigotUser(uuid, name);
     }
-    
+
     public User constructUser(Map<String, String> data) {
         return new SpigotUser(data);
     }
-    
+
     public User constructUser(User user) {
         return new SpigotUser(user);
     }
-    
+
     public User getUser(UUID uuid) {
         if (uuid == null) {
             return null;
@@ -194,13 +226,13 @@ public class SpigotUserManager extends UserManager implements Listener {
         if (this.users.containsKey(uuid)) {
             return this.users.get(uuid);
         }
-    
+
         User user = super.getUser(uuid);
         ((SpigotUser) user).loadPerks();
         this.users.put(user.getUniqueId(), user);
         return user;
     }
-    
+
     public User getUser(int userId) {
         for (User value : this.users.values()) {
             if (value.getId() == userId) {
@@ -211,7 +243,7 @@ public class SpigotUserManager extends UserManager implements Listener {
         this.users.put(user.getUniqueId(), user);
         return user;
     }
-    
+
     public User getUser(String name) {
         for (User value : this.users.values()) {
             if (value.getName().equalsIgnoreCase(name)) {

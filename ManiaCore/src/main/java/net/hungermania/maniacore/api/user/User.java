@@ -44,6 +44,47 @@ public class User implements IRecord {
         this.uniqueId = uniqueId;
         this.nickname = new Nickname(uniqueId);
     }
+    
+    public String generateActionBar() {
+        boolean nicked, vanished = false, incognito = false;
+        nicked = getNickname().isActive();
+        
+        Toggle vanishedToggle = getToggle(Toggles.VANISHED);
+        if (vanishedToggle != null) {
+            vanished = vanishedToggle.getAsBoolean();
+        }
+        Toggle incognitoToggle = getToggle(Toggles.INCOGNITO);
+        if (incognitoToggle != null) {
+            incognito = incognitoToggle.getAsBoolean();
+        }
+        
+        if (!nicked && !vanished && !incognito) {
+            return "";
+        }
+        
+        String actionBar = "&fYou are currently ";
+        if (nicked) {
+            actionBar += "&cNICKED";
+        }
+        
+        if (vanished) {
+            if (!nicked) {
+                actionBar += "&cVANISHED";
+            } else {
+                actionBar += "&f, &cVANISHED";
+            }
+        }
+        
+        if (incognito) {
+            if (!nicked &&!vanished) {
+                actionBar += "&cINCOGNITO";
+            } else {
+                actionBar += "&f, &cINCOGNITO";
+            }
+        }
+        
+        return actionBar;
+    }
 
     public void applyNickname() {
         generateFakeStats();

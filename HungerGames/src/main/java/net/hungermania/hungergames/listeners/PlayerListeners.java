@@ -22,6 +22,7 @@ import net.hungermania.maniacore.api.user.toggle.Toggles;
 import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.api.util.Position;
 import net.hungermania.maniacore.api.util.State;
+import net.hungermania.maniacore.spigot.events.UserActionBarUpdateEvent;
 import net.hungermania.maniacore.spigot.events.UserIncognitoEvent;
 import net.hungermania.maniacore.spigot.events.UserJoinEvent;
 import net.hungermania.maniacore.spigot.gui.Gui;
@@ -690,6 +691,18 @@ public class PlayerListeners extends GameListener {
                 } catch (Exception ex) {
                 }
             }
+        }
+    }
+    
+    @EventHandler
+    public void onActionBarUpdateEvent(UserActionBarUpdateEvent e) {
+        if (lobby.getVoteTimer() != null && lobby.getVoteTimer().getRemainingSeconds() > 0) {
+            e.setCancelled(true);
+            return;
+        }
+        
+        if (gameManager.getCurrentGame() != null) {
+            e.setCancelled(true);
         }
     }
 }
