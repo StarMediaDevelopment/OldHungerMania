@@ -730,11 +730,12 @@ public class Game implements IRecord {
             }
             if (killer.getUser().getNickname() != null && killer.getUser().getNickname().isActive()) {
                 killerName += killer.getUser().getNickname().getName();
+                
             } else {
                 killerName += killer.getUser().getName();
             }
             if (firstKiller == null) {
-                sendMessage("&6&l>> &c&l" + (ChatColor.stripColor(killerName) + " drew first blood!").toUpperCase());
+                sendMessage("&6&l>> &c&l" + (ChatColor.stripColor(ManiaUtils.color(killerName)) + " drew first blood!").toUpperCase());
                 playSound(Sound.WOLF_HOWL);
                 this.firstKiller = killer.getUniqueId();
                 experience += 15;

@@ -97,6 +97,7 @@ public final class HungerGames extends JavaPlugin implements ManiaPlugin {
         this.lobby = new Lobby(this, getSpawn());
         this.getCommand("map").setExecutor(lobby);
         this.getCommand("lobby").setExecutor(lobby);
+        this.getCommand("votestart").setExecutor(lobby);
         this.getServer().getPluginManager().registerEvents(lobby, this);
         this.getServer().getPluginManager().registerEvents(new PlayerListeners(), this);
         this.getServer().getPluginManager().registerEvents(new EntityListeners(), this);
