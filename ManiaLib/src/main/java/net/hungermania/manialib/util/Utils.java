@@ -169,7 +169,7 @@ public final class Utils {
                     sb.append(word.charAt(i));
                 }
             }
-            name.append(sb.toString());
+            name.append(sb);
             if (w < (words.length - 1)) {
                 name.append(" ");
             }
