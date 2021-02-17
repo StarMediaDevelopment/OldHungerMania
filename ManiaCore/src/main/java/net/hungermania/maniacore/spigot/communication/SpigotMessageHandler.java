@@ -29,6 +29,7 @@ public class SpigotMessageHandler extends MessageHandler {
         if (Bukkit.getOnlinePlayers().isEmpty()) return;
         ChatFormatter chatFormatter = ManiaCore.getInstance().getChatManager().getChatFormatter(Channel.STAFF);
         User sender = ManiaCore.getInstance().getUserManager().getUser(p);
+        sender.setChannel(Channel.STAFF);
         for (Player player : Bukkit.getOnlinePlayers()) {
             User user = ManiaCore.getInstance().getUserManager().getUser(player.getUniqueId());
             if (user.hasPermission(Rank.HELPER)) {
@@ -37,12 +38,14 @@ public class SpigotMessageHandler extends MessageHandler {
                 }
             }
         }
+        sender.setChannel(Channel.GLOBAL);
     }
     
     protected void handleAdminChat(UUID p, String message) {
         if (Bukkit.getOnlinePlayers().isEmpty()) return;
         ChatFormatter chatFormatter = ManiaCore.getInstance().getChatManager().getChatFormatter(Channel.ADMIN);
         User sender = ManiaCore.getInstance().getUserManager().getUser(p);
+        sender.setChannel(Channel.ADMIN);
         for (Player player : Bukkit.getOnlinePlayers()) {
             User user = ManiaCore.getInstance().getUserManager().getUser(player.getUniqueId());
             if (user.hasPermission(Rank.ADMIN)) {
@@ -51,6 +54,7 @@ public class SpigotMessageHandler extends MessageHandler {
                 }
             }
         }
+        sender.setChannel(Channel.GLOBAL);
     }
     
     protected void handleSpartanMsg(String server, String playerName, String hack, int violation, boolean falsePositive, double tps, int ping) {

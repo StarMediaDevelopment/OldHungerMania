@@ -160,6 +160,7 @@ public class Lobby implements Listener, CommandExecutor {
                                     user.getBukkitPlayer().setTotalExperience(0);
                                     user.getBukkitPlayer().setExp(0);
                                     DisguiseAPI.undisguiseToAll(user.getBukkitPlayer());
+                                    user.getBukkitPlayer().setPlayerListName(ManiaUtils.color(user.getDisplayName()));
                                 }
                             }
                         }
@@ -249,7 +250,6 @@ public class Lobby implements Listener, CommandExecutor {
             p.setExp(0);
             p.setLevel(0);
             p.setTotalExperience(0);
-            p.setPlayerListName(ManiaUtils.color(user.getDisplayName()));
         }
         generateMapOptions();
         this.game = null;

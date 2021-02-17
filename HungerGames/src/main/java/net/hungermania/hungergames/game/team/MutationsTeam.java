@@ -4,12 +4,13 @@ import net.hungermania.hungergames.HungerGames;
 import net.hungermania.hungergames.game.Game;
 import net.hungermania.hungergames.game.PlayerType;
 import net.hungermania.maniacore.api.user.User;
-import net.hungermania.maniacore.api.util.ManiaUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 public class MutationsTeam extends GameTeam {
     public MutationsTeam(Game game) {
@@ -26,7 +27,6 @@ public class MutationsTeam extends GameTeam {
         setPlayerStats(player, true, false, false);
         this.members.add(uuid);
         user.sendMessage(getJoinMessage());
-        player.setPlayerListName(ManiaUtils.color(getColor() + player.getName()));
         Set<UUID> shown = new HashSet<>(game.getTributesTeam().getMembers());
         shown.addAll(game.getMutationsTeam().getMembers());
         for (UUID gp : shown) {

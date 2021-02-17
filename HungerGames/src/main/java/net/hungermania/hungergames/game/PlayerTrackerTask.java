@@ -11,7 +11,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 public class PlayerTrackerTask extends BukkitRunnable {
     
@@ -96,7 +98,8 @@ public class PlayerTrackerTask extends BukkitRunnable {
     
             String health = Constants.NUMBER_FORMAT.format(target.getHealth());
             String maxHealth = Constants.NUMBER_FORMAT.format(target.getMaxHealth());
-    
+            String targetName = "";
+            
             if (holdingTracker) {
                 SpigotUtils.sendActionBar(player, "&f&lTARGET: &a" + target.getName() + "   &f&lDISTANCE: &a" + ((int) distance) + "m" + "   &f&lHEALTH: &a" + health + "&f/&a" + maxHealth + " HP");
             }

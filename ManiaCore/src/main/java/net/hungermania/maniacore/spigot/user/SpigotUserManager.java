@@ -80,10 +80,12 @@ public class SpigotUserManager extends UserManager implements Listener {
                 channel = Channel.ADMIN;
             }
             
-            String message = user.getDisplayName() + "&8: " + channel.getColor() + e.getMessage();
+            String message = e.getMessage();
+            user.setChannel(channel);
             if ((channel == Channel.STAFF && user.hasPermission(Rank.HELPER)) || (channel == Channel.ADMIN && user.hasPermission(Rank.ADMIN))) {
                 ManiaCore.getInstance().getMessageHandler().sendChannelMessage(player.getUniqueId(), channel, message);
             }
+            user.setChannel(Channel.GLOBAL);
             return;
         }
 

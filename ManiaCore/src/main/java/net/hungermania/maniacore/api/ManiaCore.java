@@ -141,7 +141,7 @@ public class ManiaCore implements DatabaseHandler {
         
         this.chatManager = new ChatManager();
         this.chatManager.setFormatter(Channel.GLOBAL, new ChatFormatter(LEVEL_FORMAT + " " + PLAYER_NAME_FORMAT + "&8: &r" + MESSAGE_FORMAT));
-        ChatFormatter otherFormatter = new ChatFormatter(CHANNEL_HEADER + " " + "{truePrefix}{trueName}" + "&8: &r" + MESSAGE_FORMAT);
+        ChatFormatter otherFormatter = new ChatFormatter(CHANNEL_HEADER + " " + "{truePrefix} {truerankbasecolor}{trueName}" + "&8: {truechatcolor}{message}");
         this.chatManager.setFormatter(Channel.STAFF, otherFormatter);
         this.chatManager.setFormatter(Channel.ADMIN, otherFormatter);
     }

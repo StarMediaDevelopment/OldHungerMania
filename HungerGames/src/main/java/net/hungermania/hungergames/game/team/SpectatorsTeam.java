@@ -7,7 +7,6 @@ import net.hungermania.hungergames.game.death.DeathInfo;
 import net.hungermania.hungergames.game.death.DeathInfoPlayerKill;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.user.User;
-import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.spigot.util.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -35,7 +34,6 @@ public class SpectatorsTeam extends GameTeam {
         game.addPlayer(uuid);
         Player player = Bukkit.getPlayer(uuid);
         setPlayerStats(player, false, true, true);
-        player.setPlayerListName(ManiaUtils.color(getColor() + player.getName()));
         ItemStack tributesBook = ItemBuilder.start(Material.ENCHANTED_BOOK).setDisplayName("&a&lTributes &7&o(Right Click)").build();
         ItemStack spectatorsBook = ItemBuilder.start(Material.ENCHANTED_BOOK).setDisplayName("&c&lSpectators &7&o(Right Click)").build();
         ItemStack mutationsBook = ItemBuilder.start(Material.ENCHANTED_BOOK).setDisplayName("&d&lMutations &7&o(Right Click)").build();

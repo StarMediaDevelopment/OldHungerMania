@@ -1,6 +1,7 @@
 package net.hungermania.hungergames.game.death;
 
 import net.hungermania.hungergames.game.Game;
+import net.hungermania.maniacore.spigot.user.SpigotUser;
 
 import java.util.UUID;
 
@@ -21,7 +22,13 @@ public class DeathInfoKilledSuicide extends DeathInfo {
     
     @Override
     public String getDeathMessage(Game game) {
-        String killerName = killerTeamColor + game.getPlayer(killer).getUser().getName();
+        String killerName = killerTeamColor;
+        SpigotUser user = game.getPlayer(killer).getUser();
+        if (user.getNickname() != null || user.getNickname().isActive()) {
+            killerName += user.getNickname().getName();
+        } else {
+            killerName += user.getName();
+        }
         this.deathMessage = "&4&l>> %playername% &7was killed by " + killerName + "&7's suicide.";
         return super.getDeathMessage(game);
     }

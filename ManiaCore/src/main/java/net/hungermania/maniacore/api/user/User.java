@@ -46,23 +46,14 @@ public class User implements IRecord {
     }
 
     public void applyNickname() {
-        Random random = new Random();
-        for (Stats fakedStat : FAKED_STATS) {
-            if (fakedStat == Stats.HG_SCORE) {
-                Statistic value = fakedStat.create(uniqueId);
-                value.setValue(random.nextInt(90) + 10);
-                this.fakeStats.put(fakedStat.name(), value);
-            } else {
-                Statistic stat = getStat(fakedStat);
-                Statistic value = fakedStat.create(uniqueId);
-                if (stat.getAsInt() != 0) {
-                    value.setValue(random.nextInt(stat.getAsInt()));
-                } else {
-                    value.setValue(0);
-                }
-                this.fakeStats.put(value.getName(), value);
-            }
+        generateFakeStats();
+    }
+
+    public Nickname getNickname() {
+        if (nickname == null) {
+            nickname = new Nickname(this.uniqueId);
         }
+        return nickname;
     }
 
     public void resetNickname() {
@@ -96,6 +87,9 @@ public class User implements IRecord {
     }
 
     public Statistic getFakedStat(Stat stat) {
+        if (fakeStats.isEmpty()) {
+            generateFakeStats();
+        }
         Statistic s = null;
         try {
             s = fakeStats.get(stat.getName());
@@ -106,8 +100,33 @@ public class User implements IRecord {
             if (!this.fakeStats.containsKey(stat.getName())) {
                 this.fakeStats.put(stat.getName(), s);
             }
+        } else {
+            if (FAKED_STATS.contains(stat)) {
+                generateFakeStats();
+                s = fakeStats.get(stat.getName());
+            }
         }
         return s;
+    }
+
+    private void generateFakeStats() {
+        Random random = new Random();
+        for (Stats fakedStat : FAKED_STATS) {
+            if (fakedStat == Stats.HG_SCORE) {
+                Statistic value = fakedStat.create(uniqueId);
+                value.setValue(random.nextInt(90) + 10);
+                this.fakeStats.put(fakedStat.getName(), value);
+            } else {
+                Statistic stat = getStat(fakedStat);
+                Statistic value = fakedStat.create(uniqueId);
+                if (stat.getAsInt() != 0) {
+                    value.setValue(random.nextInt(stat.getAsInt()));
+                } else {
+                    value.setValue(0);
+                }
+                this.fakeStats.put(value.getName(), value);
+            }
+        }
     }
 
     public void setToggles(Map<Toggles, Toggle> toggles) {
@@ -268,7 +287,7 @@ public class User implements IRecord {
     }
 
     public String getColoredName() {
-        if (nickname.isActive()) {
+        if (getNickname().isActive()) {
             return nickname.getRank().getBaseColor() + nickname.getName();
         }
         return getRank().getBaseColor() + getName();

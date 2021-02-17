@@ -1,16 +1,22 @@
 package net.hungermania.hungergames.game.team;
 
-import net.hungermania.hungergames.game.*;
+import net.hungermania.hungergames.game.Game;
+import net.hungermania.hungergames.game.GamePlayer;
+import net.hungermania.hungergames.game.PlayerType;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.user.User;
-import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.api.util.State;
 import net.hungermania.maniacore.spigot.util.SpigotUtils;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 public class TributesTeam extends GameTeam {
     public TributesTeam(Game game) {
@@ -32,8 +38,7 @@ public class TributesTeam extends GameTeam {
             player.removePotionEffect(activePotionEffect.getType());
         }
     
-        player.setPlayerListName(ManiaUtils.color(getColor() + player.getName()));
-        player.spigot().setCollidesWithEntities(true);
+        setPlayerStats(player, true, false, false);
         
         this.members.add(player.getUniqueId());
         user.sendMessage(getJoinMessage());

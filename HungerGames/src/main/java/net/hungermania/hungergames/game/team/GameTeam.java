@@ -6,10 +6,14 @@ import me.libraryaddict.disguise.DisguiseAPI;
 import net.hungermania.hungergames.game.Game;
 import net.hungermania.hungergames.game.PlayerType;
 import net.hungermania.maniacore.api.ManiaCore;
+import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.util.ManiaUtils;
+import net.hungermania.maniacore.spigot.user.SpigotUser;
 import net.hungermania.maniacore.spigot.util.SpigotUtils;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
@@ -103,7 +107,20 @@ public abstract class GameTeam implements Iterable<UUID> {
             player.removePotionEffect(activePotionEffect.getType());
         }
         DisguiseAPI.undisguiseToAll(player);
-        player.setPlayerListName(ManiaUtils.color(user.getRank().getPrefix() + " " + getColor() + player.getName()));
+        setPlayerListName((SpigotUser) user);
+    }
+    
+    public void setPlayerListName(SpigotUser user) {
+        Rank rank;
+        String name;
+        if (user.getNickname() != null && user.getNickname().isActive()) {
+            rank = user.getNickname().getRank();
+            name = user.getNickname().getName();
+        } else {
+            rank = user.getRank();
+            name = user.getName();
+        }
+        user.getBukkitPlayer().setPlayerListName(ManiaUtils.color(rank.getPrefix() + " " + getColor() + name));
     }
     
     public abstract void join(UUID uuid);

@@ -9,7 +9,7 @@ import net.hungermania.maniacore.api.util.ManiaUtils;
 
 public class ChatFormatter {
     
-    public static final String CHANNEL_HEADER = "{symbolcolor}&l[{channelcolor}{symbolcolor}&l]"; //Space and color added during processing
+    public static final String CHANNEL_HEADER = "{symbolcolor}&l[{channelcolor}{channelname}{symbolcolor}&l]"; //Space and color added during processing
     public static final String LEVEL_FORMAT = "&8[{levelcolor}{level}&8]";
     public static final String PLAYER_NAME_FORMAT = "{displayname}"; //Spaces added during processing
     public static final String MESSAGE_FORMAT = "{chatcolor}{message}";
@@ -30,6 +30,7 @@ public class ChatFormatter {
             rank = nickname.getRank();
         }
         format = format.replace("{symbolcolor}", channel.getSymbolColor());
+        format = format.replace("{channelname}", channel.name());
         format = format.replace("{channelcolor}", channel.getColor());
         format = format.replace("{levelcolor}", level.getNumberColor().toString());
         format = format.replace("{level}", level.getNumber() + "");
@@ -38,6 +39,8 @@ public class ChatFormatter {
         format = format.replace("{trueName}", user.getName());
         format = format.replace("{truePrefix}", user.getRank().getPrefix());
         format = format.replace("{displayname}", user.getDisplayName());
+        format = format.replace("{truerankbasecolor}", user.getRank().getBaseColor());
+        format = format.replace("{truechatcolor}", user.getRank().getChatColor());
         return ManiaUtils.color(format);
     }
 }

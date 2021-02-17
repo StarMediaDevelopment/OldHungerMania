@@ -166,12 +166,11 @@ public class Game implements IRecord {
         HungerGames plugin = HungerGames.getInstance();
         new BukkitRunnable() {
             public void run() {
-                Game game = plugin.getGameManager().getCurrentGame();
-                if (game == null) { return; }
+                if (archived) cancel();
                 Task task = spectatorUpdate.task().start();
-                List<UUID> players = new ArrayList<>(game.getSpectatorsTeam().getMembers());
-                players.addAll(game.getMutationsTeam().getMembers());
-                players.addAll(game.getHiddenStaffTeam().getMembers());
+                List<UUID> players = new ArrayList<>(getSpectatorsTeam().getMembers());
+                players.addAll(getMutationsTeam().getMembers());
+                players.addAll(getHiddenStaffTeam().getMembers());
                 for (UUID spectator : players) {
                     Player player = Bukkit.getPlayer(spectator);
                     player.setFoodLevel(20);
@@ -185,12 +184,11 @@ public class Game implements IRecord {
         ManiaCore.getInstance().getMemoryManager().addMemoryHook(endermanDamage);
         new BukkitRunnable() {
             public void run() {
-                Game game = plugin.getGameManager().getCurrentGame();
-                if (game == null) { return; }
+                if (archived) cancel();
                 Task task = endermanDamage.task().start();
-                if (game.getMutationsTeam().isEmpty()) { return; }
-                for (UUID mutation : game.getMutationsTeam()) {
-                    GamePlayer gamePlayer = game.getPlayer(mutation);
+                if (getMutationsTeam().isEmpty()) { return; }
+                for (UUID mutation : getMutationsTeam()) {
+                    GamePlayer gamePlayer = getPlayer(mutation);
                     if (gamePlayer.getMutationType() == MutationType.ENDERMAN) {
                         Player player = gamePlayer.getUser().getBukkitPlayer();
                         Location location = player.getLocation();
@@ -205,6 +203,7 @@ public class Game implements IRecord {
 
         new BukkitRunnable() {
             public void run() {
+                if (archived) cancel();
                 Set<UUID> members = new HashSet<>(spectatorsTeam.getMembers());
                 members.addAll(hiddenStaffTeam.getMembers());
                 for (UUID member : members) {
@@ -217,6 +216,15 @@ public class Game implements IRecord {
                 }
             }
         }.runTaskTimer(HungerGames.getInstance(), 0L, 6000);
+        
+        new BukkitRunnable() {
+            public void run() {
+                if (archived) cancel();
+                for (GamePlayer value : players.values()) {
+                    getGameTeam(value.getUniqueId()).setPlayerListName(value.getUser());
+                }
+            }
+        }.runTaskTimer(HungerGames.getInstance(), 20L, 20L);
 
         messager = new GameMessager(this);
     }
@@ -534,7 +542,10 @@ public class Game implements IRecord {
             for (GamePlayer gp : this.players.values()) {
                 if (!gp.getUser().getUniqueId().equals(winner)) {
                     gp.getUser().getStat(Stats.HG_WINSTREAK).setValue(0);
-                    gp.getUser().getFakeStats().get(Stats.HG_WINSTREAK.getName()).setValue(0);
+                    Statistic fakeWinStreak = gp.getUser().getFakedStat(Stats.HG_WINSTREAK);
+                    if (fakeWinStreak != null) {
+                        fakeWinStreak.setValue(0);
+                    }
                 }
                 Redis.pushUser(gp.getUser());
                 gp.getUser().setScoreboard(null);
@@ -619,7 +630,9 @@ public class Game implements IRecord {
         if (points.getAsInt() > 0) {
             points.setValue(points.getAsInt() - lost);
             Statistic fakedStat = gamePlayer.getUser().getFakedStat(Stats.HG_SCORE);
-            fakedStat.setValue(fakedStat.getAsInt() - lost);
+            if (fakedStat != null) {
+                fakedStat.setValue(fakedStat.getAsInt() - lost);
+            }
             gamePlayer.getUser().sendMessage("&4&l>> &cYou lost " + lost + " Score for dying.");
         }
 
@@ -715,10 +728,13 @@ public class Game implements IRecord {
                 gained += (int) Math.ceil(gained / 3);
                 killer.getUser().setStat(Stats.HG_HIGHEST_KILL_STREAK, killer.getKillStreak());
             }
-            killerName += killer.getUser().getName();
-
+            if (killer.getUser().getNickname() != null && killer.getUser().getNickname().isActive()) {
+                killerName += killer.getUser().getNickname().getName();
+            } else {
+                killerName += killer.getUser().getName();
+            }
             if (firstKiller == null) {
-                sendMessage("&6&l>> &c&l" + (killer.getUser().getName() + " drew first blood!").toUpperCase());
+                sendMessage("&6&l>> &c&l" + (ChatColor.stripColor(killerName) + " drew first blood!").toUpperCase());
                 playSound(Sound.WOLF_HOWL);
                 this.firstKiller = killer.getUniqueId();
                 experience += 15;
@@ -735,7 +751,9 @@ public class Game implements IRecord {
             Statistic killerScore = killer.getUser().getStat(Stats.HG_SCORE);
             killerScore.setValue(killerScore.getAsInt() + gained);
             Statistic killerFakeScore = killer.getUser().getFakedStat(Stats.HG_SCORE);
-            killerFakeScore.setValue(killerFakeScore.getAsInt() + gained);
+            if (killerFakeScore != null) {
+                killerFakeScore.setValue(killerFakeScore.getAsInt() + gained);
+            }
             killer.getUser().sendMessage("&6&l>> &a+" + gained + " Score!");
 
             gamePlayer.getUser().sendMessage("&4&l>> &cYour killer &8(" + killerName + "&8) &chad &4" + Utils.formatNumber(killerHealth) + " HP &cremaining!");
@@ -775,7 +793,7 @@ public class Game implements IRecord {
                 if (gp.getMutationTarget() != null) {
                     if (gp.getMutationTarget().equals(uniqueId)) {
                         gp.setMutationTarget(killerUser.getUniqueId());
-                        gp.getUser().sendMessage("&6&l>> &eYour previous target died. Your new target is &a" + killerUser.getName());
+                        gp.getUser().sendMessage("&6&l>> &eYour previous target died. Your new target is &a" + killerName);
                     }
                 }
             }

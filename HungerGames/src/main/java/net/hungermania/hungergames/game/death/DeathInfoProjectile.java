@@ -29,7 +29,11 @@ public class DeathInfoProjectile extends DeathInfo {
         if (shooter instanceof Player) {
             Player playerShooter = (Player) shooter;
             SpigotUser spigotUser = (SpigotUser) HungerGames.getInstance().getManiaCore().getUserManager().getUser(playerShooter.getUniqueId());
-            killerName = killerTeamColor + spigotUser.getName();
+            if (spigotUser.getNickname() != null || spigotUser.getNickname().isActive()) {
+                killerName = killerTeamColor + spigotUser.getNickname().getName();
+            } else {
+                killerName = killerTeamColor + spigotUser.getName();
+            }
         } else {
             killerName = "&f" + Utils.capitalizeEveryWord(shooter.getType().name());
         }

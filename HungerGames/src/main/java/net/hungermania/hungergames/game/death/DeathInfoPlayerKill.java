@@ -3,6 +3,7 @@ package net.hungermania.hungergames.game.death;
 import lombok.Getter;
 import lombok.Setter;
 import net.hungermania.hungergames.game.Game;
+import net.hungermania.maniacore.api.user.User;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
@@ -25,8 +26,14 @@ public class DeathInfoPlayerKill extends DeathInfo {
     }
     
     public String getDeathMessage(Game game) {
-        String killerName = killerTeamColor + game.getPlayer(killer).getUser().getName();
-    
+        String killerName = killerTeamColor;
+        User user = game.getPlayer(killer).getUser();
+        if (user.getNickname() != null && user.getNickname().isActive()) {
+            killerName += user.getNickname().getName();
+        } else {
+            killerName += user.getName();
+        }
+        
         String itemName;
         itemName = getHandItem(handItem);
     
