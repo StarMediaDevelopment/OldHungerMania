@@ -6,7 +6,9 @@ import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.user.toggle.Toggle;
 import net.hungermania.maniacore.api.user.toggle.Toggles;
 import net.hungermania.maniacore.api.util.ManiaUtils;
-import org.bukkit.command.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class ToggleCmd implements CommandExecutor {
@@ -24,9 +26,19 @@ public class ToggleCmd implements CommandExecutor {
         }
     
         User user = ManiaCore.getInstance().getUserManager().getUser(player.getUniqueId());
+    
+        if (ManiaUtils.checkCmdAliases(args, 0, "list")) {
+            user.sendMessage("&aList of toggles");
+            for (Toggles toggle : Toggles.values()) {
+                if (user.hasPermission(toggle.getRank())) {
+                    user.sendMessage("&e" + toggle.name().toLowerCase());
+                }
+            }
+            return true;
+        }
+        
         Toggles type = null;
         Toggle toggle;
-    
         for (Toggles value : Toggles.values()) {
             if (value.getCmdName() != null) {
                 if (value.getCmdName().equalsIgnoreCase(args[0])) {
