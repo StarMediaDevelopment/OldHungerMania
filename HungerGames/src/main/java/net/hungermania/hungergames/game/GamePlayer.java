@@ -71,4 +71,8 @@ public class GamePlayer {
         this.revived = value;
         this.revivedActor = sender;
     }
+
+    public void sendMessage(String s) {
+        user.sendMessage(s);
+    }
 }

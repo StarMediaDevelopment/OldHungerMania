@@ -11,6 +11,9 @@ import net.hungermania.hungergames.HungerGames;
 import net.hungermania.hungergames.game.death.*;
 import net.hungermania.hungergames.game.enums.GameResult;
 import net.hungermania.hungergames.game.enums.PlayerType;
+import net.hungermania.hungergames.game.sponsoring.SponsorItem;
+import net.hungermania.hungergames.game.sponsoring.SponsorManager;
+import net.hungermania.hungergames.game.sponsoring.SponsorType;
 import net.hungermania.hungergames.game.tasks.GameTask;
 import net.hungermania.hungergames.game.tasks.PlayerTrackerTask;
 import net.hungermania.hungergames.game.team.*;
@@ -85,6 +88,7 @@ public class Game implements IRecord {
     @Getter @Setter private int currentMapVotes = 0;
     @Getter private GameTeam tributesTeam, spectatorsTeam, hiddenStaffTeam, mutationsTeam;
     @Getter @Setter private boolean diamondSpecial;
+    @Getter private SponsorManager sponsorManager;
 
     public Game(HGMap map, GameSettings settings) {
         this.map = map;
@@ -110,6 +114,8 @@ public class Game implements IRecord {
         spectatorsTeam = new SpectatorsTeam(this);
         hiddenStaffTeam = new HiddenStaffTeam(this);
         mutationsTeam = new MutationsTeam(this);
+        
+        this.sponsorManager = new SponsorManager();
 
         map.getWorld().setGameRuleValue("naturalRegeneration", "" + gameSettings.isRegeneration());
         map.getWorld().setGameRuleValue("doDaylightCycle", "" + gameSettings.isTimeProgression());
@@ -584,6 +590,27 @@ public class Game implements IRecord {
             ManiaCore.getInstance().getMemoryManager().removeMemoryHook("Game Spectator Update");
             ManiaCore.getInstance().getMemoryManager().removeMemoryHook("Enderman Mutation Damage");
         }
+    }
+    
+    public void sponsorPlayer(GamePlayer actor, GamePlayer target, SponsorType type) {
+        if (!getSpectatorsTeam().isMember(actor.getUniqueId())) {
+            actor.sendMessage("&cOnly spectators can sponsor players.");
+            return;
+        }
+        
+        if (!getTributesTeam().isMember(target.getUniqueId())) {
+            actor.sendMessage("&cYou can only sponsor tributes.");
+            return;
+        }
+
+        List<SponsorItem> possibleItems = new LinkedList<>(this.sponsorManager.getSponsorItems().get(type));
+        Collections.shuffle(possibleItems);
+        SponsorItem chosen = possibleItems.get(ManiaCore.RANDOM.nextInt(possibleItems.size()));
+        target.getUser().getBukkitPlayer().getInventory().addItem(chosen.getItemStack());
+        //TODO Nickname support, maybe just add a getDisplayName in GamePlayer that accounts for team name color and nicknames
+        sendMessage("&6&l>> &a" + target.getUser().getName() + "&a was &lSPONSORED&a a(n) &l" + type.getName() + "&a by " + actor.getUser().getName() + "&a!");
+        target.sendMessage("&6&l>> &aYou have been &lSPONSORED&a " + chosen.getName() + " by " + target.getUser().getName() + "&a!");
+        target.sendMessage("&6&l>> &aYou sponsored " + target.getUser().getName() + "&ae " + chosen.getName() + "!");
     }
 
     public void resetServer() {

@@ -1,5 +1,6 @@
 package net.hungermania.hungergames.game.sponsoring;
 
+import lombok.Getter;
 import net.hungermania.maniacore.api.util.ManiaUtils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -9,7 +10,9 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.*;
 
 public class SponsorManager {
-    private Map<SponsorType, List<SponsorItem>> sponsorItems = new HashMap<>();
+    @Getter private Map<SponsorType, List<SponsorItem>> sponsorItems = new HashMap<>();
+    @Getter private Set<UUID> sponsoredActors = new HashSet<>();
+    
     
     public SponsorManager() {
         List<SponsorItem> foodItems = new LinkedList<>(), weaponItems = new LinkedList<>(), armorItems = new LinkedList<>(), potionEffects = new LinkedList<>();

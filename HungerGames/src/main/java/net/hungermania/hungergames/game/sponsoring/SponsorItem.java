@@ -3,6 +3,7 @@ package net.hungermania.hungergames.game.sponsoring;
 import lombok.Getter;
 import net.hungermania.manialib.util.Utils;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 @Getter
 public class SponsorItem {
@@ -27,5 +28,9 @@ public class SponsorItem {
             return amount + " of " + name;
         }
         return name;
+    }
+
+    public ItemStack getItemStack() { //TODO
+        return null;
     }
 }
