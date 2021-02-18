@@ -221,7 +221,7 @@ public class Game implements IRecord {
                         player.sendMessage(ManiaUtils.color("&6&l>> &eYou might be out of the game, but &f&lDON'T QUIT&e!"));
                         player.sendMessage(ManiaUtils.color("&6&l>> &eAnother game will be &f&lSTARTING SOON&e!"));
                         ComponentBuilder builder = new ComponentBuilder(">>").color(net.md_5.bungee.api.ChatColor.GOLD).bold(true)
-                                .append(" Or, ").color(net.md_5.bungee.api.ChatColor.YELLOW).append("CLICK HERE").color(net.md_5.bungee.api.ChatColor.WHITE).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "nextgame")).bold(true)
+                                .append(" Or, ").color(net.md_5.bungee.api.ChatColor.YELLOW).append("CLICK HERE").color(net.md_5.bungee.api.ChatColor.WHITE).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/nextgame")).bold(true)
                                 .append(" to go to the next available game.").color(net.md_5.bungee.api.ChatColor.YELLOW);
                         player.spigot().sendMessage(builder.create());
                         player.sendMessage("");
