@@ -194,6 +194,7 @@ public class Database {
                             if (entry.getValue() != null) {
                                 DataType type = DataType.getType(entry.getValue());
                                 if (type == null) {
+                                    System.out.println("Could not find mysql column type for " + entry.getKey() + " in record " + record.getClass().getSimpleName());
                                     continue;
                                 }
                                 sb.append(Statements.UPDATE_VALUE.replace("{column}", entry.getKey()).replace("{value}", entry.getValue() + ""));

@@ -44,19 +44,19 @@ public class Skin implements Serializable, IRecord {
             JsonObject property = (JsonObject) properties.get(0);
             String newName = property.get("name").getAsString();
             boolean updated = false;
-            if (this.name != null && !this.name.equals(newName)) {
+            if (this.name == null || (this.name != null && !this.name.equals(newName))) {
                 System.out.println("Name changed");
                 this.name = newName;
                 updated = true;
             }
             String newValue = property.get("value").getAsString();
-            if (this.value != null && !this.value.equals(newValue)) {
+            if (this.value == null || (this.value != null && !this.value.equals(newValue))) {
                 System.out.println("Value changed");
                 this.value = newValue;
                 updated = true;
             }
             String newSignature = property.get("signature").getAsString();
-            if (this.signature != null && !this.signature.equals(newSignature)) {
+            if (this.signature == null || (this.signature != null && !this.signature.equals(newSignature))) {
                 System.out.println("Signature changed");
                 this.signature = newSignature;
                 updated = true;

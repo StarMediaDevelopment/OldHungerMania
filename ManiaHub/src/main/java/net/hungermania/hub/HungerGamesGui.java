@@ -109,7 +109,7 @@ public class HungerGamesGui extends Gui {
         ItemStack hungerGames = ItemBuilder.start(Material.DIAMOND_SWORD).setDisplayName("&e&lHUNGER GAMES").withLore("&7Compete in a free-for-all deathmatch", "&7where the last player standing is", "&7declared the victor. Twists and turns", "&7at every corner!").build();
         ItemStack totalPlayers = ItemBuilder.start(Material.SKULL_ITEM, 1, (byte) 3).setDisplayName("&e&lTOTAL PLAYERS").withLore("&6" + onlinePlayers + "&8/&6" + maximumPlayers).build();
         ItemStack allServers = ItemBuilder.start(Material.GOLD_BLOCK).setDisplayName("&e&lALL SERVERS").withLore("&7View all servers, including ones already playing", "&6&lClick &fto view all servers.", "&c&oNOT IMPLEMENTED").build();
-        ItemStack autoJoin = ItemBuilder.start(Material.ENDER_PEARL).setDisplayName("&3&lAUTO-JOIN").withLore("&6&lClick &fto join the best lobby!", "&c&oNOT IMPLEMENTED").build();
+        ItemStack autoJoin = ItemBuilder.start(Material.ENDER_PEARL).setDisplayName("&3&lAUTO-JOIN").withLore("&6&lClick &fto join the best lobby!").build();
 
         setButton(0, new GUIButton(back).setListener(e -> new GameBrowserGui(plugin).openGUI(e.getWhoClicked())));
         setButton(3, new GUIButton(totalServers));

@@ -31,7 +31,7 @@ public class LevelManager {
     
     public void generateDefaults() {
         if (levels.isEmpty()) {
-            int totalXp = 2500;
+            int totalXp = 1250;
     
             Set<Range<ChatColor>> levelColors = new HashSet<>();
             levelColors.add(new Range<>(1, 9, ChatColor.GRAY));

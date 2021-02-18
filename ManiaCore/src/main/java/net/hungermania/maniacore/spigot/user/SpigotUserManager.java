@@ -13,6 +13,7 @@ import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.maniacore.api.records.ChatEntryRecord;
 import net.hungermania.maniacore.api.records.CmdEntryRecord;
 import net.hungermania.maniacore.api.records.NicknameRecord;
+import net.hungermania.maniacore.api.records.UserRecord;
 import net.hungermania.maniacore.api.redis.Redis;
 import net.hungermania.maniacore.api.skin.Skin;
 import net.hungermania.maniacore.api.user.User;
@@ -188,6 +189,11 @@ public class SpigotUserManager extends UserManager implements Listener {
                         user.setNickname((Nickname) nickRecords.get(0).toObject());
                         user.applyNickname();
                     });
+                }
+                
+                if (!user.getName().equals(player.getName())) {
+                    user.setName(player.getName());
+                    new UserRecord(user).push(ManiaCore.getInstance().getDatabase());
                 }
 
                 UserJoinEvent event = new UserJoinEvent((SpigotUser) user);

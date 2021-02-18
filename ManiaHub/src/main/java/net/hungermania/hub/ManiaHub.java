@@ -52,12 +52,12 @@ import java.util.*;
 import java.util.Map.Entry;
 
 public final class ManiaHub extends JavaPlugin implements Listener, ManiaPlugin {
-    
+
     @Getter
     private LeaderboardManager leaderboardManager;
-    
+
     public static ManiaHub instance;
-    
+
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
         if (e.getPlayer().getGameMode() == GameMode.CREATIVE) {
@@ -66,7 +66,7 @@ public final class ManiaHub extends JavaPlugin implements Listener, ManiaPlugin 
             }
         }
     }
-    
+
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
         if (e.getPlayer().getGameMode() == GameMode.CREATIVE) {
@@ -75,35 +75,45 @@ public final class ManiaHub extends JavaPlugin implements Listener, ManiaPlugin 
             }
         }
     }
-    
+
     @EventHandler
     public void onEntityDamageEvent(EntityDamageEvent e) {
         e.setCancelled(true);
     }
-    
+
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
-        if (!(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)) { return; }
-        if (e.getItem() == null) { return; }
+        if (!(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)) {
+            return;
+        }
+        if (e.getItem() == null) {
+            return;
+        }
         ItemStack itemStack = e.getItem();
-        if (!itemStack.hasItemMeta()) { return; }
-        if (!itemStack.getItemMeta().hasDisplayName()) { return; }
-        if (!itemStack.getItemMeta().getDisplayName().contains("GAME BROWSER")) { return; }
+        if (!itemStack.hasItemMeta()) {
+            return;
+        }
+        if (!itemStack.getItemMeta().hasDisplayName()) {
+            return;
+        }
+        if (!itemStack.getItemMeta().getDisplayName().contains("GAME BROWSER")) {
+            return;
+        }
         new GameBrowserGui(this).openGUI(e.getPlayer());
     }
-    
+
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         if (e.getInventory().getHolder() instanceof PlayerInventory) {
             e.setCancelled(true);
         }
     }
-    
+
     @EventHandler
     public void onItemDrop(PlayerDropItemEvent e) {
         e.setCancelled(true);
     }
-    
+
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         e.getPlayer().sendMessage(ManiaUtils.color("&6&l>> &bWelcome to &3&lHungerMania&b!"));
@@ -123,39 +133,40 @@ public final class ManiaHub extends JavaPlugin implements Listener, ManiaPlugin 
         browserMeta.setDisplayName(ManiaUtils.color("&e&lGAME BROWSER &7&o(Right Click)"));
         gameBrowser.setItemMeta(browserMeta);
         e.getPlayer().getInventory().setItem(4, gameBrowser);
+        e.getPlayer().updateInventory();
         e.getPlayer().teleport(getServer().getWorld("world").getSpawnLocation());
-        
+
         String[] motd = new String[]{"&6&l>> &bWelcome to HungerMania!", "", "----Server Info----", "&6&l>> &eDiscord: &fhttps://discord.gg/Z95xgD7", "&6&l>> &eWebsite: &fhttps://hungermania.net/", "&6&l>> &eStore: &fhttps://hunger-mania.tebex.io/", "&6&l>> &eRules: &f/rules"};
-        
+
         for (String message : motd) {
             e.getPlayer().sendMessage(ManiaUtils.color(message));
         }
     }
-    
+
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (cmd.getName().equalsIgnoreCase("testadmin")) {
             if (!sender.hasPermission("hungermania.hub.testadmin")) {
                 sender.sendMessage(ManiaUtils.color("&cYou do not have permission to use that command."));
                 return true;
             }
-            
+
             if (!(args.length > 0)) {
                 sender.sendMessage(ManiaUtils.color("&cYou must provide a sub command"));
                 return true;
             }
-    
+
             if (ManiaUtils.checkCmdAliases(args, 0, "info")) {
                 sender.sendMessage(ManiaUtils.color("&6&l>> &eHG Test Information"));
                 sender.sendMessage(ManiaUtils.color("&6&l> &bActive&8: &e" + getConfig().getBoolean("testinfo.active")));
                 sender.sendMessage(ManiaUtils.color("&6&l> &bServer&8: &e" + getConfig().getString("testinfo.server")));
                 return true;
             }
-            
+
             if (!(args.length > 1)) {
                 sender.sendMessage(ManiaUtils.color("&cYou must provide a value"));
                 return true;
             }
-    
+
             if (ManiaUtils.checkCmdAliases(args, 0, "setactive")) {
                 try {
                     boolean value = Boolean.parseBoolean(args[1]);
@@ -176,7 +187,7 @@ public final class ManiaHub extends JavaPlugin implements Listener, ManiaPlugin 
                 sender.sendMessage(ManiaUtils.color("&cOnly players may use that command."));
                 return true;
             }
-            
+
             Player player = (Player) sender;
             player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
         } else if (cmd.getName().equalsIgnoreCase("fly")) {
@@ -184,14 +195,14 @@ public final class ManiaHub extends JavaPlugin implements Listener, ManiaPlugin 
                 sender.sendMessage(ManiaUtils.color("&cOnly players may use that command."));
                 return true;
             }
-            
+
             Player player = (Player) sender;
             User user = ManiaCore.getInstance().getUserManager().getUser(player.getUniqueId());
             if (!user.hasPermission(Rank.HELPER)) {
                 player.sendMessage(ManiaUtils.color("&cYou do not have permission to use that command."));
                 return true;
             }
-            
+
             player.setAllowFlight(!player.getAllowFlight());
             if (player.getAllowFlight()) {
                 player.sendMessage(ManiaUtils.color("&6&l>> &fFly mode &a&lENABLED&f."));
@@ -203,12 +214,12 @@ public final class ManiaHub extends JavaPlugin implements Listener, ManiaPlugin 
                 sender.sendMessage(ManiaUtils.color("&cYou did not provide enough arguments"));
                 return true;
             }
-            
+
             if (!(sender instanceof Player)) {
                 sender.sendMessage(ManiaUtils.color("&cOnly players can use that command."));
                 return true;
             }
-            
+
             int start, end;
             try {
                 start = Integer.parseInt(args[0]);
@@ -216,39 +227,39 @@ public final class ManiaHub extends JavaPlugin implements Listener, ManiaPlugin 
                 sender.sendMessage(ManiaUtils.color("&cYou provided an invalid number for the starting number."));
                 return true;
             }
-            
+
             try {
                 end = Integer.parseInt(args[1]);
             } catch (NumberFormatException e) {
                 sender.sendMessage(ManiaUtils.color("&cYou provided an invalid number for the ending number."));
                 return true;
             }
-            
+
             for (Range<Leaderboard> range : leaderboardManager.getLeaderboards()) {
                 if (range.contains(start) || range.contains(end)) {
                     sender.sendMessage(ManiaUtils.color("&cA leaderboard already exists with one of those numbers."));
                     return true;
                 }
             }
-            
+
             Leaderboard leaderboard = new Leaderboard(((Player) sender).getLocation(), start, end);
             leaderboard.spawn();
             leaderboardManager.addLeaderboard(leaderboard);
         }
         return true;
     }
-    
+
     @Override
     public void onEnable() {
         instance = this;
         getServer().getPluginManager().registerEvents(this, this);
         saveDefaultConfig();
-        
+
         ManiaCore.getInstance().getServerManager().getCurrentServer().setType(ServerType.HUB);
-        
+
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         getServer().getWorld("world").setDifficulty(Difficulty.PEACEFUL);
-        
+
         MemoryHook playerUpdate = new MemoryHook("Hub Player Update");
         ManiaCore.getInstance().getMemoryManager().addMemoryHook(playerUpdate);
         new BukkitRunnable() {
@@ -257,7 +268,7 @@ public final class ManiaHub extends JavaPlugin implements Listener, ManiaPlugin 
                 Map<Integer, ItemStack> serverStacks = new TreeMap<>();
                 int onlinePlayers = 0, maximumPlayers = 0;
                 EventInfo activeEvent = ManiaCore.getInstance().getEventManager().getActiveEvent();
-    
+
                 Collection<ServerObject> hgServers = TimoCloudAPI.getUniversalAPI().getServerGroup("HG").getServers();
                 for (ServerObject server : hgServers) {
                     Material itemMaterial = null;
@@ -274,7 +285,7 @@ public final class ManiaHub extends JavaPlugin implements Listener, ManiaPlugin 
                             } else if (server.getState().equalsIgnoreCase("ingame")) {
                                 itemMaterial = Material.GOLD_BLOCK;
                             }
-                            
+
                             lore.add("");
                             lore.add(ManiaUtils.color("&d&lStatus &f" + server.getState()));
                             String time = "", map = "";
@@ -309,12 +320,12 @@ public final class ManiaHub extends JavaPlugin implements Listener, ManiaPlugin 
                         itemMaterial = Material.BEDROCK;
                         lore.addAll(Arrays.asList("", ManiaUtils.color("&c&lSERVER IS OFFLINE")));
                     }
-                    
+
                     ItemStack itemStack = new ItemStack(itemMaterial);
-                    
+
                     onlinePlayers += server.getOnlinePlayerCount();
                     maximumPlayers += server.getMaxPlayerCount();
-                    
+
                     ItemMeta itemMeta = itemStack.getItemMeta();
                     int number;
                     try {
@@ -330,15 +341,15 @@ public final class ManiaHub extends JavaPlugin implements Listener, ManiaPlugin 
 //                ItemStack totalServers = ItemBuilder.start(Material.ENCHANTED_BOOK).setDisplayName("&e&lTOTAL SERVERS").withLore("&7Servers&8: &6" + serverStacks.size(),
 //                        " &7In Lobby&8: &a&c&oNot Implemented", " &7Running&8: &e&c&oNot Implemented", " &7Restarting&8: &c&c&oNot Implemented").build();
                 ItemStack totalPlayers = ItemBuilder.start(Material.SKULL_ITEM, 1, (byte) 3).setDisplayName("&e&lTOTAL PLAYERS").withLore("&6" + onlinePlayers + "&8/&6" + maximumPlayers).build();
-                
+
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     player.setHealth(20);
                     player.setFoodLevel(20);
-                    
+
                     if (player.getLocation().getBlockY() < 0) {
                         player.teleport(Bukkit.getWorld("world").getSpawnLocation());
                     }
-                    
+
                     SpigotUser user = (SpigotUser) ManiaCore.getInstance().getUserManager().getUser(player.getUniqueId());
                     if (user.getScoreboard() == null) {
                         new HubBoard(user);
@@ -351,26 +362,22 @@ public final class ManiaHub extends JavaPlugin implements Listener, ManiaPlugin 
                     if (level != null) {
                         player.setLevel(level.getNumber());
                         if (level.getNumber() != 0) {
-                            Level previousLevel = ManiaCore.getInstance().getLevelManager().getLevels().get(level.getNumber() - 1);
                             Level nextLevel = ManiaCore.getInstance().getLevelManager().getLevels().get(level.getNumber() + 1);
                             float xp = 0;
                             if (nextLevel != null) {
                                 int xpToNextLevel = nextLevel.getTotalXp();
-                                if (previousLevel != null) {
-                                    xpToNextLevel = xpToNextLevel - previousLevel.getTotalXp();
-                                }
                                 long currentProgress = user.getStat(Stats.EXPERIENCE).getAsInt() - level.getTotalXp();
                                 xp = (currentProgress * 1F) / (xpToNextLevel * 1F);
                             }
                             player.setExp(xp);
                         }
                     }
-                    
+
                     if (player.getOpenInventory() != null) {
                         if (player.getOpenInventory().getTopInventory().getHolder() instanceof HungerGamesGui) {
                             HungerGamesGui gui = (HungerGamesGui) player.getOpenInventory().getTopInventory().getHolder();
                             gui.getButton(5).setItem(totalPlayers);
-                            
+
                             for (Entry<Integer, ItemStack> entry : serverStacks.entrySet()) {
                                 GUIButton button = gui.getButton(26 + entry.getKey());
                                 button.setItem(entry.getValue());
@@ -379,24 +386,24 @@ public final class ManiaHub extends JavaPlugin implements Listener, ManiaPlugin 
                         }
                     }
                 }
-                
+
                 for (Range<Leaderboard> range : leaderboardManager.getLeaderboards()) {
                     range.getObject().update();
                 }
-                
+
                 task.end();
             }
         }.runTaskTimer(this, 20L, 30L);
-        
+
         ManiaServer currentServer = ManiaCore.getInstance().getServerManager().getCurrentServer();
         currentServer.setType(ServerType.HUB);
-        
+
         Gui.prepare(this);
-        
+
         for (Player player : Bukkit.getOnlinePlayers()) {
             new HubBoard((SpigotUser) ManiaCore.getInstance().getUserManager().getUser(player.getUniqueId()));
         }
-        
+
         this.leaderboardManager = new LeaderboardManager(this);
         leaderboardManager.loadData();
         new BukkitRunnable() {
@@ -406,44 +413,44 @@ public final class ManiaHub extends JavaPlugin implements Listener, ManiaPlugin 
                 }
             }
         }.runTaskTimer(this, 1200, 1200);
-        
+
         ManiaCore.getInstance().getMemoryManager().addManiaPlugin(this);
     }
-    
+
     @Override
     public void onDisable() {
         leaderboardManager.saveData(true);
     }
-    
+
     public static ManiaHub getInstance() {
         return instance;
     }
-    
+
     @Override
     public String getVersion() {
         return getDescription().getVersion();
     }
-    
+
     public ManiaTask runTask(Runnable runnable) {
         return new SpigotManiaTask(Bukkit.getScheduler().runTask(this, runnable));
     }
-    
+
     public ManiaTask runTaskAsynchronously(Runnable runnable) {
         return new SpigotManiaTask(Bukkit.getScheduler().runTaskAsynchronously(this, runnable));
     }
-    
+
     public ManiaTask runTaskLater(Runnable runnable, long delay) {
         return new SpigotManiaTask(Bukkit.getScheduler().runTaskLater(this, runnable, delay));
     }
-    
+
     public ManiaTask runTaskLaterAsynchronously(Runnable runnable, long delay) {
         return new SpigotManiaTask(Bukkit.getScheduler().runTaskLaterAsynchronously(this, runnable, delay));
     }
-    
+
     public ManiaTask runTaskTimer(Runnable runnable, long delay, long period) {
         return new SpigotManiaTask(Bukkit.getScheduler().runTaskTimer(this, runnable, delay, period));
     }
-    
+
     public ManiaTask runTaskTimerAsynchronously(Runnable runnable, long delay, long period) {
         return new SpigotManiaTask(Bukkit.getScheduler().runTaskTimerAsynchronously(this, runnable, delay, period));
     }

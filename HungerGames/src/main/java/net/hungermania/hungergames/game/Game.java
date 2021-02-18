@@ -203,16 +203,22 @@ public class Game implements IRecord {
 
         new BukkitRunnable() {
             public void run() {
-                if (archived) cancel();
-                Set<UUID> members = new HashSet<>(spectatorsTeam.getMembers());
-                members.addAll(hiddenStaffTeam.getMembers());
-                for (UUID member : members) {
-                    Player player = Bukkit.getPlayer(member);
-                    player.sendMessage("");
-                    player.sendMessage(ManiaUtils.color("&6&l>> &eYou might be out of the game, but &f&lDON'T QUIT&e!"));
-                    player.sendMessage(ManiaUtils.color("&6&l>> &eAnother game will be &f&lSTARTING SOON&e!"));
-                    player.sendMessage(ManiaUtils.color("&6&l>> &eOr, &f&lCLICK HERE &eto go to the next available game. &c&l&oNot implemented yet"));
-                    player.sendMessage("");
+                if (archived) {
+                    cancel();
+                    return;
+                }
+                
+                if (state == State.PLAYING || state == State.PLAYING_DEATHMATCH || state == State.DEATHMATCH) {
+                    Set<UUID> members = new HashSet<>(spectatorsTeam.getMembers());
+                    members.addAll(hiddenStaffTeam.getMembers());
+                    for (UUID member : members) {
+                        Player player = Bukkit.getPlayer(member);
+                        player.sendMessage("");
+                        player.sendMessage(ManiaUtils.color("&6&l>> &eYou might be out of the game, but &f&lDON'T QUIT&e!"));
+                        player.sendMessage(ManiaUtils.color("&6&l>> &eAnother game will be &f&lSTARTING SOON&e!"));
+                        player.sendMessage(ManiaUtils.color("&6&l>> &eOr, &f&lCLICK HERE &eto go to the next available game. &c&l&oNot implemented yet"));
+                        player.sendMessage("");
+                    }
                 }
             }
         }.runTaskTimer(HungerGames.getInstance(), 0L, 6000);
@@ -329,6 +335,8 @@ public class Game implements IRecord {
     public void resetMutation(UUID mutation) {
         Player player = Bukkit.getPlayer(mutation);
         player.getInventory().clear();
+        User user = ManiaCore.getInstance().getUserManager().getUser(player.getUniqueId());
+        user.getStat(Stats.COINS).setValue(user.getStat(Stats.COINS).getAsInt() + 100);
         try {
             player.getInventory().setArmorContents(null);
         } catch (Exception e) {}

@@ -27,7 +27,13 @@ public class DeathInfo {
         String message = deathMessage;
         if (message != null) {
             SpigotUser user = (SpigotUser) ManiaCore.getInstance().getUserManager().getUser(this.player);
-            message = message.replace("%playername%", teamColor + user.getName());
+            String name = "";
+            if (user.getNickname().isActive()) {
+                name = user.getNickname().getName();
+            } else {
+                name = user.getName();
+            }
+            message = message.replace("%playername%", teamColor + name);
         }
         return message;
     }
