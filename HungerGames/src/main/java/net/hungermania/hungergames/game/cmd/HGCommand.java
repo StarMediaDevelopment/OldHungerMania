@@ -1,6 +1,9 @@
-package net.hungermania.hungergames.game;
+package net.hungermania.hungergames.game.cmd;
 
 import net.hungermania.hungergames.HungerGames;
+import net.hungermania.hungergames.game.Game;
+import net.hungermania.hungergames.game.GamePlayer;
+import net.hungermania.hungergames.game.PlayerType;
 import net.hungermania.hungergames.game.death.*;
 import net.hungermania.hungergames.lobby.Lobby;
 import net.hungermania.hungergames.records.GameSettingsRecord;
