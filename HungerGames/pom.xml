@@ -6,7 +6,7 @@
 
     <groupId>net.hungermania</groupId>
     <artifactId>HungerGames</artifactId>
-    <version>1.22.3-SNAPSHOT</version>
+    <version>1.23-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>HungerGames</name>
@@ -92,7 +92,7 @@
         <dependency>
             <groupId>net.hungermania</groupId>
             <artifactId>ManiaCore</artifactId>
-            <version>1.23-SNAPSHOT</version>
+            <version>1.24-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

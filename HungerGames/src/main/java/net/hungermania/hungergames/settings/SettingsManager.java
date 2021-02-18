@@ -7,9 +7,13 @@ import net.hungermania.maniacore.api.events.EventInfo;
 import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.manialib.sql.IRecord;
 import org.apache.commons.lang3.StringUtils;
-import org.bukkit.command.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SettingsManager implements CommandExecutor {
 

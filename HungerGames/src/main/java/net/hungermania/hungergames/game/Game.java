@@ -991,35 +991,54 @@ public class Game implements IRecord {
     }
 
     public void nextGame() {
+        System.out.println("Determining Next game");
         boolean restarting = HungerGames.getInstance().getGameManager().getGameCounter() >= getGameSettings().getMaxGames();
         if (restarting) {
+            System.out.println("Server is restarting");
             boolean singleServerFits = false;
             for (ServerObject server : TimoCloudAPI.getUniversalAPI().getServerGroup("HG").getServers()) {
+                System.out.println("Checking server " + server.getName());
                 if (server.getState().equalsIgnoreCase("lobby") || server.getState().equalsIgnoreCase("online")) {
-                    if (gameSettings.getMaxPlayers() - server.getOnlinePlayerCount() >= Bukkit.getOnlinePlayers().size()) {
+                    System.out.println("Server is in lobby state");
+                    int remainingSlots = gameSettings.getMaxPlayers() - server.getOnlinePlayerCount();
+                    System.out.println("Server has " + remainingSlots + " slots left");
+                    if (remainingSlots >= Bukkit.getOnlinePlayers().size()) {
+                        System.out.println("Remaining slots is higher than current server player count");
                         singleServerFits = true;
+                        System.out.println("Moving players to " + server.getName());
                         for (Player player : Bukkit.getOnlinePlayers()) {
                             PlayerObject playerObject = TimoCloudAPI.getUniversalAPI().getPlayer(player.getUniqueId());
                             playerObject.sendToServer(server);
                         }
+                        System.out.println("Done");
                         break;
                     }
                 }
             }
 
             if (!singleServerFits) {
+                System.out.println("One server does not fit all of the players, moving the remaining players to other servers");
                 Iterator<? extends Player> players = new ArrayList<>(Bukkit.getOnlinePlayers()).iterator();
+                System.out.println("Player count " + Bukkit.getOnlinePlayers().size());
                 for (ServerObject server : TimoCloudAPI.getUniversalAPI().getServerGroup("HG").getServers()) {
+                    System.out.println("Checking server " + server.getName());
                     if (server.getState().equalsIgnoreCase("lobby") || server.getState().equalsIgnoreCase("online")) {
-                        while (players.hasNext() && server.getOnlinePlayerCount() < gameSettings.getMaxPlayers()) {
+                        System.out.println("Server is in lobby state");
+                        int freeSlots = gameSettings.getMaxPlayers() - server.getOnlinePlayerCount();
+                        System.out.println("Server has " + freeSlots + " free slots");
+                        while (players.hasNext() && freeSlots > 0) {
                             Player p = players.next();
+                            System.out.println("Moving player " + p.getName() + " to server " + server.getName());
                             PlayerObject playerObject = TimoCloudAPI.getUniversalAPI().getPlayer(p.getUniqueId());
                             playerObject.sendToServer(server);
+                            System.out.println("Done");
+                            freeSlots--;
                         }
                     }
                 }
 
                 if (players.hasNext()) {
+                    System.out.println("Players still remain, meaning other HG servers are full, moving to hub");
                     ServerGroupObject hubGroup = TimoCloudAPI.getUniversalAPI().getServerGroup("Hub");
                     List<ServerObject> connectableServers = new ArrayList<>();
                     for (ServerObject server : hubGroup.getServers()) {

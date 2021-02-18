@@ -533,7 +533,7 @@ public class HGCommand implements CommandExecutor {
                             return true;
                         }
                     }
-                    GameSettings currentSettings = null, globalSettings = plugin.getSettingsManager().getCurrentSettings();
+                    GameSettings currentSettings = game.getGameSettings(), globalSettings = plugin.getSettingsManager().getCurrentSettings();
                     field.setAccessible(true);
                     try {
                         if (currentSettings != null) {
