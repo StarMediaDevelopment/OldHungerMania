@@ -106,7 +106,7 @@ public class GameTask extends BukkitRunnable {
             long calculatedStart = game.getCountdownStart() + TimeUnit.SECONDS.toMillis(game.getGameSettings().getStartingCountdown());
             int remainingSeconds = (int) TimeUnit.MILLISECONDS.toSeconds(calculatedStart - System.currentTimeMillis());
             if (!this.announcedMapInformation) {
-                long calculatedHalfStart = game.getCountdownStart() + TimeUnit.SECONDS.toMillis(game.getGameSettings().getStartingCountdown() / 2);
+                long calculatedHalfStart = (game.getCountdownStart() + TimeUnit.SECONDS.toMillis(game.getGameSettings().getStartingCountdown()) / 2);
                 if (calculatedHalfStart >= System.currentTimeMillis()) {
                     String[] creators = game.getMap().getCreators().toArray(new String[0]);
                     StringBuilder creatorNames = new StringBuilder();
@@ -139,6 +139,16 @@ public class GameTask extends BukkitRunnable {
                     game.sendMessage("&6&l>> &7Votes: &e" + game.getCurrentMapVotes());
                     game.sendMessage("&6&l>> &7Times Played: &e" + timesPlayed + " time(s) in the last week");
                     game.sendMessage("&6&l>> &7Creators: " + creatorNames);
+                    if (game.getGameSettings().isGracePeriod()) {
+                        game.sendMessage("&6&l>> &7Grace Period: &e" + game.getGameSettings().getGracePeriodLength() + " seconds");
+                    }
+                    
+                    if (game.isDiamondSpecial()) {
+                        game.sendMessage("&6&l>> &bThere is a chance that diamond armor and weapons will spawn in chests in place of diamonds.");
+                    }
+                    
+                    game.sendMessage("");
+                    
                     this.announcedMapInformation = true;
                 }
             }
@@ -197,25 +207,27 @@ public class GameTask extends BukkitRunnable {
             }
             
             if (!announcedGraceExpire) {
-                int remainingSeconds = (int) TimeUnit.MILLISECONDS.toSeconds(game.getGracePeriodEnd() - System.currentTimeMillis());
-                players.forEach((player, holding) -> {
-                    if (!holding) {
-                        SpigotUtils.sendActionBar(player, "&fThe grace period ends in &e" + remainingSeconds + "s");
-                    }
-                });
-
-                if (!this.announcedGracePeriod.contains(remainingSeconds)) {
-                    if (GRACE_PERIOD_ANNOUNCE.contains(remainingSeconds)) {
-                        game.playSound(Sound.CLICK);
-                        if (remainingSeconds == 1) {
-                            game.sendMessage("&6&l>> &eThe grace period ends &ein &b" + remainingSeconds + " &esecond!");
-                        } else if (remainingSeconds != 0) {
-                            game.sendMessage("&6&l>> &eThe grace period ends &ein &b" + remainingSeconds + " &eseconds!");
-                        } else {
-                            game.sendMessage("&6&l>> &c&lTHE GRACE PERIOD HAS ENDED!");
-                            this.announcedGraceExpire = true;
+                if (game.getGameSettings().isGracePeriod()) {
+                    int remainingSeconds = (int) TimeUnit.MILLISECONDS.toSeconds(game.getGracePeriodEnd() - System.currentTimeMillis());
+                    players.forEach((player, holding) -> {
+                        if (!holding) {
+                            SpigotUtils.sendActionBar(player, "&fThe grace period ends in &e" + remainingSeconds + "s");
                         }
-                        this.announcedGracePeriod.add(remainingSeconds);
+                    });
+
+                    if (!this.announcedGracePeriod.contains(remainingSeconds)) {
+                        if (GRACE_PERIOD_ANNOUNCE.contains(remainingSeconds)) {
+                            game.playSound(Sound.CLICK);
+                            if (remainingSeconds == 1) {
+                                game.sendMessage("&6&l>> &eThe grace period ends &ein &b" + remainingSeconds + " &esecond!");
+                            } else if (remainingSeconds != 0) {
+                                game.sendMessage("&6&l>> &eThe grace period ends &ein &b" + remainingSeconds + " &eseconds!");
+                            } else {
+                                game.sendMessage("&6&l>> &c&lTHE GRACE PERIOD HAS ENDED!");
+                                this.announcedGraceExpire = true;
+                            }
+                            this.announcedGracePeriod.add(remainingSeconds);
+                        }
                     }
                 }
             } else {

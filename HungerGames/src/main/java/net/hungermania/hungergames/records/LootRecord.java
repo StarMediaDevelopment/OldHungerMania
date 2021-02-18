@@ -1,5 +1,6 @@
 package net.hungermania.hungergames.records;
 
+import net.hungermania.hungergames.loot.DiamondLoot;
 import net.hungermania.hungergames.loot.Loot;
 import net.hungermania.manialib.sql.*;
 import org.bukkit.Material;
@@ -32,7 +33,13 @@ public class LootRecord implements IRecord<Loot> {
         String name = row.getString("name");
         int weight = row.getInt("weight");
         int maxAmount = row.getInt("maxAmount");
-        this.loot = new Loot(id, material, name, weight, maxAmount);
+        
+        if (material.equals(Material.DIAMOND)) {
+            this.loot = new DiamondLoot();
+            this.loot.setWeight(weight);
+        } else {
+            this.loot = new Loot(id, material, name, weight, maxAmount);
+        }
     }
     
     public int getId() {

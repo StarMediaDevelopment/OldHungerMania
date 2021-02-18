@@ -1,5 +1,6 @@
 package net.hungermania.hungergames.loot;
 
+import lombok.Getter;
 import net.hungermania.hungergames.HungerGames;
 import net.hungermania.hungergames.records.LootRecord;
 import net.hungermania.maniacore.api.ManiaCore;
@@ -10,8 +11,8 @@ import java.util.*;
 
 @SuppressWarnings("DuplicatedCode")
 public class LootManager {
-    private Map<Integer, Loot> possibleLoot = new HashMap<>();
-    private List<Loot> lootChances = new ArrayList<>();
+    @Getter private Map<Integer, Loot> possibleLoot = new HashMap<>();
+    @Getter private List<Loot> lootChances = new ArrayList<>();
     
     private HungerGames plugin = HungerGames.getInstance();
     
@@ -80,7 +81,7 @@ public class LootManager {
             Loot slowball = new Loot(Material.SNOW_BALL, "Slowball", 20);
             Loot iron_ingot = new Loot(Material.IRON_INGOT, 10);
             Loot gold_ingot = new Loot(Material.GOLD_INGOT, 5);
-            Loot diamond = new Loot(Material.DIAMOND, 3);
+            Loot diamond = new DiamondLoot();
             Loot stick = new Loot(Material.STICK, 15);
             Loot flint_and_steel = new Loot(Material.FLINT_AND_STEEL, 15);
             Loot tnt = new Loot(Material.TNT, "TNT", 15);

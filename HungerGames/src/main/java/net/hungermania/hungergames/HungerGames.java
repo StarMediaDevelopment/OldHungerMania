@@ -6,7 +6,8 @@ import net.hungermania.hungergames.chat.HGChatFormatter;
 import net.hungermania.hungergames.chat.HGChatHandler;
 import net.hungermania.hungergames.game.Game;
 import net.hungermania.hungergames.game.GameManager;
-import net.hungermania.hungergames.game.HGCommand;
+import net.hungermania.hungergames.game.cmd.HGCommand;
+import net.hungermania.hungergames.game.cmd.ProbablityCmd;
 import net.hungermania.hungergames.game.timer.Timer;
 import net.hungermania.hungergames.listeners.BlockListeners;
 import net.hungermania.hungergames.listeners.EntityListeners;
@@ -91,6 +92,8 @@ public final class HungerGames extends JavaPlugin implements ManiaPlugin {
         this.mapManager = new MapManager(this);
         this.mapManager.loadMaps();
         this.getCommand("mapsadmin").setExecutor(mapManager);
+        
+        this.getCommand("probability").setExecutor(new ProbablityCmd());
     
         this.gameManager = new GameManager(this);
         

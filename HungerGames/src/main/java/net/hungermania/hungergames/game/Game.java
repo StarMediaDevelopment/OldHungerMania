@@ -79,8 +79,8 @@ public class Game implements IRecord {
     @Getter private Messager messager;
     private Map<UUID, GamePlayer> cachedPlayers = new HashMap<>();
     @Getter @Setter private int currentMapVotes = 0;
-
     @Getter private GameTeam tributesTeam, spectatorsTeam, hiddenStaffTeam, mutationsTeam;
+    @Getter @Setter private boolean diamondSpecial;
 
     public Game(HGMap map, GameSettings settings) {
         this.map = map;
@@ -156,6 +156,11 @@ public class Game implements IRecord {
                     hidden.sendMessage("&6&l>> &cYou are spectating the game because you are incognito.");
                 }
             }.runTaskLater(HungerGames.getInstance(), 100L);
+        }
+        
+        if (tributesTeam.size() > 11) {
+            gameSettings.setGracePeriod(false);
+            gameSettings.setGracePeriodLength(0);
         }
 
         this.playerTrackerTask = new PlayerTrackerTask(this);
@@ -241,6 +246,10 @@ public class Game implements IRecord {
         }.runTaskTimer(HungerGames.getInstance(), 20L, 20L);
 
         messager = new GameMessager(this);
+        
+        if (ManiaCore.RANDOM.nextInt(1000) < 2) {
+            this.diamondSpecial = true;
+        }
     }
 
     public GamePlayer getPlayer(UUID uuid) {
@@ -375,17 +384,15 @@ public class Game implements IRecord {
         this.state = State.PLAYING;
         this.playerTrackerTask.start();
         this.gameStart = System.currentTimeMillis();
-        if (gameSettings.getGracePeriodLength() > 0) {
+        if (gameSettings.isGracePeriod()) {
             this.gracePeriodEnd = this.gameStart + TimeUnit.SECONDS.toMillis(gameSettings.getGracePeriodLength());
-            sendMessage("&6&l>> &2&lTHERE IS A " + gameSettings.getGracePeriodLength() + " SECOND GRACE PERIOD!");
         }
         for (UUID tribute : this.tributesTeam) {
             GamePlayer player = this.players.get(tribute);
             player.getUser().incrementStat(Stats.HG_GAMES);
             try {
                 Perks.SPEED_RACER.activate(player.getUser());
-            } catch (Exception e) {
-            }
+            } catch (Exception e) {}
         }
     }
 

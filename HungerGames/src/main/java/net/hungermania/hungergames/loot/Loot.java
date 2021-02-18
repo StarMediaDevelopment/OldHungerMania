@@ -12,10 +12,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 @Getter @Setter
 public class Loot implements IRecord {
-    private int id, maxAmount;
-    private Material material;
-    private String name;
-    private int weight;
+    protected int id, maxAmount;
+    protected Material material;
+    protected String name;
+    protected int weight;
+    
+    protected Loot() {}
     
     public Loot(Material material, String name, int weight) {
         this.material = material;
