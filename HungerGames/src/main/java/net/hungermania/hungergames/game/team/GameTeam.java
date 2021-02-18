@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import me.libraryaddict.disguise.DisguiseAPI;
 import net.hungermania.hungergames.game.Game;
-import net.hungermania.hungergames.game.PlayerType;
+import net.hungermania.hungergames.game.enums.PlayerType;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.maniacore.api.user.User;

@@ -2,9 +2,9 @@ package net.hungermania.hungergames.game.team;
 
 import net.hungermania.hungergames.game.Game;
 import net.hungermania.hungergames.game.GamePlayer;
-import net.hungermania.hungergames.game.PlayerType;
 import net.hungermania.hungergames.game.death.DeathInfo;
 import net.hungermania.hungergames.game.death.DeathInfoPlayerKill;
+import net.hungermania.hungergames.game.enums.PlayerType;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.spigot.util.ItemBuilder;

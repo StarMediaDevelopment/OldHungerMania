@@ -1,6 +1,7 @@
-package net.hungermania.hungergames.game;
+package net.hungermania.hungergames.game.gui;
 
 import net.hungermania.hungergames.HungerGames;
+import net.hungermania.hungergames.game.Game;
 import net.hungermania.hungergames.game.team.GameTeam;
 import net.hungermania.maniacore.spigot.gui.GUIButton;
 import net.hungermania.maniacore.spigot.gui.Gui;

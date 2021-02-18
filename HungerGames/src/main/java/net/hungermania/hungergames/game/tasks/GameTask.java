@@ -1,7 +1,9 @@
-package net.hungermania.hungergames.game;
+package net.hungermania.hungergames.game.tasks;
 
 import cloud.timo.TimoCloud.api.TimoCloudAPI;
 import net.hungermania.hungergames.HungerGames;
+import net.hungermania.hungergames.game.Game;
+import net.hungermania.hungergames.game.GamePlayer;
 import net.hungermania.hungergames.records.GameRecord;
 import net.hungermania.hungergames.scoreboard.GameBoard;
 import net.hungermania.maniacore.api.ManiaCore;

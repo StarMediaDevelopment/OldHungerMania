@@ -47,7 +47,6 @@ public class Lobby implements Listener, CommandExecutor {
     private VoteTimer voteTimer;
     private Game game;
     private LobbySigns lobbySigns;
-    private Set<HGMap> playedMaps = new HashSet<>();
     private Messager messager;
     
     public Lobby(HungerGames plugin, Location location) {
@@ -198,7 +197,7 @@ public class Lobby implements Listener, CommandExecutor {
                 HGMap map;
                 do {
                     map = maps.get(random.nextInt(maps.size()));
-                } while (this.mapOptions.containsMap(map) || this.playedMaps.contains(map));
+                } while (this.mapOptions.containsMap(map));
                 this.mapOptions.addMap(map);
                 maps.remove(map);
             }
@@ -283,7 +282,6 @@ public class Lobby implements Listener, CommandExecutor {
                 return;
             }
             this.game.setCurrentMapVotes(mostVotedMap.getValue());
-            this.playedMaps.add(mostVotedMap.getKey());
             plugin.getGameManager().setCurrentGame(game);
             this.game.setup(this);
             this.game.teleportStart();

@@ -9,6 +9,10 @@ import lombok.Setter;
 import me.libraryaddict.disguise.DisguiseAPI;
 import net.hungermania.hungergames.HungerGames;
 import net.hungermania.hungergames.game.death.*;
+import net.hungermania.hungergames.game.enums.GameResult;
+import net.hungermania.hungergames.game.enums.PlayerType;
+import net.hungermania.hungergames.game.tasks.GameTask;
+import net.hungermania.hungergames.game.tasks.PlayerTrackerTask;
 import net.hungermania.hungergames.game.team.*;
 import net.hungermania.hungergames.lobby.Lobby;
 import net.hungermania.hungergames.map.HGMap;
@@ -418,20 +422,20 @@ public class Game implements IRecord {
         }
     }
 
-    public ReviveResult revivePlayer(GamePlayer gamePlayer, CommandSender sender) {
+    public GameResult revivePlayer(GamePlayer gamePlayer, CommandSender sender) {
         SpigotUser user = gamePlayer.getUser();
         if (!gamePlayer.isSpectatorByDeath()) {
-            return ReviveResult.WAS_NOT_A_TRIBUTE;
+            return GameResult.WAS_NOT_A_TRIBUTE;
         }
 
         if (!(getState() == State.PLAYING || getState() == State.PLAYING_DEATHMATCH)) {
-            return ReviveResult.INVALID_STATE;
+            return GameResult.INVALID_STATE;
         }
 
         spectatorsTeam.leave(gamePlayer.getUniqueId());
         tributesTeam.join(gamePlayer.getUniqueId());
         if (!tributesTeam.isMember(gamePlayer.getUniqueId())) {
-            return ReviveResult.SPAWN_ERROR;
+            return GameResult.SPAWN_ERROR;
         } else {
             String senderName;
             if (sender instanceof Player) {
@@ -442,25 +446,25 @@ public class Game implements IRecord {
             sendMessage("&5&l>> " + user.getColoredName() + " &6has been &6&lREVIVED &6by " + senderName);
         }
         gamePlayer.setRevivedInfo(true, sender);
-        return ReviveResult.SUCCESS;
+        return GameResult.SUCCESS;
     }
 
-    public ForceAddResult forceAddPlayer(GamePlayer gamePlayer, CommandSender sender) {
+    public GameResult forceAddPlayer(GamePlayer gamePlayer, CommandSender sender) {
         if (gamePlayer.isSpectatorByDeath()) {
             sender.sendMessage(ManiaUtils.color("&cThat player was a tribute originally. Please use the command /hungergames revive instead."));
-            return ForceAddResult.WAS_TRIBUTE;
+            return GameResult.WAS_TRIBUTE;
         }
 
         if (!(getState() == State.PLAYING || getState() == State.PLAYING_DEATHMATCH || getState() == State.COUNTDOWN)) {
             sender.sendMessage(ManiaUtils.color("&cInvalid game state to add a tribute."));
-            return ForceAddResult.INVALID_STATE;
+            return GameResult.INVALID_STATE;
         }
 
         spectatorsTeam.leave(gamePlayer.getUniqueId());
         tributesTeam.join(gamePlayer.getUniqueId());
         if (!tributesTeam.isMember(gamePlayer.getUniqueId())) {
             sender.sendMessage(ManiaUtils.color("&cThere was a problem finding a spawn for that player. They were set as a spectator as a result."));
-            return ForceAddResult.SPAWN_ERROR;
+            return GameResult.SPAWN_ERROR;
         } else {
             String senderName;
             if (sender instanceof Player) {
@@ -473,7 +477,7 @@ public class Game implements IRecord {
         }
 
         gamePlayer.setForcefullAddedInfo(true, sender);
-        return ForceAddResult.SUCCESS;
+        return GameResult.SUCCESS;
     }
 
     public void beginDeathmatch() {
@@ -588,7 +592,7 @@ public class Game implements IRecord {
             Bukkit.getServer().shutdown();
         }
 
-        HungerGames.getInstance().getMapManager().deleteMap(map.getName());
+        Bukkit.unloadWorld(map.getWorld(), false);
     }
 
     public void addLootedChest(Location location) {

@@ -2,7 +2,7 @@ package net.hungermania.hungergames.game.team;
 
 import net.hungermania.hungergames.game.Game;
 import net.hungermania.hungergames.game.GamePlayer;
-import net.hungermania.hungergames.game.PlayerType;
+import net.hungermania.hungergames.game.enums.PlayerType;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.util.State;

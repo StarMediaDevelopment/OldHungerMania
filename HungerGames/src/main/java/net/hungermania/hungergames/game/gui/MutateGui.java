@@ -1,6 +1,8 @@
-package net.hungermania.hungergames.game;
+package net.hungermania.hungergames.game.gui;
 
 import net.hungermania.hungergames.HungerGames;
+import net.hungermania.hungergames.game.Game;
+import net.hungermania.hungergames.game.GamePlayer;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.stats.Stats;
 import net.hungermania.maniacore.api.user.User;

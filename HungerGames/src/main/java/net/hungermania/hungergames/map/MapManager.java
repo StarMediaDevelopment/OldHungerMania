@@ -6,10 +6,14 @@ import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.api.util.Position;
 import net.hungermania.manialib.util.Utils;
-import org.apache.commons.io.FileDeleteStrategy;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.*;
-import org.bukkit.command.*;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.World;
+import org.bukkit.WorldCreator;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -38,7 +42,7 @@ public class MapManager implements CommandExecutor {
         HGMap map = this.maps.get(name.toLowerCase() .replace(" ", "_"));
         if (map == null) return null;
         
-        String worldName = map.getName().toLowerCase().replace(" ", "_");
+        String worldName = UUID.randomUUID().toString();
         File parentFile = new File(plugin.getDataFolder() + File.separator + ".." + File.separator + "..");
         File destination = new File(parentFile + File.separator + worldName);
         if (!destination.exists()) {
@@ -81,18 +85,6 @@ public class MapManager implements CommandExecutor {
                 }
             }
         }
-    
-        File parentFile = new File(plugin.getDataFolder() + File.separator + ".." + File.separator + "..");
-        for (HGMap map : maps.values()) {
-            String worldName = map.getName().toLowerCase().replace(" ", "_");
-            for (File file : parentFile.listFiles()) {
-                if (file.isDirectory()) {
-                    if (file.getName().equalsIgnoreCase(worldName)) {
-                        Utils.purgeDirectory(file);
-                    }
-                }
-            }
-        }
     }
     
     public Map<String, HGMap> getMaps() {
@@ -101,27 +93,6 @@ public class MapManager implements CommandExecutor {
     
     public Set<String> getUnsetupMaps() {
         return unsetupMaps;
-    }
-    
-    public void deleteMap(String name) {
-        System.out.println("Attempting to delete " + name);
-        HGMap map = this.maps.get(name.toLowerCase().replace(" ", "_"));
-        if (map == null) return;
-        System.out.println("Valid map found for " + name);
-        if (map.getWorld() == null) return;
-        System.out.println("World exists for map " + map.getName());
-        File worldFolder = map.getWorld().getWorldFolder();
-        System.out.println("World folder is " + worldFolder);
-        Bukkit.unloadWorld(map.getWorld(), false);
-        System.out.println("Unloaded world " + map.getName());
-        map.setWorld(null);
-        try {
-            System.out.println("Attempting to delete files");
-            FileDeleteStrategy.FORCE.delete(worldFolder);
-            System.out.println("Files deleted");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
     
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -250,7 +221,7 @@ public class MapManager implements CommandExecutor {
                     }
                     hgMap.saveData();
                     this.unsetupMaps.remove(hgMap.getFolder());
-                    deleteMap(hgMap.getName());
+                    Bukkit.unloadWorld(hgMap.getWorld(), false);
                     sender.sendMessage(ManiaUtils.color("&aYou disabled editmode for the map &b" + hgMap.getName()));
                 }
                 return true;

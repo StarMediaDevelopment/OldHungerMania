@@ -1,7 +1,7 @@
 package net.hungermania.hungergames.game.team;
 
 import net.hungermania.hungergames.game.Game;
-import net.hungermania.hungergames.game.PlayerType;
+import net.hungermania.hungergames.game.enums.PlayerType;
 import org.bukkit.GameMode;
 
 public class HiddenStaffTeam extends SpectatorsTeam {
