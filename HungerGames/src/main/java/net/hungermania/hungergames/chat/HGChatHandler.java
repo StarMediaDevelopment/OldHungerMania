@@ -16,7 +16,9 @@ public class HGChatHandler extends ChatHandler {
         Set<UUID> targets = new HashSet<>();
         Game game = HungerGames.getInstance().getGameManager().getCurrentGame();
         if (game == null) {
-            for (SpigotUser player : HungerGames.getInstance().getLobby().getPlayers()) {
+            Set<SpigotUser> players = HungerGames.getInstance().getLobby().getPlayers();
+            players.addAll(HungerGames.getInstance().getLobby().getHiddenStaff());
+            for (SpigotUser player : players) {
                 targets.add(player.getUniqueId());
             }
         } else {
