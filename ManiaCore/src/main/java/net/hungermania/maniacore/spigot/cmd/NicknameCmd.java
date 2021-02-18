@@ -121,7 +121,12 @@ public class NicknameCmd implements CommandExecutor {
                         }
                     }
 
-                    User target = ManiaCore.getInstance().getUserManager().getUser(name);
+                    User target;
+                    try {
+                        target = ManiaCore.getInstance().getUserManager().getUser(name);
+                    } catch (Exception e) {
+                        target = null;
+                    }
                     if (target != null) {
                         PlayerObject playerObject = TimoCloudAPI.getUniversalAPI().getPlayer(target.getUniqueId());
                         if (playerObject != null) {
@@ -164,7 +169,6 @@ public class NicknameCmd implements CommandExecutor {
                             user.applyNickname();
                             ManiaCore.getInstance().getPlugin().runTaskAsynchronously(() -> new NicknameRecord(nickname).push(ManiaCore.getInstance().getDatabase()));
                             user.sendMessage("&aSet your nickname to " + user.getDisplayName());
-                            user.sendMessage("  &7&oIf you see your skin and not the intended skin, that is due to an external limitation, please try it again later or join a game or different hub.");
                         }
                     }.runTask(maniaCore);
                 }
