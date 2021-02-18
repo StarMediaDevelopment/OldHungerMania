@@ -463,7 +463,7 @@ public class PlayerListeners extends GameListener {
     
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
-        //Move to a runnable for spawns and teleporting
+        //TODO Move to a runnable for spawns and teleporting
         Location from = e.getFrom(), to = e.getTo();
         
         if (plugin.getGameManager().getCurrentGame() != null) {

@@ -135,10 +135,10 @@ public class GameTask extends BukkitRunnable {
                     game.sendMessage("");
                     game.sendMessage("&6&l>> &a&lTHE MAP HAS BEEN SELECTED!");
                     game.sendMessage("&6&l>> &7Map: &e" + game.getMap().getName());
-                    game.sendMessage("&6&l>> &7Rating: &cNOT IMPLEMENTED YET");
+                    game.sendMessage("&6&l>> &7Rating: &c&lWIP");
                     game.sendMessage("&6&l>> &7Votes: &e" + game.getCurrentMapVotes());
                     game.sendMessage("&6&l>> &7Times Played: &e" + timesPlayed + " time(s) in the last week");
-                    game.sendMessage("&6&l>> &7Creators: " + creatorNames.toString());
+                    game.sendMessage("&6&l>> &7Creators: " + creatorNames);
                     this.announcedMapInformation = true;
                 }
             }
@@ -316,17 +316,13 @@ public class GameTask extends BukkitRunnable {
                 nextGame = nextGame + TimeUnit.SECONDS.toMillis(game.getGameSettings().getNextGameStart());
             }
     
-            boolean restarting = false;
-            if (HungerGames.getInstance().getGameManager().getGameCounter() >= game.getGameSettings().getMaxGames()) {
-                restarting = true;
-            }
-            
+            boolean restarting = HungerGames.getInstance().getGameManager().getGameCounter() >= game.getGameSettings().getMaxGames();
+
             long finalNextGame = nextGame;
-            boolean finalRestarting = restarting;
             players.forEach((player, holding) -> {
                 if (!holding) {
                     String time = Utils.formatTime(finalNextGame - System.currentTimeMillis());
-                    if (!finalRestarting) {
+                    if (!restarting) {
                         SpigotUtils.sendActionBar(player, "&fThe next game starts in &e" + time);
                     } else {
                         SpigotUtils.sendActionBar(player, "&fServer restarting in &e" + time);
