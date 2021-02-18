@@ -62,7 +62,7 @@ public abstract class GameTeam implements Iterable<UUID> {
     }
     
     public String getLeaveMessage() {
-        return "&c&l>> &7You left " + getName();
+        return "&c&l<< &7You left " + getName();
     }
     
     public boolean isMember(UUID uuid) {
