@@ -35,10 +35,7 @@ import net.hungermania.maniacore.spigot.updater.UpdateType;
 import net.hungermania.maniacore.spigot.user.SpigotUser;
 import net.hungermania.maniacore.spigot.util.NBTWrapper;
 import net.hungermania.maniacore.spigot.util.SpigotUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
@@ -57,6 +54,8 @@ import org.bukkit.event.player.*;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.*;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
@@ -689,6 +688,25 @@ public class PlayerListeners extends GameListener {
                         }
                     }
                 } catch (Exception ex) {
+                }
+            }
+        }
+    }
+    
+    @EventHandler
+    public void onPlayerEat(PlayerItemConsumeEvent e) {
+        Game game = gameManager.getCurrentGame();
+        if (game == null) return;
+        if (e.getItem().getType().equals(Material.ROTTEN_FLESH)) {
+            if (e.getItem().hasItemMeta() && e.getItem().getItemMeta().hasDisplayName()) {
+                if (e.getItem().getItemMeta().getDisplayName().toLowerCase().contains("wet noodle")) {
+                    if (ManiaCore.RANDOM.nextInt(10) < 1) {
+                        game.playSound(Sound.ENDERMAN_STARE);
+                        Player player = e.getPlayer();
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 15*20, 1));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 20*20, 0));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5*20, 0));
+                    }
                 }
             }
         }

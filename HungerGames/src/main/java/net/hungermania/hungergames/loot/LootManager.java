@@ -71,16 +71,16 @@ public class LootManager {
             Loot steak = new Loot(Material.COOKED_BEEF, "Steak", 30);
             Loot grilled_chicken = new Loot(Material.COOKED_CHICKEN, "Grilled Chicken", 30);
             Loot raw_porkchop = new Loot(Material.PORK, "Raw Porkchop", 20);
-            Loot raw_beef = new Loot(Material.RAW_BEEF, 20);
-            Loot raw_chicken = new Loot(Material.RAW_CHICKEN, 20);
+            Loot raw_beef = new Loot(Material.RAW_BEEF, 15);
+            Loot raw_chicken = new Loot(Material.RAW_CHICKEN, 15);
             Loot carrots = new Loot(Material.CARROT_ITEM, "Carrot", 20);
-            Loot potato = new Loot(Material.POTATO_ITEM, "Potato", 25);
+            Loot potato = new Loot(Material.POTATO_ITEM, "Potato", 15);
             Loot baked_potato = new Loot(Material.BAKED_POTATO, 20);
             Loot egg_of_doom = new Loot(Material.EGG, "Egg of Doom", 15);
             Loot slowball = new Loot(Material.SNOW_BALL, "Slowball", 20);
             Loot iron_ingot = new Loot(Material.IRON_INGOT, 10);
             Loot gold_ingot = new Loot(Material.GOLD_INGOT, 5);
-            Loot diamond = new Loot(Material.DIAMOND, 2);
+            Loot diamond = new Loot(Material.DIAMOND, 3);
             Loot stick = new Loot(Material.STICK, 15);
             Loot flint_and_steel = new Loot(Material.FLINT_AND_STEEL, 15);
             Loot tnt = new Loot(Material.TNT, "TNT", 15);
@@ -98,10 +98,11 @@ public class LootManager {
             Loot golden_apple = new Loot(Material.GOLDEN_APPLE, "Golden Munchie", 2);
             Loot wood_planks = new Loot(Material.WOOD, "Wood Planks", 15);
             Loot ender_pearl = new Loot(Material.ENDER_PEARL, 1);
+            Loot wet_noodle = new Loot(Material.ROTTEN_FLESH, "Wet Noodle", 10);
     
             plugin.getManiaCore().getDatabase().addRecordsToQueue(new LootRecord(leather_helmet), new LootRecord(leather_chestplate), new LootRecord(leather_leggings), new LootRecord(leather_boots), new LootRecord(chain_helmet), new LootRecord(chain_chestplate), new LootRecord(chain_leggings), new LootRecord(chain_boots), new LootRecord(gold_helmet), new LootRecord(gold_chestplate), new LootRecord(gold_leggings), new LootRecord(gold_boots), new LootRecord(iron_helmet), new LootRecord(iron_chestplate), new LootRecord(iron_leggings), new LootRecord(iron_boots),
                     new LootRecord(wood_axe), new LootRecord(wood_sword), new LootRecord(stone_axe), new LootRecord(stone_sword), new LootRecord(bow), new LootRecord(arrows), new LootRecord(cooked_porkchop), new LootRecord(cooked_porkchop), new LootRecord(steak), new LootRecord(grilled_chicken), new LootRecord(raw_porkchop), new LootRecord(raw_beef), new LootRecord(raw_chicken), new LootRecord(carrots), new LootRecord(potato), new LootRecord(baked_potato), new LootRecord(egg_of_doom), new LootRecord(slowball), new LootRecord(iron_ingot), new LootRecord(gold_ingot),
-                    new LootRecord(diamond), new LootRecord(stick), new LootRecord(flint_and_steel), new LootRecord(tnt), new LootRecord(iron_axe), new LootRecord(cake), new LootRecord(player_tracker), new LootRecord(pumpkin_pie), new LootRecord(raw_fish), new LootRecord(cooked_fish), new LootRecord(feather), new LootRecord(flint), new LootRecord(fishing_rod), new LootRecord(cobweb), new LootRecord(enchantment_bottle), new LootRecord(golden_apple), new LootRecord(wood_planks), new LootRecord(ender_pearl));
+                    new LootRecord(diamond), new LootRecord(stick), new LootRecord(flint_and_steel), new LootRecord(tnt), new LootRecord(iron_axe), new LootRecord(cake), new LootRecord(player_tracker), new LootRecord(pumpkin_pie), new LootRecord(raw_fish), new LootRecord(cooked_fish), new LootRecord(feather), new LootRecord(flint), new LootRecord(fishing_rod), new LootRecord(cobweb), new LootRecord(enchantment_bottle), new LootRecord(golden_apple), new LootRecord(wood_planks), new LootRecord(ender_pearl), new LootRecord(wet_noodle));
             plugin.getManiaCore().getDatabase().pushQueue();
             this.possibleLoot.put(leather_helmet.getId(), leather_helmet);
             this.possibleLoot.put(leather_chestplate.getId(), leather_chestplate);
@@ -156,6 +157,7 @@ public class LootManager {
             this.possibleLoot.put(golden_apple.getId(), golden_apple);
             this.possibleLoot.put(wood_planks.getId(), wood_planks);
             this.possibleLoot.put(ender_pearl.getId(), ender_pearl);
+            this.possibleLoot.put(wet_noodle.getId(), wet_noodle);
         }
     }
     
