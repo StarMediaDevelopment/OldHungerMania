@@ -3,8 +3,6 @@ package net.hungermania.maniacore.api.skin;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.records.SkinRecord;
 import net.hungermania.manialib.sql.IRecord;
-import org.bukkit.Bukkit;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashSet;
 import java.util.List;
@@ -59,12 +57,7 @@ public class SkinManager {
                 }
             }
             this.skins.add(skin);
-            
-            new BukkitRunnable() {
-                public void run() {
-                    ManiaCore.getInstance().getDatabase().pushRecord(new SkinRecord(skin));
-                }
-            }.runTaskAsynchronously(Bukkit.getPluginManager().getPlugin("ManiaCore"));
+            ManiaCore.getInstance().getPlugin().runTaskAsynchronously(() -> ManiaCore.getInstance().getDatabase().pushRecord(new SkinRecord(skin)));
         }
     }
     

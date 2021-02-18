@@ -84,14 +84,6 @@ public final class ManiaCorePlugin extends JavaPlugin implements Listener, Mania
         getCommand("unnick").setExecutor(nicknameCmd);
         getCommand("realname").setExecutor(nicknameCmd);
         
-        runTaskTimerAsynchronously(() -> {
-            for (Skin skin : ManiaCore.getInstance().getSkinManager().getSkins()) {
-                skin.updateValues();
-                getManiaDatabase().addRecordToQueue(new SkinRecord(skin));
-            }
-            getManiaDatabase().pushQueue();
-        }, 20L, 6000L);
-    
         new BukkitRunnable() {
             public void run() {
                 getManiaDatabase().pushQueue();
