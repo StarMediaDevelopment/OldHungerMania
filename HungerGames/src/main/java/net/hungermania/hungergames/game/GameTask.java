@@ -332,6 +332,7 @@ public class GameTask extends BukkitRunnable {
             
             if (System.currentTimeMillis() >= nextGame) {
                 cancel();
+                game.nextGame();
                 game.resetServer();
             }
         }

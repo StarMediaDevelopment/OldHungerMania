@@ -1,6 +1,8 @@
 package net.hungermania.hungergames.lobby;
 
 import cloud.timo.TimoCloud.api.TimoCloudAPI;
+import cloud.timo.TimoCloud.api.objects.PlayerObject;
+import cloud.timo.TimoCloud.api.objects.ServerObject;
 import me.libraryaddict.disguise.DisguiseAPI;
 import net.hungermania.hungergames.HungerGames;
 import net.hungermania.hungergames.game.Game;
@@ -532,6 +534,22 @@ public class Lobby implements Listener, CommandExecutor {
                 this.voteTimer.setForceStarted(true);
             }
             sendMessage("&6&l>> &b" + player.getName() + " &ehas voted to start the game. &5(&f" + this.voteStart.size() + "&d/&f" + votesNeeded + "&d)");
+        } else if (cmd.getName().equalsIgnoreCase("nextgame")) {
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(ManiaUtils.color("&cOnly players can use that command."));
+                return true;
+            }
+            for (ServerObject server : TimoCloudAPI.getUniversalAPI().getServerGroup("HG").getServers()) {
+                if (server.getState().equalsIgnoreCase("lobby") || server.getState().equalsIgnoreCase("online")) {
+                    if (server.getOnlinePlayerCount() < gameSettings.getMaxPlayers()) {
+                        PlayerObject playerObject = TimoCloudAPI.getUniversalAPI().getPlayer(((Player) sender).getUniqueId());
+                        playerObject.sendToServer(server);
+                        return true;
+                    }
+                }
+            }
+            
+            sender.sendMessage(ManiaUtils.color("&cCould not find a free server."));
         }
         
         return true;
