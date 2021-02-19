@@ -103,6 +103,26 @@ public class MysqlDatabase {
                 }
             }
 
+            if (field.getType().isAssignableFrom(IRecord.class)) {
+                try {
+                    pushRecord((IRecord) field.get(record));
+                    continue;
+                } catch (IllegalAccessException e) {}
+            }
+            
+            if (field.getType().isAssignableFrom(Collection.class)) {
+                try {
+                    Collection collection = (Collection) field.get(record);
+                    boolean collectionContainsRecord = false;
+                    for (Object o : collection) {
+                        if (o.getClass().isAssignableFrom(IRecord.class)) {
+                            pushRecord((IRecord) o);
+                            collectionContainsRecord = true;
+                        }
+                    }
+                    if (collectionContainsRecord) continue;
+                } catch (IllegalAccessException e) {}
+            }
 
             DataTypeHandler<?> handler = table.getColumn(field.getName()).getTypeHandler();
             if (handler == null) {

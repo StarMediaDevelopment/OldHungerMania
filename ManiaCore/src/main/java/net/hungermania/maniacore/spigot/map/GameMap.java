@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.hungermania.maniacore.api.util.Position;
 import net.hungermania.maniacore.spigot.util.SpigotUtils;
+import net.hungermania.manialib.data.annotations.ColumnInfo;
 import net.hungermania.manialib.data.annotations.TableInfo;
 import net.hungermania.manialib.data.model.IRecord;
 import org.bukkit.*;
@@ -28,14 +29,14 @@ public class GameMap implements IRecord {
 
     @Setter protected int id; //Database id, isn't really used outside of database things
     @Setter protected String name; //The display name of the map
-    @Setter protected Position center; //The center of the map
+    @Setter protected Position center; //The center of the map //TODO TypeHandler
     protected String[] creators; //Map creators
     @Setter protected String downloadUrl; //The url in which to download the map zip file
     protected Set<Spawn> spawns; //Spawn locations of the map
     //Temp Stuff
-    @Setter protected UUID uuid; //This is used for the world
-    @Setter protected World world; //The Bukkit World for this map and can be used to easily reference the world
-    @Setter protected File zipFile; //The downloaded zip file for easier reference
+    @Setter @ColumnInfo(ignored = true) protected UUID uuid; //This is used for the world
+    @Setter @ColumnInfo(ignored = true) protected World world; //The Bukkit World for this map and can be used to easily reference the world
+    @Setter @ColumnInfo(ignored = true) protected File zipFile; //The downloaded zip file for easier reference
 
     public GameMap(int id, String name) {
         this.id = id;
@@ -55,7 +56,7 @@ public class GameMap implements IRecord {
         new BukkitRunnable() {
             public void run() {
                 UUID fileUUID = UUID.randomUUID();
-                File tmpFile = new File(mapManager.getDownloadFolder(), fileUUID.toString() + ".tmp");
+                File tmpFile = new File(mapManager.getDownloadFolder(), fileUUID + ".tmp");
                 try {
                     URL url = new URL(downloadUrl);
                     URLConnection connection = url.openConnection();
@@ -68,7 +69,7 @@ public class GameMap implements IRecord {
                         }
                     }
 
-                    File zipFile = new File(mapManager.getDownloadFolder(), fileUUID.toString() + ".zip");
+                    File zipFile = new File(mapManager.getDownloadFolder(), fileUUID + ".zip");
                     tmpFile.renameTo(zipFile);
                     String worldName = fileUUID.toString();
                     File worldContainer = new File(worldName);
