@@ -23,6 +23,7 @@ import net.hungermania.hungergames.records.GameSettingsRecord;
 import net.hungermania.hungergames.records.LootRecord;
 import net.hungermania.hungergames.settings.GameSettings;
 import net.hungermania.hungergames.settings.SettingsManager;
+import net.hungermania.maniacore.ManiaCorePlugin;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.channel.Channel;
 import net.hungermania.maniacore.api.chat.ChatManager;
@@ -35,6 +36,7 @@ import net.hungermania.maniacore.spigot.perks.Perks;
 import net.hungermania.maniacore.spigot.plugin.SpigotManiaTask;
 import net.hungermania.maniacore.spigot.user.PlayerBoard;
 import net.hungermania.maniacore.spigot.user.SpigotUser;
+import net.hungermania.maniacore.spigot.util.Spawnpoint;
 import net.hungermania.manialib.ManiaLib;
 import net.hungermania.manialib.data.DatabaseManager;
 import net.hungermania.manialib.data.MysqlDatabase;
@@ -42,7 +44,6 @@ import net.hungermania.manialib.util.Priority;
 import net.hungermania.manialib.util.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -55,7 +56,6 @@ public final class HungerGames extends JavaPlugin implements ManiaPlugin {
     private GameManager gameManager;
     private ManiaCore maniaCore;
     @Setter
-    private Location spawn;
     private MapManager mapManager;
     private Lobby lobby;
     private LootManager lootManager;
@@ -64,6 +64,7 @@ public final class HungerGames extends JavaPlugin implements ManiaPlugin {
     
     private MemoryHook gameTaskHook = new MemoryHook("Game Task");
     private SettingsManager settingsManager;
+    private Spawnpoint spawnpoint;
     
     @Override
     public void onEnable() {
@@ -83,12 +84,6 @@ public final class HungerGames extends JavaPlugin implements ManiaPlugin {
         this.settingsManager = new SettingsManager(this);
         this.settingsManager.load();
         
-        if (getConfig().contains("spawn")) {
-            this.spawn = (Location) getConfig().get("spawn");
-        } else {
-            this.spawn = Bukkit.getWorld("world").getSpawnLocation();
-        }
-        
         this.mapManager = new MapManager(this);
         this.mapManager.loadMaps();
         this.getCommand("mapsadmin").setExecutor(mapManager);
@@ -96,8 +91,9 @@ public final class HungerGames extends JavaPlugin implements ManiaPlugin {
         this.getCommand("probability").setExecutor(new ProbablityCmd());
     
         this.gameManager = new GameManager(this);
-        
-        this.lobby = new Lobby(this, getSpawn());
+
+        spawnpoint = ((ManiaCorePlugin) Bukkit.getPluginManager().getPlugin("ManiaCore")).getSpawnpoint();
+        this.lobby = new Lobby(this, spawnpoint);
         this.getCommand("map").setExecutor(lobby);
         this.getCommand("lobby").setExecutor(lobby);
         this.getCommand("votestart").setExecutor(lobby);
@@ -155,7 +151,7 @@ public final class HungerGames extends JavaPlugin implements ManiaPlugin {
             if (map.getWorld() != null) {
                 if (!map.getWorld().getPlayers().isEmpty()) {
                     for (Player player : map.getWorld().getPlayers()) {
-                        player.teleport(getSpawn());
+                        player.teleport(getSpawnpoint().getLocation());
                     }
                 }
                 Bukkit.unloadWorld(map.getWorld(), false);
@@ -173,7 +169,6 @@ public final class HungerGames extends JavaPlugin implements ManiaPlugin {
         lobby.getLobbySigns().save();
         
         this.maniaCore.getDatabase().pushQueue();
-        getConfig().set("spawn", spawn);
         saveConfig();
     }
     

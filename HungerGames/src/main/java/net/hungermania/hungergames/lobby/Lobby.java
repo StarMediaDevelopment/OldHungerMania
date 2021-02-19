@@ -22,6 +22,7 @@ import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.memory.MemoryHook;
 import net.hungermania.maniacore.memory.MemoryHook.Task;
 import net.hungermania.maniacore.spigot.user.SpigotUser;
+import net.hungermania.maniacore.spigot.util.Spawnpoint;
 import net.hungermania.maniacore.spigot.util.SpigotUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -43,14 +44,14 @@ public class Lobby implements Listener, CommandExecutor {
     private Set<SpigotUser> players = new HashSet<>(), hiddenStaff = new HashSet<>();
     private MapOptions mapOptions = new MapOptions();
     private Set<UUID> voteStart = new HashSet<>();
-    private Location location;
+    private Spawnpoint spawnpoint;
     private VoteTimer voteTimer;
     private Game game;
     private LobbySigns lobbySigns;
     private Messager messager;
     
-    public Lobby(HungerGames plugin, Location location) {
-        this.location = location;
+    public Lobby(HungerGames plugin, Spawnpoint spawnpoint) {
+        this.spawnpoint = spawnpoint;
         this.plugin = plugin;
         this.gameSettings = plugin.getSettingsManager().getCurrentSettings();
         this.lobbySigns = new LobbySigns();
@@ -231,7 +232,7 @@ public class Lobby implements Listener, CommandExecutor {
     public void fromGame(Game game) {
         for (GamePlayer player : game.getPlayers()) {
             SpigotUser user = player.getUser();
-            user.getBukkitPlayer().teleport(getLocation());
+            user.getBukkitPlayer().teleport(getSpawnpoint().getLocation());
             user.getBukkitPlayer().setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
             new LobbyBoard(this, user);
             if (!user.getToggle(Toggles.INCOGNITO).getAsBoolean()) {
@@ -359,11 +360,11 @@ public class Lobby implements Listener, CommandExecutor {
     public Set<UUID> getVoteStart() {
         return voteStart;
     }
-    
-    public Location getLocation() {
-        return location;
+
+    public Spawnpoint getSpawnpoint() {
+        return spawnpoint;
     }
-    
+
     public void addVote(int map, UUID player) {
         User user = plugin.getManiaCore().getUserManager().getUser(player);
         Rank rank = user.getRank();

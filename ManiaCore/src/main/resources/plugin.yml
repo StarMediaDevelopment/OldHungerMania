@@ -31,3 +31,5 @@ commands:
     nick:
     unnick:
     realname:
+    setspawn:
+    spawn:

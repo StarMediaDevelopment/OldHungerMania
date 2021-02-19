@@ -5,6 +5,7 @@ import cloud.timo.TimoCloud.api.objects.ServerObject;
 import lombok.Getter;
 import net.hungermania.hub.leaderboard.Leaderboard;
 import net.hungermania.hub.leaderboard.LeaderboardManager;
+import net.hungermania.maniacore.ManiaCorePlugin;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.channel.Channel;
 import net.hungermania.maniacore.api.events.EventInfo;
@@ -24,6 +25,7 @@ import net.hungermania.maniacore.spigot.gui.Gui;
 import net.hungermania.maniacore.spigot.plugin.SpigotManiaTask;
 import net.hungermania.maniacore.spigot.user.SpigotUser;
 import net.hungermania.maniacore.spigot.util.ItemBuilder;
+import net.hungermania.maniacore.spigot.util.Spawnpoint;
 import net.hungermania.manialib.util.Range;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
@@ -53,10 +55,11 @@ import java.util.Map.Entry;
 
 public final class ManiaHub extends JavaPlugin implements Listener, ManiaPlugin {
 
-    @Getter
-    private LeaderboardManager leaderboardManager;
+    @Getter private LeaderboardManager leaderboardManager;
 
     public static ManiaHub instance;
+    
+    @Getter private Spawnpoint spawnpoint;
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
@@ -134,7 +137,7 @@ public final class ManiaHub extends JavaPlugin implements Listener, ManiaPlugin 
         gameBrowser.setItemMeta(browserMeta);
         e.getPlayer().getInventory().setItem(4, gameBrowser);
         e.getPlayer().updateInventory();
-        e.getPlayer().teleport(getServer().getWorld("world").getSpawnLocation());
+        e.getPlayer().teleport(getSpawnpoint().getLocation());
 
         String[] motd = new String[]{"&6&l>> &bWelcome to HungerMania!", "", "----Server Info----", "&6&l>> &eDiscord: &fhttps://discord.gg/Z95xgD7", "&6&l>> &eWebsite: &fhttps://hungermania.net/", "&6&l>> &eStore: &fhttps://hunger-mania.tebex.io/", "&6&l>> &eRules: &f/rules"};
 
@@ -189,7 +192,7 @@ public final class ManiaHub extends JavaPlugin implements Listener, ManiaPlugin 
             }
 
             Player player = (Player) sender;
-            player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+            player.teleport(getSpawnpoint().getLocation());
         } else if (cmd.getName().equalsIgnoreCase("fly")) {
             if (!(sender instanceof Player)) {
                 sender.sendMessage(ManiaUtils.color("&cOnly players may use that command."));
@@ -259,6 +262,8 @@ public final class ManiaHub extends JavaPlugin implements Listener, ManiaPlugin 
 
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         getServer().getWorld("world").setDifficulty(Difficulty.PEACEFUL);
+        
+        this.spawnpoint = ((ManiaCorePlugin) Bukkit.getPluginManager().getPlugin("ManiaCore")).getSpawnpoint();
 
         MemoryHook playerUpdate = new MemoryHook("Hub Player Update");
         ManiaCore.getInstance().getMemoryManager().addMemoryHook(playerUpdate);

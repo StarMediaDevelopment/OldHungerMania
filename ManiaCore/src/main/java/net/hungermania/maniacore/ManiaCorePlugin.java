@@ -1,5 +1,7 @@
 package net.hungermania.maniacore;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.chat.ChatHandler;
 import net.hungermania.maniacore.api.ranks.Rank;
@@ -25,10 +27,12 @@ import net.hungermania.maniacore.spigot.server.SpigotServerManager;
 import net.hungermania.maniacore.spigot.updater.Updater;
 import net.hungermania.maniacore.spigot.user.FriendsRedisListener;
 import net.hungermania.maniacore.spigot.user.SpigotUserManager;
+import net.hungermania.maniacore.spigot.util.Spawnpoint;
 import net.hungermania.manialib.ManiaLib;
 import net.hungermania.manialib.sql.Database;
 import net.hungermania.manialib.util.Priority;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -44,7 +48,13 @@ public final class ManiaCorePlugin extends JavaPlugin implements Listener, Mania
     
     private ManiaCore maniaCore;
     
+    static {
+        ConfigurationSerialization.registerClass(Spawnpoint.class);
+    }
+    
     private static final char[] CODE_CHARS = new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+    
+    @Getter @Setter private Spawnpoint spawnpoint;
     
     @Override
     public void onEnable() {
@@ -83,6 +93,9 @@ public final class ManiaCorePlugin extends JavaPlugin implements Listener, Mania
         getCommand("nick").setExecutor(nicknameCmd);
         getCommand("unnick").setExecutor(nicknameCmd);
         getCommand("realname").setExecutor(nicknameCmd);
+        SpawnCmd spawnCmd = new SpawnCmd(this);
+        getCommand("setspawn").setExecutor(spawnCmd);
+        getCommand("spawn").setExecutor(spawnCmd);
         
         new BukkitRunnable() {
             public void run() {
@@ -171,6 +184,12 @@ public final class ManiaCorePlugin extends JavaPlugin implements Listener, Mania
                 return targets;
             }
         }, Priority.LOWEST);
+        
+        if (getConfig().contains("spawnpoint")) {
+            this.spawnpoint = (Spawnpoint) getConfig().get("spawnpoint");
+        } else {
+            this.spawnpoint = new Spawnpoint(Bukkit.getWorld("world").getSpawnLocation());
+        }
     }
     
     public ManiaCore getManiaCore() {
@@ -205,7 +224,8 @@ public final class ManiaCorePlugin extends JavaPlugin implements Listener, Mania
         for (Skin skin : getManiaCore().getSkinManager().getSkins()) {
             maniaCore.getDatabase().addRecordToQueue(new SkinRecord(skin));
         }
-    
+        
+        getConfig().set("spawnpoint", spawnpoint);
         this.maniaCore.getDatabase().pushQueue();
         saveConfig();
     }

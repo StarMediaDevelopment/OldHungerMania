@@ -320,11 +320,6 @@ public class HGCommand implements CommandExecutor {
 
             game.restockChests();
             game.sendMessage(ManiaUtils.color("&5&l>> &6The chests have been forcefully restocked by " + senderName + "&6."));
-        } else if (ManiaUtils.checkCmdAliases(args, 0, "setspawn")) {
-            plugin.setSpawn(player.getLocation());
-            sender.sendMessage(ManiaUtils.color("&aSet the spawnpoint to your current location."));
-            plugin.getConfig().set("spawn", plugin.getSpawn());
-            plugin.saveConfig();
         } else if (ManiaUtils.checkCmdAliases(args, 0, "mutations")) {
             if (!sender.hasPermission("mania.hungergames.playertrackers")) {
                 sender.sendMessage(ManiaUtils.color("&cYou do not have permission to use that command."));

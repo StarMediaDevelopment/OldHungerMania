@@ -5,7 +5,6 @@ description: HungerMania's Hub
 depend: [ManiaCore]
 commands:
     testadmin:
-    spawn:
     fly:
     hologram:
     leaderboard:
