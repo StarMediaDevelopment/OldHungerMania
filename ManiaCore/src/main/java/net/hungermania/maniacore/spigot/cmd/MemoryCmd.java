@@ -6,8 +6,13 @@ import net.hungermania.maniacore.api.util.ReflectionUtils;
 import net.hungermania.maniacore.memory.MemoryHook;
 import net.hungermania.maniacore.plugin.ManiaPlugin;
 import net.hungermania.manialib.util.Constants;
-import org.bukkit.*;
-import org.bukkit.command.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
+import org.bukkit.World;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 
 import java.text.DecimalFormat;
@@ -32,7 +37,7 @@ public class MemoryCmd implements CommandExecutor {
                 tpsString.append("&7, ");
             }
         }
-        sender.sendMessage(ManiaUtils.color("&6&l> " + tpsString.toString()));
+        sender.sendMessage(ManiaUtils.color("&6&l> " + tpsString));
     
         int loadedChunks = 0, totalWorldsLoaded = 0;
         for (World world : Bukkit.getWorlds()) {
