@@ -1,5 +1,6 @@
 package net.hungermania.hungergames.game.gui;
 
+import lombok.Getter;
 import net.hungermania.hungergames.HungerGames;
 import net.hungermania.hungergames.game.Game;
 import net.hungermania.hungergames.game.GamePlayer;
@@ -10,15 +11,27 @@ import net.hungermania.maniacore.spigot.util.ItemBuilder;
 import net.hungermania.manialib.util.Constants;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class SpectatorInventoryGui extends Gui {
+    
+    public static final int OFFSET = 9;
+    @Getter private GamePlayer player, target;
+    
+    @Getter private static Set<InventoryHolder> guiInstances = new HashSet<>();
+    
     public SpectatorInventoryGui(Game game, GamePlayer player, GamePlayer target) {
         super(HungerGames.getInstance(), ManiaUtils.color(target.getUser().getName() + "'s Inventory &c&lWIP"), false, 54);
 
+        this.player = player;
+        this.target = target;
+        
         ItemStack skull = target.getSkull().clone();
         ItemMeta skullMeta = skull.getItemMeta();
         skullMeta.setDisplayName(ManiaUtils.color("&e" + target.getUser().getName()));
@@ -41,14 +54,14 @@ public class SpectatorInventoryGui extends Gui {
         setButton(5, new GUIButton(ItemBuilder.start(Material.GLASS_BOTTLE).setDisplayName("&ePotion Effects &c&lWIP").build()));
         setButton(8, new GUIButton(ItemBuilder.start(Material.ARROW).setDisplayName("&eBack").build()).setListener(e -> new SpectatorGui(game, player, target).openGUI(player.getUser().getBukkitPlayer())));
         
-        int offset = 9;
         for (int i = 0; i < 36; i++) {
-            setButton(offset + i, new GUIButton(targetPlayer.getInventory().getItem(i)).setListener(e -> e.setCancelled(true)));
+            setButton(OFFSET + i, new GUIButton(targetPlayer.getInventory().getItem(i)).setListener(e -> e.setCancelled(true)));
         }
         
         setButton(50, new GUIButton(targetPlayer.getInventory().getHelmet()).setListener(e -> e.setCancelled(true)));
         setButton(51, new GUIButton(targetPlayer.getInventory().getChestplate()).setListener(e -> e.setCancelled(true)));
         setButton(52, new GUIButton(targetPlayer.getInventory().getLeggings()).setListener(e -> e.setCancelled(true)));
         setButton(53, new GUIButton(targetPlayer.getInventory().getBoots()).setListener(e -> e.setCancelled(true)));
+        guiInstances.add(this);
     }
 }

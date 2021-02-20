@@ -11,6 +11,7 @@ import net.hungermania.hungergames.game.cmd.ProbablityCmd;
 import net.hungermania.hungergames.game.timer.Timer;
 import net.hungermania.hungergames.listeners.BlockListeners;
 import net.hungermania.hungergames.listeners.EntityListeners;
+import net.hungermania.hungergames.listeners.InventoryListeners;
 import net.hungermania.hungergames.listeners.PlayerListeners;
 import net.hungermania.hungergames.lobby.Lobby;
 import net.hungermania.hungergames.loot.Loot;
@@ -104,6 +105,7 @@ public final class HungerGames extends JavaPlugin implements ManiaPlugin {
         this.getServer().getPluginManager().registerEvents(new PlayerListeners(), this);
         this.getServer().getPluginManager().registerEvents(new EntityListeners(), this);
         this.getServer().getPluginManager().registerEvents(new BlockListeners(), this);
+        this.getServer().getPluginManager().registerEvents(new InventoryListeners(), this);
     
         this.lobby.generateMapOptions();
         
