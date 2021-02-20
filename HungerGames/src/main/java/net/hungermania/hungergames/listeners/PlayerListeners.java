@@ -192,7 +192,6 @@ public class PlayerListeners extends GameListener {
                     return;
                 }
                 if (hand.getType() == Material.ENDER_PEARL) {
-                    System.out.println("Hand item is an enderpearl");
                     if (game.getMutationsTeam().isMember(e.getPlayer().getUniqueId())) {
                         GamePlayer gamePlayer = game.getPlayer(e.getPlayer().getUniqueId());
                         if (gamePlayer.getMutationType() == MutationType.ENDERMAN) {
@@ -201,7 +200,6 @@ public class PlayerListeners extends GameListener {
                                 long nextUse = lastUse + TimeUnit.SECONDS.toMillis(game.getGameSettings().getPearlCooldown());
                                 if (System.currentTimeMillis() < nextUse) {
                                     e.setCancelled(true);
-                                    e.getPlayer().sendMessage(ManiaUtils.color("&cThe enderpearl is still on cooldown."));
                                     return;
                                 }
                             }
