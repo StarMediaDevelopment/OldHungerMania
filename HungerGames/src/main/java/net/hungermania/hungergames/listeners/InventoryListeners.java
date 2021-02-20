@@ -8,7 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryInteractEvent;
-import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class InventoryListeners implements Listener {
@@ -18,13 +18,13 @@ public class InventoryListeners implements Listener {
         Player player = (Player) e.getWhoClicked();
         new BukkitRunnable() {
             public void run() {
-                for (InventoryHolder guiInstance : SpectatorInventoryGui.getGuiInstances()) {
-                    SpectatorInventoryGui gui = (SpectatorInventoryGui) guiInstance;
+                for (Inventory guiInstance : SpectatorInventoryGui.getGuiInstances()) {
+                    SpectatorInventoryGui gui = (SpectatorInventoryGui) guiInstance.getHolder();
                     if (gui.getTarget().getUniqueId().equals(player.getUniqueId())) {
-                        for (int i = SpectatorInventoryGui.OFFSET; i < gui.getItems().values().size(); i++) {
+                        for (int i = SpectatorInventoryGui.OFFSET; i < 54; i++) {
                             GUIButton button = gui.getButton(i);
                             button.setItem(e.getInventory().getItem(i - SpectatorInventoryGui.OFFSET));
-                            gui.refreshInventory(gui.getPlayer().getUser().getBukkitPlayer());
+                            guiInstance.setItem(i - SpectatorInventoryGui.OFFSET, button.getItem());
                         }
                     }
                 }
@@ -35,7 +35,7 @@ public class InventoryListeners implements Listener {
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
         if (e.getInventory().getHolder() instanceof SpectatorInventoryGui) {
-            SpectatorInventoryGui.getGuiInstances().remove(e.getInventory().getHolder());
+            SpectatorInventoryGui.getGuiInstances().remove(e.getInventory());
         }
     }
 }

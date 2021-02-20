@@ -8,6 +8,7 @@ import net.hungermania.hungergames.game.Game;
 import net.hungermania.hungergames.game.GameManager;
 import net.hungermania.hungergames.game.cmd.HGCommand;
 import net.hungermania.hungergames.game.cmd.ProbablityCmd;
+import net.hungermania.hungergames.game.gui.SpectatorInventoryGui;
 import net.hungermania.hungergames.game.timer.Timer;
 import net.hungermania.hungergames.listeners.BlockListeners;
 import net.hungermania.hungergames.listeners.EntityListeners;
@@ -140,6 +141,7 @@ public final class HungerGames extends JavaPlugin implements ManiaPlugin {
         ChatManager chatManager = ManiaCore.getInstance().getChatManager();
         chatManager.setFormatter(Channel.GLOBAL, new HGChatFormatter());
         chatManager.registerHandler(this, new HGChatHandler(), Priority.HIGHEST);
+        SpectatorInventoryGui.prepareTask();
     }
 
     public void registerRecordTypes() {

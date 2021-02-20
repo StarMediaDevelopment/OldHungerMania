@@ -255,8 +255,10 @@ public class Gui implements InventoryHolder {
         }
     }
     
-    public void openGUI(HumanEntity player) {
-        player.openInventory(getInventory());
+    public Inventory openGUI(HumanEntity player) {
+        Inventory inventory = getInventory();
+        player.openInventory(inventory);
+        return inventory;
     }
     
     public void callExtraListeners(InventoryClickEvent event) {
