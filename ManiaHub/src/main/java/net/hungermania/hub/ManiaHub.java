@@ -59,7 +59,7 @@ public final class ManiaHub extends JavaPlugin implements Listener, ManiaPlugin 
 
     public static ManiaHub instance;
     
-    @Getter private Spawnpoint spawnpoint;
+    private Spawnpoint spawnpoint;
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
@@ -137,7 +137,14 @@ public final class ManiaHub extends JavaPlugin implements Listener, ManiaPlugin 
         gameBrowser.setItemMeta(browserMeta);
         e.getPlayer().getInventory().setItem(4, gameBrowser);
         e.getPlayer().updateInventory();
-        e.getPlayer().teleport(getSpawnpoint().getLocation());
+        new BukkitRunnable() {
+            public void run() {
+                Spawnpoint spawnpoint = getSpawnpoint();
+                System.out.println("Spawnpoint " + spawnpoint);
+                System.out.println("Spawn Location " + spawnpoint.getLocation());
+                e.getPlayer().teleport(spawnpoint.getLocation());
+            }
+        }.runTaskLater(this, 2L);
 
         String[] motd = new String[]{"&6&l>> &bWelcome to HungerMania!", "", "----Server Info----", "&6&l>> &eDiscord: &fhttps://discord.gg/Z95xgD7", "&6&l>> &eWebsite: &fhttps://hungermania.net/", "&6&l>> &eStore: &fhttps://hunger-mania.tebex.io/", "&6&l>> &eRules: &f/rules"};
 
@@ -252,6 +259,10 @@ public final class ManiaHub extends JavaPlugin implements Listener, ManiaPlugin 
         return true;
     }
 
+    public Spawnpoint getSpawnpoint() {
+        return this.spawnpoint = ((ManiaCorePlugin) Bukkit.getPluginManager().getPlugin("ManiaCore")).getSpawnpoint();
+    }
+
     @Override
     public void onEnable() {
         instance = this;
@@ -262,8 +273,6 @@ public final class ManiaHub extends JavaPlugin implements Listener, ManiaPlugin 
 
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         getServer().getWorld("world").setDifficulty(Difficulty.PEACEFUL);
-        
-        this.spawnpoint = ((ManiaCorePlugin) Bukkit.getPluginManager().getPlugin("ManiaCore")).getSpawnpoint();
 
         MemoryHook playerUpdate = new MemoryHook("Hub Player Update");
         ManiaCore.getInstance().getMemoryManager().addMemoryHook(playerUpdate);

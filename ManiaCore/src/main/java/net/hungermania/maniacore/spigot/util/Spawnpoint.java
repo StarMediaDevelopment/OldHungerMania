@@ -53,7 +53,7 @@ public class Spawnpoint implements ConfigurationSerializable {
         double x = (this.x + ManiaCore.RANDOM.nextInt(radius)) + .5;
         double y = (this.y + ManiaCore.RANDOM.nextInt(radius)) + .5;
         double z = (this.z + ManiaCore.RANDOM.nextInt(radius)) + .5;
-        return new Location(world, x, y, z, yaw, pitch);
+        return new Location(getWorld(), x, y, z, yaw, pitch);
     }
 
     public Map<String, Object> serialize() {
@@ -66,5 +66,18 @@ public class Spawnpoint implements ConfigurationSerializable {
             put("pitch", pitch + "");
             put("radius", radius + "");
         }};
+    }
+
+    public String toString() {
+        return "Spawnpoint{" +
+                "worldName='" + worldName + '\'' +
+                ", world=" + world +
+                ", x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                ", yaw=" + yaw +
+                ", pitch=" + pitch +
+                ", radius=" + radius +
+                '}';
     }
 }
