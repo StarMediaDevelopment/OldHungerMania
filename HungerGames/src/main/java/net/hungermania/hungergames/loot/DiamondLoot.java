@@ -49,4 +49,8 @@ public class DiamondLoot extends Loot {
         
         return DIAMOND.generateItemStack();
     }
+
+    public int getWeight() {
+        return 3;
+    }
 }

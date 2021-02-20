@@ -17,12 +17,15 @@ public class NicknameManager {
     }
     
     public boolean isBlacklisted(String name) {
-        User user = ManiaCore.getInstance().getUserManager().getUser(name);
-        if (user != null) {
-            if (user.getRank().ordinal() <= Rank.MEDIA.ordinal()) {
-                return true;
+        try {
+            User user = ManiaCore.getInstance().getUserManager().getUser(name);
+            if (user != null) {
+                if (user.getRank().ordinal() <= Rank.MEDIA.ordinal()) {
+                    return true;
+                }
             }
-        }
+        } catch (Exception e) { }
+        
 
         for (String blname : this.blacklistedNames) {
             if (name.equalsIgnoreCase(blname)) {

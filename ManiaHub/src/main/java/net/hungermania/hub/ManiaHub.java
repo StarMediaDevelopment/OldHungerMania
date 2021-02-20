@@ -59,8 +59,6 @@ public final class ManiaHub extends JavaPlugin implements Listener, ManiaPlugin 
 
     public static ManiaHub instance;
     
-    private Spawnpoint spawnpoint;
-
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
         if (e.getPlayer().getGameMode() == GameMode.CREATIVE) {
@@ -139,10 +137,7 @@ public final class ManiaHub extends JavaPlugin implements Listener, ManiaPlugin 
         e.getPlayer().updateInventory();
         new BukkitRunnable() {
             public void run() {
-                Spawnpoint spawnpoint = getSpawnpoint();
-                System.out.println("Spawnpoint " + spawnpoint);
-                System.out.println("Spawn Location " + spawnpoint.getLocation());
-                e.getPlayer().teleport(spawnpoint.getLocation());
+                e.getPlayer().teleport(getSpawnpoint().getLocation());
             }
         }.runTaskLater(this, 2L);
 
@@ -260,7 +255,7 @@ public final class ManiaHub extends JavaPlugin implements Listener, ManiaPlugin 
     }
 
     public Spawnpoint getSpawnpoint() {
-        return this.spawnpoint = ((ManiaCorePlugin) Bukkit.getPluginManager().getPlugin("ManiaCore")).getSpawnpoint();
+        return ((ManiaCorePlugin) Bukkit.getPluginManager().getPlugin("ManiaCore")).getSpawnpoint();
     }
 
     @Override

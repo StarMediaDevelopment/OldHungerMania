@@ -257,9 +257,12 @@ public class Game implements IRecord {
 
         messager = new GameMessager(this);
         
-        if (ManiaCore.RANDOM.nextInt(1000) < 2) {
-            this.diamondSpecial = true;
-        }
+        this.diamondSpecial = true;
+        
+        //TODO
+//        if (ManiaCore.RANDOM.nextInt(1000) < 2) {
+//            this.diamondSpecial = true;
+//        }
     }
 
     public GamePlayer getPlayer(UUID uuid) {

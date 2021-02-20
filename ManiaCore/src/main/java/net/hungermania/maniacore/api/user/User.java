@@ -108,7 +108,11 @@ public class User implements IRecord {
     }
 
     public User(Map<String, String> jedisData) {
-        this.id = Integer.parseInt(jedisData.get("id"));
+        try {
+            this.id = Integer.parseInt(jedisData.get("id"));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
         this.uniqueId = UUID.fromString(jedisData.get("uniqueId"));
         this.name = jedisData.get("name");
         this.rank = Rank.valueOf(jedisData.get("rank"));

@@ -64,8 +64,11 @@ public final class HungerGames extends JavaPlugin implements ManiaPlugin {
     
     private MemoryHook gameTaskHook = new MemoryHook("Game Task");
     private SettingsManager settingsManager;
-    private Spawnpoint spawnpoint;
-    
+
+    public Spawnpoint getSpawnpoint() {
+        return ((ManiaCorePlugin) Bukkit.getPluginManager().getPlugin("ManiaCore")).getSpawnpoint();
+    }
+
     @Override
     public void onEnable() {
         instance = this;
@@ -92,8 +95,7 @@ public final class HungerGames extends JavaPlugin implements ManiaPlugin {
     
         this.gameManager = new GameManager(this);
 
-        spawnpoint = ((ManiaCorePlugin) Bukkit.getPluginManager().getPlugin("ManiaCore")).getSpawnpoint();
-        this.lobby = new Lobby(this, spawnpoint);
+        this.lobby = new Lobby(this, getSpawnpoint());
         this.getCommand("map").setExecutor(lobby);
         this.getCommand("lobby").setExecutor(lobby);
         this.getCommand("votestart").setExecutor(lobby);
