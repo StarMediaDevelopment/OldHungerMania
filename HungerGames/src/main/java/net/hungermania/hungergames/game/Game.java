@@ -423,7 +423,7 @@ public class Game implements IRecord {
                 this.players.put(uuid, this.cachedPlayers.get(uuid));
                 this.cachedPlayers.remove(uuid);
             } else {
-                this.players.put(uuid, new GamePlayer(uuid));
+                this.players.put(uuid, new GamePlayer(this, uuid));
             }
         }
     }

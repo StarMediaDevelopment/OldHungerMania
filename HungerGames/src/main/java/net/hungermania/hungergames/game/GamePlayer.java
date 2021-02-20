@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import lombok.Getter;
 import lombok.Setter;
 import net.hungermania.hungergames.game.death.DeathInfo;
+import net.hungermania.hungergames.game.team.GameTeam;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.spigot.mutations.MutationType;
@@ -21,6 +22,7 @@ import java.util.UUID;
 
 @Getter
 public class GamePlayer {
+    private Game game;
     private SpigotUser user;
     private boolean forcefullyAdded;
     private CommandSender forcefullyAddedActor;
@@ -38,7 +40,8 @@ public class GamePlayer {
     @Setter private int earnedCoins = 0;
     @Setter private long revengeTime = 0;
     
-    public GamePlayer(UUID uuid) {
+    public GamePlayer(Game game, UUID uuid) {
+        this.game = game;
         this.user = (SpigotUser) ManiaCore.getInstance().getUserManager().getUser(uuid); 
         this.skull = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
         SkullMeta skullMeta = ((SkullMeta) skull.getItemMeta());
@@ -74,5 +77,9 @@ public class GamePlayer {
 
     public void sendMessage(String s) {
         user.sendMessage(s);
+    }
+
+    public GameTeam getTeam() {
+        return game.getGameTeam(getUniqueId());
     }
 }

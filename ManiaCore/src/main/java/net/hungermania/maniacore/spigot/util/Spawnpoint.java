@@ -51,8 +51,14 @@ public class Spawnpoint implements ConfigurationSerializable {
 
     public Location getLocation() {
         double x = (this.x + ManiaCore.RANDOM.nextInt(radius)) + .5;
+        if (ManiaCore.RANDOM.nextInt(2) < 1) {
+            x = x * -1;
+        }
         double y = (this.y + ManiaCore.RANDOM.nextInt(radius)) + .5;
         double z = (this.z + ManiaCore.RANDOM.nextInt(radius)) + .5;
+        if (ManiaCore.RANDOM.nextInt(2) < 1) {
+            z = z * -1;
+        }
         return new Location(getWorld(), x, y, z, yaw, pitch);
     }
 

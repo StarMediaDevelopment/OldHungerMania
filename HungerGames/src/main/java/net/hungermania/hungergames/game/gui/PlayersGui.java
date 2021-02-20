@@ -5,8 +5,6 @@ import net.hungermania.hungergames.game.Game;
 import net.hungermania.hungergames.game.team.GameTeam;
 import net.hungermania.maniacore.spigot.gui.GUIButton;
 import net.hungermania.maniacore.spigot.gui.Gui;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -16,10 +14,7 @@ public class PlayersGui extends Gui {
     
         for (UUID p : team.getMembers()) {
             GUIButton button = new GUIButton(game.getPlayer(p).getSkull());
-            button.setListener(e -> {
-                Player player = Bukkit.getPlayer(p);
-                e.getWhoClicked().teleport(player);
-            });
+            button.setListener(e -> new SpectatorGui(game, game.getPlayer(e.getWhoClicked().getUniqueId()), game.getPlayer(p)).openGUI(e.getWhoClicked()));
             addButton(button);
         }
     }
