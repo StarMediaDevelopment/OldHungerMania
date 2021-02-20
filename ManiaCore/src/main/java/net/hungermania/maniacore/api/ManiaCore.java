@@ -13,6 +13,7 @@ import net.hungermania.maniacore.api.leveling.Level;
 import net.hungermania.maniacore.api.leveling.LevelManager;
 import net.hungermania.maniacore.api.logging.entry.ChatEntry;
 import net.hungermania.maniacore.api.logging.entry.CmdEntry;
+import net.hungermania.maniacore.api.nickname.NicknameManager;
 import net.hungermania.maniacore.api.records.*;
 import net.hungermania.maniacore.api.redis.Redis;
 import net.hungermania.maniacore.api.server.ServerManager;
@@ -66,6 +67,7 @@ public class ManiaCore implements DatabaseHandler {
     private EventManager eventManager;
     private FriendsManager friendsManager;
     private ChatManager chatManager;
+    private NicknameManager nicknameManager;
 
     public void init(Logger logger, ManiaPlugin plugin) {
         this.logger = logger;
@@ -144,6 +146,8 @@ public class ManiaCore implements DatabaseHandler {
         ChatFormatter otherFormatter = new ChatFormatter(CHANNEL_HEADER + " " + "{truePrefix} {truerankbasecolor}{trueName}" + "&8: {truechatcolor}{message}");
         this.chatManager.setFormatter(Channel.STAFF, otherFormatter);
         this.chatManager.setFormatter(Channel.ADMIN, otherFormatter);
+        
+        this.nicknameManager = new NicknameManager();
     }
 
     public void registerRecordTypes() {
@@ -227,5 +231,9 @@ public class ManiaCore implements DatabaseHandler {
 
     public ChatManager getChatManager() {
         return this.chatManager;
+    }
+
+    public NicknameManager getNicknameManager() {
+        return nicknameManager;
     }
 }

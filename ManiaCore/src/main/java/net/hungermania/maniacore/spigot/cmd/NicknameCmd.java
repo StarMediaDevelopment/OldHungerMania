@@ -51,7 +51,6 @@ public class NicknameCmd implements CommandExecutor {
             new BukkitRunnable() {
                 public void run() {
                     User user = ManiaCore.getInstance().getUserManager().getUser(((Player) sender).getUniqueId());
-
                     if (!(args.length > 0)) {
                         user.sendMessage("&cUsage: /nick <displayName>");
                         user.sendMessage("&c&o  -s can be used for the skin name and -r can be used for the rank");
@@ -70,9 +69,13 @@ public class NicknameCmd implements CommandExecutor {
                         return;
                     }
 
+                    user.sendMessage("&aSending in your request for a nickname.");
+
                     String name = args[0];
                     Skin skin = null;
                     Rank rank = DEFAULT;
+                    
+                    user.sendMessage("&aDetermining the name, skin and rank to be used for your nickname.");
 
                     if (args.length > 1) {
                         for (int i = 1; i < args.length; i++) {
@@ -155,6 +158,11 @@ public class NicknameCmd implements CommandExecutor {
                                 }
                             }
                         }
+                    }
+                    
+                    if (ManiaCore.getInstance().getNicknameManager().isBlacklisted(name)) {
+                        sender.sendMessage(ManiaUtils.color("&cThat name is blacklisted from being used."));
+                        return;
                     }
 
                     Skin finalSkin = skin;
