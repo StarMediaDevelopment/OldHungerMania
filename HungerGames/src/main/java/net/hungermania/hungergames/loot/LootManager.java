@@ -14,8 +14,6 @@ public class LootManager {
     @Getter private Map<Integer, Loot> possibleLoot = new HashMap<>();
     @Getter private List<Loot> lootChances = new ArrayList<>();
 
-    private Loot diamond = new DiamondLoot();
-    
     private HungerGames plugin = HungerGames.getInstance();
     
     public void loadFromDatabase() {
@@ -83,7 +81,7 @@ public class LootManager {
             Loot slowball = new Loot(Material.SNOW_BALL, "Slowball", 20);
             Loot iron_ingot = new Loot(Material.IRON_INGOT, 10);
             Loot gold_ingot = new Loot(Material.GOLD_INGOT, 5);
-            //TODO Loot diamond = new DiamondLoot();
+            Loot diamond = new DiamondLoot();
             Loot stick = new Loot(Material.STICK, 15);
             Loot flint_and_steel = new Loot(Material.FLINT_AND_STEEL, 15);
             Loot tnt = new Loot(Material.TNT, "TNT", 15);
@@ -173,7 +171,6 @@ public class LootManager {
             loot.add(lootChances.get(ManiaCore.RANDOM.nextInt(lootChances.size())));
         }
         
-        loot.add(diamond); //TODO
         return loot;
     }
     
