@@ -2,7 +2,6 @@ package net.hungermania.maniacore.api.nickname;
 
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.ranks.Rank;
-import net.hungermania.maniacore.api.records.NicknameRecord;
 import net.hungermania.maniacore.api.user.User;
 
 import java.util.*;
@@ -13,8 +12,8 @@ public class NicknameManager {
     
     private Set<String> blacklistedNames = new HashSet<>();
     
-    public void loadNicknames() {
-        ManiaCore.getInstance().getDatabase().getRecords(NicknameRecord.class, null, null);
+    public void addNameToBlacklist(String name) {
+        this.blacklistedNames.add(name);
     }
     
     public boolean isBlacklisted(String name) {
@@ -32,5 +31,9 @@ public class NicknameManager {
         }
         
         return false;
+    }
+
+    public Set<String> getBlacklistedNames() {
+        return blacklistedNames;
     }
 }
