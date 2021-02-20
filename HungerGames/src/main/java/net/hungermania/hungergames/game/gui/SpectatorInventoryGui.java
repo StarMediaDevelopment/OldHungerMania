@@ -9,15 +9,15 @@ import net.hungermania.maniacore.spigot.gui.GUIButton;
 import net.hungermania.maniacore.spigot.gui.Gui;
 import net.hungermania.maniacore.spigot.util.ItemBuilder;
 import net.hungermania.manialib.util.Constants;
+import net.hungermania.manialib.util.Utils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class SpectatorInventoryGui extends Gui {
     
@@ -51,7 +51,11 @@ public class SpectatorInventoryGui extends Gui {
         setButton(2, new GUIButton(ItemBuilder.start(Material.GOLDEN_APPLE).setDisplayName("&eHealth: &c&l" + Constants.NUMBER_FORMAT.format(targetPlayer.getHealth()) + "/" + Constants.NUMBER_FORMAT.format(targetPlayer.getMaxHealth())).build()));
         setButton(3, new GUIButton(ItemBuilder.start(Material.COOKED_BEEF).setDisplayName("&eFood: &c&l" + Constants.NUMBER_FORMAT.format(targetPlayer.getFoodLevel()) + "/" + Constants.NUMBER_FORMAT.format(20)).build()));
         setButton(4, new GUIButton(ItemBuilder.start(Material.EXP_BOTTLE).setDisplayName("&eXP Level: &b" + targetPlayer.getLevel()).build()));
-        setButton(5, new GUIButton(ItemBuilder.start(Material.GLASS_BOTTLE).setDisplayName("&ePotion Effects &c&lWIP").build()));
+        List<String> activeEffects = new ArrayList<>();
+        for (PotionEffect effect : targetPlayer.getActivePotionEffects()) {
+            activeEffects.add(effect.getType().getName() + " " + Utils.romanNumerals(effect.getAmplifier()));
+        }
+        setButton(5, new GUIButton(ItemBuilder.start(Material.GLASS_BOTTLE).setDisplayName("&ePotion Effects").setLore(activeEffects).build()));
         setButton(8, new GUIButton(ItemBuilder.start(Material.ARROW).setDisplayName("&eBack").build()).setListener(e -> new SpectatorGui(game, player, target).openGUI(player.getUser().getBukkitPlayer())));
         
         for (int i = 0; i < 36; i++) {
