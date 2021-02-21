@@ -8,7 +8,9 @@ import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.stream.Stream;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
@@ -36,6 +38,49 @@ public final class Utils {
         return fields;
     }
 
+    public static long parseTime(String rawTime) {
+        Entry<Long, String> years = extractRawTime(rawTime, Unit.YEARS);
+        Entry<Long, String> months = extractRawTime(years.getValue(), Unit.MONTHS);
+        Entry<Long, String> weeks = extractRawTime(months.getValue(), Unit.WEEKS);
+        Entry<Long, String> days = extractRawTime(weeks.getValue(), Unit.DAYS);
+        Entry<Long, String> hours = extractRawTime(days.getValue(), Unit.HOURS);
+        Entry<Long, String> minutes = extractRawTime(hours.getValue(), Unit.MINUTES);
+        Entry<Long, String> seconds = extractRawTime(minutes.getValue(), Unit.SECONDS);
+        return years.getKey() + months.getKey() + weeks.getKey() + days.getKey() + hours.getKey() + minutes.getKey() + seconds.getKey();
+    }
+
+    private static Entry<Long, String> extractRawTime(String rawTime, Unit unit) {
+        rawTime = rawTime.toLowerCase();
+        String[] rawArray;
+        for (String alias : unit.getAliases()) {
+            alias = alias.toLowerCase();
+            if (rawTime.contains(alias)) {
+                rawArray = rawTime.split(alias);
+                String fh = rawArray[0];
+                long rawLength;
+                try {
+                    rawLength = Integer.parseInt(fh);
+                } catch (NumberFormatException e) {
+                    StringBuilder sb = new StringBuilder();
+                    for (int i = fh.length() - 1; i > 0; i--) {
+                        char c = fh.charAt(i);
+                        if (Character.isDigit(c)) {
+                            sb.insert(0, c);
+                        } else {
+                            break;
+                        }
+                    }
+                    rawLength = Integer.parseInt(sb.toString());
+                }
+                rawTime = rawTime.replace(rawLength + alias, "");
+
+                return new SimpleEntry<>(unit.convertTime(rawLength), rawTime);
+            }
+        }
+
+        return new SimpleEntry<>(0L, rawTime);
+    }
+
     public static String romanNumerals(int Int) {
         LinkedHashMap<String, Integer> roman_numerals = new LinkedHashMap<>();
         roman_numerals.put("M", 1000);
@@ -51,13 +96,13 @@ public final class Utils {
         roman_numerals.put("V", 5);
         roman_numerals.put("IV", 4);
         roman_numerals.put("I", 1);
-        String res = "";
-        for (Map.Entry<String, Integer> entry : roman_numerals.entrySet()) {
+        StringBuilder res = new StringBuilder();
+        for (Entry<String, Integer> entry : roman_numerals.entrySet()) {
             int matches = Int / entry.getValue();
-            res += repeat(entry.getKey(), matches);
+            res.append(repeat(entry.getKey(), matches));
             Int = Int % entry.getValue();
         }
-        return res;
+        return res.toString();
     }
 
     public static String repeat(String s, int n) {

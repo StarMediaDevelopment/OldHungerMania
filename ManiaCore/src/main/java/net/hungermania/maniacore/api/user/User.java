@@ -7,6 +7,7 @@ import net.hungermania.maniacore.api.channel.Channel;
 import net.hungermania.maniacore.api.leveling.Level;
 import net.hungermania.maniacore.api.nickname.Nickname;
 import net.hungermania.maniacore.api.ranks.Rank;
+import net.hungermania.maniacore.api.ranks.RankInfo;
 import net.hungermania.maniacore.api.records.IgnoreInfoRecord;
 import net.hungermania.maniacore.api.skin.Skin;
 import net.hungermania.maniacore.api.stats.Stat;
@@ -28,12 +29,12 @@ public class User implements IRecord {
     protected static final Set<Stats> FAKED_STATS = new HashSet<>(Arrays.asList(Stats.EXPERIENCE, Stats.COINS, Stats.HG_CHESTS_FOUND, Stats.HG_SCORE, Stats.HG_KILLS, Stats.HG_WINS, Stats.HG_DEATHMATCHES, Stats.HG_DEATHS, Stats.HG_MUTANT_DEATHS, Stats.HG_GAMES, Stats.HG_HIGHEST_KILL_STREAK, Stats.HG_MUTANT_KILLS, Stats.HG_WINSTREAK));
 
     protected int id = 0;
-    protected UUID uniqueId;
+    protected final UUID uniqueId;
     protected String name;
     protected Channel channel = Channel.GLOBAL; //TODO Type handler (Probably just a default enum handler
     protected Set<IgnoreInfo> ignoredPlayers = new HashSet<>(); //TODO Set type handlers
-    protected Rank rank = Rank.DEFAULT; //TODO Type handler
     protected Nickname nickname;
+    protected final RankInfo rankInfo;
 
     protected Map<String, Statistic> stats = new HashMap<>();
     protected Map<Toggles, Toggle> toggles = new HashMap<>();
@@ -43,12 +44,31 @@ public class User implements IRecord {
     public User(UUID uniqueId) {
         this.uniqueId = uniqueId;
         this.nickname = new Nickname(uniqueId);
+        this.rankInfo = new RankInfo(uniqueId);
     }
     
+    public void setRank(Rank rank, long expire) {
+        if (getUniqueId().equals(FIRESTAR311)) {
+            this.rankInfo.setRank(Rank.ROOT);
+            this.rankInfo.setExpire(-1);
+        } else if (getUniqueId().equals(ASSASSINPLAYS)) {
+            this.rankInfo.setRank(Rank.OWNER);
+            this.rankInfo.setExpire(-1);
+        } else {
+            this.rankInfo.setPreviousRank(this.rankInfo.getRank());
+            this.rankInfo.setRank(rank);
+            this.rankInfo.setExpire(expire);
+        }
+    }
+    
+    public void setRank(Rank rank) {
+        setRank(rank, -1);
+    }
+
     public String generateActionBar() {
         boolean nicked, vanished = false, incognito = false;
         nicked = getNickname().isActive();
-        
+
         Toggle vanishedToggle = getToggle(Toggles.VANISHED);
         if (vanishedToggle != null) {
             vanished = vanishedToggle.getAsBoolean();
@@ -57,16 +77,16 @@ public class User implements IRecord {
         if (incognitoToggle != null) {
             incognito = incognitoToggle.getAsBoolean();
         }
-        
+
         if (!nicked && !vanished && !incognito) {
             return "";
         }
-        
+
         String actionBar = "&fYou are currently ";
         if (nicked) {
             actionBar += "&cNICKED";
         }
-        
+
         if (vanished) {
             if (!nicked) {
                 actionBar += "&cVANISHED";
@@ -74,15 +94,15 @@ public class User implements IRecord {
                 actionBar += "&f, &cVANISHED";
             }
         }
-        
+
         if (incognito) {
-            if (!nicked &&!vanished) {
+            if (!nicked && !vanished) {
                 actionBar += "&cINCOGNITO";
             } else {
                 actionBar += "&f, &cINCOGNITO";
             }
         }
-        
+
         return actionBar;
     }
 
@@ -91,9 +111,6 @@ public class User implements IRecord {
     }
 
     public Nickname getNickname() {
-        if (nickname == null) {
-            nickname = new Nickname(this.uniqueId);
-        }
         return nickname;
     }
 
@@ -102,9 +119,8 @@ public class User implements IRecord {
     }
 
     public User(UUID uniqueId, String name) {
-        this.uniqueId = uniqueId;
+        this(uniqueId);
         this.name = name;
-        this.nickname = new Nickname(uniqueId);
     }
 
     public User(Map<String, String> jedisData) {
@@ -115,8 +131,10 @@ public class User implements IRecord {
         }
         this.uniqueId = UUID.fromString(jedisData.get("uniqueId"));
         this.name = jedisData.get("name");
-        this.rank = Rank.valueOf(jedisData.get("rank"));
+        Rank rank = Rank.valueOf(jedisData.get("rank"));
         this.nickname = new Nickname(uniqueId);
+        this.rankInfo = new RankInfo(uniqueId);
+        this.rankInfo.setRank(rank);
     }
 
     public boolean isOnline() {
@@ -197,15 +215,11 @@ public class User implements IRecord {
         }
     }
 
-    public User(int id, UUID uniqueId, String name, Rank rank, Channel channel) {
-        this.id = id;
+    public User(int id, UUID uniqueId, String name, RankInfo rank, Channel channel) {
         this.uniqueId = uniqueId;
+        this.id = id;
         this.name = name;
-        if (rank == null) {
-            this.rank = Rank.DEFAULT;
-        } else {
-            this.rank = rank;
-        }
+        this.rankInfo = rank;
         this.channel = channel;
     }
 
@@ -237,9 +251,9 @@ public class User implements IRecord {
         double multiplier = 1;
         String multiplierString = "";
         if (coinMultiplier) {
-            if (rank.getCoinMultiplier() > 1) {
-                multiplier = rank.getCoinMultiplier();
-                multiplierString = rank.getBaseColor() + "&lx" + rank.getCoinMultiplier() + " " + rank.getName().toUpperCase() + " BONUS";
+            if (getRank().getCoinMultiplier() > 1) {
+                multiplier = getRank().getCoinMultiplier();
+                multiplierString = getRank().getBaseColor() + "&lx" + getRank().getCoinMultiplier() + " " + getRank().getName().toUpperCase() + " BONUS";
             }
         }
         int totalCoins = (int) Math.round(coins * multiplier);
@@ -323,7 +337,7 @@ public class User implements IRecord {
         }
 
         String displayName = rank.getPrefix() + rank.getBaseColor();
-        if (rank != Rank.DEFAULT) {
+        if (rank != Rank.DEFAULT && rank != Rank.CONSOLE) {
             displayName += " ";
         }
         displayName += name;
@@ -355,12 +369,17 @@ public class User implements IRecord {
 
     public Rank getRank() {
         if (getUniqueId().equals(FIRESTAR311)) {
-            this.rank = Rank.ROOT;
+            this.rankInfo.setRank(Rank.ROOT);
+            this.rankInfo.setExpire(-1);
         } else if (getUniqueId().equals(ASSASSINPLAYS)) {
-            this.rank = Rank.OWNER;
+            this.rankInfo.setRank(Rank.OWNER);
+            this.rankInfo.setExpire(-1);
         }
-
-        return rank;
+        
+        if (this.rankInfo.isExpired()) {
+            return this.rankInfo.getPreviousRank();
+        }
+        return this.rankInfo.getRank();
     }
 
     public void addIgnoredInfo(IgnoreInfo toObject) {
@@ -438,7 +457,7 @@ public class User implements IRecord {
     public Skin getSkin() {
         return ManiaCore.getInstance().getSkinManager().getSkin(getUniqueId());
     }
-
+    
     public String toString() {
         return "User{" +
                 "uniqueId=" + uniqueId +

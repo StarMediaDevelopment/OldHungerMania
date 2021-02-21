@@ -1,4 +1,4 @@
-package net.hungermania.maniacore.api.util;
+package net.hungermania.manialib.util;
 
 import java.util.concurrent.TimeUnit;
 

@@ -6,7 +6,10 @@ import net.hungermania.maniacore.api.records.UserRecord;
 import net.hungermania.maniacore.api.redis.Redis;
 import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.util.ManiaUtils;
-import org.bukkit.command.*;
+import net.hungermania.manialib.util.Utils;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class RankCmd implements CommandExecutor {
@@ -67,8 +70,14 @@ public class RankCmd implements CommandExecutor {
             sender.sendMessage(ManiaUtils.color("&cThat player already has that rank."));
             return true;
         }
+        
+        long expire = -1;
+        if (args.length > 1) {
+            expire = Utils.parseTime(args[1]) + System.currentTimeMillis();
+        }
     
-        target.setRank(newRank);
+        target.setRank(newRank, expire);
+        target.getRankInfo().setActor(sender.getName());
         ManiaCore.getInstance().getDatabase().pushRecord(new UserRecord(target));
         Redis.sendCommand("rankUpdate " + target.getUniqueId().toString() + " " + newRank.name());
         sender.sendMessage(ManiaUtils.color("&aSuccessfully set &b" + target.getName() + "&a's rank to " + newRank.getPrefix()));

@@ -1,8 +1,8 @@
 package net.hungermania.hungergames.records;
 
 import net.hungermania.hungergames.newsettings.GameSetting;
-import net.hungermania.maniacore.api.util.Unit;
 import net.hungermania.manialib.sql.*;
+import net.hungermania.manialib.util.Unit;
 
 import java.util.HashMap;
 import java.util.Map;

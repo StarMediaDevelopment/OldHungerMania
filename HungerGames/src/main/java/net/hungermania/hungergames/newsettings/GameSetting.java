@@ -2,7 +2,7 @@ package net.hungermania.hungergames.newsettings;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.hungermania.maniacore.api.util.Unit;
+import net.hungermania.manialib.util.Unit;
 
 @Getter
 public class GameSetting implements Cloneable {

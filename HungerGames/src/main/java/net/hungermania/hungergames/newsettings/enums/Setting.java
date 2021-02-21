@@ -3,7 +3,7 @@ package net.hungermania.hungergames.newsettings.enums;
 import lombok.Getter;
 import net.hungermania.hungergames.settings.Time;
 import net.hungermania.hungergames.settings.Weather;
-import net.hungermania.maniacore.api.util.Unit;
+import net.hungermania.manialib.util.Unit;
 
 import static net.hungermania.hungergames.newsettings.GameSetting.Type;
 
