@@ -4,6 +4,10 @@ import lombok.Getter;
 import net.hungermania.hungergames.HungerGames;
 import net.hungermania.hungergames.game.Game;
 import net.hungermania.hungergames.game.GamePlayer;
+import net.hungermania.maniacore.api.ManiaCore;
+import net.hungermania.maniacore.api.leveling.Level;
+import net.hungermania.maniacore.api.stats.Stats;
+import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.spigot.gui.GUIButton;
 import net.hungermania.maniacore.spigot.gui.Gui;
@@ -53,7 +57,73 @@ public class SpectatorInventoryGui extends Gui {
         skullMeta.setLore(Collections.singletonList(ManiaUtils.color(line)));
         skull.setItemMeta(skullMeta);
         setButton(0, new GUIButton(skull));
-        setButton(1, new GUIButton(ItemBuilder.start(Material.DIAMOND_SWORD).setDisplayName("&eStats &c&lWIP").build()));
+        List<String> statsLore = new LinkedList<>();
+        User user = target.getUser();
+        int kills, deaths, wins, losses, deathmatches, chestsFound, coins, exp, winStreak, score;
+
+        boolean realStats = true;
+        if (user.getNickname().isActive()) {
+            if (player.getUser().getRank().ordinal() > user.getRank().ordinal()) {
+                realStats = false;
+            }
+        }
+
+        if (realStats) {
+            kills = user.getStat(Stats.HG_KILLS).getAsInt();
+            deaths = user.getStat(Stats.HG_DEATHS).getAsInt();
+            wins = user.getStat(Stats.HG_WINS).getAsInt();
+            chestsFound = user.getStat(Stats.HG_CHESTS_FOUND).getAsInt();
+            winStreak = user.getStat(Stats.HG_WINSTREAK).getAsInt();
+            deathmatches = user.getStat(Stats.HG_DEATHMATCHES).getAsInt();
+            losses = user.getStat(Stats.HG_GAMES).getAsInt() - wins;
+            coins = user.getStat(Stats.COINS).getAsInt();
+            exp = user.getStat(Stats.EXPERIENCE).getAsInt();
+            score = user.getStat(Stats.HG_SCORE).getAsInt();
+        } else {
+            kills = user.getFakedStat(Stats.HG_KILLS).getAsInt();
+            deaths = user.getFakedStat(Stats.HG_DEATHS).getAsInt();
+            wins = user.getFakedStat(Stats.HG_WINS).getAsInt();
+            chestsFound = user.getFakedStat(Stats.HG_CHESTS_FOUND).getAsInt();
+            winStreak = user.getFakedStat(Stats.HG_WINSTREAK).getAsInt();
+            deathmatches = user.getFakedStat(Stats.HG_DEATHMATCHES).getAsInt();
+            losses = user.getFakedStat(Stats.HG_GAMES).getAsInt() - wins;
+            coins = user.getFakedStat(Stats.COINS).getAsInt();
+            exp = user.getFakedStat(Stats.EXPERIENCE).getAsInt();
+            score = user.getFakedStat(Stats.HG_SCORE).getAsInt();
+        }
+
+        double kdr;
+        double wlr;
+
+        if (deaths == 0) {
+            kdr = kills;
+        } else {
+            kdr = kills / (deaths * 1.0);
+        }
+
+        if (losses == 0) {
+            wlr = wins;
+        } else {
+            wlr = wins / (losses * 1.0);
+        }
+
+        Level level = ManiaCore.getInstance().getLevelManager().getLevel(exp);
+        Level nextLevel = ManiaCore.getInstance().getLevelManager().getLevels().getOrDefault(level.getNumber() + 1, ManiaCore.getInstance().getLevelManager().getLevel(0));
+
+        statsLore.add(ManiaUtils.color("&6&l> &7Coins: &b" + coins));
+        statsLore.add(ManiaUtils.color("&6&l> &7Level: &b" + level.getNumber()));
+        statsLore.add(ManiaUtils.color("&6&l> &7Experience: &b" + exp + "     &e&lNext Level: &b" + (nextLevel.getTotalXp() - exp)));
+        statsLore.add(ManiaUtils.color("&6&l> &7Kills: &b" + kills));
+        statsLore.add(ManiaUtils.color("&6&l> &7Deaths: &b" + deaths));
+        statsLore.add(ManiaUtils.color("&6&l> &7K/D: &b" + Constants.NUMBER_FORMAT.format(kdr)));
+        statsLore.add(ManiaUtils.color("&6&l> &7Wins: &b" + wins));
+        statsLore.add(ManiaUtils.color("&6&l> &7Losses: &b" + losses));
+        statsLore.add(ManiaUtils.color("&6&l> &7W/L: &b" + Constants.NUMBER_FORMAT.format(wlr)));
+        statsLore.add(ManiaUtils.color("&6&l> &7Win Streak: &b" + winStreak));
+        statsLore.add(ManiaUtils.color("&6&l> &7Deathmatches Reached: &b" + deathmatches));
+        statsLore.add(ManiaUtils.color("&6&l> &7Chests Found: &b" + chestsFound));
+        statsLore.add(ManiaUtils.color("&6&l> &7Score: &b" + score));
+        setButton(1, new GUIButton(ItemBuilder.start(Material.DIAMOND_SWORD).setDisplayName("&eStats").setLore(statsLore).build()));
         Player targetPlayer = target.getUser().getBukkitPlayer();
         setButton(2, new GUIButton(ItemBuilder.start(Material.GOLDEN_APPLE).setDisplayName("&eHealth: &c&l" + Constants.NUMBER_FORMAT.format(targetPlayer.getHealth()) + "/" + Constants.NUMBER_FORMAT.format(targetPlayer.getMaxHealth())).build()));
         setButton(3, new GUIButton(ItemBuilder.start(Material.COOKED_BEEF).setDisplayName("&eFood: &c&l" + Constants.NUMBER_FORMAT.format(targetPlayer.getFoodLevel()) + "/" + Constants.NUMBER_FORMAT.format(20)).build()));
@@ -112,7 +182,6 @@ public class SpectatorInventoryGui extends Gui {
                     inv.setItem(CHEST, targetInv.getChestplate());
                     inv.setItem(LEGS, targetInv.getLeggings());
                     inv.setItem(BOOTS, targetInv.getBoots());
-                    //player.updateInventory();
                 }
             }
         };

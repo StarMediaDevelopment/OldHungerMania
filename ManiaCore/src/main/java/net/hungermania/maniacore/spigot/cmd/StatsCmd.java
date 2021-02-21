@@ -99,9 +99,9 @@ public class StatsCmd implements CommandExecutor {
                 winStreak = user.getStat(Stats.HG_WINSTREAK).getAsInt();
                 deathmatches = user.getStat(Stats.HG_DEATHMATCHES).getAsInt();
                 losses = user.getStat(Stats.HG_GAMES).getAsInt() - wins;
-                coins = target.getStat(Stats.COINS).getAsInt();
-                exp = target.getStat(Stats.EXPERIENCE).getAsInt();
-                score = target.getStat(Stats.HG_SCORE).getAsInt();
+                coins = user.getStat(Stats.COINS).getAsInt();
+                exp = user.getStat(Stats.EXPERIENCE).getAsInt();
+                score = user.getStat(Stats.HG_SCORE).getAsInt();
             } else {
                 name = user.getNickname().getName();
                 kills = user.getFakedStat(Stats.HG_KILLS).getAsInt();
@@ -111,9 +111,9 @@ public class StatsCmd implements CommandExecutor {
                 winStreak = user.getFakedStat(Stats.HG_WINSTREAK).getAsInt();
                 deathmatches = user.getFakedStat(Stats.HG_DEATHMATCHES).getAsInt();
                 losses = user.getFakedStat(Stats.HG_GAMES).getAsInt() - wins;
-                coins = target.getFakedStat(Stats.COINS).getAsInt();
-                exp = target.getFakedStat(Stats.EXPERIENCE).getAsInt();
-                score = target.getFakedStat(Stats.HG_SCORE).getAsInt();
+                coins = user.getFakedStat(Stats.COINS).getAsInt();
+                exp = user.getFakedStat(Stats.EXPERIENCE).getAsInt();
+                score = user.getFakedStat(Stats.HG_SCORE).getAsInt();
             }
 
             double kdr;
