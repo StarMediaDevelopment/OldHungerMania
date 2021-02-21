@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.channel.Channel;
-import net.hungermania.maniacore.api.ranks.Rank;
+import net.hungermania.maniacore.api.ranks.RankInfo;
 import net.hungermania.maniacore.api.records.NicknameRecord;
 import net.hungermania.maniacore.api.skin.Skin;
 import net.hungermania.maniacore.api.user.User;
@@ -49,10 +49,10 @@ public class SpigotUser extends User {
     }
     
     public SpigotUser(User user) {
-        this(user.getId(), user.getUniqueId(), user.getName(), user.getRank(), user.getChannel());
+        this(user.getId(), user.getUniqueId(), user.getName(), user.getRankInfo(), user.getChannel());
     }
     
-    public SpigotUser(int id, UUID uniqueId, String name, Rank rank, Channel channel) {
+    public SpigotUser(int id, UUID uniqueId, String name, RankInfo rank, Channel channel) {
         super(id, uniqueId, name, rank, channel);
     }
     

@@ -221,6 +221,7 @@ public class User implements IRecord {
         this.name = name;
         this.rankInfo = rank;
         this.channel = channel;
+        this.nickname = new Nickname(uniqueId);
     }
 
     public void addNetworkExperience(int exp) {

@@ -1,7 +1,7 @@
 package net.hungermania.maniacore.bungee.user;
 
 import net.hungermania.maniacore.api.channel.Channel;
-import net.hungermania.maniacore.api.ranks.Rank;
+import net.hungermania.maniacore.api.ranks.RankInfo;
 import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.md_5.bungee.api.ChatMessageType;
@@ -23,14 +23,14 @@ public class BungeeUser extends User {
     }
     
     public BungeeUser(User user) {
-        this(user.getId(), user.getUniqueId(), user.getName(), user.getRank(), user.getChannel());
+        this(user.getId(), user.getUniqueId(), user.getName(), user.getRankInfo(), user.getChannel());
     }
     
     public BungeeUser(Map<String, String> jedisData) {
         super(jedisData);
     }
     
-    public BungeeUser(int id, UUID uniqueId, String name, Rank rank, Channel channel) {
+    public BungeeUser(int id, UUID uniqueId, String name, RankInfo rank, Channel channel) {
         super(id, uniqueId, name, rank, channel);
     }
     

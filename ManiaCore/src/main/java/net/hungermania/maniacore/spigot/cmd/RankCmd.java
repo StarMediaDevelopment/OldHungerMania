@@ -72,8 +72,8 @@ public class RankCmd implements CommandExecutor {
         }
         
         long expire = -1;
-        if (args.length > 1) {
-            expire = Utils.parseTime(args[1]) + System.currentTimeMillis();
+        if (args.length > 2) {
+            expire = Utils.parseTime(args[2]) + System.currentTimeMillis();
         }
     
         target.setRank(newRank, expire);
