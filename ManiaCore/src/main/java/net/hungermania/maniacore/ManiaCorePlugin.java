@@ -96,6 +96,7 @@ public final class ManiaCorePlugin extends JavaPlugin implements Listener, Mania
         SpawnCmd spawnCmd = new SpawnCmd(this);
         getCommand("setspawn").setExecutor(spawnCmd);
         getCommand("spawn").setExecutor(spawnCmd);
+        getCommand("user").setExecutor(new UserCmd(this));
         
         new BukkitRunnable() {
             public void run() {

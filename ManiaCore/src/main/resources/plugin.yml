@@ -33,3 +33,4 @@ commands:
     realname:
     setspawn:
     spawn:
+    user:

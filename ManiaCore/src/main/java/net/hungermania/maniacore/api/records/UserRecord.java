@@ -37,13 +37,29 @@ public class UserRecord implements IRecord<User> {
 
         RankInfo rankInfo = new RankInfo(uniqueId);
         String[] rawRank = rankString.split(":");
-        if (rawRank == null || rawRank.length != 4) {
+        if (rawRank == null || rawRank.length < 1) {
             rankInfo.setRank(Rank.valueOf(rankString));
         } else {
-            rankInfo.setRank(Rank.valueOf(rawRank[0]));
-            rankInfo.setExpire(Long.parseLong(rawRank[1]));
-            rankInfo.setPreviousRank(Rank.valueOf(rawRank[2]));
-            rankInfo.setActor(rawRank[3]);
+            try {
+                rankInfo.setRank(Rank.valueOf(rawRank[0]));
+            } catch (Exception e) {
+                rankInfo.setRank(Rank.DEFAULT);
+            }
+            try {
+                rankInfo.setExpire(Long.parseLong(rawRank[1]));
+            } catch (Exception e) {
+                rankInfo.setExpire(-1);
+            }
+            try {
+                rankInfo.setPreviousRank(Rank.valueOf(rawRank[2]));
+            } catch (Exception e) {
+                rankInfo.setPreviousRank(Rank.DEFAULT);
+            }
+            try {
+                rankInfo.setActor(rawRank[3]);
+            } catch (Exception e) {
+                rankInfo.setActor("SERVER");
+            }
         }
         
         Channel channel;
