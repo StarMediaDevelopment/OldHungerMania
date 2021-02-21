@@ -71,7 +71,7 @@ public class StatsCmd implements CommandExecutor {
             }
 
             User user = ManiaCore.getInstance().getUserManager().getUser(target.getUniqueId());
-            int kills, deaths, wins, losses, deathmatches, chestsFound, coins, exp, winStreak;
+            int kills, deaths, wins, losses, deathmatches, chestsFound, coins, exp, winStreak, score;
 
             boolean realStats = true;
             if (user.getNickname().isActive()) {
@@ -101,6 +101,7 @@ public class StatsCmd implements CommandExecutor {
                 losses = user.getStat(Stats.HG_GAMES).getAsInt() - wins;
                 coins = target.getStat(Stats.COINS).getAsInt();
                 exp = target.getStat(Stats.EXPERIENCE).getAsInt();
+                score = target.getStat(Stats.HG_SCORE).getAsInt();
             } else {
                 name = user.getNickname().getName();
                 kills = user.getFakedStat(Stats.HG_KILLS).getAsInt();
@@ -112,6 +113,7 @@ public class StatsCmd implements CommandExecutor {
                 losses = user.getFakedStat(Stats.HG_GAMES).getAsInt() - wins;
                 coins = target.getFakedStat(Stats.COINS).getAsInt();
                 exp = target.getFakedStat(Stats.EXPERIENCE).getAsInt();
+                score = target.getFakedStat(Stats.HG_SCORE).getAsInt();
             }
 
             double kdr;
@@ -145,6 +147,7 @@ public class StatsCmd implements CommandExecutor {
             sender.sendMessage(ManiaUtils.color("&6&l> &7Win Streak: &b" + winStreak));
             sender.sendMessage(ManiaUtils.color("&6&l> &7Deathmatches Reached: &b" + deathmatches));
             sender.sendMessage(ManiaUtils.color("&6&l> &7Chests Found: &b" + chestsFound));
+            sender.sendMessage(ManiaUtils.color("&6&l> &7Score: &b" + score));
         });
         return true;
     }
