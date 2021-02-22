@@ -3,9 +3,6 @@ package net.hungermania.maniacore.api.server;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.redis.Redis;
 import net.hungermania.maniacore.api.redis.RedisListener;
-import redis.clients.jedis.Jedis;
-
-import static net.hungermania.maniacore.api.redis.Redis.CROSSTALK_CHANNEL;
 
 @SuppressWarnings("DuplicatedCode")
 public abstract class ServerManager implements RedisListener {

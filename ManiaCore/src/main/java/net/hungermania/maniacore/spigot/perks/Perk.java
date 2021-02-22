@@ -106,6 +106,7 @@ public abstract class Perk implements Comparable<Perk> {
             } else {
                 lore.add(ManiaUtils.color("&c&oLocked"));
                 lore.add("&dYou do not have enough coins to purchase this perk.");
+                lore.add("&bThis perk costs " + baseCost);
             }
         }
         

@@ -1,7 +1,7 @@
 package net.hungermania.maniacore.spigot.perks.impl;
 
-import net.hungermania.maniacore.spigot.perks.TieredPerk;
 import net.hungermania.maniacore.api.user.User;
+import net.hungermania.maniacore.spigot.perks.TieredPerk;
 import org.bukkit.Material;
 
 public class FeatherweightPerk extends TieredPerk {
@@ -20,7 +20,7 @@ public class FeatherweightPerk extends TieredPerk {
             }
         });
     
-        this.tiers.put(3, new Tier(5000, 25, "25% chance to take 50% less fall damage.") {
+        this.tiers.put(3, new Tier(3, 5000, 25, "25% chance to take 50% less fall damage.") {
             public boolean activate(User user) {
                 return true;
             }

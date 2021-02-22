@@ -1,7 +1,7 @@
 package net.hungermania.maniacore.spigot.perks.impl;
 
-import net.hungermania.maniacore.spigot.perks.TieredPerk;
 import net.hungermania.maniacore.api.user.User;
+import net.hungermania.maniacore.spigot.perks.TieredPerk;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -18,14 +18,14 @@ public class EnchantXpPerk extends TieredPerk {
                 return true;
             }
         });
-        this.tiers.put(2, new Tier(2, getBaseCost(), "Get 2 enchantment levels on a kill.") {
+        this.tiers.put(2, new Tier(2, 1000, "Get 2 enchantment levels on a kill.") {
             public boolean activate(User user) {
                 Player player = Bukkit.getPlayer(user.getUniqueId());
                 player.setLevel(player.getLevel() + 2);
                 return true;
             }
         });
-        this.tiers.put(3, new Tier(3, getBaseCost(), "Get 3 enchantment levels on a kill.") {
+        this.tiers.put(3, new Tier(3, 1500, "Get 3 enchantment levels on a kill.") {
             public boolean activate(User user) {
                 Player player = Bukkit.getPlayer(user.getUniqueId());
                 player.setLevel(player.getLevel() + 3);
