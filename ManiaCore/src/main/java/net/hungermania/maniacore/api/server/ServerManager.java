@@ -4,13 +4,31 @@ import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.redis.Redis;
 import net.hungermania.maniacore.api.redis.RedisListener;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.Properties;
+
 @SuppressWarnings("DuplicatedCode")
 public abstract class ServerManager implements RedisListener {
     protected ManiaServer currentServer;
     protected ManiaCore maniaCore;
+    protected NetworkType networkType;
     
     public ServerManager(ManiaCore maniaCore) {
         this.maniaCore = maniaCore;
+
+        File typeFile = new File("./mania.properties");
+        if (typeFile.exists()) {
+            Properties properties = new Properties();
+            try (FileInputStream fis = new FileInputStream(typeFile)) {
+                properties.load(fis);
+            } catch (Exception e) {}
+            try {
+                networkType = NetworkType.valueOf(properties.getProperty("networkType"));
+            } catch (IllegalArgumentException e) {
+                networkType = NetworkType.UNKNOWN;
+            }
+        }
     }
     
     public abstract void init();

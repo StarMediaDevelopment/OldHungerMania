@@ -5,6 +5,7 @@ import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.friends.FriendNotification;
 import net.hungermania.maniacore.api.friends.FriendRequest;
 import net.hungermania.maniacore.api.friends.Friendship;
+import net.hungermania.maniacore.api.server.NetworkType;
 import net.hungermania.maniacore.api.stats.Statistic;
 import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.user.toggle.Toggle;
@@ -85,6 +86,10 @@ public class Redis {
         subscribe();
     }
     
+    private static String getNetworkType() {
+        return ManiaCore.getInstance().getServerManager().getCurrentServer().getNetworkType().name();
+    }
+    
     public static void pushObject(String key, RedisObject object) {
         try (Jedis jedis = getConnection()) {
             jedis.hmset(key, object.serialize());
@@ -117,14 +122,14 @@ public class Redis {
         }
         
         try (Jedis jedis = getConnection()) {
-            jedis.hmset("TOGGLES-" + user.getUniqueId().toString(), data);
+            jedis.hmset(getNetworkType() + "~TOGGLES-" + user.getUniqueId().toString(), data);
         }
     }
     
     public static Map<Toggles, Toggle> getToggles(UUID uuid) {
         Map<Toggles, Toggle> toggles = new HashMap<>();
         try (Jedis jedis = getConnection()) {
-            Map<String, String> data = jedis.hgetAll("TOGGLES-" + uuid.toString());
+            Map<String, String> data = jedis.hgetAll(getNetworkType() + "~TOGGLES-" + uuid.toString());
             for (Entry<String, String> entry : data.entrySet()) {
                 Toggles type = Toggles.valueOf(entry.getKey());
                 Toggle toggle = new Toggle(uuid, type.name().toLowerCase(), entry.getValue(), entry.getValue());
@@ -141,13 +146,13 @@ public class Redis {
             data.put("player1", friendship.getPlayer1().toString());
             data.put("player2", friendship.getPlayer2().toString());
             data.put("timestamp", friendship.getTimestamp() + "");
-            jedis.hmset("FRIENDSHIP:" + friendship.getId(), data);
+            jedis.hmset(getNetworkType() + "~FRIENDSHIP:" + friendship.getId(), data);
         }
     }
     
     public static Friendship getFriendship(int id) {
         try (Jedis jedis = getConnection()) {
-            Map<String, String> data = jedis.hgetAll("FRIENDSHIP:" + id);
+            Map<String, String> data = jedis.hgetAll(getNetworkType() + "~FRIENDSHIP:" + id);
             if (!data.isEmpty()) {
                 return new Friendship(data);
             }
@@ -158,8 +163,8 @@ public class Redis {
     public static List<Friendship> getFriendships() {
         List<Friendship> friendships = new ArrayList<>();
         try (Jedis jedis = getConnection()) {
-            for (String key : jedis.keys("FRIENDSHIP:*")) {
-                Map<String, String> data = jedis.hgetAll("FRIENDSHIP:" + key.split(":")[1]);
+            for (String key : jedis.keys(getNetworkType() + "~FRIENDSHIP:*")) {
+                Map<String, String> data = jedis.hgetAll(getNetworkType() + "~FRIENDSHIP:" + key.split(":")[1]);
                 if (!data.isEmpty()) {
                     friendships.add(new Friendship(data));
                 }
@@ -175,13 +180,13 @@ public class Redis {
             data.put("from", request.getSender().toString());
             data.put("to", request.getTo().toString());
             data.put("timestamp", request.getTimestamp() + "");
-            jedis.hmset("FRIENDREQUEST:" + request.getId(), data);
+            jedis.hmset(getNetworkType() + "~FRIENDREQUEST:" + request.getId(), data);
         }
     }
     
     public static FriendRequest getFriendRequest(int id) {
         try (Jedis jedis = getConnection()) {
-            Map<String, String> data = jedis.hgetAll("FRIENDREQUEST:" + id);
+            Map<String, String> data = jedis.hgetAll(getNetworkType() + "~FRIENDREQUEST:" + id);
             if (!data.isEmpty()) {
                 return new FriendRequest(data);
             }
@@ -193,8 +198,8 @@ public class Redis {
     public static List<FriendRequest> getFriendRequests() {
         List<FriendRequest> friendRequests = new ArrayList<>();
         try (Jedis jedis = getConnection()) {
-            for (String key : jedis.keys("FRIENDREQUEST:*")) {
-                Map<String, String> data = jedis.hgetAll("FRIENDREQUEST:" + key.split(":")[1]);
+            for (String key : jedis.keys(getNetworkType() + "~FRIENDREQUEST:*")) {
+                Map<String, String> data = jedis.hgetAll(getNetworkType() + "~FRIENDREQUEST:" + key.split(":")[1]);
                 if (!data.isEmpty()) {
                     friendRequests.add(new FriendRequest(data));
                 }
@@ -212,13 +217,13 @@ public class Redis {
             data.put("target", notification.getTarget().toString());
             data.put("type", notification.getType().name());
             data.put("timestamp", notification.getTimestamp() + "");
-            jedis.hmset("FRIENDNOTIFICATION:" + notification.getId(), data);
+            jedis.hmset(getNetworkType() + "~FRIENDNOTIFICATION:" + notification.getId(), data);
         }
     }
     
     public static FriendNotification getFriendNotification(int id) {
         try (Jedis jedis = getConnection()) {
-            Map<String, String> data = jedis.hgetAll("FRIENDNOTIFICATION:" + id);
+            Map<String, String> data = jedis.hgetAll(getNetworkType() + "~FRIENDNOTIFICATION:" + id);
             if (!data.isEmpty()) {
                 return new FriendNotification(data);
             }
@@ -229,8 +234,8 @@ public class Redis {
     public static List<FriendNotification> getFriendNotifications() {
         List<FriendNotification> friendNotifications = new ArrayList<>();
         try (Jedis jedis = getConnection()) {
-            for (String key : jedis.keys("FRIENDNOTIFICATIONS:*")) {
-                Map<String, String> data = jedis.hgetAll("FRIENDNOTIFICATION:" + key.split(":")[1]);
+            for (String key : jedis.keys(getNetworkType() + "~FRIENDNOTIFICATIONS:*")) {
+                Map<String, String> data = jedis.hgetAll(getNetworkType() + "~FRIENDNOTIFICATION:" + key.split(":")[1]);
                 if (!data.isEmpty()) {
                     friendNotifications.add(new FriendNotification(data));
                 }
@@ -246,7 +251,7 @@ public class Redis {
             data.put("uniqueId", user.getUniqueId().toString());
             data.put("name", user.getName());
             data.put("rank", user.getRank().name());
-            jedis.hmset("USER:" + user.getUniqueId().toString(), data);
+            jedis.hmset(getNetworkType() + "~USER:" + user.getUniqueId().toString(), data);
             pushToggles(user);
             addUUIDIDMapping(user.getUniqueId(), user.getId());
             addUUIDToNameMapping(user.getUniqueId(), user.getName());
@@ -263,7 +268,7 @@ public class Redis {
         
         if (!realStats.isEmpty()) {
             try (Jedis jedis = getConnection()) {
-                jedis.hmset("UserStats:" + user.getUniqueId().toString(), realStats);
+                jedis.hmset(getNetworkType() + "~UserStats:" + user.getUniqueId().toString(), realStats);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -277,7 +282,7 @@ public class Redis {
 
         if (!fakedStats.isEmpty()) {
             try (Jedis jedis = getConnection()) {
-                jedis.hmset("UserFakedStats:" + user.getUniqueId().toString(), fakedStats);
+                jedis.hmset(getNetworkType() + "~UserFakedStats:" + user.getUniqueId().toString(), fakedStats);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -287,7 +292,7 @@ public class Redis {
     public static Map<String, Statistic> getUserStats(UUID uuid) {
         Map<String, Statistic> stats = new HashMap<>();
         try (Jedis jedis = getConnection()) {
-            Map<String, String> rawData = jedis.hgetAll("UserStats:" + uuid.toString());
+            Map<String, String> rawData = jedis.hgetAll(getNetworkType() + "~UserStats:" + uuid.toString());
             for (Entry<String, String> entry : rawData.entrySet()) {
                 Statistic statistic = new Gson().fromJson(entry.getValue(), Statistic.class);
                 stats.put(entry.getKey(), statistic);
@@ -299,7 +304,7 @@ public class Redis {
     public static Map<String, Statistic> getUserFakedStats(UUID uuid) {
         Map<String, Statistic> stats = new HashMap<>();
         try (Jedis jedis = getConnection()) {
-            Map<String, String> rawData = jedis.hgetAll("UserFakedStats:" + uuid.toString());
+            Map<String, String> rawData = jedis.hgetAll(getNetworkType() + "~UserFakedStats:" + uuid.toString());
             for (Entry<String, String> entry : rawData.entrySet()) {
                 Statistic statistic = new Gson().fromJson(entry.getValue(), Statistic.class);
                 stats.put(entry.getKey(), statistic);
@@ -310,27 +315,27 @@ public class Redis {
     
     public static void deleteUserData(UUID uuid) {
         try (Jedis jedis = getConnection()) {
-            jedis.del("USER:" + uuid.toString());
+            jedis.del(getNetworkType() + "~USER:" + uuid.toString());
         }
     }
     
     public static void deleteUserStats(UUID uuid) {
         try (Jedis jedis = getConnection()) {
-            jedis.del("UserStats:" + uuid.toString());
+            jedis.del(getNetworkType() + "~UserStats:" + uuid.toString());
         }
     }
     
     public static void deleteToggles(UUID uuid) {
         try (Jedis jedis = getConnection()) {
-            jedis.del("TOGGLES-" + uuid.toString());
+            jedis.del(getNetworkType() + "~TOGGLES-" + uuid.toString());
         }
     }
     
     public static Map<String, String> getUserData(UUID uuid) {
         Map<String, String> data = new HashMap<>();
         try (Jedis jedis = getConnection()) {
-            if (jedis.exists("USER:" + uuid.toString())) {
-                data.putAll(jedis.hgetAll("USER:" + uuid));
+            if (jedis.exists(getNetworkType() + "~USER:" + uuid.toString())) {
+                data.putAll(jedis.hgetAll(getNetworkType() + "~USER:" + uuid));
             }
         }
         return data;
@@ -340,8 +345,8 @@ public class Redis {
         Map<UUID, Integer> map;
         try (Jedis jedis = getConnection()) {
             map = new HashMap<>();
-            if (jedis.exists("uuidtoidmap")) {
-                Map<String, String> rawMap = jedis.hgetAll("uuidtoidmap");
+            if (jedis.exists(getNetworkType() + "~uuidtoidmap")) {
+                Map<String, String> rawMap = jedis.hgetAll(getNetworkType() + "~uuidtoidmap");
                 for (Entry<String, String> entry : rawMap.entrySet()) {
                     try {
                         map.put(UUID.fromString(entry.getKey()), Integer.parseInt(entry.getValue()));
@@ -358,7 +363,7 @@ public class Redis {
             for (Entry<UUID, Integer> entry : map.entrySet()) {
                 rawMap.put(entry.getKey().toString(), entry.getValue() + "");
             }
-            jedis.hmset("uuidtoidmap", rawMap);
+            jedis.hmset(getNetworkType() + "~uuidtoidmap", rawMap);
         }
     }
     
@@ -368,20 +373,20 @@ public class Redis {
     
     public static void deleteFriendship(Friendship friendship) {
         try (Jedis jedis = getConnection()) {
-            jedis.del("FRIENDSHIP:" + friendship.getId());
+            jedis.del(getNetworkType() + "~FRIENDSHIP:" + friendship.getId());
         }
     }
     
     public static void deleteFriendRequest(FriendRequest request) {
         try (Jedis jedis = getConnection()) {
-            jedis.del("FRIENDREQUEST:" + request.getId());
+            jedis.del(getNetworkType() + "~FRIENDREQUEST:" + request.getId());
         }
     }
     
     public Set<UUID> getUserUUIDsInRedis() {
         Set<UUID> users = new HashSet<>();
         try (Jedis jedis = getConnection()) {
-            Set<String> keys = jedis.keys("User:*");
+            Set<String> keys = jedis.keys(getNetworkType() + "~User:*");
             for (String key : keys) {
                 users.add(UUID.fromString(key.split("-")[1]));
             }
@@ -412,8 +417,8 @@ public class Redis {
         Map<UUID, String> map;
         try (Jedis jedis = getConnection()) {
             map = new HashMap<>();
-            if (jedis.exists("uuidtonamemap")) {
-                Map<String, String> rawMap = jedis.hgetAll("uuidtonamemap");
+            if (jedis.exists(getNetworkType() + "~uuidtonamemap")) {
+                Map<String, String> rawMap = jedis.hgetAll(getNetworkType() + "~uuidtonamemap");
                 for (Entry<String, String> entry : rawMap.entrySet()) {
                     map.put(UUID.fromString(entry.getKey()), entry.getValue());
                 }
@@ -428,7 +433,7 @@ public class Redis {
             for (Entry<UUID, String> entry : map.entrySet()) {
                 rawMap.put(entry.getKey().toString(), entry.getValue());
             }
-            jedis.hmset("uuidtonamemap", rawMap);
+            jedis.hmset(getNetworkType() + "~uuidtonamemap", rawMap);
         }
     }
     
@@ -473,7 +478,7 @@ public class Redis {
         if (command.startsWith("/")) {
             command = command.substring(1);
         }
-        final String finalCommand = command;
+        final String finalCommand = getNetworkType() + "~" + command;
         Runnable runnable = () -> {
             try (Jedis jedis = getConnection()) {
                 jedis.publish(CROSSTALK_CHANNEL, finalCommand);
@@ -495,6 +500,19 @@ public class Redis {
         
         @Override
         public void onMessage(String channel, String command) {
+            try {
+                String[] typeSplit = command.split("~");
+                if (typeSplit != null && typeSplit.length == 2) {
+                    if (getNetworkType().equalsIgnoreCase(NetworkType.valueOf(typeSplit[0]).name())) {
+                        command = command.replace(getNetworkType() + "~", "");
+                    } else {
+                        return;
+                    }
+                }
+            } catch (Exception e) {
+                ManiaCore.getInstance().getLogger().severe("Error while parsing Redis command Network Type: " + e.getMessage());
+                return;
+            }
             String[] args = new String[]{};
             if (command.contains(" ")) {
                 String[] wholeCommand = command.split(" ");

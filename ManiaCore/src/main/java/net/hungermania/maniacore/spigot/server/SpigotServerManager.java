@@ -4,7 +4,9 @@ import cloud.timo.TimoCloud.api.TimoCloudAPI;
 import cloud.timo.TimoCloud.api.objects.ServerObject;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.channel.Channel;
-import net.hungermania.maniacore.api.server.*;
+import net.hungermania.maniacore.api.server.ManiaServer;
+import net.hungermania.maniacore.api.server.ServerManager;
+import net.hungermania.maniacore.api.server.ServerType;
 import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.user.toggle.Toggles;
 import net.hungermania.maniacore.api.util.ManiaUtils;
@@ -20,6 +22,7 @@ public class SpigotServerManager extends ServerManager {
     public void init() {
         ServerObject server = TimoCloudAPI.getBukkitAPI().getThisServer();
         this.currentServer = new ManiaServer(server.getName(), server.getPort());
+        this.currentServer.setNetworkType(networkType);
     }
     
     protected void handleServerStart(String server) {

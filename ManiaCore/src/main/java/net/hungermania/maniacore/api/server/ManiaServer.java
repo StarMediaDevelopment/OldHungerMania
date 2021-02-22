@@ -11,6 +11,7 @@ public class ManiaServer {
     private int port;
     private ServerType type = ServerType.UNKNOWN;
     private int serverNumber = 1;
+    private NetworkType networkType = NetworkType.UNKNOWN;
 
     public ManiaServer(String name, int port) {
         this.name = name;
