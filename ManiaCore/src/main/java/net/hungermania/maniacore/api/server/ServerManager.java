@@ -17,7 +17,7 @@ public abstract class ServerManager implements RedisListener {
     public ServerManager(ManiaCore maniaCore) {
         this.maniaCore = maniaCore;
 
-        File typeFile = new File("./mania.properties");
+        File typeFile = new File("./manianetwork.properties");
         if (typeFile.exists()) {
             Properties properties = new Properties();
             try (FileInputStream fis = new FileInputStream(typeFile)) {
