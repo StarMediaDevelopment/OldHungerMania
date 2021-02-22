@@ -1,6 +1,7 @@
 package net.hungermania.hungergames.game;
 
 import com.mojang.authlib.GameProfile;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import net.hungermania.hungergames.game.death.DeathInfo;
@@ -26,7 +27,8 @@ public class GamePlayer {
     private SpigotUser user;
     private boolean forcefullyAdded;
     private CommandSender forcefullyAddedActor;
-    @Setter private boolean hasMutated = false, hasSponsored = false;
+    @Setter private boolean hasMutated = false;
+    @Getter(value = AccessLevel.NONE) @Setter(value = AccessLevel.NONE) private boolean hasSponsored = false;
     @Setter private UUID mutationTarget;
     @Setter private MutationType mutationType;
     @Setter private int killStreak;
@@ -59,6 +61,14 @@ public class GamePlayer {
     
     public UUID getUniqueId() {
         return user.getUniqueId();
+    }
+    
+    public boolean hasSponsored() {
+        return hasSponsored;
+    }
+    
+    public void setSponsored(boolean value) {
+        this.hasSponsored = value;
     }
     
     public boolean hasMutated() {

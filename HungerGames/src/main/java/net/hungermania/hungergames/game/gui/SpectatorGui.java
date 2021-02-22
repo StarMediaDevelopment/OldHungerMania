@@ -14,7 +14,7 @@ public class SpectatorGui extends Gui {
         
         setButton(0, new GUIButton(ItemBuilder.start(Material.ENDER_PEARL).setDisplayName("&aTeleport").build()).setListener(e -> player.getUser().getBukkitPlayer().teleport(target.getUser().getBukkitPlayer().getLocation())));
         setButton(1, new GUIButton(ItemBuilder.start(Material.CHEST).setDisplayName("&eInventory").build()).setListener(e -> new SpectatorInventoryGui(game, player, target).openGUI(player.getUser().getBukkitPlayer())));
-        setButton(2, new GUIButton(ItemBuilder.start(Material.EXP_BOTTLE).setDisplayName("&6Sponsor &c&lWIP").build()).setListener(e -> player.sendMessage("&cThis feature is not yet implemented yet.")));
+        setButton(2, new GUIButton(ItemBuilder.start(Material.EXP_BOTTLE).setDisplayName("&6Sponsor").build()).setListener(e -> new SponsorGui(game, player, target)));
         setButton(8, new GUIButton(ItemBuilder.start(Material.ARROW).setDisplayName("&fBack").build()).setListener(e -> new PlayersGui(game, target.getTeam())));
     }
 }
