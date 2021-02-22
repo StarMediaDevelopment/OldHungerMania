@@ -154,7 +154,7 @@ public class HGCommand implements CommandExecutor {
                     player.sendMessage(ManiaUtils.color("&6&l> &eKill Streak: &f" + gamePlayer.getKillStreak()));
                     player.sendMessage(ManiaUtils.color("&6&l> &eEarned Coins: &f" + gamePlayer.getEarnedCoins()));
                     player.sendMessage(ManiaUtils.color("&6&l> &eHas Mutated: &f" + gamePlayer.hasMutated()));
-                    player.sendMessage(ManiaUtils.color("&6&l> &eHas Sponsored: &f" + gamePlayer.isHasSponsored()));
+                    player.sendMessage(ManiaUtils.color("&6&l> &eHas Sponsored: &f" + gamePlayer.hasSponsored()));
                     player.sendMessage(ManiaUtils.color("&6&l> &eIs Mutating: &f" + gamePlayer.isMutating()));
                     if (playerType == PlayerType.MUTATION) {
                         player.sendMessage(ManiaUtils.color("&6&l> &eMutation Target: &f" + game.getPlayer(gamePlayer.getMutationTarget()).getUser().getName()));
