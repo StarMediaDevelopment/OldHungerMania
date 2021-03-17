@@ -103,7 +103,7 @@ public final class ManiaCorePlugin extends JavaPlugin implements Listener, Mania
                 getManiaDatabase().pushQueue();
             }
         }.runTaskTimerAsynchronously(this, 6000, 6000);
-    
+
         maniaCore.setMessageHandler(new SpigotMessageHandler(this));
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         

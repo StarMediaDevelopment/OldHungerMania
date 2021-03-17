@@ -122,7 +122,7 @@ public class DatabaseManager {
         this.typeHandlers.add(handler);
     }
     
-    public void registerRecordClasses(MysqlDatabase database, Class<? extends IRecord>... recordClasses) {
+    public void registerRecordC0lasses(MysqlDatabase database, Class<? extends IRecord>... recordClasses) {
         if (recordClasses != null) {
             for (Class<? extends IRecord> recordClass : recordClasses) {
                 registerRecord(recordClass, database);
