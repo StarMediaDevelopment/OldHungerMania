@@ -1,6 +1,5 @@
 package net.hungermania.manialib.data;
 
-import lombok.Getter;
 import net.hungermania.manialib.data.annotations.ColumnInfo;
 import net.hungermania.manialib.data.annotations.TableInfo;
 import net.hungermania.manialib.data.exceptions.AlreadyRegisteredException;
@@ -19,8 +18,12 @@ import java.util.Set;
 
 public class DatabaseManager {
 
-    @Getter private final static DatabaseManager instance = new DatabaseManager();
-
+    private final static DatabaseManager instance = new DatabaseManager();
+    
+    public static DatabaseManager getInstance() {
+        return instance;
+    }
+    
     private Map<String, MysqlDatabase> databases = new HashMap<>();
     private Set<DataTypeHandler<?>> typeHandlers = new HashSet<>();
     private Set<Class<? extends IRecord>> recordRegistry = new HashSet<>();
@@ -99,7 +102,7 @@ public class DatabaseManager {
             }
         }
 
-        if (tableName == null || tableName.equals("")) {
+        if (tableName == null) {
             tableName = recordClass.getSimpleName();
         }
 
@@ -122,7 +125,7 @@ public class DatabaseManager {
         this.typeHandlers.add(handler);
     }
     
-    public void registerRecordC0lasses(MysqlDatabase database, Class<? extends IRecord>... recordClasses) {
+    public void registerRecordClasses(MysqlDatabase database, Class<? extends IRecord>... recordClasses) {
         if (recordClasses != null) {
             for (Class<? extends IRecord> recordClass : recordClasses) {
                 registerRecord(recordClass, database);
@@ -136,7 +139,7 @@ public class DatabaseManager {
             try {
                 recordClass.getDeclaredConstructor();
             } catch (NoSuchMethodException e) {
-                //System.out.println("Could not find a default contructor for record " + recordClass.getName());
+                //System.out.println("Could not find a default constructor for record " + recordClass.getName());
                 return;
             }
 

@@ -40,7 +40,7 @@ public class MulticraftAPI {
             try (BufferedReader input = new BufferedReader(new FileReader(mcFile))) {
                 String line = input.readLine();
                 if (line != null && !line.isEmpty()) {
-                    INSTANCE = new MulticraftAPI("https://hungermania.net/multicraft/api.php", "api", line);
+                    INSTANCE = new MulticraftAPI("https://firecraftmc.net/multicraft/api.php", "api", line);
                 }
             } catch (Exception e) {
                 System.out.println("Error loading MulcraftAPI: " + e.getMessage());
@@ -89,15 +89,14 @@ public class MulticraftAPI {
         JsonObject result = call("getServerStatus", parameters);
         Set<PlayerStatus> players = new HashSet<>();
         if (result == null) {
-            return ServerStatus.builder().serverId(id).status("error").players(players).build();
+            return new ServerStatus(id, "error", 0, 0, players);
         }
         JsonArray playersArray = result.getAsJsonArray("players");
         for (JsonElement jsonElement : playersArray) {
             JsonObject playerInfo = jsonElement.getAsJsonObject();
-            players.add(PlayerStatus.builder().ip(playerInfo.get("ip").getAsString()).id(playerInfo.get("id").getAsInt()).name(playerInfo.get("name").getAsString()).build());
+            players.add(new PlayerStatus(playerInfo.get("ip").getAsString(), playerInfo.get("id").getAsInt(), playerInfo.get("name").getAsString()));
         }
-        return ServerStatus.builder().serverId(id).status(result.get("status").getAsString()).onlinePlayers(result.get("onlinePlayers").getAsInt())
-                .maxPlayers(result.get("maxPlayers").getAsInt()).players(players).build();
+        return new ServerStatus(id, result.get("status").getAsString(), result.get("onlinePlayers").getAsInt(), result.get("maxPlayers").getAsInt(), players);
     }
     
     public ServerList getServers() {
@@ -110,12 +109,12 @@ public class MulticraftAPI {
         parameters.put("id", id + "");
         JsonObject result = call("getServer", parameters);
         JsonObject si = result.getAsJsonObject("Server");
-        return ServerInfo.builder().memory(si.get("memory").getAsInt()).startMemory(si.get("start_memory").getAsInt()).port(si.get("port").getAsInt()).ip(si.get("ip").getAsString())
-                .world(si.get("world").getAsString()).jarfile(si.get("jarfile").getAsString()).autoStart(si.get("autostart").getAsInt()).defaultLevel(si.get("default_level").getAsInt())
-                .daemonId(si.get("daemon_id").getAsInt()).announceSave(si.get("announce_save").getAsInt()).kickDelay(si.get("kick_delay").getAsInt()).suspended(si.get("suspended").getAsInt())
-                .autosave(si.get("autosave").getAsInt()).jardir(si.get("jardir").getAsString()).template(si.get("template").getAsString()).setup(si.get("setup").getAsString())
-                .prevJarfile(si.get("prev_jarfile").getAsString()).params(si.get("params").getAsString()).crashCheck(si.get("crash_check").getAsString()).diskQuota(si.get("disk_quota").getAsInt())
-                .domain(si.get("domain").getAsString()).name(si.get("name").getAsString()).players(si.get("players").getAsInt()).id(si.get("id").getAsInt()).dir(si.get("dir").getAsString()).build();
+        return new ServerInfo(si.get("memory").getAsInt(), si.get("start_memory").getAsInt(), si.get("port").getAsInt(), si.get("autostart").getAsInt(), si.get("default_level").getAsInt(), 
+                si.get("daemon_id").getAsInt(), si.get("announce_save").getAsInt(), si.get("kick_dely").getAsInt(), si.get("suspended").getAsInt(), si.get("autosave").getAsInt(),
+                si.get("players").getAsInt(), si.get("id").getAsInt(), si.get("disk_quota").getAsInt(), si.get("ip").getAsString(), si.get("world").getAsString(), 
+                si.get("jarfile").getAsString(), si.get("jardir").getAsString(), si.get("template").getAsString(), si.get("setup").getAsString(), 
+                si.get("prev_jarfile").getAsString(), si.get("params").getAsString(), si.get("crash_check").getAsString(), si.get("domain").getAsString(), si.get("name").getAsString(), 
+                si.get("dir").getAsString());
     }
     
     public void startServer(int id) {
@@ -202,7 +201,6 @@ public class MulticraftAPI {
         hasher.init(new SecretKeySpec(apiKey.getBytes(), "HmacSHA256"));
         
         byte[] hash = hasher.doFinal(parameterQuery.getBytes());
-        
         return DatatypeConverter.printHexBinary(hash).toLowerCase();
     }
 }

@@ -1,13 +1,12 @@
 package net.hungermania.manialib.data.handlers;
 
-import lombok.Getter;
 import net.hungermania.manialib.data.model.DataType;
 
 public abstract class DataTypeHandler<T> {
     
-    @Getter protected Class<?> javaClass;
-    @Getter protected DataType mysqlType;
-    @Getter protected int defaultLength;
+    protected Class<?> javaClass;
+    protected DataType mysqlType;
+    protected int defaultLength;
 
     public DataTypeHandler(Class<?> javaClass, DataType mysqlType) {
         this.javaClass = javaClass;
@@ -37,4 +36,16 @@ public abstract class DataTypeHandler<T> {
     }
 
     public abstract String serializeRedis(Object object);
+    
+    public Class<?> getJavaClass() {
+        return javaClass;
+    }
+    
+    public DataType getMysqlType() {
+        return mysqlType;
+    }
+    
+    public int getDefaultLength() {
+        return defaultLength;
+    }
 }

@@ -1,12 +1,11 @@
 package net.hungermania.manialib.multicraft.data;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-
-@Builder @Getter @Setter
-public class ServerInfo extends MulticraftObject {
+public record ServerInfo(int memory, int startMemory, int port, int autoStart, int defaultLevel, int daemonId,
+                         int announceSave, int kickDelay, int suspended, int autosave, int players, int id,
+                         int diskQuota, String ip, String world, String jarfile,
+                         String jardir, String template, String setup,
+                         String prevJarfile, String params, String crashCheck,
+                         String domain, String name,
+                         String dir) implements MulticraftObject {
     
-    private int memory, startMemory, port, autoStart, defaultLevel, daemonId, announceSave, kickDelay, suspended, autosave, players, id, diskQuota;
-    private String ip, world, jarfile, jardir, template, setup, prevJarfile, params, crashCheck, domain, name, dir;
 }

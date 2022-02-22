@@ -1,6 +1,5 @@
 package net.hungermania.manialib.data;
 
-import lombok.Getter;
 import net.hungermania.manialib.data.annotations.ColumnInfo;
 import net.hungermania.manialib.data.annotations.TableInfo;
 import net.hungermania.manialib.data.handlers.DataTypeHandler;
@@ -25,8 +24,8 @@ public class MysqlDatabase {
 
     private Set<IRecord> localCache = new HashSet<>();
 
-    @Getter private Map<String, Table> tables = new HashMap<>();
-    @Getter private String databaseName;
+    private Map<String, Table> tables = new HashMap<>();
+    private String databaseName;
 
     public MysqlDatabase(Properties properties, Logger logger, DatabaseManager databaseManager) {
         this.logger = logger;
@@ -80,6 +79,30 @@ public class MysqlDatabase {
         
         records.sort(Comparator.comparingInt(IRecord::getId));
         return records;
+    }
+    
+    public Logger getLogger() {
+        return logger;
+    }
+    
+    public DataSource getDataSource() {
+        return dataSource;
+    }
+    
+    public DatabaseManager getDatabaseManager() {
+        return databaseManager;
+    }
+    
+    public Set<IRecord> getLocalCache() {
+        return localCache;
+    }
+    
+    public Map<String, Table> getTables() {
+        return tables;
+    }
+    
+    public String getDatabaseName() {
+        return databaseName;
     }
     
     public <T extends IRecord> T getRecord(Class<T> recordType, String columnName, Object value) {
