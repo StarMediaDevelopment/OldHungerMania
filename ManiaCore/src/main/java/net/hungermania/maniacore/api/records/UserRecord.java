@@ -37,7 +37,7 @@ public class UserRecord implements IRecord<User> {
 
         RankInfo rankInfo = new RankInfo(uniqueId);
         String[] rawRank = rankString.split(":");
-        if (rawRank == null || rawRank.length < 1) {
+        if (rawRank.length < 1) {
             rankInfo.setRank(Rank.valueOf(rankString));
         } else {
             try {

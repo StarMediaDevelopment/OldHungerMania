@@ -1,7 +1,6 @@
 package net.hungermania.maniacore.api.util;
 
 import com.google.gson.*;
-import lombok.experimental.UtilityClass;
 import net.hungermania.maniacore.memory.MemoryHook;
 import net.md_5.bungee.api.ChatColor;
 
@@ -9,7 +8,6 @@ import java.io.*;
 import java.net.URL;
 import java.util.UUID;
 
-@UtilityClass
 public class ManiaUtils {
     public static String color(String uncolored) {
         return ChatColor.translateAlternateColorCodes('&', uncolored);

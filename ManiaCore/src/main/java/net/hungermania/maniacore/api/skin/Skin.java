@@ -2,8 +2,6 @@ package net.hungermania.maniacore.api.skin;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import lombok.Getter;
-import lombok.Setter;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.records.SkinRecord;
 import net.hungermania.maniacore.api.util.ManiaUtils;
@@ -15,7 +13,6 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.logging.Level;
 
-@Getter @Setter
 public class Skin implements Serializable, IRecord {
     private static final String skinUrlString = "https://sessionserver.mojang.com/session/minecraft/profile/{uuid}?unsigned=false";
     private static final long serialVersionUID = 1L;
@@ -31,6 +28,48 @@ public class Skin implements Serializable, IRecord {
     public Skin(UUID uuid) {
         this.uuid = uuid;
         updateValues();
+    }
+    
+    @Override
+    public int getId() {
+        return id;
+    }
+    
+    @Override
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    public UUID getUuid() {
+        return uuid;
+    }
+    
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public String getSignature() {
+        return signature;
+    }
+    
+    public void setSignature(String signature) {
+        this.signature = signature;
+    }
+    
+    public String getValue() {
+        return value;
+    }
+    
+    public void setValue(String value) {
+        this.value = value;
     }
     
     public void updateValues() {

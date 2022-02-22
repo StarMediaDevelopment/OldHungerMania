@@ -1,7 +1,5 @@
 package net.hungermania.maniacore.spigot.server;
 
-import cloud.timo.TimoCloud.api.TimoCloudAPI;
-import cloud.timo.TimoCloud.api.objects.ServerObject;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.channel.Channel;
 import net.hungermania.maniacore.api.server.ManiaServer;
@@ -20,9 +18,9 @@ public class SpigotServerManager extends ServerManager {
 
     @Override
     public void init() {
-        ServerObject server = TimoCloudAPI.getBukkitAPI().getThisServer();
-        this.currentServer = new ManiaServer(server.getName(), server.getPort());
-        this.currentServer.setNetworkType(networkType);
+//        ServerObject server = TimoCloudAPI.getBukkitAPI().getThisServer();
+//        this.currentServer = new ManiaServer(server.getName(), server.getPort());
+//        this.currentServer.setNetworkType(networkType); //TODO
     }
     
     protected void handleServerStart(String server) {

@@ -1,9 +1,5 @@
 package net.hungermania.maniacore.api.server;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter @Setter
 public class ManiaServer {
 
     private int id;
@@ -24,5 +20,53 @@ public class ManiaServer {
         this.port = port;
         this.type = type;
         this.serverNumber = serverNumber;
+    }
+    
+    public int getId() {
+        return id;
+    }
+    
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public int getPort() {
+        return port;
+    }
+    
+    public void setPort(int port) {
+        this.port = port;
+    }
+    
+    public ServerType getType() {
+        return type;
+    }
+    
+    public void setType(ServerType type) {
+        this.type = type;
+    }
+    
+    public int getServerNumber() {
+        return serverNumber;
+    }
+    
+    public void setServerNumber(int serverNumber) {
+        this.serverNumber = serverNumber;
+    }
+    
+    public NetworkType getNetworkType() {
+        return networkType;
+    }
+    
+    public void setNetworkType(NetworkType networkType) {
+        this.networkType = networkType;
     }
 }

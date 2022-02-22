@@ -13,7 +13,6 @@ import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -27,7 +26,8 @@ public class MemoryCmd implements CommandExecutor {
             return true;
         }
     
-        double[] recentTps = ((CraftServer) Bukkit.getServer()).getServer().recentTps;
+        //TODO double[] recentTps = ((CraftServer) Bukkit.getServer()).getServer().recentTps;
+        double[] recentTps = new double[0];
         sender.sendMessage(ManiaUtils.color("&6&l>> &dHunger Mania &bserver performance: &7&o" + ManiaCore.getInstance().getServerManager().getCurrentServer().getName()));
         sender.sendMessage(ManiaUtils.color("&6&l>> &5Minecraft Vanilla Performance:"));
         StringBuilder tpsString = new StringBuilder("&7TPS (1m, 5m, 15m): ");

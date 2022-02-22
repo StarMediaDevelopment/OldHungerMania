@@ -15,7 +15,7 @@ public class BettyPerk extends FlatPerk {
         super("Betty", 1000, 100, Material.DIAMOND_AXE, PerkCategory.KILL, "Your axe gains sharpness 1 after killing 3 people with that axe.");
     }
     
-    private static final Set<Material> AXE_TYPES = EnumSet.of(Material.WOOD_AXE, Material.STONE_AXE, Material.GOLD_AXE, Material.IRON_AXE, Material.DIAMOND_AXE);
+    private static final Set<Material> AXE_TYPES = EnumSet.of(Material.WOODEN_AXE, Material.STONE_AXE, Material.GOLDEN_AXE, Material.IRON_AXE, Material.DIAMOND_AXE);
     
     public boolean activate(SpigotUser user) {
         ItemStack hand = user.getBukkitPlayer().getItemInHand();

@@ -22,13 +22,13 @@ public class MutateGui extends Gui {
     public MutateGui(UUID mutator) {
         super(Bukkit.getPluginManager().getPlugin("ManiaCore"), "Purchase Mutations", false, 27);
 
-        GUIButton unlockedWool = new GUIButton(ItemBuilder.start(Material.WOOL, 1, (short) 13).setDisplayName("&a&lAvailable").build());
-        GUIButton purchasableWool = new GUIButton(ItemBuilder.start(Material.WOOL, 1, (short) 4).setDisplayName("&e&lPurchasable").build());
-        GUIButton lockedWool = new GUIButton(ItemBuilder.start(Material.WOOL, 1, (short) 14).setDisplayName("&c&lLocked").build());
+        GUIButton unlockedWool = new GUIButton(ItemBuilder.start(Material.GREEN_WOOL).setDisplayName("&a&lAvailable").build());
+        GUIButton purchasableWool = new GUIButton(ItemBuilder.start(Material.YELLOW_WOOL).setDisplayName("&e&lPurchasable").build());
+        GUIButton lockedWool = new GUIButton(ItemBuilder.start(Material.RED_WOOL).setDisplayName("&c&lLocked").build());
 
-        GUIButton unlockedPane = new GUIButton(ItemBuilder.start(Material.STAINED_GLASS_PANE, 1, (short) 5).setDisplayName("&a").build());
-        GUIButton purchasablePane = new GUIButton(ItemBuilder.start(Material.STAINED_GLASS_PANE, 1, (short) 4).setDisplayName("&e").build());
-        GUIButton lockedPane = new GUIButton(ItemBuilder.start(Material.STAINED_GLASS_PANE, 1, (short) 14).setDisplayName("&c").build());
+        GUIButton unlockedPane = new GUIButton(ItemBuilder.start(Material.GREEN_STAINED_GLASS_PANE).setDisplayName("&a").build());
+        GUIButton purchasablePane = new GUIButton(ItemBuilder.start(Material.YELLOW_STAINED_GLASS_PANE).setDisplayName("&e").build());
+        GUIButton lockedPane = new GUIButton(ItemBuilder.start(Material.RED_STAINED_GLASS_PANE).setDisplayName("&c").build());
 
         setButton(0, unlockedWool);
         setButton(1, unlockedPane);

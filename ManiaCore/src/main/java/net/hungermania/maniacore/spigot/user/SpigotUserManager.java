@@ -2,7 +2,6 @@ package net.hungermania.maniacore.spigot.user;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import lombok.Getter;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.channel.Channel;
 import net.hungermania.maniacore.api.chat.ChatHandler;
@@ -28,7 +27,6 @@ import net.hungermania.maniacore.spigot.updater.UpdateEvent;
 import net.hungermania.maniacore.spigot.updater.UpdateType;
 import net.hungermania.manialib.sql.IRecord;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -44,8 +42,12 @@ public class SpigotUserManager extends UserManager implements Listener {
 
     private ManiaPlugin plugin;
 
-    @Getter private Map<UUID, User> users = new HashMap<>();
-
+    private Map<UUID, User> users = new HashMap<>();
+    
+    public Map<UUID, User> getUsers() {
+        return users;
+    }
+    
     public SpigotUserManager(ManiaPlugin plugin) {
         this.plugin = plugin;
 
@@ -149,7 +151,7 @@ public class SpigotUserManager extends UserManager implements Listener {
     public void onPlayerJoin(PlayerJoinEvent e) {
         e.setJoinMessage(null);
         Player player = e.getPlayer();
-        GameProfile gameProfile = ((CraftPlayer) player).getProfile();
+        GameProfile gameProfile = /*((CraftPlayer) player).getProfile()*/ null; //TODO
         String value = null, signature = null;
         for (Property property : gameProfile.getProperties().get("textures")) {
             value = property.getValue();

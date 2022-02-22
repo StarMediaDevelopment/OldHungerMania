@@ -23,7 +23,7 @@ public class FriendshipRecord implements IRecord<Friendship> {
     }
     
     public FriendshipRecord(Row row) {
-        this.friendship = Friendship.builder().id(row.getInt("id")).player1(row.getUUID("player1")).player2(row.getUUID("player2")).timestamp(row.getLong("timestamp")).build();
+        this.friendship = new Friendship(row.getInt("id"), row.getUUID("player1"), row.getUUID("player2"), row.getLong("timestamp"));
     }
     
     public int getId() {

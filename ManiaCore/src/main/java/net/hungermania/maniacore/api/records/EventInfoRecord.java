@@ -2,7 +2,7 @@ package net.hungermania.maniacore.api.records;
 
 import net.hungermania.maniacore.api.events.EventInfo;
 import net.hungermania.manialib.sql.*;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.*;
 
@@ -36,12 +36,12 @@ public class EventInfoRecord implements IRecord<EventInfo> {
         String rawServers = row.getString("servers");
         Set<Integer> players = new HashSet<>();
         Set<String> servers = new HashSet<>();
-        if (!StringUtils.isEmpty(rawPlayers)) {
+        if (!(rawPlayers == null || rawPlayers.equals(""))) {
             for (String p : rawPlayers.split(",")) {
                 players.add(Integer.parseInt(p));
             }
         }
-        if (!StringUtils.isEmpty(rawServers)) {
+        if (!(rawServers == null || rawServers.equals(""))) {
             servers.addAll(Arrays.asList(rawServers.split(",")));
         }
         

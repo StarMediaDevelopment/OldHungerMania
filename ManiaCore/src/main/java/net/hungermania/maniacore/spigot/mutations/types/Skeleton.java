@@ -17,7 +17,7 @@ public class Skeleton extends Mutation {
         this.buffs.addAll(Arrays.asList("Charge at your killer with Speed I.", "Get those 360 no-scopes with a Bow!", "Wooden Sword for those intense melee fights."));
         this.debuffs.add("Take 50% amplified damage");
         this.potionEffects.put(PotionEffectType.SPEED, 0);
-        this.inventory.put(0, new ItemStack(Material.WOOD_SWORD));
+        this.inventory.put(0, new ItemStack(Material.WOODEN_SWORD));
         this.inventory.put(1, ItemBuilder.start(Material.BOW).build());
         this.inventory.put(8, new ItemStack(Material.ARROW, 64));
     }

@@ -3,8 +3,10 @@ package net.hungermania.maniacore.api.channel;
 public enum Channel {
     GLOBAL, STAFF("STAFF", "&3", "&b", true), ADMIN("ADMIN", "&c", "&4", true);
     
-    private String prefix, color, symbolColor;
-    private boolean crossServer;
+    private final String prefix;
+    private final String color;
+    private final String symbolColor;
+    private final boolean crossServer;
     Channel() {
         this.prefix = "";
         this.color = "&f";

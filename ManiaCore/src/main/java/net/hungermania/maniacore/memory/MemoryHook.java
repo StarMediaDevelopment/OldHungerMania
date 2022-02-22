@@ -1,10 +1,7 @@
 package net.hungermania.maniacore.memory;
 
-import lombok.Getter;
-import lombok.Setter;
 import net.hungermania.maniacore.api.util.ManiaUtils;
 
-@Getter @Setter
 public class MemoryHook {
     private String name;
     private int lowest, highest;
@@ -38,13 +35,45 @@ public class MemoryHook {
         }
     }
     
+    public String getName() {
+        return name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public int getLowest() {
+        return lowest;
+    }
+    
+    public void setLowest(int lowest) {
+        this.lowest = lowest;
+    }
+    
+    public int getHighest() {
+        return highest;
+    }
+    
+    public void setHighest(int highest) {
+        this.highest = highest;
+    }
+    
+    public int[] getRecentRuns() {
+        return recentRuns;
+    }
+    
+    public void setRecentRuns(int[] recentRuns) {
+        this.recentRuns = recentRuns;
+    }
+    
     public Task task() {
         return new Task(this);
     }
     
     public static class Task {
         MemoryHook memoryHook;
-        @Getter long start = 0, end = 0;
+        long start = 0, end = 0;
     
         public Task(MemoryHook memoryHook) {
             this.memoryHook = memoryHook;
@@ -54,7 +83,31 @@ public class MemoryHook {
             this.start = System.currentTimeMillis();
             return this;
         }
-        
+    
+        public void setMemoryHook(MemoryHook memoryHook) {
+            this.memoryHook = memoryHook;
+        }
+    
+        public void setStart(long start) {
+            this.start = start;
+        }
+    
+        public void setEnd(long end) {
+            this.end = end;
+        }
+    
+        public MemoryHook getMemoryHook() {
+            return memoryHook;
+        }
+    
+        public long getStart() {
+            return start;
+        }
+    
+        public long getEnd() {
+            return end;
+        }
+    
         public Task end() {
             this.end = System.currentTimeMillis();
             ManiaUtils.updateMemoryHook(memoryHook, start, end);

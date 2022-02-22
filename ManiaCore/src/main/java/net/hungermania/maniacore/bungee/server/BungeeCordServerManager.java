@@ -1,8 +1,9 @@
 package net.hungermania.maniacore.bungee.server;
 
-import cloud.timo.TimoCloud.api.TimoCloudAPI;
 import net.hungermania.maniacore.api.ManiaCore;
-import net.hungermania.maniacore.api.server.*;
+import net.hungermania.maniacore.api.server.ManiaServer;
+import net.hungermania.maniacore.api.server.ServerManager;
+import net.hungermania.maniacore.api.server.ServerType;
 
 public class BungeeCordServerManager extends ServerManager {
     public BungeeCordServerManager(ManiaCore maniaCore) {
@@ -11,7 +12,7 @@ public class BungeeCordServerManager extends ServerManager {
 
     @Override
     public void init() {
-        this.currentServer = new ManiaServer("Proxy", TimoCloudAPI.getBungeeAPI().getThisProxy().getPort());
+        this.currentServer = new ManiaServer("Proxy", 1); //TODO Find out how to get port
         this.currentServer.setType(ServerType.PROXY);
     }
     

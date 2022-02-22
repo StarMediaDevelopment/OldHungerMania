@@ -1,8 +1,5 @@
 package net.hungermania.maniacore.api.logging.entry;
 
-import lombok.Getter;
-
-@Getter
 public class ChatEntry extends Entry {
     protected String text, channel;
     protected int sender;
@@ -19,5 +16,29 @@ public class ChatEntry extends Entry {
         this.sender = sender;
         this.text = text;
         this.channel = channel;
+    }
+    
+    public String getText() {
+        return text;
+    }
+    
+    public void setText(String text) {
+        this.text = text;
+    }
+    
+    public String getChannel() {
+        return channel;
+    }
+    
+    public void setChannel(String channel) {
+        this.channel = channel;
+    }
+    
+    public int getSender() {
+        return sender;
+    }
+    
+    public void setSender(int sender) {
+        this.sender = sender;
     }
 }

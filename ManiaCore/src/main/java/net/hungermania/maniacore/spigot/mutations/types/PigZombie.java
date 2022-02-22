@@ -22,6 +22,6 @@ public class PigZombie extends Mutation {
         this.armorSlots.put(ArmorSlot.BOOTS, new ItemStack(Material.LEATHER_BOOTS));
         this.potionEffects.put(PotionEffectType.SPEED, 1);
         this.potionEffects.put(PotionEffectType.FIRE_RESISTANCE, 0);
-        this.inventory.put(0, new ItemStack(Material.GOLD_SWORD));
+        this.inventory.put(0, new ItemStack(Material.GOLDEN_SWORD));
     }
 }

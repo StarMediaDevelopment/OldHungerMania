@@ -25,7 +25,7 @@ public class LevelRecord implements IRecord<Level> {
     }
     
     public LevelRecord(Row row) {
-        this.level = Level.builder().number(row.getInt("number")).totalXp(row.getInt("totalXp")).coinReward(row.getInt("coinReward")).numberColor(ChatColor.valueOf(row.getString("numberColor"))).build();
+        this.level = new Level(row.getInt("number"), row.getInt("totalXp"), row.getInt("coinReward"), ChatColor.valueOf(row.getString("numberColor")));
     }
     
     @Override

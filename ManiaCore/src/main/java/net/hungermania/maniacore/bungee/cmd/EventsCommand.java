@@ -13,7 +13,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Command;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.*;
 
@@ -82,7 +82,7 @@ public class EventsCommand extends Command {
             }
             
             if (ManiaUtils.checkCmdAliases(args, 2, "setname")) {
-                eventInfo.setName(StringUtils.join(args, 3, args.length));
+                //eventInfo.setName(StringUtils.join(args, 3, args.length));
                 sender.sendMessage(new ComponentBuilder("You have set the name of the event to " + eventInfo.getName()).color(ChatColor.GREEN).create());
             } else if (ManiaUtils.checkCmdAliases(args, 2, "setactive")) {
                 boolean value;

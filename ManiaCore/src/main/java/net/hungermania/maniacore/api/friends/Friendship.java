@@ -1,8 +1,5 @@
 package net.hungermania.maniacore.api.friends;
 
-import cloud.timo.TimoCloud.api.TimoCloudAPI;
-import cloud.timo.TimoCloud.api.objects.PlayerObject;
-import lombok.*;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.pagination.IElement;
 import net.hungermania.maniacore.api.user.User;
@@ -10,12 +7,8 @@ import net.hungermania.manialib.data.model.IRecord;
 
 import java.util.*;
 
-@Getter
-@AllArgsConstructor
-@Builder
 public class Friendship implements IElement, IRecord {
     
-    @Setter
     private int id;
     private UUID player1;
     private UUID player2;
@@ -34,6 +27,47 @@ public class Friendship implements IElement, IRecord {
         this.timestamp = Long.parseLong(jedisData.get("timestamp"));
     }
     
+    public Friendship(int id, UUID player1, UUID player2, long timestamp) {
+        this.id = id;
+        this.player1 = player1;
+        this.player2 = player2;
+        this.timestamp = timestamp;
+    }
+    
+    @Override
+    public int getId() {
+        return id;
+    }
+    
+    @Override
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    public UUID getPlayer1() {
+        return player1;
+    }
+    
+    public void setPlayer1(UUID player1) {
+        this.player1 = player1;
+    }
+    
+    public UUID getPlayer2() {
+        return player2;
+    }
+    
+    public void setPlayer2(UUID player2) {
+        this.player2 = player2;
+    }
+    
+    public long getTimestamp() {
+        return timestamp;
+    }
+    
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+    
     public String formatLine(String... args) {
         if (args.length != 1) { return null; }
         
@@ -50,17 +84,17 @@ public class Friendship implements IElement, IRecord {
         User otherUser = ManiaCore.getInstance().getUserManager().getUser(other);
         String status = null;
         if (otherUser.isOnline()) {
-            status = "&aonline &eon &b" + ManiaCore.getInstance().getServerManager().getCurrentServer().getName();
+            //status = "&aonline &eon &b" + ManiaCore.getInstance().getServerManager().getCurrentServer().getName();
         } else {
-            PlayerObject playerObject = TimoCloudAPI.getUniversalAPI().getPlayer(other);
-            if (playerObject != null) {
-                if (playerObject.getServer() != null) {
-                    status = "&aonline &eon &b" + playerObject.getServer().getName();
-                }
-            }
-            if (status == null) {
-                status = "&coffline";
-            }
+//            PlayerObject playerObject = TimoCloudAPI.getUniversalAPI().getPlayer(other);
+//            if (playerObject != null) {
+//                if (playerObject.getServer() != null) {
+//                    status = "&aonline &eon &b" + playerObject.getServer().getName();
+//                }
+//            }
+//            if (status == null) {
+//                status = "&coffline";
+//            } //TODO
         }
         return otherUser.getColoredName() + " &eis " + status + "&e.";
     }

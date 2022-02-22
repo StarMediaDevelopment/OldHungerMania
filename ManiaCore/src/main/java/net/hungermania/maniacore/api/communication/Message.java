@@ -1,9 +1,7 @@
 package net.hungermania.maniacore.api.communication;
 
 import com.google.common.io.ByteArrayDataInput;
-import lombok.Getter;
 
-@Getter
 public class Message {
     private String channel, subChannel;
     private String id;
@@ -14,5 +12,21 @@ public class Message {
         this.subChannel = subChannel;
         this.byteArray = byteArray;
         this.id = id;
+    }
+    
+    public String getChannel() {
+        return channel;
+    }
+    
+    public String getSubChannel() {
+        return subChannel;
+    }
+    
+    public String getId() {
+        return id;
+    }
+    
+    public ByteArrayDataInput getByteArray() {
+        return byteArray;
     }
 }

@@ -1,7 +1,5 @@
 package net.hungermania.maniacore.spigot.cmd;
 
-import cloud.timo.TimoCloud.api.TimoCloudAPI;
-import cloud.timo.TimoCloud.api.objects.PlayerObject;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.nickname.Nickname;
 import net.hungermania.maniacore.api.ranks.Rank;
@@ -132,13 +130,13 @@ public class NicknameCmd implements CommandExecutor {
                             target = null;
                         }
                         if (target != null) {
-                            PlayerObject playerObject = TimoCloudAPI.getUniversalAPI().getPlayer(target.getUniqueId());
-                            if (playerObject != null) {
-                                if (playerObject.isOnline()) {
-                                    user.sendMessage("&cThat player is online, you cannot use that name.");
-                                    return;
-                                }
-                            }
+//                            PlayerObject playerObject = TimoCloudAPI.getUniversalAPI().getPlayer(target.getUniqueId());
+//                            if (playerObject != null) {
+//                                if (playerObject.isOnline()) {
+//                                    user.sendMessage("&cThat player is online, you cannot use that name.");
+//                                    return;
+//                                }
+//                            } //TODO
 
                             if (target.getRank().ordinal() <= user.getRank().ordinal()) {
                                 user.sendMessage("&cThat player has a higher rank than you.");

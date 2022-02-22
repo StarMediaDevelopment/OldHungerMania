@@ -65,6 +65,14 @@
 
     <repositories>
         <repository>
+            <id>minecraft-repo</id>
+            <url>https://libraries.minecraft.net/</url>
+        </repository>
+        <repository>
+            <id>bungeecord-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+        <repository>
             <id>spigotmc-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
@@ -85,26 +93,21 @@
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.8.8-R0.1-SNAPSHOT</version>
+            <artifactId>spigot-api</artifactId>
+            <version>1.18.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.md-5</groupId>
             <artifactId>bungeecord-api</artifactId>
-            <version>1.16-R0.4-SNAPSHOT</version>
+            <version>1.18-R0.1-SNAPSHOT</version>
+            <type>jar</type>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.MilkBowl</groupId>
             <artifactId>VaultAPI</artifactId>
             <version>1.7</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.12</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -121,27 +124,27 @@
             <systemPath>${project.basedir}/../Libs/SpartanAPI.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>cloud.timo.TimoCloud</groupId>
-            <artifactId>TimoCloud-API</artifactId>
-            <version>6.2.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.hungermania</groupId>
+            <groupId>LibsDisguises</groupId>
             <artifactId>LibsDisguises</artifactId>
             <scope>provided</scope>
-            <version>1.0-BETA</version>
+            <version>10.0.27-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.github.dmulloy2</groupId>
             <artifactId>ProtocolLib</artifactId>
-            <version>4.6.0</version>
+            <version>4.7.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>net.hungermania</groupId>
-            <artifactId>ManiaCore</artifactId>
-            <version>1.22-SNAPSHOT</version>
+            <groupId>com.mojang</groupId>
+            <artifactId>authlib</artifactId>
+            <version>1.5.21</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>LibsDisguises</groupId>
+            <artifactId>plugin</artifactId>
+            <version>10.0.27-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

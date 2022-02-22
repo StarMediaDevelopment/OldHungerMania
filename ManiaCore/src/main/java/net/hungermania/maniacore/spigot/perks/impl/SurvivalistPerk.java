@@ -9,7 +9,7 @@ import org.bukkit.potion.PotionEffectType;
 
 public class SurvivalistPerk extends FlatPerk {
     public SurvivalistPerk() {
-        super("Survivalist", 10000, 1, Material.GOLD_HELMET, PerkCategory.KILL, "A low chance to gain a great boost after a kill.");
+        super("Survivalist", 10000, 1, Material.GOLDEN_HELMET, PerkCategory.KILL, "A low chance to gain a great boost after a kill.");
     }
     
     public boolean activate(SpigotUser user) {

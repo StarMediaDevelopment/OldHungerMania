@@ -1,12 +1,10 @@
 package net.hungermania.maniacore.spigot.map;
 
-import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.*;
 
-@Getter
 public class MapManager {
 
     private Map<Integer, GameMap> cachedMaps = new HashMap<>();
@@ -22,5 +20,21 @@ public class MapManager {
                 plugin.getLogger().severe("Could not create Map Download Folder");
             }
         }
+    }
+    
+    public Map<Integer, GameMap> getCachedMaps() {
+        return cachedMaps;
+    }
+    
+    public File getDownloadFolder() {
+        return downloadFolder;
+    }
+    
+    public Set<UUID> getUsedMapUniqueIds() {
+        return usedMapUniqueIds;
+    }
+    
+    public JavaPlugin getPlugin() {
+        return plugin;
     }
 }

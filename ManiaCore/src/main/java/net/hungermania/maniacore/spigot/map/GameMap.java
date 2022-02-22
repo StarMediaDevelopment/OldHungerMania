@@ -1,7 +1,5 @@
 package net.hungermania.maniacore.spigot.map;
 
-import lombok.Getter;
-import lombok.Setter;
 import net.hungermania.maniacore.api.util.Position;
 import net.hungermania.maniacore.spigot.util.SpigotUtils;
 import net.hungermania.manialib.data.annotations.ColumnInfo;
@@ -23,26 +21,25 @@ import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-@Getter
 @TableInfo(tableName = "gamemaps")
 public class GameMap implements IRecord {
-
-    @Setter protected int id; //Database id, isn't really used outside of database things
-    @Setter protected String name; //The display name of the map
-    @Setter protected Position center; //The center of the map //TODO TypeHandler
+    
+    protected int id; //Database id, isn't really used outside of database things
+    protected String name; //The display name of the map
+    protected Position center; //The center of the map //TODO TypeHandler
     protected String[] creators; //Map creators
-    @Setter protected String downloadUrl; //The url in which to download the map zip file
+    protected String downloadUrl; //The url in which to download the map zip file
     protected Set<Spawn> spawns; //Spawn locations of the map
     //Temp Stuff
-    @Setter @ColumnInfo(ignored = true) protected UUID uuid; //This is used for the world
-    @Setter @ColumnInfo(ignored = true) protected World world; //The Bukkit World for this map and can be used to easily reference the world
-    @Setter @ColumnInfo(ignored = true) protected File zipFile; //The downloaded zip file for easier reference
-
+    @ColumnInfo(ignored = true) protected UUID uuid; //This is used for the world
+    @ColumnInfo(ignored = true) protected World world; //The Bukkit World for this map and can be used to easily reference the world
+    @ColumnInfo(ignored = true) protected File zipFile; //The downloaded zip file for easier reference
+    
     public GameMap(int id, String name) {
         this.id = id;
         this.name = name;
     }
-
+    
     public GameMap(int id, String name, Position center, String[] creators, String downloadUrl, Set<Spawn> spawns) {
         this.id = id;
         this.name = name;
@@ -51,7 +48,81 @@ public class GameMap implements IRecord {
         this.downloadUrl = downloadUrl;
         this.spawns = spawns;
     }
-
+    
+    @Override
+    public int getId() {
+        return id;
+    }
+    
+    @Override
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public Position getCenter() {
+        return center;
+    }
+    
+    public void setCenter(Position center) {
+        this.center = center;
+    }
+    
+    public String[] getCreators() {
+        return creators;
+    }
+    
+    public void setCreators(String[] creators) {
+        this.creators = creators;
+    }
+    
+    public String getDownloadUrl() {
+        return downloadUrl;
+    }
+    
+    public void setDownloadUrl(String downloadUrl) {
+        this.downloadUrl = downloadUrl;
+    }
+    
+    public Set<Spawn> getSpawns() {
+        return spawns;
+    }
+    
+    public void setSpawns(Set<Spawn> spawns) {
+        this.spawns = spawns;
+    }
+    
+    public UUID getUuid() {
+        return uuid;
+    }
+    
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+    
+    public World getWorld() {
+        return world;
+    }
+    
+    public void setWorld(World world) {
+        this.world = world;
+    }
+    
+    public File getZipFile() {
+        return zipFile;
+    }
+    
+    public void setZipFile(File zipFile) {
+        this.zipFile = zipFile;
+    }
+    
     public void loadMap(MapManager mapManager) {
         new BukkitRunnable() {
             public void run() {
@@ -68,7 +139,7 @@ public class GameMap implements IRecord {
                             out.write(buffer, 0, read);
                         }
                     }
-
+                    
                     File zipFile = new File(mapManager.getDownloadFolder(), fileUUID + ".zip");
                     tmpFile.renameTo(zipFile);
                     String worldName = fileUUID.toString();
@@ -76,7 +147,7 @@ public class GameMap implements IRecord {
                     if (!worldContainer.exists()) {
                         worldContainer.createNewFile();
                     }
-
+                    
                     try (ZipInputStream zip = new ZipInputStream(new FileInputStream(zipFile))) {
                         byte[] buffer = new byte[1024];
                         ZipEntry entry;
@@ -94,18 +165,18 @@ public class GameMap implements IRecord {
                             }
                         }
                     }
-
+                    
                     zipFile.delete();
                 } catch (Exception e) {
                 }
-
+                
                 new BukkitRunnable() {
                     public void run() {
                         WorldCreator creator = new WorldCreator(fileUUID.toString());
                         creator.seed(0);
                         creator.type(WorldType.FLAT);
                         creator.environment(World.Environment.NORMAL);
-
+                        
                         world = Bukkit.createWorld(creator);
                         world.setTime(0);
                         world.setThundering(false);
@@ -118,7 +189,7 @@ public class GameMap implements IRecord {
                                 spawnChunk.load(true);
                             }
                         }
-
+                        
                         world.getEntities().stream().filter(entity -> !(entity instanceof Player)).forEach(Entity::remove);
                     }
                 }.runTask(mapManager.getPlugin());

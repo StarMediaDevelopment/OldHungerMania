@@ -1,6 +1,5 @@
 package net.hungermania.maniacore.spigot.gui;
 
-import lombok.Getter;
 import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.spigot.util.ItemBuilder;
 import org.bukkit.Bukkit;
@@ -16,7 +15,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
-@Getter
 public class Gui implements InventoryHolder {
     
     private static InventoryListenerGUI inventoryListenerGUI;
@@ -54,16 +52,67 @@ public class Gui implements InventoryHolder {
         this.extraListeners = new ArrayList<>();
     }
     
+    public static InventoryListenerGUI getInventoryListenerGUI() {
+        return inventoryListenerGUI;
+    }
+    
+    public static void prepare(JavaPlugin plugin) {
+        if (inventoryListenerGUI == null) {
+            inventoryListenerGUI = new InventoryListenerGUI();
+            plugin.getServer().getPluginManager().registerEvents(inventoryListenerGUI, plugin);
+        }
+    }
+    
+    public List<CustomGUIListener> getExtraListeners() {
+        return extraListeners;
+    }
+    
+    public Map<Integer, GUIButton> getItems() {
+        return items;
+    }
+    
+    public Map<Integer, GUIButton> getToolbarItems() {
+        return toolbarItems;
+    }
+    
+    public int getCurrentPage() {
+        return currentPage;
+    }
+    
+    public int getMaxSlots() {
+        return maxSlots;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public Plugin getPlugin() {
+        return plugin;
+    }
+    
+    public boolean isPaginated() {
+        return paginated;
+    }
+    
+    public boolean isAllowInsert() {
+        return allowInsert;
+    }
+    
+    public List<Integer> getAllowedInsertSlots() {
+        return allowedInsertSlots;
+    }
+    
     public boolean getAllowInsert() {
         return allowInsert;
     }
     
-    public void setDisplayName(String name) {
-        this.name = ChatColor.translateAlternateColorCodes('&', name);
-    }
-    
     public String getDisplayName() {
         return name;
+    }
+    
+    public void setDisplayName(String name) {
+        this.name = ChatColor.translateAlternateColorCodes('&', name);
     }
     
     public int addButton(GUIButton button) {
@@ -100,7 +149,8 @@ public class Gui implements InventoryHolder {
             int page = currentPage;
             int index = slot;
             if (paginated) {
-                if (page > 0) index = (page * 45) + slot;
+                if (page > 0)
+                    index = (page * 45) + slot;
             }
             
             return items.get(index);
@@ -248,13 +298,6 @@ public class Gui implements InventoryHolder {
         return inventory;
     }
     
-    public static void prepare(JavaPlugin plugin) {
-        if (inventoryListenerGUI == null) {
-            inventoryListenerGUI = new InventoryListenerGUI();
-            plugin.getServer().getPluginManager().registerEvents(inventoryListenerGUI, plugin);
-        }
-    }
-    
     public Inventory openGUI(HumanEntity player) {
         Inventory inventory = getInventory();
         player.openInventory(inventory);
@@ -262,7 +305,8 @@ public class Gui implements InventoryHolder {
     }
     
     public void callExtraListeners(InventoryClickEvent event) {
-        if (!this.extraListeners.isEmpty()) this.extraListeners.forEach(listener -> listener.onInventoryClick(event));
+        if (!this.extraListeners.isEmpty())
+            this.extraListeners.forEach(listener -> listener.onInventoryClick(event));
     }
     
     public void addExtraListener(CustomGUIListener listener) {

@@ -9,7 +9,7 @@ import java.util.Map;
 public class FriendRequestRecord implements IRecord<FriendRequest> {
     
     public FriendRequestRecord(Row row) {
-        this.object = FriendRequest.builder().id(row.getInt("id")).sender(row.getUUID("from")).to(row.getUUID("to")).timestamp(row.getLong("timestamp")).build();
+        this.object = new FriendRequest(row.getInt("id"), row.getUUID("from"), row.getUUID("to"), row.getLong("timestamp"));
     }
     
     private FriendRequest object;

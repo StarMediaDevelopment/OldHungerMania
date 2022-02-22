@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 public class EnchantXpPerk extends TieredPerk {
     
     public EnchantXpPerk() {
-        super("Enchanting XP Level Boost", 500, 100, Material.EXP_BOTTLE, PerkCategory.KILL, "Gives you enchantment xp on a kill.");
+        super("Enchanting XP Level Boost", 500, 100, Material.EXPERIENCE_BOTTLE, PerkCategory.KILL, "Gives you enchantment xp on a kill.");
         
         this.tiers.put(1, new Tier(1, getBaseCost(), "Get 1 enchantment level on a kill.") {
             public boolean activate(User user) {

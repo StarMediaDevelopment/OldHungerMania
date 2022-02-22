@@ -1,7 +1,5 @@
 package net.hungermania.maniacore;
 
-import lombok.Getter;
-import lombok.Setter;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.chat.ChatHandler;
 import net.hungermania.maniacore.api.ranks.Rank;
@@ -54,7 +52,15 @@ public final class ManiaCorePlugin extends JavaPlugin implements Listener, Mania
     
     private static final char[] CODE_CHARS = new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
     
-    @Getter @Setter private Spawnpoint spawnpoint;
+    private Spawnpoint spawnpoint;
+    
+    public Spawnpoint getSpawnpoint() {
+        return spawnpoint;
+    }
+    
+    public void setSpawnpoint(Spawnpoint spawnpoint) {
+        this.spawnpoint = spawnpoint;
+    }
     
     @Override
     public void onEnable() {

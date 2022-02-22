@@ -1,12 +1,9 @@
 package net.hungermania.maniacore.api.logging.entry;
 
-import lombok.Getter;
-import lombok.Setter;
 import net.hungermania.manialib.data.model.IRecord;
 
-@Getter
 public abstract class Entry implements IRecord {
-    @Setter protected int id = -1;
+    protected int id = -1;
     protected long date;
     protected String server;
     
@@ -20,6 +17,32 @@ public abstract class Entry implements IRecord {
     
     public Entry(long date, String server) {
         this.date = date;
+        this.server = server;
+    }
+    
+    @Override
+    public int getId() {
+        return id;
+    }
+    
+    @Override
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    public long getDate() {
+        return date;
+    }
+    
+    public void setDate(long date) {
+        this.date = date;
+    }
+    
+    public String getServer() {
+        return server;
+    }
+    
+    public void setServer(String server) {
         this.server = server;
     }
 }

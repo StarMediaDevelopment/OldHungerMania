@@ -22,6 +22,6 @@ public class Zombie extends Mutation {
         this.armorSlots.put(ArmorSlot.LEGGINGS, new ItemStack(Material.CHAINMAIL_LEGGINGS));
         this.armorSlots.put(ArmorSlot.BOOTS, new ItemStack(Material.CHAINMAIL_BOOTS));
         this.potionEffects.put(PotionEffectType.SLOW, 0);
-        this.inventory.put(0, ItemBuilder.start(Material.GOLD_SWORD).setUnbreakable(true).build());
+        this.inventory.put(0, ItemBuilder.start(Material.GOLDEN_SWORD).setUnbreakable(true).build());
     }
 }

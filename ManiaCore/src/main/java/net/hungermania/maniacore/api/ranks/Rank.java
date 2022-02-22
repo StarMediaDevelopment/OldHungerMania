@@ -1,7 +1,5 @@
 package net.hungermania.maniacore.api.ranks;
 
-import lombok.Getter;
-
 public enum Rank {
     
     ROOT("Owner", "&4", true, "&6", 5, 5, 0),
@@ -20,13 +18,13 @@ public enum Rank {
     DEFAULT("Default", "&f", false, "&7", 1, 1, 5);
     
     
-    @Getter private final String name;
-    @Getter private final String baseColor;
+    private final String name;
+    private final String baseColor;
     private final boolean prefix;
-    @Getter private final String chatColor;
-    @Getter private final int voteWeight;
-    @Getter private final double coinMultiplier;
-    @Getter private final double chatCooldown;
+    private final String chatColor;
+    private final int voteWeight;
+    private final double coinMultiplier;
+    private final double chatCooldown;
     
     Rank(String name, String baseColor, boolean prefix, String chatColor, int voteWeight, double coinMultiplier, double chatCooldown) {
         this.name = name;
@@ -36,6 +34,34 @@ public enum Rank {
         this.voteWeight = voteWeight;
         this.coinMultiplier = coinMultiplier;
         this.chatCooldown = chatCooldown;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public String getBaseColor() {
+        return baseColor;
+    }
+    
+    public boolean isPrefix() {
+        return prefix;
+    }
+    
+    public String getChatColor() {
+        return chatColor;
+    }
+    
+    public int getVoteWeight() {
+        return voteWeight;
+    }
+    
+    public double getCoinMultiplier() {
+        return coinMultiplier;
+    }
+    
+    public double getChatCooldown() {
+        return chatCooldown;
     }
     
     public String getPrefix() {

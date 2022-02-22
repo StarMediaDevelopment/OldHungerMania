@@ -1,12 +1,9 @@
 package net.hungermania.maniacore.api.user.toggle;
 
-import lombok.Getter;
-import lombok.Setter;
 import net.hungermania.manialib.data.model.IRecord;
 
 import java.util.UUID;
 
-@Getter @Setter
 public class Toggle implements IRecord {
     
     private int id; //Database purposes
@@ -25,6 +22,48 @@ public class Toggle implements IRecord {
         this.uuid = uuid;
         this.name = name;
         this.value = value;
+    }
+    
+    @Override
+    public int getId() {
+        return id;
+    }
+    
+    @Override
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    public UUID getUuid() {
+        return uuid;
+    }
+    
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public String getValue() {
+        return value;
+    }
+    
+    public void setValue(String value) {
+        this.value = value;
+    }
+    
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+    
+    public void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
     }
     
     public boolean getAsBoolean() {

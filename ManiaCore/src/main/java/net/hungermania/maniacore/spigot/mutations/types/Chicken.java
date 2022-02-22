@@ -16,7 +16,7 @@ public class Chicken extends Mutation {
         this.buffs.addAll(Arrays.asList("Launch high into the air! &c&lWIP", "Use your brethren as a parachute! &c&lWIP", "No fall damage!", "Shoot eggs! &c&lWIP"));
         this.debuffs.addAll(Arrays.asList("Less health", "No armor"));
         // TODO https://bukkit.org/threads/launch-players-into-the-air.60946/
-        this.inventory.put(0, new ItemStack(Material.WOOD_SWORD));
+        this.inventory.put(0, new ItemStack(Material.WOODEN_SWORD));
         this.inventory.put(1, ItemBuilder.start(Material.SLIME_BALL).setDisplayName("&fLaunch &c&lWIP").build());
         this.inventory.put(2, ItemBuilder.start(Material.FEATHER).setDisplayName("&fParachute &c&lWIP").build());
     }

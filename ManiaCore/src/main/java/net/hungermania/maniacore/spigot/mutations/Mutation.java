@@ -1,6 +1,5 @@
 package net.hungermania.maniacore.spigot.mutations;
 
-import lombok.Getter;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.Disguise;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
@@ -18,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-@Getter
 public abstract class Mutation {
     protected String name;
     protected MutationType type;
@@ -42,6 +40,58 @@ public abstract class Mutation {
         this.disguise = new MobDisguise(disguiseType, true).setReplaceSounds(true);
         this.disguise.setViewSelfDisguise(false);
         this.icon = material;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public MutationType getType() {
+        return type;
+    }
+    
+    public int getUnlockCost() {
+        return unlockCost;
+    }
+    
+    public int getUseCost() {
+        return useCost;
+    }
+    
+    public DefenseType getDefenseType() {
+        return defenseType;
+    }
+    
+    public List<String> getBuffs() {
+        return buffs;
+    }
+    
+    public List<String> getDebuffs() {
+        return debuffs;
+    }
+    
+    public double getMaxHP() {
+        return maxHP;
+    }
+    
+    public Map<Integer, ItemStack> getInventory() {
+        return inventory;
+    }
+    
+    public Map<PotionEffectType, Integer> getPotionEffects() {
+        return potionEffects;
+    }
+    
+    public Map<ArmorSlot, ItemStack> getArmorSlots() {
+        return armorSlots;
+    }
+    
+    public MobDisguise getDisguise() {
+        return disguise;
+    }
+    
+    public Material getIcon() {
+        return icon;
     }
     
     public void applyPlayer(Player player) {

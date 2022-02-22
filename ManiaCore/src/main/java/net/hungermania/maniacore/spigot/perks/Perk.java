@@ -1,6 +1,5 @@
 package net.hungermania.maniacore.spigot.perks;
 
-import lombok.Getter;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.redis.Redis;
 import net.hungermania.maniacore.api.stats.Stats;
@@ -15,7 +14,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
-@Getter
 public abstract class Perk implements Comparable<Perk> {
     
     protected String displayName;
@@ -24,6 +22,30 @@ public abstract class Perk implements Comparable<Perk> {
     protected Material iconMaterial;
     protected PerkCategory category;
     protected String description;
+    
+    public String getDisplayName() {
+        return displayName;
+    }
+    
+    public int getBaseCost() {
+        return baseCost;
+    }
+    
+    public int getChance() {
+        return chance;
+    }
+    
+    public Material getIconMaterial() {
+        return iconMaterial;
+    }
+    
+    public PerkCategory getCategory() {
+        return category;
+    }
+    
+    public String getDescription() {
+        return description;
+    }
     
     public Perk() {
     }

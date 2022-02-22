@@ -26,7 +26,8 @@ public class FriendNotificationRecord implements IRecord<FriendNotification> {
     }
     
     public FriendNotificationRecord(Row row) {
-        this.object = FriendNotification.builder().id(row.getInt("id")).type(Type.valueOf(row.getString("type"))).sender(row.getUUID("sender")).target(row.getUUID("target")).timestamp(row.getLong("timestamp")).build();
+        //this.object = FriendNotification.builder().id(row.getInt("id")).type(Type.valueOf(row.getString("type"))).sender(row.getUUID("sender")).target(row.getUUID("target")).timestamp(row.getLong("timestamp")).build();
+        this.object = new FriendNotification(row.getInt("id"), Type.valueOf(row.getString("type")), row.getUUID("sender"), row.getUUID("target"), row.getLong("timestamp"));
     }
     
     public int getId() {

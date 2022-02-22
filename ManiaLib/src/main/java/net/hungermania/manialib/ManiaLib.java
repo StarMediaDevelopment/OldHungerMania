@@ -24,6 +24,10 @@ public class ManiaLib {
         instance = this;
     }
     
+    public MysqlDatabase getMysqlDatabase() {
+        return mysqlDatabase;
+    }
+    
     public void addDatabaseHandler(DatabaseHandler databaseHandler) {
         this.databaseManager.addDatabaseHandler(databaseHandler);
     }

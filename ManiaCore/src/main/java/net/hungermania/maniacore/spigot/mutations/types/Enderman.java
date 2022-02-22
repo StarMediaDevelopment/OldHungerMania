@@ -18,7 +18,7 @@ public class Enderman extends Mutation {
         super("Enderman", MutationType.ENDERMAN, 5000, 100, DefenseType.NONE, 20, DisguiseType.ENDERMAN, Material.ENDER_PEARL);
         this.buffs.addAll(Arrays.asList("Teleport where you are looking!", "No fall damage!", "Melee players with a Knockback II gold sword!"));
         this.debuffs.add("Receive damage while in water.");
-        this.inventory.put(0, ItemBuilder.start(Material.GOLD_SWORD).addEnchantment(Enchantment.KNOCKBACK, 1).build());
+        this.inventory.put(0, ItemBuilder.start(Material.GOLDEN_SWORD).addEnchantment(Enchantment.KNOCKBACK, 1).build());
         this.inventory.put(1, new ItemStack(Material.ENDER_PEARL, 32));
         this.potionEffects.put(PotionEffectType.WEAKNESS, 1);
         this.armorSlots.put(ArmorSlot.HELMET, new ItemStack(Material.LEATHER_HELMET));

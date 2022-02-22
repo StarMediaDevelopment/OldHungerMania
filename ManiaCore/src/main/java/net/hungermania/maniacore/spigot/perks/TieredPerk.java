@@ -1,6 +1,5 @@
 package net.hungermania.maniacore.spigot.perks;
 
-import lombok.Getter;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.redis.Redis;
 import net.hungermania.maniacore.api.stats.Statistic;
@@ -184,7 +183,6 @@ public abstract class TieredPerk extends Perk {
         return this.tiers.get(currentTier);
     }
     
-    @Getter
     public static abstract class Tier {
         private int number, cost, chance;
         private String description;
@@ -202,7 +200,23 @@ public abstract class TieredPerk extends Perk {
             this.chance = chance;
             this.description = description;
         }
-        
+    
+        public int getNumber() {
+            return number;
+        }
+    
+        public int getCost() {
+            return cost;
+        }
+    
+        public int getChance() {
+            return chance;
+        }
+    
+        public String getDescription() {
+            return description;
+        }
+    
         public abstract boolean activate(User user);
     }
 }

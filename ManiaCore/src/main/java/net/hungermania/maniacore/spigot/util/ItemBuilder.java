@@ -1,30 +1,21 @@
 package net.hungermania.maniacore.spigot.util;
 
-import com.mojang.authlib.GameProfile;
-import lombok.Getter;
-import net.hungermania.maniacore.api.ManiaCore;
-import net.hungermania.maniacore.api.records.SkinRecord;
 import net.hungermania.maniacore.api.skin.Skin;
-import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.util.ManiaUtils;
-import net.hungermania.manialib.sql.IRecord;
-import org.bukkit.*;
+import org.bukkit.Color;
+import org.bukkit.DyeColor;
+import org.bukkit.Material;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.banner.Pattern;
-import org.bukkit.craftbukkit.v1_8_R3.CraftOfflinePlayer;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
-@Getter
 public class ItemBuilder {
     private String displayName;
     private List<String> lore = new LinkedList<>();
@@ -74,7 +65,7 @@ public class ItemBuilder {
             itemMeta.addItemFlags(itemFlags.toArray(new ItemFlag[0]));
         }
         
-        itemMeta.spigot().setUnbreakable(unbreakable);
+        itemMeta.setUnbreakable(unbreakable);
     
         if (itemMeta instanceof BannerMeta) {
             BannerMeta bannerMeta = (BannerMeta) itemMeta;
@@ -127,56 +118,57 @@ public class ItemBuilder {
             }
         }
         
-        if (itemMeta instanceof SkullMeta) {
-            if (this.skullOwner != null) {
-                SkullMeta skullMeta = (SkullMeta) itemMeta;
-                String skullOwner;
-                User user = ManiaCore.getInstance().getUserManager().getUser(this.skullOwner);
-                if (user != null) {
-                    skullOwner = user.getName();
-                } else {
-                    skullOwner = ManiaUtils.getNameFromUUID(this.skullOwner);
-                }
-    
-                if (skullOwner != null) {
-                    skullMeta.setOwner(skullOwner);
-        
-                    
-                }
-    
-                GameProfile mcProfile = null;
-    
-                if (this.skullSkin != null) {
-                    mcProfile = SpigotUtils.skinToProfile(skullSkin);
-                } else {
-                    Player player = Bukkit.getPlayer(this.skullOwner);
-                    if (player != null) {
-                        mcProfile = ((CraftPlayer) player).getProfile();
-                    } else {
-                        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(this.skullOwner);
-                        if (offlinePlayer != null) {
-                            mcProfile = ((CraftOfflinePlayer) offlinePlayer).getProfile();
-                            if (mcProfile == null) {
-                                List<IRecord> records = ManiaCore.getInstance().getDatabase().getRecords(SkinRecord.class, "uuid", this.skullOwner.toString());
-                                for (IRecord record : records) {
-                                    if (record instanceof SkinRecord) {
-                                        mcProfile = SpigotUtils.skinToProfile(((SkinRecord) record).toObject());
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                
-                if (mcProfile != null) {
-                    try {
-                        Field field = skullMeta.getClass().getDeclaredField("profile");
-                        field.setAccessible(true);
-                        field.set(skullMeta, mcProfile);
-                    } catch (Exception e) {}
-                }
-            }
-        }
+        //TODO
+//        if (itemMeta instanceof SkullMeta) {
+//            if (this.skullOwner != null) {
+//                SkullMeta skullMeta = (SkullMeta) itemMeta;
+//                String skullOwner;
+//                User user = ManiaCore.getInstance().getUserManager().getUser(this.skullOwner);
+//                if (user != null) {
+//                    skullOwner = user.getName();
+//                } else {
+//                    skullOwner = ManiaUtils.getNameFromUUID(this.skullOwner);
+//                }
+//    
+//                if (skullOwner != null) {
+//                    skullMeta.setOwner(skullOwner);
+//        
+//                    
+//                }
+//    
+//                GameProfile mcProfile = null;
+//    
+//                if (this.skullSkin != null) {
+//                    mcProfile = SpigotUtils.skinToProfile(skullSkin);
+//                } else {
+//                    Player player = Bukkit.getPlayer(this.skullOwner);
+//                    if (player != null) {
+//                        mcProfile = ((CraftPlayer) player).getProfile();
+//                    } else {
+//                        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(this.skullOwner);
+//                        if (offlinePlayer != null) {
+//                            mcProfile = ((CraftOfflinePlayer) offlinePlayer).getProfile();
+//                            if (mcProfile == null) {
+//                                List<IRecord> records = ManiaCore.getInstance().getDatabase().getRecords(SkinRecord.class, "uuid", this.skullOwner.toString());
+//                                for (IRecord record : records) {
+//                                    if (record instanceof SkinRecord) {
+//                                        mcProfile = SpigotUtils.skinToProfile(((SkinRecord) record).toObject());
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//                
+//                if (mcProfile != null) {
+//                    try {
+//                        Field field = skullMeta.getClass().getDeclaredField("profile");
+//                        field.setAccessible(true);
+//                        field.set(skullMeta, mcProfile);
+//                    } catch (Exception e) {}
+//                }
+//            }
+//        }
         
         itemStack.setItemMeta(itemMeta);
         return itemStack;

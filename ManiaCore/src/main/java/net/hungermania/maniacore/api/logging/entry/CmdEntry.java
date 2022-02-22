@@ -1,8 +1,5 @@
 package net.hungermania.maniacore.api.logging.entry;
 
-import lombok.Getter;
-
-@Getter
 public class CmdEntry extends Entry {
     protected String text;
     protected int sender;
@@ -17,5 +14,21 @@ public class CmdEntry extends Entry {
         super(date, server);
         this.sender = sender;
         this.text = text;
+    }
+    
+    public String getText() {
+        return text;
+    }
+    
+    public void setText(String text) {
+        this.text = text;
+    }
+    
+    public int getSender() {
+        return sender;
+    }
+    
+    public void setSender(int sender) {
+        this.sender = sender;
     }
 }

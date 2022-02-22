@@ -1,14 +1,8 @@
 package net.hungermania.maniacore.spigot.user;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
-import com.mojang.authlib.properties.PropertyMap;
-import lombok.Getter;
-import lombok.Setter;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.channel.Channel;
 import net.hungermania.maniacore.api.ranks.RankInfo;
-import net.hungermania.maniacore.api.records.NicknameRecord;
 import net.hungermania.maniacore.api.skin.Skin;
 import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.util.ManiaUtils;
@@ -18,19 +12,11 @@ import net.hungermania.maniacore.spigot.perks.PerkInfoRecord;
 import net.hungermania.maniacore.spigot.perks.Perks;
 import net.hungermania.manialib.sql.IRecord;
 import net.md_5.bungee.api.chat.BaseComponent;
-import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
-import static net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER;
-import static net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER;
-
-@Getter @Setter
 public class SpigotUser extends User {
     
     private PlayerBoard scoreboard;
@@ -93,50 +79,51 @@ public class SpigotUser extends User {
     }
     
     private void applySkinAndName(Skin skin, String name) {
-        CraftPlayer craftPlayer = (CraftPlayer) this.getBukkitPlayer();
-        EntityPlayer entityPlayer = craftPlayer.getHandle();
-        GameProfile gameProfile = entityPlayer.getProfile();
-        skin.updateValues();
-        
-        if (!(skin.getValue() == null || skin.getSignature() == null)) {
-            PropertyMap properties = gameProfile.getProperties();
-            properties.clear();
-            properties.put("textures", new Property("textures", skin.getValue(), skin.getSignature()));
-        }
-        try {
-            Field nameField = gameProfile.getClass().getDeclaredField("name");
-            nameField.setAccessible(true);
-            nameField.set(gameProfile, name);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        int dim = entityPlayer.getWorld().worldProvider.getDimension();
-        EnumDifficulty diff = entityPlayer.getWorld().getDifficulty();
-        WorldType type = entityPlayer.getWorld().worldData.getType();
-        WorldSettings.EnumGamemode gamemode = WorldSettings.EnumGamemode.valueOf(craftPlayer.getGameMode().name());
-        Location location = craftPlayer.getLocation().clone();
-        PacketPlayOutPlayerInfo removePlayer = new PacketPlayOutPlayerInfo(REMOVE_PLAYER, entityPlayer);
-        PacketPlayOutPlayerInfo addPlayer = new PacketPlayOutPlayerInfo(ADD_PLAYER, entityPlayer);
-        PacketPlayOutRespawn respawn = new PacketPlayOutRespawn(dim, diff, type, gamemode);
-        entityPlayer.playerConnection.sendPacket(removePlayer);
-        entityPlayer.playerConnection.sendPacket(respawn);
-        craftPlayer.teleport(location);
-        entityPlayer.playerConnection.sendPacket(addPlayer);
-
-        List<Player> canSee = new ArrayList<>();
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (player.canSee(getBukkitPlayer())) {
-                canSee.add(player);
-                player.hidePlayer(getBukkitPlayer());
-            }
-        }
-
-        for (Player player : canSee) {
-            player.showPlayer(getBukkitPlayer());
-        }
-        
-        ManiaCore.getInstance().getPlugin().runTaskAsynchronously(() -> new NicknameRecord(nickname).push(ManiaCore.getInstance().getDatabase()));
+        //TODO
+//        CraftPlayer craftPlayer = (CraftPlayer) this.getBukkitPlayer();
+//        EntityPlayer entityPlayer = craftPlayer.getHandle();
+//        GameProfile gameProfile = craftPlayer.getProfile();
+//        skin.updateValues();
+//        
+//        if (!(skin.getValue() == null || skin.getSignature() == null)) {
+//            PropertyMap properties = gameProfile.getProperties();
+//            properties.clear();
+//            properties.put("textures", new Property("textures", skin.getValue(), skin.getSignature()));
+//        }
+//        try {
+//            Field nameField = gameProfile.getClass().getDeclaredField("name");
+//            nameField.setAccessible(true);
+//            nameField.set(gameProfile, name);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        int dim = entityPlayer.getWorld().worldProvider.getDimension();
+//        EnumDifficulty diff = entityPlayer.getWorld().getDifficulty();
+//        WorldType type = entityPlayer.getWorld().worldData.getType();
+//        WorldSettings.EnumGamemode gamemode = WorldSettings.EnumGamemode.valueOf(craftPlayer.getGameMode().name());
+//        Location location = craftPlayer.getLocation().clone();
+//        PacketPlayOutPlayerInfo removePlayer = new PacketPlayOutPlayerInfo(REMOVE_PLAYER, entityPlayer);
+//        PacketPlayOutPlayerInfo addPlayer = new PacketPlayOutPlayerInfo(ADD_PLAYER, entityPlayer);
+//        PacketPlayOutRespawn respawn = new PacketPlayOutRespawn(dim, diff, type, gamemode);
+//        entityPlayer.playerConnection.sendPacket(removePlayer);
+//        entityPlayer.playerConnection.sendPacket(respawn);
+//        craftPlayer.teleport(location);
+//        entityPlayer.playerConnection.sendPacket(addPlayer);
+//
+//        List<Player> canSee = new ArrayList<>();
+//        for (Player player : Bukkit.getOnlinePlayers()) {
+//            if (player.canSee(getBukkitPlayer())) {
+//                canSee.add(player);
+//                player.hidePlayer(getBukkitPlayer());
+//            }
+//        }
+//
+//        for (Player player : canSee) {
+//            player.showPlayer(getBukkitPlayer());
+//        }
+//        
+//        ManiaCore.getInstance().getPlugin().runTaskAsynchronously(() -> new NicknameRecord(nickname).push(ManiaCore.getInstance().getDatabase()));
     }
 
     public void applyNickname() {

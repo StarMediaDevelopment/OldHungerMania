@@ -1,7 +1,5 @@
 package net.hungermania.maniacore.bungee.cmd;
 
-import cloud.timo.TimoCloud.api.TimoCloudAPI;
-import cloud.timo.TimoCloud.api.objects.ServerObject;
 import net.md_5.bungee.api.*;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -26,13 +24,13 @@ public class HubCommand extends Command {
         }
     
         ServerInfo target = ProxyServer.getInstance().getServerInfo("Hub");
-        for (ServerObject hub : TimoCloudAPI.getUniversalAPI().getServerGroup("Hub").getServers()) {
-            if (hub.getState().equalsIgnoreCase("online")) {
-                if (hub.getOnlinePlayerCount() < hub.getMaxPlayerCount()) {
-                    target = ProxyServer.getInstance().getServerInfo(hub.getName());
-                }
-            }
-        }
+//        for (ServerObject hub : TimoCloudAPI.getUniversalAPI().getServerGroup("Hub").getServers()) {
+//            if (hub.getState().equalsIgnoreCase("online")) {
+//                if (hub.getOnlinePlayerCount() < hub.getMaxPlayerCount()) {
+//                    target = ProxyServer.getInstance().getServerInfo(hub.getName());
+//                }
+//            }
+//        }
         
         if (target == null) {
             player.sendMessage(new ComponentBuilder("Could not find a hub to connect you to.").color(ChatColor.RED).create());

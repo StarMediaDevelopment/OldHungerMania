@@ -3,26 +3,24 @@ package net.hungermania.maniacore.spigot.util;
 import com.google.common.base.Preconditions;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import lombok.experimental.UtilityClass;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.maniacore.api.skin.Skin;
 import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.api.util.Position;
-import net.minecraft.server.v1_8_R3.ChatComponentText;
-import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
+import net.minecraft.network.chat.ChatComponentText;
+import net.minecraft.network.protocol.game.PacketPlayOutChat;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@UtilityClass
 public class SpigotUtils {
 
     public static GameProfile skinToProfile(Skin skin) {
@@ -52,8 +50,8 @@ public class SpigotUtils {
     }
     
     public static void sendActionBar(Player player, String text) {
-        PacketPlayOutChat packet = new PacketPlayOutChat(new ChatComponentText(ManiaUtils.color(text)), (byte) 2);
-        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+//        PacketPlayOutChat packet = new PacketPlayOutChat(new ChatComponentText(ManiaUtils.color(text)), (byte) 2);
+//        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet); //TODO
     }
 
     public static Location positionToLocation(World world, Position position) {

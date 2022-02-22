@@ -1,7 +1,5 @@
 package net.hungermania.maniacore.api.user;
 
-import lombok.Getter;
-import lombok.Setter;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.channel.Channel;
 import net.hungermania.maniacore.api.leveling.Level;
@@ -21,8 +19,6 @@ import net.md_5.bungee.api.chat.BaseComponent;
 
 import java.util.*;
 
-@Getter
-@Setter
 public class User implements IRecord {
     private static final UUID FIRESTAR311 = UUID.fromString("3f7891ce-5a73-4d52-a2ba-299839053fdc");
     private static final UUID ASSASSINPLAYS = UUID.fromString("c292df56-5baa-4a11-87a3-cba08ce5f7a6");
@@ -45,6 +41,56 @@ public class User implements IRecord {
         this.uniqueId = uniqueId;
         this.nickname = new Nickname(uniqueId);
         this.rankInfo = new RankInfo(uniqueId);
+    }
+    
+    @Override
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public void setChannel(Channel channel) {
+        this.channel = channel;
+    }
+    
+    public void setNickname(Nickname nickname) {
+        this.nickname = nickname;
+    }
+    
+    public void setFakeStats(Map<String, Statistic> fakeStats) {
+        this.fakeStats = fakeStats;
+    }
+    
+    @Override
+    public int getId() {
+        return id;
+    }
+    
+    public UUID getUniqueId() {
+        return uniqueId;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public RankInfo getRankInfo() {
+        return rankInfo;
+    }
+    
+    public Map<String, Statistic> getStats() {
+        return stats;
+    }
+    
+    public Map<Toggles, Toggle> getToggles() {
+        return toggles;
+    }
+    
+    public Map<String, Statistic> getFakeStats() {
+        return fakeStats;
     }
     
     public void setRank(Rank rank, long expire) {

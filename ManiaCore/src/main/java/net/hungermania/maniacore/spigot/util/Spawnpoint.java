@@ -1,6 +1,5 @@
 package net.hungermania.maniacore.spigot.util;
 
-import lombok.Setter;
 import net.hungermania.maniacore.api.ManiaCore;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -15,7 +14,7 @@ public class Spawnpoint implements ConfigurationSerializable {
     private World world;
     private int x, y, z;
     private float yaw, pitch;
-    @Setter private int radius;
+    private int radius;
     
     public Spawnpoint(Map<String, Object> serialized) {
         this.worldName = (String) serialized.get("world");
@@ -37,7 +36,11 @@ public class Spawnpoint implements ConfigurationSerializable {
         this.pitch = pitch;
         this.radius = radius;
     }
-
+    
+    public void setRadius(int radius) {
+        this.radius = radius;
+    }
+    
     public Spawnpoint(Location location) {
         this(location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ(), location.getYaw(), location.getPitch(), 0);
     }

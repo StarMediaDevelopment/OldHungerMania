@@ -18,7 +18,7 @@ import java.util.*;
 public abstract class UserManager {
     public User getUser(String name) {
         System.out.println("Getting user by name " + name);
-        if (name == null && name.isEmpty()) { return null; }
+        if (name == null || name.isEmpty()) { return null; }
         UUID uuid = Redis.getUUIDFromName(name);
         System.out.println("UUID is " + uuid);
         User user = getUser(uuid);
