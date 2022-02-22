@@ -1,7 +1,5 @@
 package net.hungermania.hungergames.lobby;
 
-import lombok.Getter;
-import lombok.Setter;
 import net.hungermania.hungergames.HungerGames;
 import net.hungermania.hungergames.map.HGMap;
 import net.hungermania.maniacore.api.ManiaCore;
@@ -10,7 +8,9 @@ import net.hungermania.maniacore.api.user.User;
 import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.api.util.Position;
 import net.hungermania.maniacore.spigot.util.SpigotUtils;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -23,10 +23,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-@Getter
+
 public class LobbySigns {
     
-    @Setter
+    
     private Position voteTitleSign, votingInfo;
     private Map<Integer, Position> mapSigns = new HashMap<>();
     private Map<SignType, Position> statSigns = new HashMap<>();
@@ -174,5 +174,61 @@ public class LobbySigns {
 //        if (!playerSigns.isEmpty()) {
 //
 //        }
+    }
+    
+    public Position getVoteTitleSign() {
+        return voteTitleSign;
+    }
+    
+    public Position getVotingInfo() {
+        return votingInfo;
+    }
+    
+    public Map<Integer, Position> getMapSigns() {
+        return mapSigns;
+    }
+    
+    public Map<SignType, Position> getStatSigns() {
+        return statSigns;
+    }
+    
+    public Map<Integer, Position> getPlayerSigns() {
+        return playerSigns;
+    }
+    
+    public File getFile() {
+        return file;
+    }
+    
+    public FileConfiguration getConfig() {
+        return config;
+    }
+    
+    public void setVoteTitleSign(Position voteTitleSign) {
+        this.voteTitleSign = voteTitleSign;
+    }
+    
+    public void setVotingInfo(Position votingInfo) {
+        this.votingInfo = votingInfo;
+    }
+    
+    public void setMapSigns(Map<Integer, Position> mapSigns) {
+        this.mapSigns = mapSigns;
+    }
+    
+    public void setStatSigns(Map<SignType, Position> statSigns) {
+        this.statSigns = statSigns;
+    }
+    
+    public void setPlayerSigns(Map<Integer, Position> playerSigns) {
+        this.playerSigns = playerSigns;
+    }
+    
+    public void setFile(File file) {
+        this.file = file;
+    }
+    
+    public void setConfig(FileConfiguration config) {
+        this.config = config;
     }
 }

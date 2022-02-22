@@ -4,8 +4,6 @@ import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import com.gmail.filoghost.holographicdisplays.api.line.HologramLine;
 import com.gmail.filoghost.holographicdisplays.api.line.TextLine;
-import lombok.Getter;
-import lombok.Setter;
 import net.hungermania.hub.ManiaHub;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.events.EventInfo;
@@ -14,8 +12,6 @@ import org.bukkit.Location;
 
 import java.util.*;
 
-@Getter
-@Setter
 public class Leaderboard {
     private Location location;
     private int min, max;
@@ -25,6 +21,38 @@ public class Leaderboard {
         this.location = location;
         this.min = min;
         this.max = max;
+    }
+    
+    public Location getLocation() {
+        return location;
+    }
+    
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+    
+    public int getMin() {
+        return min;
+    }
+    
+    public void setMin(int min) {
+        this.min = min;
+    }
+    
+    public int getMax() {
+        return max;
+    }
+    
+    public void setMax(int max) {
+        this.max = max;
+    }
+    
+    public Hologram getHologram() {
+        return hologram;
+    }
+    
+    public void setHologram(Hologram hologram) {
+        this.hologram = hologram;
     }
     
     public void spawn() {
@@ -54,13 +82,30 @@ public class Leaderboard {
 //        }
         
         class LeaderboardPlayer implements Comparable<LeaderboardPlayer> {
-            @Getter private UUID uuid;
-            @Getter private int value;
+            private UUID uuid;
+            private int value;
             
             public LeaderboardPlayer(UUID uuid, int value) {
                 this.uuid = uuid;
                 this.value = value;
             }
+            
+            public UUID getUuid() {
+                return uuid;
+            }
+            
+            public void setUuid(UUID uuid) {
+                this.uuid = uuid;
+            }
+            
+            public int getValue() {
+                return value;
+            }
+            
+            public void setValue(int value) {
+                this.value = value;
+            }
+            
             @Override
             public int compareTo(LeaderboardPlayer o) {
                 return -Integer.compare(value, o.value);
@@ -86,7 +131,7 @@ public class Leaderboard {
                 rankedPlayers.put(1, uuid);
             }
         }
-    
+        
         Map<Integer, UUID> leaderboardPositions = new HashMap<>();
         
         for (int i = 0; i <= 12; i++) {
@@ -94,12 +139,11 @@ public class Leaderboard {
                 leaderboardPositions.put(i, rankedPlayers.get(i + min));
             }
         }
-    
+        
         HologramLine mainLine;
         try {
             mainLine = this.hologram.getLine(0);
-            if (mainLine instanceof TextLine) {
-                TextLine textLine = (TextLine) mainLine;
+            if (mainLine instanceof TextLine textLine) {
                 if (!textLine.getText().contains("LEADERBOARD")) {
                     textLine.setText(ManiaUtils.color("&6&lLEADERBOARD (" + min + " - " + max + ")"));
                 }
@@ -107,7 +151,7 @@ public class Leaderboard {
         } catch (Exception e) {
             this.hologram.insertTextLine(0, ManiaUtils.color("&6&lLEADERBOARD (" + min + " - " + max + ")"));
         }
-    
+
 //        for (Entry<Integer, UUID> entry : leaderboardPositions.entrySet()) {
 //            HologramLine line = null;
 //            try {

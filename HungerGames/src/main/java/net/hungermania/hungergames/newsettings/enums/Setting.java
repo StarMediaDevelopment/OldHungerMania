@@ -1,6 +1,5 @@
 package net.hungermania.hungergames.newsettings.enums;
 
-import lombok.Getter;
 import net.hungermania.hungergames.settings.Time;
 import net.hungermania.hungergames.settings.Weather;
 import net.hungermania.manialib.util.Unit;
@@ -31,9 +30,9 @@ public enum Setting {
     TIME(Type.OTHER, Time.NOON.name()),
     WEATHER(Type.OTHER, Weather.CLEAR.name());
 
-    @Getter private Type type;
-    @Getter private String defaultValue;
-    @Getter private Unit unit;
+     private Type type;
+     private String defaultValue;
+     private Unit unit;
 
     Setting(Type type, String defaultValue, Unit unit) {
         this.type = type;
@@ -45,5 +44,17 @@ public enum Setting {
         this.type = type;
         this.defaultValue = defaultValue;
         this.unit = Unit.UNDEFINED;
+    }
+    
+    public Type getType() {
+        return type;
+    }
+    
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+    
+    public Unit getUnit() {
+        return unit;
     }
 }

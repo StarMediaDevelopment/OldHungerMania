@@ -1,6 +1,5 @@
 package net.hungermania.hungergames.newsettings;
 
-import lombok.Getter;
 import net.hungermania.hungergames.lobby.GameOverrides;
 import net.hungermania.hungergames.map.HGMap;
 import net.hungermania.hungergames.newsettings.enums.Setting;
@@ -10,7 +9,7 @@ import java.util.Map;
 //Represents settings in the current game
 public class GameSettings {
     private Map<Setting, GameSetting> settings;
-    @Getter private HGMap map;
+     private HGMap map;
 
     public GameSettings(HGMap map, Map<Setting, GameSetting> s, GameOverrides overrides) {
         this.map = map;
@@ -20,5 +19,21 @@ public class GameSettings {
 
     public GameSetting getSetting(Setting setting) {
         return settings.get(setting);
+    }
+    
+    public Map<Setting, GameSetting> getSettings() {
+        return settings;
+    }
+    
+    public void setSettings(Map<Setting, GameSetting> settings) {
+        this.settings = settings;
+    }
+    
+    public HGMap getMap() {
+        return map;
+    }
+    
+    public void setMap(HGMap map) {
+        this.map = map;
     }
 }

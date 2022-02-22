@@ -1,7 +1,5 @@
 package net.hungermania.hungergames.map;
 
-import lombok.Getter;
-import lombok.Setter;
 import net.hungermania.maniacore.api.util.Position;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -13,15 +11,15 @@ import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
 
-@Getter
+
 public class HGMap {
     private FileConfiguration config;
-    @Setter private String name, folder;
-    @Setter private Position center;
+    private String name, folder;
+    private Position center;
     private SortedMap<Integer, Position> spawns = new TreeMap<>();
-    @Setter private World world;
-    @Setter private boolean editmode;
-    @Setter private int borderDistance = 100;
+    private World world;
+    private boolean editmode;
+    private int borderDistance = 100;
     private List<String> creators = new ArrayList<>();
     
     public HGMap(String folder) {
@@ -73,8 +71,41 @@ public class HGMap {
         }
     }
     
+    public String getName() {
+        return name;
+    }
+    
+    public String getFolder() {
+        return folder;
+    }
+    
+    public Position getCenter() {
+        return center;
+    }
+    
+    public SortedMap<Integer, Position> getSpawns() {
+        return spawns;
+    }
+    
+    public World getWorld() {
+        return world;
+    }
+    
+    public boolean isEditmode() {
+        return editmode;
+    }
+    
+    public int getBorderDistance() {
+        return borderDistance;
+    }
+    
+    public List<String> getCreators() {
+        return creators;
+    }
+    
     public boolean isSetup() {
-        if (this.center == null) return false;
+        if (this.center == null)
+            return false;
         return this.spawns.size() != 0;
     }
     
@@ -122,17 +153,58 @@ public class HGMap {
     public void saveConfig() {
         try {
             getConfig().save(new File(getFolder(), "map.yml"));
-        } catch (IOException e) {}
+        } catch (IOException e) {
+        }
     }
     
     public boolean equals(Object o) {
-        if (this == o) { return true; }
-        if (o == null || getClass() != o.getClass()) { return false; }
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         HGMap hgMap = (HGMap) o;
         return Objects.equals(name.toLowerCase().replace(" ", "_"), hgMap.name.toLowerCase().replace(" ", "_"));
     }
     
     public int hashCode() {
         return Objects.hash(name);
+    }
+    
+    public void setConfig(FileConfiguration config) {
+        this.config = config;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public void setFolder(String folder) {
+        this.folder = folder;
+    }
+    
+    public void setCenter(Position center) {
+        this.center = center;
+    }
+    
+    public void setSpawns(SortedMap<Integer, Position> spawns) {
+        this.spawns = spawns;
+    }
+    
+    public void setWorld(World world) {
+        this.world = world;
+    }
+    
+    public void setEditmode(boolean editmode) {
+        this.editmode = editmode;
+    }
+    
+    public void setBorderDistance(int borderDistance) {
+        this.borderDistance = borderDistance;
+    }
+    
+    public void setCreators(List<String> creators) {
+        this.creators = creators;
     }
 }

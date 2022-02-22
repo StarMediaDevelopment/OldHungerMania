@@ -1,7 +1,5 @@
 package net.hungermania.hungergames.game.team;
 
-import lombok.Getter;
-import lombok.Setter;
 import me.libraryaddict.disguise.DisguiseAPI;
 import net.hungermania.hungergames.game.Game;
 import net.hungermania.hungergames.game.enums.PlayerType;
@@ -21,13 +19,13 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.Consumer;
 
-@Getter
+
 public abstract class GameTeam implements Iterable<UUID> {
     protected String name, color;
     protected PlayerType playerType;
     protected Set<UUID> members = new HashSet<>();
     protected Game game;
-    @Setter
+    
     protected GameMode gameMode;
     protected Map<Perms, Boolean> permissons = new HashMap<>();
     
@@ -151,5 +149,53 @@ public abstract class GameTeam implements Iterable<UUID> {
     
     public boolean isEmpty() {
         return this.members.isEmpty();
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public String getColor() {
+        return color;
+    }
+    
+    public void setColor(String color) {
+        this.color = color;
+    }
+    
+    public PlayerType getPlayerType() {
+        return playerType;
+    }
+    
+    public void setPlayerType(PlayerType playerType) {
+        this.playerType = playerType;
+    }
+    
+    public void setMembers(Set<UUID> members) {
+        this.members = members;
+    }
+    
+    public Game getGame() {
+        return game;
+    }
+    
+    public void setGame(Game game) {
+        this.game = game;
+    }
+    
+    public GameMode getGameMode() {
+        return gameMode;
+    }
+    
+    public void setGameMode(GameMode gameMode) {
+        this.gameMode = gameMode;
+    }
+    
+    public Map<Perms, Boolean> getPermissons() {
+        return permissons;
+    }
+    
+    public void setPermissons(Map<Perms, Boolean> permissons) {
+        this.permissons = permissons;
     }
 }

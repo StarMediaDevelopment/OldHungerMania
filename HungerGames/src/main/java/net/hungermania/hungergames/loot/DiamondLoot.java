@@ -1,6 +1,5 @@
 package net.hungermania.hungergames.loot;
 
-import lombok.Getter;
 import net.hungermania.hungergames.HungerGames;
 import net.hungermania.hungergames.game.Game;
 import net.hungermania.maniacore.api.ManiaCore;
@@ -13,10 +12,9 @@ import java.util.List;
 
 public class DiamondLoot extends Loot {
     
-    @Getter private List<Loot> loot = new ArrayList<>();
-    private List<Loot> lootChances = new ArrayList<>();
-    
     private static final Loot DIAMOND = new Loot(Material.DIAMOND, 80);
+    private List<Loot> loot = new ArrayList<>();
+    private List<Loot> lootChances = new ArrayList<>();
     
     public DiamondLoot() {
         super(DIAMOND.getMaterial(), 3);
@@ -27,16 +25,16 @@ public class DiamondLoot extends Loot {
         this.loot.add(new Loot(Material.DIAMOND_CHESTPLATE, 12));
         this.loot.add(new Loot(Material.DIAMOND_LEGGINGS, 13));
         this.loot.add(new Loot(Material.DIAMOND_BOOTS, 16));
-
+        
         for (Loot l : this.loot) {
             for (int c = 0; c < l.getWeight(); c++) {
                 lootChances.add(l);
             }
         }
-
+        
         Collections.shuffle(lootChances);
     }
-
+    
     public ItemStack generateItemStack() {
         Game game = HungerGames.getInstance().getGameManager().getCurrentGame();
         if (game == null) {
@@ -49,7 +47,23 @@ public class DiamondLoot extends Loot {
         
         return DIAMOND.generateItemStack();
     }
-
+    
+    public List<Loot> getLoot() {
+        return loot;
+    }
+    
+    public void setLoot(List<Loot> loot) {
+        this.loot = loot;
+    }
+    
+    public List<Loot> getLootChances() {
+        return lootChances;
+    }
+    
+    public void setLootChances(List<Loot> lootChances) {
+        this.lootChances = lootChances;
+    }
+    
     public int getWeight() {
         return 3;
     }

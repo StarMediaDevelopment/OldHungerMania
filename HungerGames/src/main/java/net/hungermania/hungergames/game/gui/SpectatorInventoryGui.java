@@ -1,6 +1,5 @@
 package net.hungermania.hungergames.game.gui;
 
-import lombok.Getter;
 import net.hungermania.hungergames.HungerGames;
 import net.hungermania.hungergames.game.Game;
 import net.hungermania.hungergames.game.GamePlayer;
@@ -30,16 +29,14 @@ import java.util.*;
 
 public class SpectatorInventoryGui extends Gui {
     
-    public static final int OFFSET = 9, HELM = 50, CHEST = HELM + 1, LEGS = CHEST + 1, BOOTS = LEGS + 1; 
-    @Getter private GamePlayer player, target;
-    
-    @Getter private static Set<Inventory> guiInstances = new HashSet<>();
-    
+    public static final int OFFSET = 9, HELM = 50, CHEST = HELM + 1, LEGS = CHEST + 1, BOOTS = LEGS + 1;
+    private static Set<Inventory> guiInstances = new HashSet<>();
     private static BukkitRunnable task;
+    private GamePlayer player, target;
     
     public SpectatorInventoryGui(Game game, GamePlayer player, GamePlayer target) {
         super(HungerGames.getInstance(), ManiaUtils.color(target.getUser().getName() + "'s Inventory &c&lWIP"), false, 54);
-
+        
         this.player = player;
         this.target = target;
         
@@ -60,14 +57,14 @@ public class SpectatorInventoryGui extends Gui {
         List<String> statsLore = new LinkedList<>();
         User user = target.getUser();
         int kills, deaths, wins, losses, deathmatches, chestsFound, coins, exp, winStreak, score;
-
+        
         boolean realStats = true;
         if (user.getNickname().isActive()) {
             if (player.getUser().getRank().ordinal() > user.getRank().ordinal()) {
                 realStats = false;
             }
         }
-
+        
         if (realStats) {
             kills = user.getStat(Stats.HG_KILLS).getAsInt();
             deaths = user.getStat(Stats.HG_DEATHS).getAsInt();
@@ -91,25 +88,25 @@ public class SpectatorInventoryGui extends Gui {
             exp = user.getFakedStat(Stats.EXPERIENCE).getAsInt();
             score = user.getFakedStat(Stats.HG_SCORE).getAsInt();
         }
-
+        
         double kdr;
         double wlr;
-
+        
         if (deaths == 0) {
             kdr = kills;
         } else {
             kdr = kills / (deaths * 1.0);
         }
-
+        
         if (losses == 0) {
             wlr = wins;
         } else {
             wlr = wins / (losses * 1.0);
         }
-
+        
         Level level = ManiaCore.getInstance().getLevelManager().getLevel(exp);
         Level nextLevel = ManiaCore.getInstance().getLevelManager().getLevels().getOrDefault(level.getNumber() + 1, ManiaCore.getInstance().getLevelManager().getLevel(0));
-
+        
         statsLore.add(ManiaUtils.color("&6&l> &7Coins: &b" + coins));
         statsLore.add(ManiaUtils.color("&6&l> &7Level: &b" + level.getNumber()));
         statsLore.add(ManiaUtils.color("&6&l> &7Experience: &b" + exp + "     &e&lNext Level: &b" + (nextLevel.getTotalXp() - exp)));
@@ -127,7 +124,7 @@ public class SpectatorInventoryGui extends Gui {
         Player targetPlayer = target.getUser().getBukkitPlayer();
         setButton(2, new GUIButton(ItemBuilder.start(Material.GOLDEN_APPLE).setDisplayName("&eHealth: &c&l" + Constants.NUMBER_FORMAT.format(targetPlayer.getHealth()) + "/" + Constants.NUMBER_FORMAT.format(targetPlayer.getMaxHealth())).build()));
         setButton(3, new GUIButton(ItemBuilder.start(Material.COOKED_BEEF).setDisplayName("&eFood: &c&l" + Constants.NUMBER_FORMAT.format(targetPlayer.getFoodLevel()) + "/" + Constants.NUMBER_FORMAT.format(20)).build()));
-        setButton(4, new GUIButton(ItemBuilder.start(Material.EXP_BOTTLE).setDisplayName("&eXP Level: &b" + targetPlayer.getLevel()).build()));
+        setButton(4, new GUIButton(ItemBuilder.start(Material.EXPERIENCE_BOTTLE).setDisplayName("&eXP Level: &b" + targetPlayer.getLevel()).build()));
         List<String> activeEffects = new ArrayList<>();
         for (PotionEffect effect : targetPlayer.getActivePotionEffects()) {
             activeEffects.add(effect.getType().getName() + " " + Utils.romanNumerals(effect.getAmplifier()));
@@ -156,7 +153,7 @@ public class SpectatorInventoryGui extends Gui {
                     if (invView == null) {
                         continue;
                     }
-
+                    
                     Inventory inv = invView.getTopInventory();
                     if (!(inv.getHolder() instanceof SpectatorInventoryGui)) {
                         continue;
@@ -187,7 +184,23 @@ public class SpectatorInventoryGui extends Gui {
         };
         task.runTaskTimer(HungerGames.getInstance(), 20L, 5L);
     }
-
+    
+    public static Set<Inventory> getGuiInstances() {
+        return guiInstances;
+    }
+    
+    public static BukkitRunnable getTask() {
+        return task;
+    }
+    
+    public GamePlayer getPlayer() {
+        return player;
+    }
+    
+    public GamePlayer getTarget() {
+        return target;
+    }
+    
     public Inventory openGUI(HumanEntity player) {
         Inventory inventory = super.openGUI(player);
         guiInstances.add(inventory);

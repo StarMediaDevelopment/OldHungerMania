@@ -32,4 +32,8 @@ public class DeathInfoKilledSuicide extends DeathInfo {
         this.deathMessage = "&4&l>> %playername% &7was killed by " + killerName + "&7's suicide.";
         return super.getDeathMessage(game);
     }
+    
+    public String getKillerTeamColor() {
+        return killerTeamColor;
+    }
 }

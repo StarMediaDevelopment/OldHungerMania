@@ -1,6 +1,5 @@
 package net.hungermania.hungergames.lobby;
 
-import cloud.timo.TimoCloud.api.TimoCloudAPI;
 import net.hungermania.hungergames.HungerGames;
 import net.hungermania.maniacore.spigot.user.SpigotUser;
 import net.hungermania.maniacore.spigot.util.SpigotUtils;
@@ -32,7 +31,7 @@ public class VoteTimer extends BukkitRunnable {
             cancel();
             lobby.startGame();
         } else {
-            TimoCloudAPI.getBukkitAPI().getThisServer().setExtra("map:Undecided;time:" + remainingSeconds + "s");
+            //TODO TimoCloudAPI.getBukkitAPI().getThisServer().setExtra("map:Undecided;time:" + remainingSeconds + "s");
             if (!this.announced.contains(remainingSeconds)) {
                 List<SpigotUser> players = new ArrayList<>(lobby.getPlayers());
                 players.addAll(lobby.getHiddenStaff());
@@ -41,7 +40,7 @@ public class VoteTimer extends BukkitRunnable {
                 }
                 if (ANNOUNCE_SECONDS.contains(remainingSeconds)) {
                     for (SpigotUser player : players) {
-                        player.getBukkitPlayer().playSound(player.getBukkitPlayer().getLocation(), Sound.CLICK, 1F, 1F);
+                        player.getBukkitPlayer().playSound(player.getBukkitPlayer().getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1F);
                     }
                     lobby.sendMessage("&e&lVoting closes in &b&l" + remainingSeconds + " &e&lseconds.");
                     announced.add(remainingSeconds);

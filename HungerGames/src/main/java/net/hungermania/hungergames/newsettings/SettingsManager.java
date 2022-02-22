@@ -1,6 +1,5 @@
 package net.hungermania.hungergames.newsettings;
 
-import lombok.Getter;
 import net.hungermania.hungergames.newsettings.enums.Setting;
 import net.hungermania.hungergames.records.GameSettingRecord;
 import net.hungermania.maniacore.api.ManiaCore;
@@ -14,7 +13,7 @@ import java.util.Map.Entry;
 
 public class SettingsManager {
 
-    @Getter private Map<String, SettingGroup> settingsGroup = new HashMap<>();
+     private Map<String, SettingGroup> settingsGroup = new HashMap<>();
 
     public void loadData() {
         List<IRecord> records = ManiaCore.getInstance().getDatabase().getRecords(GameSettingRecord.class, null, null);
@@ -59,5 +58,13 @@ public class SettingsManager {
             }
             this.settingsGroup.put(entry.getKey(), new SettingGroup(entry.getKey(), groupSettings));
         }
+    }
+    
+    public Map<String, SettingGroup> getSettingsGroup() {
+        return settingsGroup;
+    }
+    
+    public void setSettingsGroup(Map<String, SettingGroup> settingsGroup) {
+        this.settingsGroup = settingsGroup;
     }
 }

@@ -1,8 +1,5 @@
 package net.hungermania.hungergames.lobby;
 
-import cloud.timo.TimoCloud.api.TimoCloudAPI;
-import cloud.timo.TimoCloud.api.objects.PlayerObject;
-import cloud.timo.TimoCloud.api.objects.ServerObject;
 import me.libraryaddict.disguise.DisguiseAPI;
 import net.hungermania.hungergames.HungerGames;
 import net.hungermania.hungergames.game.Game;
@@ -211,8 +208,8 @@ public class Lobby implements Listener, CommandExecutor {
         }
         new BukkitRunnable() {
             public void run() {
-                TimoCloudAPI.getBukkitAPI().getThisServer().setExtra("map:Undecided;time:" + time + "s");
-                TimoCloudAPI.getBukkitAPI().getThisServer().setState("LOBBY");
+                //TimoCloudAPI.getBukkitAPI().getThisServer().setExtra("map:Undecided;time:" + time + "s");
+                //TimoCloudAPI.getBukkitAPI().getThisServer().setState("LOBBY");
                 Redis.sendCommand("gameReady " + ManiaCore.getInstance().getServerManager().getCurrentServer().getName());
             }
         }.runTaskLaterAsynchronously(HungerGames.getInstance(), 1L);
@@ -538,15 +535,15 @@ public class Lobby implements Listener, CommandExecutor {
                 sender.sendMessage(ManiaUtils.color("&cOnly players can use that command."));
                 return true;
             }
-            for (ServerObject server : TimoCloudAPI.getUniversalAPI().getServerGroup("HG").getServers()) {
-                if (server.getState().equalsIgnoreCase("lobby") || server.getState().equalsIgnoreCase("online")) {
-                    if (server.getOnlinePlayerCount() < gameSettings.getMaxPlayers()) {
-                        PlayerObject playerObject = TimoCloudAPI.getUniversalAPI().getPlayer(((Player) sender).getUniqueId());
-                        playerObject.sendToServer(server);
-                        return true;
-                    }
-                }
-            }
+//            for (ServerObject server : TimoCloudAPI.getUniversalAPI().getServerGroup("HG").getServers()) {
+//                if (server.getState().equalsIgnoreCase("lobby") || server.getState().equalsIgnoreCase("online")) {
+//                    if (server.getOnlinePlayerCount() < gameSettings.getMaxPlayers()) {
+//                        PlayerObject playerObject = TimoCloudAPI.getUniversalAPI().getPlayer(((Player) sender).getUniqueId());
+//                        playerObject.sendToServer(server);
+//                        return true;
+//                    }
+//                }
+//            } //TODO
             
             sender.sendMessage(ManiaUtils.color("&cCould not find a free server."));
         }

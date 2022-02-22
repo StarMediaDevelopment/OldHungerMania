@@ -1,7 +1,5 @@
 package net.hungermania.hungergames.loot;
 
-import lombok.Getter;
-import lombok.Setter;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.manialib.data.model.IRecord;
@@ -10,7 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-@Getter @Setter
+ 
 public class Loot implements IRecord {
     protected int id, maxAmount;
     protected Material material;
@@ -70,5 +68,47 @@ public class Loot implements IRecord {
         }
         itemStack.setItemMeta(itemMeta);
         return itemStack;
+    }
+    
+    @Override
+    public int getId() {
+        return id;
+    }
+    
+    @Override
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    public int getMaxAmount() {
+        return maxAmount;
+    }
+    
+    public void setMaxAmount(int maxAmount) {
+        this.maxAmount = maxAmount;
+    }
+    
+    public Material getMaterial() {
+        return material;
+    }
+    
+    public void setMaterial(Material material) {
+        this.material = material;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public int getWeight() {
+        return weight;
+    }
+    
+    public void setWeight(int weight) {
+        this.weight = weight;
     }
 }

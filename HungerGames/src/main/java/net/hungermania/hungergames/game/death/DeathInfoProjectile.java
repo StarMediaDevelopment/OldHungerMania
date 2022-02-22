@@ -1,6 +1,5 @@
 package net.hungermania.hungergames.game.death;
 
-import lombok.Getter;
 import net.hungermania.hungergames.HungerGames;
 import net.hungermania.hungergames.game.Game;
 import net.hungermania.maniacore.spigot.user.SpigotUser;
@@ -10,7 +9,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-@Getter
+
 public class DeathInfoProjectile extends DeathInfo {
     
     private Entity shooter;
@@ -40,5 +39,29 @@ public class DeathInfoProjectile extends DeathInfo {
         
         this.deathMessage = "&4&l>> %playername% &7was shot by " + killerName + " &7from &f" + Utils.formatNumber(distance) + " blocks.";
         return super.getDeathMessage(game);
+    }
+    
+    public Entity getShooter() {
+        return shooter;
+    }
+    
+    public void setShooter(Entity shooter) {
+        this.shooter = shooter;
+    }
+    
+    public double getDistance() {
+        return distance;
+    }
+    
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
+    
+    public String getKillerTeamColor() {
+        return killerTeamColor;
+    }
+    
+    public void setKillerTeamColor(String killerTeamColor) {
+        this.killerTeamColor = killerTeamColor;
     }
 }

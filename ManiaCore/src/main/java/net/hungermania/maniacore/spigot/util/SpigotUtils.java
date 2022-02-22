@@ -45,7 +45,7 @@ public class SpigotUtils {
         }
     }
     
-    public Position locationToPosition(Location location) {
+    public static Position locationToPosition(Location location) {
         return new Position(location.getBlockX(), location.getBlockY(), location.getBlockZ(), location.getYaw(), location.getPitch());
     }
     

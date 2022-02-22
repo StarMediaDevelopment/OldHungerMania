@@ -1,6 +1,5 @@
 package net.hungermania.hungergames.loot;
 
-import lombok.Getter;
 import net.hungermania.hungergames.HungerGames;
 import net.hungermania.hungergames.records.LootRecord;
 import net.hungermania.maniacore.api.ManiaCore;
@@ -11,8 +10,8 @@ import java.util.*;
 
 @SuppressWarnings("DuplicatedCode")
 public class LootManager {
-    @Getter private Map<Integer, Loot> possibleLoot = new HashMap<>();
-    @Getter private List<Loot> lootChances = new ArrayList<>();
+     private Map<Integer, Loot> possibleLoot = new HashMap<>();
+     private List<Loot> lootChances = new ArrayList<>();
 
     private HungerGames plugin = HungerGames.getInstance();
     
@@ -44,6 +43,30 @@ public class LootManager {
         Collections.shuffle(lootChances);
     }
     
+    public Map<Integer, Loot> getPossibleLoot() {
+        return possibleLoot;
+    }
+    
+    public void setPossibleLoot(Map<Integer, Loot> possibleLoot) {
+        this.possibleLoot = possibleLoot;
+    }
+    
+    public List<Loot> getLootChances() {
+        return lootChances;
+    }
+    
+    public void setLootChances(List<Loot> lootChances) {
+        this.lootChances = lootChances;
+    }
+    
+    public HungerGames getPlugin() {
+        return plugin;
+    }
+    
+    public void setPlugin(HungerGames plugin) {
+        this.plugin = plugin;
+    }
+    
     public void generateDefaultLoot() {
         if (this.possibleLoot.isEmpty()) {
             Loot leather_helmet = new Loot(Material.LEATHER_HELMET, 22);
@@ -58,27 +81,27 @@ public class LootManager {
             Loot iron_chestplate = new Loot(Material.IRON_CHESTPLATE, 7);
             Loot iron_leggings = new Loot(Material.IRON_LEGGINGS, 7);
             Loot iron_boots = new Loot(Material.IRON_BOOTS, 7);
-            Loot gold_helmet = new Loot(Material.GOLD_HELMET, 20);
-            Loot gold_chestplate = new Loot(Material.GOLD_CHESTPLATE, 20);
-            Loot gold_leggings = new Loot(Material.GOLD_LEGGINGS, 20);
-            Loot gold_boots = new Loot(Material.GOLD_BOOTS, 20);
-            Loot wood_axe = new Loot(Material.WOOD_AXE, 20);
-            Loot wood_sword = new Loot(Material.WOOD_SWORD, 25);
+            Loot gold_helmet = new Loot(Material.GOLDEN_HELMET, 20);
+            Loot gold_chestplate = new Loot(Material.GOLDEN_CHESTPLATE, 20);
+            Loot gold_leggings = new Loot(Material.GOLDEN_LEGGINGS, 20);
+            Loot gold_boots = new Loot(Material.GOLDEN_BOOTS, 20);
+            Loot wood_axe = new Loot(Material.WOODEN_AXE, 20);
+            Loot wood_sword = new Loot(Material.WOODEN_SWORD, 25);
             Loot stone_axe = new Loot(Material.STONE_AXE, 20);
             Loot stone_sword = new Loot(Material.STONE_SWORD, 25);
             Loot bow = new Loot(Material.BOW, 15);
             Loot arrows = new Loot(Material.ARROW, 20, 5);
-            Loot cooked_porkchop = new Loot(Material.GRILLED_PORK, "Porkchop", 20);
+            Loot cooked_porkchop = new Loot(Material.COOKED_PORKCHOP, "Porkchop", 20);
             Loot steak = new Loot(Material.COOKED_BEEF, "Steak", 30);
             Loot grilled_chicken = new Loot(Material.COOKED_CHICKEN, "Grilled Chicken", 30);
-            Loot raw_porkchop = new Loot(Material.PORK, "Raw Porkchop", 20);
-            Loot raw_beef = new Loot(Material.RAW_BEEF, 15);
-            Loot raw_chicken = new Loot(Material.RAW_CHICKEN, 15);
-            Loot carrots = new Loot(Material.CARROT_ITEM, "Carrot", 20);
-            Loot potato = new Loot(Material.POTATO_ITEM, "Potato", 15);
+            Loot raw_porkchop = new Loot(Material.PORKCHOP, "Raw Porkchop", 20);
+            Loot raw_beef = new Loot(Material.BEEF, 15);
+            Loot raw_chicken = new Loot(Material.CHICKEN, 15);
+            Loot carrots = new Loot(Material.CARROT, "Carrot", 20);
+            Loot potato = new Loot(Material.POTATO, "Potato", 15);
             Loot baked_potato = new Loot(Material.BAKED_POTATO, 20);
             Loot egg_of_doom = new Loot(Material.EGG, "Egg of Doom", 15);
-            Loot slowball = new Loot(Material.SNOW_BALL, "Slowball", 20);
+            Loot slowball = new Loot(Material.SNOWBALL, "Slowball", 20);
             Loot iron_ingot = new Loot(Material.IRON_INGOT, 10);
             Loot gold_ingot = new Loot(Material.GOLD_INGOT, 5);
             Loot diamond = new DiamondLoot();
@@ -89,15 +112,15 @@ public class LootManager {
             Loot cake = new Loot(Material.CAKE, 20);
             Loot player_tracker = new Loot(Material.COMPASS, "Player Tracker", 15);
             Loot pumpkin_pie = new Loot(Material.PUMPKIN_PIE, 10);
-            Loot raw_fish = new Loot(Material.RAW_FISH, 20);
-            Loot cooked_fish = new Loot(Material.COOKED_FISH, 20);
+            Loot raw_fish = new Loot(Material.COD, 20);
+            Loot cooked_fish = new Loot(Material.COOKED_COD, 20);
             Loot feather = new Loot(Material.FEATHER, 20);
             Loot flint = new Loot(Material.FLINT, 20);
             Loot fishing_rod = new Loot(Material.FISHING_ROD, 20);
-            Loot cobweb = new Loot(Material.WEB, "Cobweb", 15);
-            Loot enchantment_bottle = new Loot(Material.EXP_BOTTLE, 20, 3);
+            Loot cobweb = new Loot(Material.COBWEB, "Cobweb", 15);
+            Loot enchantment_bottle = new Loot(Material.EXPERIENCE_BOTTLE, 20, 3);
             Loot golden_apple = new Loot(Material.GOLDEN_APPLE, "Golden Munchie", 2);
-            Loot wood_planks = new Loot(Material.WOOD, "Wood Planks", 15);
+            Loot wood_planks = new Loot(Material.OAK_PLANKS, "Wood Planks", 15);
             Loot ender_pearl = new Loot(Material.ENDER_PEARL, 1);
             Loot wet_noodle = new Loot(Material.ROTTEN_FLESH, "Wet Noodle", 10);
             Loot golden_carrot = new Loot(Material.GOLDEN_CARROT, 15);

@@ -2,7 +2,6 @@ package net.hungermania.hub.leaderboard;
 
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
-import lombok.Getter;
 import net.hungermania.hub.ManiaHub;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.manialib.util.Range;
@@ -19,8 +18,8 @@ import java.util.Map.Entry;
 public class LeaderboardManager {
     
     private final ManiaHub plugin;
-    @Getter private Map<Integer, NPC> npcs = new HashMap<>();
-    @Getter private Set<Range<Leaderboard>> leaderboards = new HashSet<>();
+    private Map<Integer, NPC> npcs = new HashMap<>();
+    private Set<Range<Leaderboard>> leaderboards = new HashSet<>();
     private File file;
     private FileConfiguration config;
     
@@ -38,6 +37,26 @@ public class LeaderboardManager {
         this.config = YamlConfiguration.loadConfiguration(file);
     }
     
+    public ManiaHub getPlugin() {
+        return plugin;
+    }
+    
+    public Map<Integer, NPC> getNpcs() {
+        return npcs;
+    }
+    
+    public Set<Range<Leaderboard>> getLeaderboards() {
+        return leaderboards;
+    }
+    
+    public File getFile() {
+        return file;
+    }
+    
+    public FileConfiguration getConfig() {
+        return config;
+    }
+    
     public void addLeaderboard(Leaderboard leaderboard) {
         this.leaderboards.add(new Range<>(leaderboard.getMin(), leaderboard.getMax(), leaderboard));
     }
@@ -50,7 +69,7 @@ public class LeaderboardManager {
         if (this.config.contains("npcs")) {
             ConfigurationSection section = config.getConfigurationSection("npcs");
             for (String key : section.getKeys(false)) {
-                UUID uuid  = UUID.fromString(section.getString(key + ".uuid"));
+                UUID uuid = UUID.fromString(section.getString(key + ".uuid"));
                 UUID skinUUID = UUID.fromString(section.getString(key + ".skinUuid"));
                 Location location = (Location) section.get(key + ".location");
                 int position = Integer.parseInt(key);

@@ -1,6 +1,5 @@
 package net.hungermania.hungergames.game.sponsoring;
 
-import lombok.Getter;
 import net.hungermania.maniacore.api.util.ManiaUtils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -10,35 +9,35 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.*;
 
 public class SponsorManager {
-    @Getter private Map<SponsorType, List<SponsorItem>> sponsorItems = new HashMap<>();
-    @Getter private Set<UUID> sponsoredActors = new HashSet<>();
+     private Map<SponsorType, List<SponsorItem>> sponsorItems = new HashMap<>();
+     private Set<UUID> sponsoredActors = new HashSet<>();
     
     
     public SponsorManager() {
         List<SponsorItem> foodItems = new LinkedList<>(), weaponItems = new LinkedList<>(), armorItems = new LinkedList<>(), potionEffects = new LinkedList<>();
         foodItems.add(new SponsorItem(Material.APPLE, 1, SponsorType.FOOD));
-        foodItems.add(new SponsorItem(Material.RAW_FISH, 3, SponsorType.FOOD));
-        foodItems.add(new SponsorItem("Carrots", Material.CARROT_ITEM, 2, SponsorType.FOOD));
+        foodItems.add(new SponsorItem(Material.COD, 3, SponsorType.FOOD));
+        foodItems.add(new SponsorItem("Carrots", Material.CARROT, 2, SponsorType.FOOD));
         foodItems.add(new SponsorItem(Material.MELON, 3, SponsorType.FOOD));
-        foodItems.add(new SponsorItem("Potatoes", Material.POTATO_ITEM, 2, SponsorType.FOOD));
-        foodItems.add(new SponsorItem(Material.PORK, 2, SponsorType.FOOD));
-        foodItems.add(new SponsorItem(Material.RAW_BEEF, 2, SponsorType.FOOD));
-        foodItems.add(new SponsorItem(Material.GRILLED_PORK, 1, SponsorType.FOOD));
+        foodItems.add(new SponsorItem("Potatoes", Material.POTATO, 2, SponsorType.FOOD));
+        foodItems.add(new SponsorItem(Material.PORKCHOP, 2, SponsorType.FOOD));
+        foodItems.add(new SponsorItem(Material.BEEF, 2, SponsorType.FOOD));
+        foodItems.add(new SponsorItem(Material.COOKED_PORKCHOP, 1, SponsorType.FOOD));
         foodItems.add(new SponsorItem(Material.COOKED_BEEF, 1, SponsorType.FOOD));
-        foodItems.add(new SponsorItem(Material.COOKED_FISH, 1, SponsorType.FOOD));
+        foodItems.add(new SponsorItem(Material.COOKED_COD, 1, SponsorType.FOOD));
         
-        weaponItems.add(new SponsorItem(Material.WOOD_AXE, 1, SponsorType.WEAPON));
-        weaponItems.add(new SponsorItem(Material.WOOD_SWORD, 1, SponsorType.WEAPON));
+        weaponItems.add(new SponsorItem(Material.WOODEN_AXE, 1, SponsorType.WEAPON));
+        weaponItems.add(new SponsorItem(Material.WOODEN_SWORD, 1, SponsorType.WEAPON));
         weaponItems.add(new SponsorItem(Material.STONE_AXE, 1, SponsorType.WEAPON));
         weaponItems.add(new SponsorItem(Material.STONE_SWORD, 1, SponsorType.WEAPON));
         weaponItems.add(new SponsorItem(Material.IRON_AXE, 1, SponsorType.WEAPON));
         weaponItems.add(new SponsorItem(Material.IRON_SWORD, 1, SponsorType.WEAPON));
         weaponItems.add(new SponsorItem(Material.FISHING_ROD, 1, SponsorType.WEAPON));
 
-        armorItems.add(new SponsorItem(Material.GOLD_HELMET, 1, SponsorType.ARMOR));
-        armorItems.add(new SponsorItem(Material.GOLD_CHESTPLATE, 1, SponsorType.ARMOR));
-        armorItems.add(new SponsorItem(Material.GOLD_LEGGINGS, 1, SponsorType.ARMOR));
-        armorItems.add(new SponsorItem(Material.GOLD_BOOTS, 1, SponsorType.ARMOR));
+        armorItems.add(new SponsorItem(Material.GOLDEN_HELMET, 1, SponsorType.ARMOR));
+        armorItems.add(new SponsorItem(Material.GOLDEN_CHESTPLATE, 1, SponsorType.ARMOR));
+        armorItems.add(new SponsorItem(Material.GOLDEN_LEGGINGS, 1, SponsorType.ARMOR));
+        armorItems.add(new SponsorItem(Material.GOLDEN_BOOTS, 1, SponsorType.ARMOR));
         armorItems.add(new SponsorItem(Material.CHAINMAIL_HELMET, 1, SponsorType.ARMOR));
         armorItems.add(new SponsorItem(Material.CHAINMAIL_CHESTPLATE, 1, SponsorType.ARMOR));
         armorItems.add(new SponsorItem(Material.CHAINMAIL_LEGGINGS, 1, SponsorType.ARMOR));
@@ -90,5 +89,13 @@ public class SponsorManager {
         meta.setLore(lore);
         itemStack.setItemMeta(meta);
         return itemStack;
+    }
+    
+    public Map<SponsorType, List<SponsorItem>> getSponsorItems() {
+        return sponsorItems;
+    }
+    
+    public Set<UUID> getSponsoredActors() {
+        return sponsoredActors;
     }
 }

@@ -1,7 +1,5 @@
 package net.hungermania.hungergames;
 
-import lombok.Getter;
-import lombok.Setter;
 import net.hungermania.hungergames.chat.HGChatFormatter;
 import net.hungermania.hungergames.chat.HGChatHandler;
 import net.hungermania.hungergames.game.Game;
@@ -52,12 +50,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 
-@Getter
+
 public final class HungerGames extends JavaPlugin implements ManiaPlugin {
     
     private GameManager gameManager;
     private ManiaCore maniaCore;
-    @Setter
+    
     private MapManager mapManager;
     private Lobby lobby;
     private LootManager lootManager;
@@ -184,6 +182,30 @@ public final class HungerGames extends JavaPlugin implements ManiaPlugin {
     
     public SettingsManager getSettingsManager() {
         return settingsManager;
+    }
+    
+    public GameManager getGameManager() {
+        return gameManager;
+    }
+    
+    public ManiaCore getManiaCore() {
+        return maniaCore;
+    }
+    
+    public MapManager getMapManager() {
+        return mapManager;
+    }
+    
+    public Lobby getLobby() {
+        return lobby;
+    }
+    
+    public LootManager getLootManager() {
+        return lootManager;
+    }
+    
+    public MemoryHook getGameTaskHook() {
+        return gameTaskHook;
     }
     
     @Override

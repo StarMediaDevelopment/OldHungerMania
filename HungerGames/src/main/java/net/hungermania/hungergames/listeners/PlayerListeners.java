@@ -64,6 +64,9 @@ import java.util.concurrent.TimeUnit;
 
 public class PlayerListeners extends GameListener {
     
+    private EnumSet<Material> RAW_FOOD_ITEMS = EnumSet.of(Material.BEEF, Material.COD, Material.CHICKEN, Material.POTATO, Material.MUTTON, Material.RABBIT, Material.SALMON);
+    //TODO Maybe more food items, need to look
+    
     @EventHandler
     public void onItemDrop(PlayerDropItemEvent e) {
         if (gameManager.getCurrentGame() != null) {
@@ -104,7 +107,7 @@ public class PlayerListeners extends GameListener {
                 }
                 
                 EnchantingInventory enchantingInventory = (EnchantingInventory) e.getInventory();
-                enchantingInventory.setSecondary(new ItemStack(Material.INK_SACK, 64, (short) 4));
+                enchantingInventory.setSecondary(new ItemStack(Material.INK_SAC, 64, (short) 4));
             }
         } else {
             if (!(e.getInventory().getHolder() instanceof Gui)) {
@@ -120,7 +123,8 @@ public class PlayerListeners extends GameListener {
                 EnchantingInventory enchantingInventory = (EnchantingInventory) e.getInventory();
                 enchantingInventory.setSecondary(null);
             }
-        } catch (Exception ex) {}
+        } catch (Exception ex) {
+        }
     }
     
     @EventHandler
@@ -129,18 +133,22 @@ public class PlayerListeners extends GameListener {
             Game game = gameManager.getCurrentGame();
             if (e.getClickedBlock() != null) {
                 Block block = e.getClickedBlock();
-                if (block.getType() == Material.DISPENSER || block.getType() == Material.FURNACE || block.getType() == Material.BURNING_FURNACE) {
+                if (block.getType() == Material.DISPENSER || block.getType() == Material.FURNACE) {
                     e.setCancelled(true);
                     return;
                 }
                 
                 if (block.getType() == Material.CHEST || block.getType() == Material.TRAPPED_CHEST) {
-                    if (game == null) { return; }
+                    if (game == null) {
+                        return;
+                    }
                     if (!game.getTributesTeam().isMember(e.getPlayer().getUniqueId())) {
                         e.setCancelled(true);
                         return;
                     }
-                    if (game.isLootedChest(block)) { return; }
+                    if (game.isLootedChest(block)) {
+                        return;
+                    }
                     Inventory inv = ((Chest) block.getState()).getBlockInventory();
                     int maxAmount = 6;
                     if (inv instanceof DoubleChestInventory) {
@@ -170,7 +178,9 @@ public class PlayerListeners extends GameListener {
                         }
                     }
                     
-                    if (mapPosition == 0) { return; }
+                    if (mapPosition == 0) {
+                        return;
+                    }
                     for (SpigotUser user : lobby.getHiddenStaff()) {
                         if (user.getUniqueId().equals(e.getPlayer().getUniqueId())) {
                             e.getPlayer().sendMessage(ManiaUtils.color("&cYou cannot vote for a map."));
@@ -178,12 +188,13 @@ public class PlayerListeners extends GameListener {
                         }
                     }
                     e.getPlayer().performCommand("map " + mapPosition);
-                } else if (block.getType() == Material.CAKE_BLOCK) {
+                } else if (block.getType() == Material.CAKE) {
                     if (e.getPlayer().getFoodLevel() != 20) {
                         try {
                             SpigotUser user = (SpigotUser) ManiaCore.getInstance().getUserManager().getUser(e.getPlayer().getUniqueId());
                             Perks.FATTY.activate(user);
-                        } catch (Exception ex) {}
+                        } catch (Exception ex) {
+                        }
                     }
                 }
             } else {
@@ -303,7 +314,7 @@ public class PlayerListeners extends GameListener {
                     }
                     
                     new MutateGui(gamePlayer.getUniqueId(), target).openGUI(e.getPlayer());
-                } else if (hand.getType() == Material.SULPHUR) {
+                } else if (hand.getType() == Material.GUNPOWDER) {
                     if (game.getMutationsTeam().isMember(e.getPlayer().getUniqueId())) {
                         GamePlayer gamePlayer = game.getPlayer(e.getPlayer().getUniqueId());
                         Player player = Bukkit.getPlayer(e.getPlayer().getUniqueId());
@@ -343,7 +354,9 @@ public class PlayerListeners extends GameListener {
         e.setDeathMessage(null);
         
         Game game = gameManager.getCurrentGame();
-        if (game == null) { return; }
+        if (game == null) {
+            return;
+        }
         Player player = e.getEntity();
         if (!(game.getTributesTeam().isMember(player.getUniqueId()) || game.getMutationsTeam().isMember(player.getUniqueId()))) {
             return;
@@ -542,7 +555,7 @@ public class PlayerListeners extends GameListener {
                     public void run() {
                         user.getBukkitPlayer().setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
                         user.setScoreboard(null);
-    
+                        
                         Messager messager;
                         GameSettings gameSettings;
                         int totalPlayers;
@@ -563,21 +576,21 @@ public class PlayerListeners extends GameListener {
                                 lobby.getPlayers().add(user);
                             }
                             user.getBukkitPlayer().teleport(plugin.getSpawnpoint().getLocation());
-
+                            
                             if (lobby.getPlayers().size() >= lobby.getGameSettings().getMinPlayers()) {
                                 lobby.startTimer();
                                 if (lobby.getVoteTimer() == null) {
                                     lobby.sendMessage("&6&l>> &aMinimum player requirement met. Game starting shortly...");
                                 }
                             }
-
+                            
                             user.getBukkitPlayer().setPlayerListName(ManiaUtils.color(user.getDisplayName()));
                             new BukkitRunnable() {
                                 public void run() {
                                     user.sendMessage("&6&l>> &e&lDid you know that you can use &f&l/votestart &e&lto start a game early?");
                                 }
                             }.runTaskLater(HungerGames.getInstance(), 40L);
-
+                            
                             messager = lobby.getMessager();
                             gameSettings = lobby.getGameSettings();
                             totalPlayers = lobby.getPlayers().size();
@@ -603,7 +616,8 @@ public class PlayerListeners extends GameListener {
     @EventHandler
     public void onPlayerTeleport(PlayerTeleportEvent e) {
         Game game = gameManager.getCurrentGame();
-        if (game == null) return;
+        if (game == null)
+            return;
         if (e.getCause() == TeleportCause.ENDER_PEARL) {
             e.setCancelled(true);
             e.getPlayer().teleport(e.getTo(), TeleportCause.PLUGIN);
@@ -649,13 +663,13 @@ public class PlayerListeners extends GameListener {
         }
     }
     
-    private EnumSet<Material> RAW_FOOD_ITEMS = EnumSet.of(Material.RAW_BEEF, Material.RAW_FISH, Material.RAW_CHICKEN, Material.POTATO, Material.MUTTON, Material.RABBIT);
-    
     @EventHandler
     public void onUpdate(UpdateEvent e) {
-        if (e.getType() != UpdateType.SECOND) return;
+        if (e.getType() != UpdateType.SECOND)
+            return;
         Game game = gameManager.getCurrentGame();
-        if (game == null) return;
+        if (game == null)
+            return;
         for (UUID uuid : game.getTributesTeam()) {
             Player player = Bukkit.getPlayer(uuid);
             ItemStack hand = player.getItemInHand();
@@ -665,13 +679,13 @@ public class PlayerListeners extends GameListener {
                     int heldTime = Integer.parseInt(rawTime);
                     if (heldTime >= 7) {
                         switch (hand.getType()) {
-                            case RAW_BEEF:
+                            case BEEF:
                                 hand.setType(Material.COOKED_BEEF);
                                 break;
-                            case RAW_FISH:
-                                hand.setType(Material.COOKED_FISH);
+                            case COD:
+                                hand.setType(Material.COOKED_COD);
                                 break;
-                            case RAW_CHICKEN:
+                            case CHICKEN:
                                 hand.setType(Material.COOKED_CHICKEN);
                                 break;
                             case POTATO:
@@ -682,6 +696,9 @@ public class PlayerListeners extends GameListener {
                                 break;
                             case RABBIT:
                                 hand.setType(Material.COOKED_RABBIT);
+                                break;
+                            case SALMON:
+                                hand.setType(Material.COOKED_SALMON);
                                 break;
                         }
                     }
@@ -694,16 +711,17 @@ public class PlayerListeners extends GameListener {
     @EventHandler
     public void onPlayerEat(PlayerItemConsumeEvent e) {
         Game game = gameManager.getCurrentGame();
-        if (game == null) return;
+        if (game == null)
+            return;
         if (e.getItem().getType().equals(Material.ROTTEN_FLESH)) {
             if (e.getItem().hasItemMeta() && e.getItem().getItemMeta().hasDisplayName()) {
                 if (e.getItem().getItemMeta().getDisplayName().toLowerCase().contains("wet noodle")) {
                     if (ManiaCore.RANDOM.nextInt(10) < 1) {
-                        game.playSound(Sound.ENDERMAN_STARE);
+                        game.playSound(Sound.ENTITY_ENDERMAN_STARE);
                         Player player = e.getPlayer();
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 15*20, 1));
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 20*20, 0));
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5*20, 0));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 15 * 20, 1));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 20 * 20, 0));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5 * 20, 0));
                     }
                 }
             }

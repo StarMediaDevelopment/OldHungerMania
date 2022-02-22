@@ -1,7 +1,5 @@
 package net.hungermania.hungergames.game.death;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import net.hungermania.hungergames.HungerGames;
 import net.hungermania.hungergames.game.Game;
 import net.hungermania.maniacore.api.ManiaCore;
@@ -11,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
-@Getter @AllArgsConstructor
+
 public class DeathInfo {
     protected UUID player;
     protected DeathType type;
@@ -23,19 +21,11 @@ public class DeathInfo {
         this.teamColor = HungerGames.getInstance().getGameManager().getCurrentGame().getGameTeam(player).getColor();
     }
     
-    public String getDeathMessage(Game game) {
-        String message = deathMessage;
-        if (message != null) {
-            SpigotUser user = (SpigotUser) ManiaCore.getInstance().getUserManager().getUser(this.player);
-            String name = "";
-            if (user.getNickname().isActive()) {
-                name = user.getNickname().getName();
-            } else {
-                name = user.getName();
-            }
-            message = message.replace("%playername%", teamColor + name);
-        }
-        return message;
+    public DeathInfo(UUID player, DeathType type, String deathMessage, String teamColor) {
+        this.player = player;
+        this.type = type;
+        this.deathMessage = deathMessage;
+        this.teamColor = teamColor;
     }
     
     public static String getKillerName(Game game, UUID killer) {
@@ -55,5 +45,36 @@ public class DeathInfo {
             itemName = "their fists";
         }
         return itemName;
+    }
+    
+    public String getDeathMessage(Game game) {
+        String message = deathMessage;
+        if (message != null) {
+            SpigotUser user = (SpigotUser) ManiaCore.getInstance().getUserManager().getUser(this.player);
+            String name = "";
+            if (user.getNickname().isActive()) {
+                name = user.getNickname().getName();
+            } else {
+                name = user.getName();
+            }
+            message = message.replace("%playername%", teamColor + name);
+        }
+        return message;
+    }
+    
+    public UUID getPlayer() {
+        return player;
+    }
+    
+    public DeathType getType() {
+        return type;
+    }
+    
+    public String getDeathMessage() {
+        return deathMessage;
+    }
+    
+    public String getTeamColor() {
+        return teamColor;
     }
 }

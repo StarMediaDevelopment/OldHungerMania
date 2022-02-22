@@ -165,4 +165,16 @@ public class SpigotUser extends User {
     public Collection<PerkInfo> getPerks() {
         return this.perks.values();
     }
+    
+    public void setScoreboard(PlayerBoard scoreboard) {
+        this.scoreboard = scoreboard;
+    }
+    
+    public PlayerBoard getScoreboard() {
+        return scoreboard;
+    }
+    
+    public void setPerks(Map<String, PerkInfo> perks) {
+        this.perks = perks;
+    }
 }

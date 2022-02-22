@@ -84,10 +84,6 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
-        <repository>
-            <id>TimoCloud-API</id>
-            <url>https://maven.timo.cloud/repository/TimoCloud-API/</url>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -124,12 +120,6 @@
             <systemPath>${project.basedir}/../Libs/SpartanAPI.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>LibsDisguises</groupId>
-            <artifactId>LibsDisguises</artifactId>
-            <scope>provided</scope>
-            <version>10.0.27-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>com.github.dmulloy2</groupId>
             <artifactId>ProtocolLib</artifactId>
             <version>4.7.0</version>
@@ -143,9 +133,15 @@
         </dependency>
         <dependency>
             <groupId>LibsDisguises</groupId>
+            <artifactId>LibsDisguises</artifactId>
+            <scope>provided</scope>
+            <version>10.0.27-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>LibsDisguises</groupId>
             <artifactId>plugin</artifactId>
             <version>10.0.27-SNAPSHOT</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

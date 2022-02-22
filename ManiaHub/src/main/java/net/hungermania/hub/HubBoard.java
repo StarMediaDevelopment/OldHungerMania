@@ -1,7 +1,5 @@
 package net.hungermania.hub;
 
-import cloud.timo.TimoCloud.api.TimoCloudAPI;
-import cloud.timo.TimoCloud.api.objects.ServerObject;
 import net.hungermania.maniacore.api.ManiaCore;
 import net.hungermania.maniacore.api.ranks.Rank;
 import net.hungermania.maniacore.api.server.ManiaServer;
@@ -30,12 +28,12 @@ public class HubBoard extends PlayerBoard {
         addLine("", ChatColor.LIGHT_PURPLE.toString(), "");
         addLine("", ChatColor.GOLD + "" + ChatColor.BOLD + "ONLINE", "");
         int hubOnline = 0, gameOnline = 0;
-        for (ServerObject server : TimoCloudAPI.getUniversalAPI().getServerGroup("Hub").getServers()) {
-            hubOnline += server.getOnlinePlayerCount();
-        }
-        for (ServerObject server : TimoCloudAPI.getUniversalAPI().getServerGroup("HG").getServers()) {
-            gameOnline += server.getOnlinePlayerCount();
-        }
+//        for (ServerObject server : TimoCloudAPI.getUniversalAPI().getServerGroup("Hub").getServers()) {
+//            hubOnline += server.getOnlinePlayerCount();
+//        }
+//        for (ServerObject server : TimoCloudAPI.getUniversalAPI().getServerGroup("HG").getServers()) {
+//            gameOnline += server.getOnlinePlayerCount();
+//        } //TODO
         this.hubLine = addLine("", ChatColor.WHITE + "Hub: " + ChatColor.GREEN, "" + hubOnline);
         this.inGameLine = addLine("", ChatColor.WHITE + "In Game: " + ChatColor.GREEN, "" + gameOnline);
         addLine("", ChatColor.YELLOW.toString(), "");
@@ -56,7 +54,7 @@ public class HubBoard extends PlayerBoard {
         }
         addLine("", ChatColor.WHITE + "", serverName);
         addLine(ChatColor.YELLOW + "play.", "hungermania.net", "");
-        spigotUser.setScoreboard(this);
+        //TODO spigotUser.setScoreboard(this);
         send(spigotUser.getBukkitPlayer());
     }
     
@@ -64,12 +62,12 @@ public class HubBoard extends PlayerBoard {
         Rank rank = user.getRank();
         setLine(rankLine, ManiaUtils.color(rank.getBaseColor() + "&l" + rank.getName().toUpperCase()));
         int hubOnline = 0, gameOnline = 0;
-        for (ServerObject server : TimoCloudAPI.getUniversalAPI().getServerGroup("Hub").getServers()) {
-            hubOnline += server.getOnlinePlayerCount();
-        }
-        for (ServerObject server : TimoCloudAPI.getUniversalAPI().getServerGroup("HG").getServers()) {
-            gameOnline += server.getOnlinePlayerCount();
-        }
+//        for (ServerObject server : TimoCloudAPI.getUniversalAPI().getServerGroup("Hub").getServers()) {
+//            hubOnline += server.getOnlinePlayerCount();
+//        }
+//        for (ServerObject server : TimoCloudAPI.getUniversalAPI().getServerGroup("HG").getServers()) {
+//            gameOnline += server.getOnlinePlayerCount();
+//        } //TODO
         setLine(hubLine, hubOnline + "");
         setLine(inGameLine, gameOnline + "");
         int totalWins = user.getStat(Stats.HG_WINS).getAsInt();

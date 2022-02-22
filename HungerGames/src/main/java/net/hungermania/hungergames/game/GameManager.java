@@ -1,7 +1,5 @@
 package net.hungermania.hungergames.game;
 
-import lombok.Getter;
-import lombok.Setter;
 import net.hungermania.hungergames.HungerGames;
 import net.hungermania.hungergames.records.GameRecord;
 import net.hungermania.manialib.sql.IRecord;
@@ -15,7 +13,7 @@ public class GameManager {
     private Map<Integer, Game> games = new HashMap<>();
     private Game currentGame;
     private HungerGames plugin;
-    @Getter @Setter private int gameCounter = 0;
+    private int gameCounter = 0;
     
     public GameManager(HungerGames plugin) {
         this.plugin = plugin;
@@ -44,6 +42,30 @@ public class GameManager {
     
     public Game getCurrentGame() {
         return currentGame;
+    }
+    
+    public Map<Integer, Game> getGames() {
+        return games;
+    }
+    
+    public void setGames(Map<Integer, Game> games) {
+        this.games = games;
+    }
+    
+    public HungerGames getPlugin() {
+        return plugin;
+    }
+    
+    public void setPlugin(HungerGames plugin) {
+        this.plugin = plugin;
+    }
+    
+    public int getGameCounter() {
+        return gameCounter;
+    }
+    
+    public void setGameCounter(int gameCounter) {
+        this.gameCounter = gameCounter;
     }
     
     public void setCurrentGame(Game currentGame) {

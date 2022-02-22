@@ -1,11 +1,5 @@
 package net.hungermania.hungergames.game;
 
-import cloud.timo.TimoCloud.api.TimoCloudAPI;
-import cloud.timo.TimoCloud.api.objects.PlayerObject;
-import cloud.timo.TimoCloud.api.objects.ServerGroupObject;
-import cloud.timo.TimoCloud.api.objects.ServerObject;
-import lombok.Getter;
-import lombok.Setter;
 import me.libraryaddict.disguise.DisguiseAPI;
 import net.hungermania.hungergames.HungerGames;
 import net.hungermania.hungergames.game.death.*;
@@ -61,40 +55,40 @@ import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings({"DuplicatedCode", "unused"})
 public class Game implements IRecord {
-    @Getter private long deathmatchPlayingStart;
-    @Getter @Setter private int id = -1, serverId;
-    @Getter private HGMap map;
-    @Getter private PlayerTrackerTask playerTrackerTask;
+    private long deathmatchPlayingStart;
+    private int id = -1, serverId;
+    private HGMap map;
+    private PlayerTrackerTask playerTrackerTask;
     private Map<UUID, GamePlayer> players = new HashMap<>();
-    @Getter private long gameStart;
-    @Getter private long gracePeriodEnd;
-    @Getter private long gameEnd;
-    @Getter private long countdownStart;
-    @Getter private long deathmatchCountdownStart;
-    @Getter private long deathmatchStart;
-    @Getter private State state;
-    @Getter private GameTask task;
+    private long gameStart;
+    private long gracePeriodEnd;
+    private long gameEnd;
+    private long countdownStart;
+    private long deathmatchCountdownStart;
+    private long deathmatchStart;
+    private State state;
+    private GameTask task;
     private GameSettings gameSettings;
-    @Getter @Setter private boolean archived = false;
-    @Getter private Set<Integer> profiles = new HashSet<>();
-    @Getter private Map<Integer, UUID> spawns = new HashMap<>();
-    @Getter private Set<Location> lootedChests = new HashSet<>();
-    @Getter private boolean playerTrackers = true;
-    @Getter private UUID firstKiller = null;
-    @Getter private Map<Location, UUID> suicideLocations = new HashMap<>();
-    @Getter private Map<UUID, Long> endermanPearlLastUse = new HashMap<>();
-    @Getter private Messager messager;
+    private boolean archived = false;
+    private Set<Integer> profiles = new HashSet<>();
+    private Map<Integer, UUID> spawns = new HashMap<>();
+    private Set<Location> lootedChests = new HashSet<>();
+    private boolean playerTrackers = true;
+    private UUID firstKiller = null;
+    private Map<Location, UUID> suicideLocations = new HashMap<>();
+    private Map<UUID, Long> endermanPearlLastUse = new HashMap<>();
+    private Messager messager;
     private Map<UUID, GamePlayer> cachedPlayers = new HashMap<>();
-    @Getter @Setter private int currentMapVotes = 0;
-    @Getter private GameTeam tributesTeam, spectatorsTeam, hiddenStaffTeam, mutationsTeam;
-    @Getter @Setter private boolean diamondSpecial;
-    @Getter private SponsorManager sponsorManager;
-
+    private int currentMapVotes = 0;
+    private GameTeam tributesTeam, spectatorsTeam, hiddenStaffTeam, mutationsTeam;
+    private boolean diamondSpecial;
+    private SponsorManager sponsorManager;
+    
     public Game(HGMap map, GameSettings settings) {
         this.map = map;
         this.gameSettings = settings;
     }
-
+    
     public Game(int id, HGMap map, long gameStart, long gameEnd, boolean archived, Set<Integer> profiles, int serverId) {
         this.id = id;
         this.map = map;
@@ -104,10 +98,258 @@ public class Game implements IRecord {
         this.archived = archived;
         this.serverId = serverId;
     }
-
+    
+    public long getDeathmatchPlayingStart() {
+        return deathmatchPlayingStart;
+    }
+    
+    public void setDeathmatchPlayingStart(long deathmatchPlayingStart) {
+        this.deathmatchPlayingStart = deathmatchPlayingStart;
+    }
+    
+    @Override
+    public int getId() {
+        return id;
+    }
+    
+    @Override
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    public int getServerId() {
+        return serverId;
+    }
+    
+    public void setServerId(int serverId) {
+        this.serverId = serverId;
+    }
+    
+    public HGMap getMap() {
+        return map;
+    }
+    
+    public void setMap(HGMap map) {
+        this.map = map;
+    }
+    
+    public PlayerTrackerTask getPlayerTrackerTask() {
+        return playerTrackerTask;
+    }
+    
+    public void setPlayerTrackerTask(PlayerTrackerTask playerTrackerTask) {
+        this.playerTrackerTask = playerTrackerTask;
+    }
+    
+    public long getGameStart() {
+        return gameStart;
+    }
+    
+    public void setGameStart(long gameStart) {
+        this.gameStart = gameStart;
+    }
+    
+    public long getGracePeriodEnd() {
+        return gracePeriodEnd;
+    }
+    
+    public void setGracePeriodEnd(long gracePeriodEnd) {
+        this.gracePeriodEnd = gracePeriodEnd;
+    }
+    
+    public long getGameEnd() {
+        return gameEnd;
+    }
+    
+    public void setGameEnd(long gameEnd) {
+        this.gameEnd = gameEnd;
+    }
+    
+    public long getCountdownStart() {
+        return countdownStart;
+    }
+    
+    public void setCountdownStart(long countdownStart) {
+        this.countdownStart = countdownStart;
+    }
+    
+    public long getDeathmatchCountdownStart() {
+        return deathmatchCountdownStart;
+    }
+    
+    public void setDeathmatchCountdownStart(long deathmatchCountdownStart) {
+        this.deathmatchCountdownStart = deathmatchCountdownStart;
+    }
+    
+    public long getDeathmatchStart() {
+        return deathmatchStart;
+    }
+    
+    public void setDeathmatchStart(long deathmatchStart) {
+        this.deathmatchStart = deathmatchStart;
+    }
+    
+    public State getState() {
+        return state;
+    }
+    
+    public void setState(State state) {
+        this.state = state;
+    }
+    
+    public GameTask getTask() {
+        return task;
+    }
+    
+    public void setTask(GameTask task) {
+        this.task = task;
+    }
+    
+    public boolean isArchived() {
+        return archived;
+    }
+    
+    public void setArchived(boolean archived) {
+        this.archived = archived;
+    }
+    
+    public Set<Integer> getProfiles() {
+        return profiles;
+    }
+    
+    public void setProfiles(Set<Integer> profiles) {
+        this.profiles = profiles;
+    }
+    
+    public Map<Integer, UUID> getSpawns() {
+        return spawns;
+    }
+    
+    public void setSpawns(Map<Integer, UUID> spawns) {
+        this.spawns = spawns;
+    }
+    
+    public Set<Location> getLootedChests() {
+        return lootedChests;
+    }
+    
+    public void setLootedChests(Set<Location> lootedChests) {
+        this.lootedChests = lootedChests;
+    }
+    
+    public boolean isPlayerTrackers() {
+        return playerTrackers;
+    }
+    
+    public void setPlayerTrackers(boolean playerTrackers) {
+        this.playerTrackers = playerTrackers;
+        
+        if (playerTrackers) {
+            sendMessage("&6&l>> &ePlayer trackers have been &a&lENABLED&e!");
+        } else {
+            sendMessage("&6&l>> &ePlayer trackers have been &c&lDISABLED&e!");
+        }
+    }
+    
+    public UUID getFirstKiller() {
+        return firstKiller;
+    }
+    
+    public void setFirstKiller(UUID firstKiller) {
+        this.firstKiller = firstKiller;
+    }
+    
+    public Map<Location, UUID> getSuicideLocations() {
+        return suicideLocations;
+    }
+    
+    public void setSuicideLocations(Map<Location, UUID> suicideLocations) {
+        this.suicideLocations = suicideLocations;
+    }
+    
+    public Map<UUID, Long> getEndermanPearlLastUse() {
+        return endermanPearlLastUse;
+    }
+    
+    public void setEndermanPearlLastUse(Map<UUID, Long> endermanPearlLastUse) {
+        this.endermanPearlLastUse = endermanPearlLastUse;
+    }
+    
+    public Messager getMessager() {
+        return messager;
+    }
+    
+    public void setMessager(Messager messager) {
+        this.messager = messager;
+    }
+    
+    public Map<UUID, GamePlayer> getCachedPlayers() {
+        return cachedPlayers;
+    }
+    
+    public void setCachedPlayers(Map<UUID, GamePlayer> cachedPlayers) {
+        this.cachedPlayers = cachedPlayers;
+    }
+    
+    public int getCurrentMapVotes() {
+        return currentMapVotes;
+    }
+    
+    public void setCurrentMapVotes(int currentMapVotes) {
+        this.currentMapVotes = currentMapVotes;
+    }
+    
+    public GameTeam getTributesTeam() {
+        return tributesTeam;
+    }
+    
+    public void setTributesTeam(GameTeam tributesTeam) {
+        this.tributesTeam = tributesTeam;
+    }
+    
+    public GameTeam getSpectatorsTeam() {
+        return spectatorsTeam;
+    }
+    
+    public void setSpectatorsTeam(GameTeam spectatorsTeam) {
+        this.spectatorsTeam = spectatorsTeam;
+    }
+    
+    public GameTeam getHiddenStaffTeam() {
+        return hiddenStaffTeam;
+    }
+    
+    public void setHiddenStaffTeam(GameTeam hiddenStaffTeam) {
+        this.hiddenStaffTeam = hiddenStaffTeam;
+    }
+    
+    public GameTeam getMutationsTeam() {
+        return mutationsTeam;
+    }
+    
+    public void setMutationsTeam(GameTeam mutationsTeam) {
+        this.mutationsTeam = mutationsTeam;
+    }
+    
+    public boolean isDiamondSpecial() {
+        return diamondSpecial;
+    }
+    
+    public void setDiamondSpecial(boolean diamondSpecial) {
+        this.diamondSpecial = diamondSpecial;
+    }
+    
+    public SponsorManager getSponsorManager() {
+        return sponsorManager;
+    }
+    
+    public void setSponsorManager(SponsorManager sponsorManager) {
+        this.sponsorManager = sponsorManager;
+    }
+    
     public void setup(Lobby lobby) {
-        TimoCloudAPI.getBukkitAPI().getThisServer().setState("INGAME");
-        TimoCloudAPI.getBukkitAPI().getThisServer().setExtra("map:" + this.map.getName() + ";time:0");
+        //TimoCloudAPI.getBukkitAPI().getThisServer().setState("INGAME");
+        //TimoCloudAPI.getBukkitAPI().getThisServer().setExtra("map:" + this.map.getName() + ";time:0");
         this.state = State.SETUP;
         HungerGames.getInstance().getMapManager().copyMap(this.map.getName());
         tributesTeam = new TributesTeam(this);
@@ -116,7 +358,7 @@ public class Game implements IRecord {
         mutationsTeam = new MutationsTeam(this);
         
         this.sponsorManager = new SponsorManager();
-
+        
         map.getWorld().setGameRuleValue("naturalRegeneration", "" + gameSettings.isRegeneration());
         map.getWorld().setGameRuleValue("doDaylightCycle", "" + gameSettings.isTimeProgression());
         map.getWorld().setGameRuleValue("doWeatherCycle", "" + gameSettings.isWeatherProgression());
@@ -125,7 +367,7 @@ public class Game implements IRecord {
         map.getWorld().setGameRuleValue("doFireTick", "false");
         map.getWorld().setGameRuleValue("keepInventory", "false");
         map.getWorld().setDifficulty(Difficulty.EASY);
-
+        
         List<Entity> entities = map.getWorld().getEntities();
         map.getWorld().setGameRuleValue("doEntityDrops", "false");
         for (Entity entity : entities) {
@@ -134,7 +376,7 @@ public class Game implements IRecord {
             }
         }
         map.getWorld().setGameRuleValue("doEntityDrops", "true");
-
+        
         switch (gameSettings.getWeather()) {
             case RAIN:
                 map.getWorld().setStorm(true);
@@ -147,18 +389,18 @@ public class Game implements IRecord {
                 map.getWorld().setStorm(false);
                 break;
         }
-
+        
         map.getWorld().setWeatherDuration(Integer.MAX_VALUE);
         map.getWorld().setTime(gameSettings.getTime().getStart());
-
+        
         for (Integer id : this.map.getSpawns().keySet()) {
             this.spawns.put(id, null);
         }
-
+        
         for (SpigotUser player : lobby.getPlayers()) {
             this.tributesTeam.join(player.getUniqueId());
         }
-
+        
         for (SpigotUser hidden : lobby.getHiddenStaff()) {
             this.hiddenStaffTeam.join(hidden.getUniqueId());
             new BukkitRunnable() {
@@ -172,9 +414,9 @@ public class Game implements IRecord {
             gameSettings.setGracePeriod(false);
             gameSettings.setGracePeriodLength(0);
         }
-
+        
         this.playerTrackerTask = new PlayerTrackerTask(this);
-
+        
         MemoryHook spectatorUpdate = new MemoryHook("Game Spectator Update");
         ManiaCore.getInstance().getMemoryManager().addMemoryHook(spectatorUpdate);
         HungerGames plugin = HungerGames.getInstance();
@@ -194,7 +436,7 @@ public class Game implements IRecord {
                 task.end();
             }
         }.runTaskTimer(HungerGames.getInstance(), 20L, 20L);
-
+        
         MemoryHook endermanDamage = new MemoryHook("Enderman Mutation Damage");
         ManiaCore.getInstance().getMemoryManager().addMemoryHook(endermanDamage);
         new BukkitRunnable() {
@@ -210,7 +452,7 @@ public class Game implements IRecord {
                     if (gamePlayer.getMutationType() == MutationType.ENDERMAN) {
                         Player player = gamePlayer.getUser().getBukkitPlayer();
                         Location location = player.getLocation();
-                        if (location.getBlock().getType() == Material.WATER || location.getBlock().getType() == Material.STATIONARY_WATER) {
+                        if (location.getBlock().getType() == Material.WATER) {
                             player.damage(4);
                         }
                     }
@@ -218,18 +460,18 @@ public class Game implements IRecord {
                 task.end();
             }
         }.runTaskTimer(HungerGames.getInstance(), 20L, 20L);
-
+        
         new BukkitRunnable() {
             public void run() {
                 if (archived) {
                     cancel();
                     return;
                 }
-
+                
                 if (state == State.PLAYING || state == State.PLAYING_DEATHMATCH || state == State.DEATHMATCH) {
                     Set<UUID> members = new HashSet<>(spectatorsTeam.getMembers());
                     members.addAll(hiddenStaffTeam.getMembers());
-
+                    
                     for (UUID member : members) {
                         Player player = Bukkit.getPlayer(member);
                         player.sendMessage("");
@@ -244,7 +486,7 @@ public class Game implements IRecord {
                 }
             }
         }.runTaskTimer(HungerGames.getInstance(), 0L, 6000);
-
+        
         new BukkitRunnable() {
             public void run() {
                 if (archived)
@@ -254,25 +496,29 @@ public class Game implements IRecord {
                 }
             }
         }.runTaskTimer(HungerGames.getInstance(), 20L, 20L);
-
+        
         messager = new GameMessager(this);
         
         if (ManiaCore.RANDOM.nextInt(1000) < 2) {
             this.diamondSpecial = true;
         }
     }
-
+    
     public GamePlayer getPlayer(UUID uuid) {
         return this.players.get(uuid);
     }
-
+    
     public GameSettings getGameSettings() {
         if (gameSettings == null) {
             gameSettings = HungerGames.getInstance().getSettingsManager().getCurrentSettings();
         }
         return gameSettings;
     }
-
+    
+    public void setGameSettings(GameSettings gameSettings) {
+        this.gameSettings = gameSettings;
+    }
+    
     public void resetPlayer(Player player) {
         player.setTotalExperience(0);
         player.setLevel(0);
@@ -281,7 +527,7 @@ public class Game implements IRecord {
         player.getInventory().setArmorContents(null);
         DisguiseAPI.undisguiseToAll(player);
     }
-
+    
     public void teleportStart() {
         List<UUID> tributes = new LinkedList<>(tributesTeam.getMembers());
         this.spawns.entrySet().forEach(entry -> entry.setValue(null));
@@ -302,7 +548,7 @@ public class Game implements IRecord {
                         }
                     }
                 }
-
+                
                 Location spawn = SpigotUtils.positionToLocation(map.getWorld(), this.map.getSpawns().get(index));
                 player.teleport(spawn);
                 player.setGameMode(GameMode.SURVIVAL);
@@ -314,7 +560,7 @@ public class Game implements IRecord {
                 this.spawns.put(index, player.getUniqueId());
             }
         }
-
+        
         Location spawn = SpigotUtils.positionToLocation(map.getWorld(), map.getCenter());
         this.spectatorsTeam.teleportAll(spawn);
         this.hiddenStaffTeam.teleportAll(spawn);
@@ -324,12 +570,12 @@ public class Game implements IRecord {
             new GameBoard(this, user);
         }
     }
-
+    
     public void teleportDeathmatch() {
         this.spawns.entrySet().forEach(entry -> entry.setValue(null));
         List<Entry<Integer, UUID>> spawns = new ArrayList<>(this.spawns.entrySet());
         Collections.shuffle(spawns);
-
+        
         for (UUID tribute : this.tributesTeam) {
             Player player = Bukkit.getPlayer(tribute);
             for (Entry<Integer, UUID> entry : spawns) {
@@ -342,7 +588,7 @@ public class Game implements IRecord {
                 }
             }
         }
-
+        
         Iterator<UUID> mutationIterator = this.mutationsTeam.iterator();
         while (mutationIterator.hasNext()) {
             UUID mutation = mutationIterator.next();
@@ -352,12 +598,12 @@ public class Game implements IRecord {
             spectatorsTeam.join(mutation);
             mutationIterator.remove();
         }
-
+        
         Location center = SpigotUtils.positionToLocation(map.getWorld(), map.getCenter());
         this.spectatorsTeam.teleportAll(center);
         this.hiddenStaffTeam.teleportAll(center);
     }
-
+    
     @SuppressWarnings("unused")
     public void resetMutation(UUID mutation) {
         Player player = Bukkit.getPlayer(mutation);
@@ -370,26 +616,26 @@ public class Game implements IRecord {
         }
         DisguiseAPI.undisguiseToAll(player);
     }
-
+    
     public void beginCountdown() {
         this.state = State.COUNTDOWN;
         this.countdownStart = System.currentTimeMillis();
         this.task = new GameTask(this);
         this.task.start();
-
+        
         GameManager gameManager = HungerGames.getInstance().getGameManager();
         if (gameManager.getGameCounter() + 1 >= gameSettings.getMaxGames()) {
             Set<UUID> players = new HashSet<>(tributesTeam.getMembers());
             players.addAll(spectatorsTeam.getMembers());
             players.addAll(hiddenStaffTeam.getMembers());
-
+            
             for (UUID u : players) {
                 Player player = Bukkit.getPlayer(u);
                 player.sendMessage(ManiaUtils.color("&4&l>> &c&lTHE SERVER WILL RESTART AFTER THIS GAME FOR CLEANUP!"));
             }
         }
     }
-
+    
     public void startGame() {
         this.state = State.PLAYING;
         this.playerTrackerTask.start();
@@ -402,21 +648,22 @@ public class Game implements IRecord {
             player.getUser().incrementStat(Stats.HG_GAMES);
             try {
                 Perks.SPEED_RACER.activate(player.getUser());
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
     }
-
+    
     public void sendMessage(String message) {
         sendMessage(message, null);
     }
-
+    
     public List<Integer> getArchivedProfiles() {
         for (GamePlayer value : this.players.values()) {
             this.profiles.add(value.getUser().getId());
         }
         return new ArrayList<>(profiles);
     }
-
+    
     public void addPlayer(UUID uuid) {
         if (!this.players.containsKey(uuid)) {
             if (this.cachedPlayers.containsKey(uuid)) {
@@ -427,17 +674,17 @@ public class Game implements IRecord {
             }
         }
     }
-
+    
     public GameResult revivePlayer(GamePlayer gamePlayer, CommandSender sender) {
         SpigotUser user = gamePlayer.getUser();
         if (!gamePlayer.isSpectatorByDeath()) {
             return GameResult.WAS_NOT_A_TRIBUTE;
         }
-
+        
         if (!(getState() == State.PLAYING || getState() == State.PLAYING_DEATHMATCH)) {
             return GameResult.INVALID_STATE;
         }
-
+        
         spectatorsTeam.leave(gamePlayer.getUniqueId());
         tributesTeam.join(gamePlayer.getUniqueId());
         if (!tributesTeam.isMember(gamePlayer.getUniqueId())) {
@@ -454,18 +701,18 @@ public class Game implements IRecord {
         gamePlayer.setRevivedInfo(true, sender);
         return GameResult.SUCCESS;
     }
-
+    
     public GameResult forceAddPlayer(GamePlayer gamePlayer, CommandSender sender) {
         if (gamePlayer.isSpectatorByDeath()) {
             sender.sendMessage(ManiaUtils.color("&cThat player was a tribute originally. Please use the command /hungergames revive instead."));
             return GameResult.WAS_TRIBUTE;
         }
-
+        
         if (!(getState() == State.PLAYING || getState() == State.PLAYING_DEATHMATCH || getState() == State.COUNTDOWN)) {
             sender.sendMessage(ManiaUtils.color("&cInvalid game state to add a tribute."));
             return GameResult.INVALID_STATE;
         }
-
+        
         spectatorsTeam.leave(gamePlayer.getUniqueId());
         tributesTeam.join(gamePlayer.getUniqueId());
         if (!tributesTeam.isMember(gamePlayer.getUniqueId())) {
@@ -481,11 +728,11 @@ public class Game implements IRecord {
             }
             sendMessage("&5&l>> " + gamePlayer.getUser().getColoredName() + " &6has been &6&lADDED &6to the game by " + senderName);
         }
-
+        
         gamePlayer.setForcefullAddedInfo(true, sender);
         return GameResult.SUCCESS;
     }
-
+    
     public void beginDeathmatch() {
         if (this.state == State.PLAYING) {
             this.state = State.PLAYING_DEATHMATCH;
@@ -493,7 +740,7 @@ public class Game implements IRecord {
             sendMessage("&6&l>> &4&lTHE DEATHMATCH COUNTDOWN HAS STARTED!");
         }
     }
-
+    
     public void startDeathmatchCountdown() {
         this.state = State.DEATHMATCH_COUNTDOWN;
         this.deathmatchCountdownStart = System.currentTimeMillis();
@@ -505,7 +752,7 @@ public class Game implements IRecord {
             player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 200, -50));
         });
     }
-
+    
     public void startDeathmatch() {
         this.state = State.DEATHMATCH;
         this.deathmatchStart = System.currentTimeMillis();
@@ -528,26 +775,26 @@ public class Game implements IRecord {
             }
         }
     }
-
+    
     public void restockChests() {
         this.lootedChests.clear();
         sendMessage("&6&l>> &a&lALL CHESTS HAVE BEEN RESTOCKED!");
     }
-
+    
     public void endGame() {
         if (state != State.ENDING) {
             this.state = State.ENDING;
-
+            
             this.gameEnd = System.currentTimeMillis();
             this.archived = true;
-
+            
             for (Player player : Bukkit.getOnlinePlayers()) {
                 for (Player player1 : Bukkit.getOnlinePlayers()) {
                     player.showPlayer(player1);
                 }
                 player.setAllowFlight(true);
             }
-
+            
             String winnerName;
             UUID winner = null;
             if (this.tributesTeam.size() == 1) {
@@ -565,14 +812,14 @@ public class Game implements IRecord {
             } else {
                 winnerName = "&f&lNo one";
             }
-
+            
             sendMessage("&e&l/  /  /  /  / &6&lHUNGER MANIA &e&l/  /  /  /  /");
             sendMessage("");
             sendMessage("");
             sendMessage(winnerName + "&a&l won the Hunger Games!");
             sendMessage("");
             sendMessage("");
-
+            
             HungerGames.getInstance().getManiaCore().getDatabase().addRecordToQueue(new GameRecord(this));
             for (GamePlayer gp : this.players.values()) {
                 if (!gp.getUser().getUniqueId().equals(winner)) {
@@ -602,7 +849,7 @@ public class Game implements IRecord {
             actor.sendMessage("&cYou can only sponsor tributes.");
             return;
         }
-
+        
         List<SponsorItem> possibleItems = new LinkedList<>(this.sponsorManager.getSponsorItems().get(type));
         Collections.shuffle(possibleItems);
         SponsorItem chosen = possibleItems.get(ManiaCore.RANDOM.nextInt(possibleItems.size()));
@@ -612,35 +859,35 @@ public class Game implements IRecord {
         target.sendMessage("&6&l>> &aYou have been &lSPONSORED&a " + chosen.getName() + " by " + target.getUser().getName() + "&a!");
         target.sendMessage("&6&l>> &aYou sponsored " + target.getUser().getName() + "&ae " + chosen.getName() + "!");
     }
-
+    
     public void resetServer() {
         if (HungerGames.getInstance().getGameManager().getGameCounter() >= gameSettings.getMaxGames()) {
-            TimoCloudAPI.getBukkitAPI().getThisServer().setState("RESTARTING");
+            //TimoCloudAPI.getBukkitAPI().getThisServer().setState("RESTARTING");
             Bukkit.getServer().shutdown();
         }
-
+        
         Bukkit.unloadWorld(map.getWorld(), false);
     }
-
+    
     public void addLootedChest(Location location) {
         this.lootedChests.add(location);
     }
-
+    
     public boolean isLootedChest(Location location) {
         return this.lootedChests.contains(location);
     }
-
+    
     public void removePlayer(UUID uuid) {
         GamePlayer gamePlayer = getPlayer(uuid);
         this.cachedPlayers.put(uuid, gamePlayer);
-
+        
         this.tributesTeam.leave(uuid);
         this.mutationsTeam.leave(uuid);
         this.spectatorsTeam.leave(uuid);
         this.hiddenStaffTeam.leave(uuid);
         this.players.remove(uuid);
     }
-
+    
     public void killPlayer(UUID uniqueId, DeathInfo deathInfo) {
         if (!this.players.containsKey(uniqueId)) {
             return;
@@ -661,7 +908,7 @@ public class Game implements IRecord {
             }
             gamePlayer.getUser().sendMessage("&4&l>> &cYou lost " + lost + " Score for dying.");
         }
-
+        
         if (tributesTeam.isMember(uniqueId)) {
             sendMessage("&6&l>> &c&l" + (tributesTeam.size() - 1) + " tributes remain.");
             if ((this.tributesTeam.size() - 1) <= gameSettings.getDeathmatchPlayerStart()) {
@@ -670,18 +917,18 @@ public class Game implements IRecord {
         } else if (mutationsTeam.isMember(uniqueId)) {
             sendMessage("&6&l>> &d&l" + (mutationsTeam.size() - 1) + " mutations remain.");
         }
-
+        
         if (firstKiller != null) {
             if (tributesTeam.isMember(uniqueId)) {
-                playSound(Sound.WITHER_SPAWN);
+                playSound(Sound.ENTITY_WITHER_SPAWN);
             } else if (mutationsTeam.isMember(uniqueId)) {
-                playSound(Sound.ZOMBIE_PIG_DEATH);
+                playSound(Sound.ENTITY_ZOMBIFIED_PIGLIN_DEATH);
             }
         }
-
+        
         this.tributesTeam.leave(gamePlayer.getUniqueId());
         this.mutationsTeam.leave(gamePlayer.getUniqueId());
-
+        
         if (deathInfo.getType() != DeathType.LEAVE) {
             spectatorsTeam.join(gamePlayer.getUniqueId());
             gamePlayer = players.get(uniqueId);
@@ -689,7 +936,7 @@ public class Game implements IRecord {
             player.setAllowFlight(true);
             player.setFlying(true);
         }
-
+        
         GamePlayer killer = null;
         String killerName = null;
         boolean mutationKill = false;
@@ -706,7 +953,7 @@ public class Game implements IRecord {
             } else if (spectatorsTeam.isMember(playerDeath.getKiller())) {
                 killerName += "&c";
             }
-
+            
             killer = this.players.get(playerDeath.getKiller());
             mutationKill = playerDeath.isMutationKill();
             killerHealth = playerDeath.getKillerHealth();
@@ -727,7 +974,7 @@ public class Game implements IRecord {
             } else {
                 killerName += "&d";
             }
-
+            
             killer = this.players.get(death.getKiller());
             Player killerPlayer = Bukkit.getPlayer(killer.getUniqueId());
             killerPlayer.setMaxHealth(gameSettings.getMaxHealth());
@@ -735,7 +982,7 @@ public class Game implements IRecord {
             mutationKill = true;
             killerHealth = 20; //TODO Add better tracking of this for this type of death
         }
-
+        
         if (killer != null) {
             Player killerPlayer = Bukkit.getPlayer(killer.getUniqueId());
             killer.setKillStreak(killer.getKillStreak() + 1);
@@ -743,11 +990,11 @@ public class Game implements IRecord {
             if (killer.getUser().getStat(Stats.HG_HIGHEST_KILL_STREAK).getAsInt() < killer.getKillStreak()) {
                 killer.getUser().setStat(Stats.HG_HIGHEST_KILL_STREAK, killer.getKillStreak());
             }
-
+            
             SpigotUser killerUser = killer.getUser();
-
+            
             int coins = 25, experience = 10;
-
+            
             killer.setKillStreak(killer.getKillStreak() + 1);
             killer.setKills(killer.getKills() + 1);
             if (killer.getUser().getStat(Stats.HG_HIGHEST_KILL_STREAK).getAsInt() < killer.getKillStreak()) {
@@ -756,25 +1003,25 @@ public class Game implements IRecord {
             }
             if (killer.getUser().getNickname() != null && killer.getUser().getNickname().isActive()) {
                 killerName += killer.getUser().getNickname().getName();
-
+                
             } else {
                 killerName += killer.getUser().getName();
             }
             if (firstKiller == null) {
                 sendMessage("&6&l>> &c&l" + (ChatColor.stripColor(ManiaUtils.color(killerName)) + " drew first blood!").toUpperCase());
-                playSound(Sound.WOLF_HOWL);
+                playSound(Sound.ENTITY_WOLF_HOWL);
                 this.firstKiller = killer.getUniqueId();
                 experience += 15;
                 coins += 15;
                 gained += (int) Math.ceil((gained / 2));
             }
-
+            
             newTeam.join(uniqueId);
-
+            
             if (tributesTeam.size() == 1) {
                 gained += gained;
             }
-
+            
             Statistic killerScore = killer.getUser().getStat(Stats.HG_SCORE);
             killerScore.setValue(killerScore.getAsInt() + gained);
             Statistic killerFakeScore = killer.getUser().getFakedStat(Stats.HG_SCORE);
@@ -782,9 +1029,9 @@ public class Game implements IRecord {
                 killerFakeScore.setValue(killerFakeScore.getAsInt() + gained);
             }
             killer.getUser().sendMessage("&6&l>> &a+" + gained + " Score!");
-
+            
             gamePlayer.getUser().sendMessage("&4&l>> &cYour killer &8(" + killerName + "&8) &chad &4" + Utils.formatNumber(killerHealth) + " HP &cremaining!");
-
+            
             if (mutationKill) {
                 sendMessage("&6&l>> " + killerName + " &ahas taken revenge , and is back in the game!");
                 DisguiseAPI.undisguiseToAll(killerPlayer);
@@ -808,14 +1055,14 @@ public class Game implements IRecord {
                 } catch (Exception e) {
                 }
             }
-
+            
             gamePlayer.setKillStreak(0);
             killerUser.addNetworkExperience(experience);
             killerUser.sendMessage("&6&l>> &f&lCurrent Streak: &a" + killer.getKillStreak() + "   &f&lPersonal Best: &a" + killer.getUser().getStat(Stats.HG_HIGHEST_KILL_STREAK).getAsInt());
             Pair<Integer, String> result = killerUser.addCoins(coins, gameSettings.isCoinMultiplier());
             killer.setEarnedCoins(killer.getEarnedCoins() + result.getValue1());
             killerUser.sendMessage("&2&l>> &a+" + result.getValue1() + " &3COINS&a! " + result.getValue2());
-
+            
             for (UUID mutation : this.mutationsTeam) {
                 GamePlayer gp = this.players.get(mutation);
                 if (gp.getMutationTarget() != null) {
@@ -826,11 +1073,11 @@ public class Game implements IRecord {
                 }
             }
         }
-
+        
         if (sendDeathMessage) {
             this.sendMessage(deathInfo.getDeathMessage(this));
         }
-
+        
         new BukkitRunnable() {
             public void run() {
                 if (state == State.ENDING || state == State.ARCHIVED) {
@@ -841,7 +1088,7 @@ public class Game implements IRecord {
             }
         }.runTaskLater(HungerGames.getInstance(), 1L);
     }
-
+    
     public void checkWin() {
         if (this.state != State.ENDING) {
             if (this.tributesTeam.size() < 2) {
@@ -849,25 +1096,15 @@ public class Game implements IRecord {
             }
         }
     }
-
+    
     public boolean isLootedChest(Block block) {
         return this.lootedChests.contains(block.getLocation());
     }
-
-    public void setPlayerTrackers(boolean playerTrackers) {
-        this.playerTrackers = playerTrackers;
-
-        if (playerTrackers) {
-            sendMessage("&6&l>> &ePlayer trackers have been &a&lENABLED&e!");
-        } else {
-            sendMessage("&6&l>> &ePlayer trackers have been &c&lDISABLED&e!");
-        }
-    }
-
+    
     public void sendMessage(String message, Rank permission) {
         getMessager().sendMessage(message, permission);
     }
-
+    
     public void mutatePlayer(UUID uniqueId, Mutation mutation, UUID target) {
         GamePlayer gamePlayer = this.players.get(uniqueId);
         gamePlayer.setMutating(true);
@@ -877,9 +1114,9 @@ public class Game implements IRecord {
         gamePlayer.getUser().sendMessage("&6&l>> &eYou will mutate in &e&l15 Seconds&e!");
         GamePlayer targetPlayer = this.players.get(target);
         new BukkitRunnable() {
-            private int secondsLeft = 15;
             private final Set<Integer> ANNOUNCE = new HashSet<>(Arrays.asList(15, 10, 5, 3, 2, 1));
-
+            private int secondsLeft = 15;
+            
             public void run() {
                 if (state == State.DEATHMATCH || state == State.ENDING || state == State.DEATHMATCH_COUNTDOWN) {
                     cancel();
@@ -887,21 +1124,21 @@ public class Game implements IRecord {
                     gamePlayer.setMutating(false);
                     return;
                 }
-
+                
                 if (!tributesTeam.isMember(gamePlayer.getMutationTarget())) {
                     cancel();
                     gamePlayer.getUser().sendMessage("&6&l>> &cYour target has died. You cannot mutate anymore.");
                     gamePlayer.setMutating(false);
                     return;
                 }
-
+                
                 if (!gameSettings.isMutations()) {
                     cancel();
                     gamePlayer.getUser().sendMessage("&6&l>> &cMutations have been disabled.");
                     gamePlayer.setMutating(false);
                     return;
                 }
-
+                
                 if (secondsLeft == 0) {
                     int spawn = -1;
                     for (Entry<Integer, UUID> entry : spawns.entrySet()) {
@@ -909,7 +1146,7 @@ public class Game implements IRecord {
                             spawn = entry.getKey();
                         }
                     }
-
+                    
                     if (spawn == -1) {
                         for (Entry<Integer, UUID> entry : spawns.entrySet()) {
                             if (entry.getValue() == null) {
@@ -917,11 +1154,11 @@ public class Game implements IRecord {
                             }
                         }
                     }
-
+                    
                     if (spawn == -1) {
                         spawn = ManiaCore.RANDOM.nextInt(spawns.size());
                     }
-
+                    
                     Position position = map.getSpawns().get(spawn);
                     Location location = SpigotUtils.positionToLocation(map.getWorld(), position);
                     spectatorsTeam.leave(uniqueId);
@@ -945,14 +1182,14 @@ public class Game implements IRecord {
             }
         }.runTaskTimer(HungerGames.getInstance(), 0L, 20L);
     }
-
+    
     public void setMutations(boolean value) {
         if (!value) {
             for (UUID mutation : this.mutationsTeam) {
                 mutationsTeam.leave(mutation);
             }
         }
-
+        
         String status;
         if (value) {
             status = "&a&lENABLED";
@@ -962,23 +1199,19 @@ public class Game implements IRecord {
         sendMessage("&6&l>> &eMutations have been " + status);
         gameSettings.setMutations(value);
     }
-
-    public void setGameSettings(GameSettings gameSettings) {
-        this.gameSettings = gameSettings;
-    }
-
+    
     public void playSound(Sound sound) {
         Set<UUID> players = new HashSet<>(tributesTeam.getMembers());
         players.addAll(spectatorsTeam.getMembers());
         players.addAll(mutationsTeam.getMembers());
         players.addAll(hiddenStaffTeam.getMembers());
-
+        
         for (UUID p : players) {
             Player player = Bukkit.getPlayer(p);
             player.playSound(player.getLocation(), sound, 1.0F, 1.0F);
         }
     }
-
+    
     public PlayerType getPlayerType(UUID uuid) {
         if (!this.players.containsKey(uuid)) {
             return PlayerType.UNKNOWN;
@@ -994,7 +1227,7 @@ public class Game implements IRecord {
             return PlayerType.UNKNOWN;
         }
     }
-
+    
     public GameTeam getGameTeam(UUID player) {
         if (tributesTeam.isMember(player)) {
             return tributesTeam;
@@ -1007,11 +1240,15 @@ public class Game implements IRecord {
         }
         return null;
     }
-
+    
     public GamePlayer[] getPlayers() {
         return this.players.values().toArray(new GamePlayer[0]);
     }
-
+    
+    public void setPlayers(Map<UUID, GamePlayer> players) {
+        this.players = players;
+    }
+    
     public GamePlayer getTopKiller() {
         GamePlayer topKiller = null;
         for (GamePlayer p : getPlayers()) {
@@ -1027,80 +1264,80 @@ public class Game implements IRecord {
         }
         return topKiller;
     }
-
+    
     public void nextGame() {
         System.out.println("Determining Next game");
         boolean restarting = HungerGames.getInstance().getGameManager().getGameCounter() >= getGameSettings().getMaxGames();
         if (restarting) {
             System.out.println("Server is restarting");
             boolean singleServerFits = false;
-            for (ServerObject server : TimoCloudAPI.getUniversalAPI().getServerGroup("HG").getServers()) {
-                System.out.println("Checking server " + server.getName());
-                if (server.getState().equalsIgnoreCase("lobby") || server.getState().equalsIgnoreCase("online")) {
-                    System.out.println("Server is in lobby state");
-                    int remainingSlots = gameSettings.getMaxPlayers() - server.getOnlinePlayerCount();
-                    System.out.println("Server has " + remainingSlots + " slots left");
-                    if (remainingSlots >= Bukkit.getOnlinePlayers().size()) {
-                        System.out.println("Remaining slots is higher than current server player count");
-                        singleServerFits = true;
-                        System.out.println("Moving players to " + server.getName());
-                        for (Player player : Bukkit.getOnlinePlayers()) {
-                            PlayerObject playerObject = TimoCloudAPI.getUniversalAPI().getPlayer(player.getUniqueId());
-                            playerObject.sendToServer(server);
-                        }
-                        System.out.println("Done");
-                        break;
-                    }
-                }
-            }
-
-            if (!singleServerFits) {
-                System.out.println("One server does not fit all of the players, moving the remaining players to other servers");
-                Iterator<? extends Player> players = new ArrayList<>(Bukkit.getOnlinePlayers()).iterator();
-                System.out.println("Player count " + Bukkit.getOnlinePlayers().size());
-                for (ServerObject server : TimoCloudAPI.getUniversalAPI().getServerGroup("HG").getServers()) {
-                    System.out.println("Checking server " + server.getName());
-                    if (server.getState().equalsIgnoreCase("lobby") || server.getState().equalsIgnoreCase("online")) {
-                        System.out.println("Server is in lobby state");
-                        int freeSlots = gameSettings.getMaxPlayers() - server.getOnlinePlayerCount();
-                        System.out.println("Server has " + freeSlots + " free slots");
-                        while (players.hasNext() && freeSlots > 0) {
-                            Player p = players.next();
-                            System.out.println("Moving player " + p.getName() + " to server " + server.getName());
-                            PlayerObject playerObject = TimoCloudAPI.getUniversalAPI().getPlayer(p.getUniqueId());
-                            playerObject.sendToServer(server);
-                            System.out.println("Done");
-                            freeSlots--;
-                        }
-                    }
-                }
-
-                if (players.hasNext()) {
-                    System.out.println("Players still remain, meaning other HG servers are full, moving to hub");
-                    ServerGroupObject hubGroup = TimoCloudAPI.getUniversalAPI().getServerGroup("Hub");
-                    List<ServerObject> connectableServers = new ArrayList<>();
-                    for (ServerObject server : hubGroup.getServers()) {
-                        if (server.getOnlinePlayerCount() < server.getMaxPlayerCount()) {
-                            connectableServers.add(server);
-                        }
-                    }
-
-                    for (ServerObject server : connectableServers) {
-                        while (players.hasNext() && server.getOnlinePlayerCount() < server.getMaxPlayerCount()) {
-                            Player p = players.next();
-                            PlayerObject playerObject = TimoCloudAPI.getUniversalAPI().getPlayer(p.getUniqueId());
-                            playerObject.sendToServer(server);
-                        }
-                    }
-
-                    if (players.hasNext()) {
-                        while (players.hasNext()) {
-                            Player player = players.next();
-                            player.kickPlayer(ManiaUtils.color("&cAll games and hubs are full."));
-                        }
-                    }
-                }
-            }
+//            for (ServerObject server : TimoCloudAPI.getUniversalAPI().getServerGroup("HG").getServers()) {
+//                System.out.println("Checking server " + server.getName());
+//                if (server.getState().equalsIgnoreCase("lobby") || server.getState().equalsIgnoreCase("online")) {
+//                    System.out.println("Server is in lobby state");
+//                    int remainingSlots = gameSettings.getMaxPlayers() - server.getOnlinePlayerCount();
+//                    System.out.println("Server has " + remainingSlots + " slots left");
+//                    if (remainingSlots >= Bukkit.getOnlinePlayers().size()) {
+//                        System.out.println("Remaining slots is higher than current server player count");
+//                        singleServerFits = true;
+//                        System.out.println("Moving players to " + server.getName());
+//                        for (Player player : Bukkit.getOnlinePlayers()) {
+//                            PlayerObject playerObject = TimoCloudAPI.getUniversalAPI().getPlayer(player.getUniqueId());
+//                            playerObject.sendToServer(server);
+//                        }
+//                        System.out.println("Done");
+//                        break;
+//                    }
+//                }
+//            }
+            
+//            if (!singleServerFits) {
+//                System.out.println("One server does not fit all of the players, moving the remaining players to other servers");
+//                Iterator<? extends Player> players = new ArrayList<>(Bukkit.getOnlinePlayers()).iterator();
+//                System.out.println("Player count " + Bukkit.getOnlinePlayers().size());
+//                for (ServerObject server : TimoCloudAPI.getUniversalAPI().getServerGroup("HG").getServers()) {
+//                    System.out.println("Checking server " + server.getName());
+//                    if (server.getState().equalsIgnoreCase("lobby") || server.getState().equalsIgnoreCase("online")) {
+//                        System.out.println("Server is in lobby state");
+//                        int freeSlots = gameSettings.getMaxPlayers() - server.getOnlinePlayerCount();
+//                        System.out.println("Server has " + freeSlots + " free slots");
+//                        while (players.hasNext() && freeSlots > 0) {
+//                            Player p = players.next();
+//                            System.out.println("Moving player " + p.getName() + " to server " + server.getName());
+//                            PlayerObject playerObject = TimoCloudAPI.getUniversalAPI().getPlayer(p.getUniqueId());
+//                            playerObject.sendToServer(server);
+//                            System.out.println("Done");
+//                            freeSlots--;
+//                        }
+//                    }
+//                }
+//                
+//                if (players.hasNext()) {
+//                    System.out.println("Players still remain, meaning other HG servers are full, moving to hub");
+//                    ServerGroupObject hubGroup = TimoCloudAPI.getUniversalAPI().getServerGroup("Hub");
+//                    List<ServerObject> connectableServers = new ArrayList<>();
+//                    for (ServerObject server : hubGroup.getServers()) {
+//                        if (server.getOnlinePlayerCount() < server.getMaxPlayerCount()) {
+//                            connectableServers.add(server);
+//                        }
+//                    }
+//                    
+//                    for (ServerObject server : connectableServers) {
+//                        while (players.hasNext() && server.getOnlinePlayerCount() < server.getMaxPlayerCount()) {
+//                            Player p = players.next();
+//                            PlayerObject playerObject = TimoCloudAPI.getUniversalAPI().getPlayer(p.getUniqueId());
+//                            playerObject.sendToServer(server);
+//                        }
+//                    }
+//                    
+//                    if (players.hasNext()) {
+//                        while (players.hasNext()) {
+//                            Player player = players.next();
+//                            player.kickPlayer(ManiaUtils.color("&cAll games and hubs are full."));
+//                        }
+//                    }
+//                }
+//            }
         } else {
             HungerGames.getInstance().getLobby().fromGame(this);
             HungerGames.getInstance().getGameManager().setCurrentGame(null);

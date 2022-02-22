@@ -4,15 +4,18 @@ import net.hungermania.hungergames.game.Game;
 import net.hungermania.hungergames.game.team.GameTeam.Perms;
 import net.hungermania.maniacore.api.util.ManiaUtils;
 import net.hungermania.maniacore.api.util.State;
-import net.minecraft.server.v1_8_R3.EntityTNTPrimed;
+import net.minecraft.world.entity.item.EntityTNTPrimed;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftTNTPrimed;
+import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_18_R1.entity.CraftTNTPrimed;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.*;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
+import org.bukkit.event.block.BlockFadeEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.lang.reflect.Field;
@@ -25,8 +28,10 @@ public class BlockListeners extends GameListener {
     private static final Set<Material> ALLOWED_BREAK, NO_DROPS;
     private Map<UUID, Location> placedCraftingTables = new HashMap<>();
     static {
-        ALLOWED_BREAK = new HashSet<>(Arrays.asList(LONG_GRASS, RED_ROSE, YELLOW_FLOWER, LEAVES, FIRE, WEB, MELON_BLOCK, CROPS, CARROT, POTATO));
-        NO_DROPS = new HashSet<>(Arrays.asList(YELLOW_FLOWER, LONG_GRASS, COCOA, LEAVES, LEAVES_2, RED_ROSE));
+        ALLOWED_BREAK = new HashSet<>(Arrays.asList(GRASS, TALL_GRASS, POPPY, DANDELION, ACACIA_LEAVES, AZALEA_LEAVES, BIRCH_LEAVES, DARK_OAK_LEAVES, FLOWERING_AZALEA_LEAVES, 
+                JUNGLE_LEAVES, OAK_LEAVES, SPRUCE_LEAVES, FIRE, COBWEB, MELON, CARROTS, POTATOES)); //TODO Other crops
+        NO_DROPS = new HashSet<>(Arrays.asList(DANDELION, GRASS, COCOA, ACACIA_LEAVES, AZALEA_LEAVES, BIRCH_LEAVES, DARK_OAK_LEAVES, FLOWERING_AZALEA_LEAVES,
+                JUNGLE_LEAVES, OAK_LEAVES, SPRUCE_LEAVES, POPPY));
     }
     
     @EventHandler
@@ -63,10 +68,10 @@ public class BlockListeners extends GameListener {
                         e.getBlock().setType(Material.AIR);
                     }
                 }.runTaskLater(plugin, 1L);
-            } else if (e.getBlock().getType() == Material.WORKBENCH) {
+            } else if (e.getBlock().getType() == CRAFTING_TABLE) {
                 if (this.placedCraftingTables.containsKey(e.getPlayer().getUniqueId())) {
                     Location location = this.placedCraftingTables.get(e.getPlayer().getUniqueId());
-                    if (location.getBlock() == null || location.getBlock().getType() != Material.WORKBENCH) {
+                    if (location.getBlock() == null || location.getBlock().getType() != CRAFTING_TABLE) {
                         this.placedCraftingTables.remove(e.getPlayer().getUniqueId());
                     }
                 }
@@ -78,7 +83,7 @@ public class BlockListeners extends GameListener {
                 }
         
                 this.placedCraftingTables.put(e.getPlayer().getUniqueId(), e.getBlock().getLocation());
-            } else if (e.getBlock().getType() == Material.WOOD) {
+            } else if (e.getBlock().getType() == OAK_PLANKS) { //TODO Other wood types
                 e.setCancelled(true);
             }
         } else if (!lobby.isMapEdititing()) {
@@ -100,7 +105,7 @@ public class BlockListeners extends GameListener {
                 return;
             }
     
-            if (e.getBlock().getType() == Material.WORKBENCH) {
+            if (e.getBlock().getType() == CRAFTING_TABLE) {
                 if (!placedCraftingTables.containsValue(e.getBlock().getLocation())) {
                     e.getPlayer().sendMessage(ManiaUtils.color("&cYou can only break crafting tables placed by a player."));
                     e.setCancelled(true);
